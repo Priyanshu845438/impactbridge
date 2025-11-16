@@ -1,0 +1,214 @@
+# AGENTS.md – ImpactBridge Backend Agent Guide
+
+This document explains the **ImpactBridge platform**, the **backend architecture**, the **development workflow**, and maintains a **detailed activity log** of every task the Agent and developer have completed.
+
+---
+
+# Project Overview: ImpactBridge Platform
+
+ImpactBridge is a full-stack platform designed to connect **NGOs**, **Corporates**, and **Donors** to streamline CSR (Corporate Social Responsibility) activities and impact reporting. The backend is built using **NestJS**, **Prisma**, and **PostgreSQL**.
+
+### Core Goals
+
+* Manage authenticated users with roles: **SUPER_ADMIN**, **NGO**, **COMPANY**, **DONOR**.
+* Enable NGO onboarding & verification.
+* Provide a corporate donor portal with transparent spending.
+* Manage donation campaigns, fund tracking, and impact reports.
+* Provide a clean, scalable, auditable backend architecture.
+
+---
+
+# Backend Architecture (Important for the Agent)
+
+The backend strictly follows the NestJS layered pattern:
+
+1. **Controller** → Handles the request and response only.
+2. **Service** → Contains business logic.
+3. **Prisma Layer** → Communicates with PostgreSQL through Prisma Client.
+4. **DTO Layer** → Validates incoming data using class-validator.
+5. **Utils** → Pure helper functions (e.g., hashing, token generation).
+
+### Technologies in Use
+
+* **NestJS 11** (modular backend framework)
+* **Prisma ORM** (postgres connector, schema-first design)
+* **PostgreSQL (Neon serverless)**
+* **bcrypt** (password hashing)
+* **JWT** (authentication)
+* **DevContainer** (isolated development environment)
+
+---
+
+# Agent Operating Rules
+
+The Agent must always:
+
+* Generate code ONLY inside: `impactbridge/apps/backend`.
+* Follow NestJS architecture: **controller → service → prisma**.
+* Use **DTOs with class-validator**.
+* Import Prisma Client only from `prisma/generated`.
+* Never write business logic in controllers.
+* Use bcrypt for password hashing.
+* Generate production-ready, syntactically correct TypeScript.
+* Maintain file paths **exactly** as requested.
+* Update this AGENTS.md log whenever development progresses.
+
+---
+
+# Activity Log (Detailed Timeline)
+
+This section tracks **everything completed so far**.
+
+---
+
+## **1. Backend Environment Setup**
+
+* DevContainer initialized successfully.
+* NestJS backend opened in isolated environment.
+* Prisma connected to PostgreSQL (Neon database).
+* Verified schema configuration and connection.
+* Ran **initial Prisma migration** for the User model.
+* Database tables confirmed.
+
+---
+
+## **2. Module Scaffolding Completed**
+
+Generated via Agent using CLI code generator:
+
+* `auth` module with controller, service, and module.
+* `user` module with controller, service, and module.
+* `prisma` module with PrismaService.
+* PrismaService exported globally via module.
+
+This establishes the **base folder structure**.
+
+---
+
+## **3. User Feature Foundations Built**
+
+Created by Agent:
+
+* `UserRole` enum with: **SUPER_ADMIN, NGO, COMPANY, DONOR**.
+* `CreateUserDto` for validating user creation input.
+
+DTO includes:
+
+* name
+* email
+* password
+* role
+
+Each with class-validator decorators.
+
+---
+
+## **4. Auth DTOs Implemented**
+
+Created by Agent:
+
+* `LoginDto`
+* `RegisterDto`
+
+Validated fields:
+
+* email
+* password
+* name (for register)
+* role (from UserRole enum)
+
+This prepares the Auth module for signup/login implementation.
+
+---
+
+## **5. Password Utility Implemented**
+
+File created:
+
+```
+src/auth/utils/password.util.ts
+```
+
+Contains:
+
+* `hashPassword(password: string)` → bcrypt.hash with 10 salt rounds
+* `comparePassword(password, hash)` → bcrypt.compare
+
+This ensures secure password storage and verification.
+
+---
+
+## **6. User Registration Service Implemented**
+
+Updated `AuthService` to provide `register(dto: RegisterDto)` following the required flow:
+
+1. Check for existing user by email via Prisma.
+2. Throw `BadRequestException` if email already exists.
+3. Hash incoming password with `hashPassword` utility.
+4. Create new user record with Prisma.
+5. Return user object without password field.
+
+This completes backend signup handling while respecting NestJS layering.
+
+---
+
+## **7. Auth Login Flow Implemented (Placeholder JWT)**
+
+Enhanced `AuthService.login(dto: LoginDto)` to:
+
+1. Fetch user by email using Prisma.
+2. Reject invalid credentials with `BadRequestException`.
+3. Verify password using `comparePassword`.
+4. Call a placeholder JWT signer (`signJwtPlaceholder`) pending final token implementation.
+5. Return sanitized user details (without password) and success message.
+
+Maintains controller → service → prisma responsibilities and prepares for JWT integration.
+
+---
+
+## **8. Auth Controller Endpoints Wired**
+
+Updated `AuthController` with:
+
+* `POST /auth/register` → delegates to `AuthService.register` with `RegisterDto`.
+* `POST /auth/login` → delegates to `AuthService.login` with `LoginDto`.
+
+No business logic in controller—aims for clean request routing and validation via DTOs.
+
+---
+
+### **9. JWT Utility Implemented**
+- Added jwt.util.ts with signToken() helper.
+- Uses environment-based JWT_SECRET.
+- Expires tokens in 1 day.
+- Prepares the AuthService for real JWT authentication.
+
+---
+
+### **10. Auth Login Updated with Real JWT**
+- AuthService.login now signs tokens via signToken().
+- Returns accessToken alongside sanitized user profile.
+- Removes placeholder message for production readiness.
+
+---
+
+### **11. AuthModule Configured for JWT**
+- Imported JwtModule with 1-day expiry and env secret.
+- Ensured AuthModule exports AuthService and depends on PrismaModule.
+- Prepares NestJS DI for JWT-based authentication flows.
+---
+
+### **12. Global Validation Enabled**
+- main.ts now applies ValidationPipe globally with whitelist + forbidNonWhitelisted.
+- Ensures all incoming DTO payloads are enforced consistently across controllers.
+
+---
+
+### **13. Backend errors fixed, JWT typing patched, Prisma role casting fixed, and all docs generated.**
+- Resolved build/runtime issues in JWT util and Prisma role conversions.
+- Created auth documentation suite under `docs/` (API testing, frontend business, technical overview).
+- Verified build succeeds; runtime DB connection pending due to external Neon availability.
+- Auth register/login flows now emit sanitized profiles with JWT tokens.
+
+---
+
