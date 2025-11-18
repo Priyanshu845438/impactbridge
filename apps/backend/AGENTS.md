@@ -264,3 +264,10 @@ No business logic in controller—aims for clean request routing and validation 
 - Build confirmed after password management updates.
 
 ---
+
+### **21. Admin NGO & Company Views Added**
+- Added role-restricted endpoints to fetch individual NGO and Company profiles.
+- `UsersService` now provides sanitized lookups filtered by role.
+- Build verified after RBAC extensions for targeted profile access.
+
+---

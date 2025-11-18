@@ -11,6 +11,14 @@ import { comparePassword, hashPassword } from '../auth/utils/password.util';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
+  private sanitize<T extends { password?: string }>(user: T | null) {
+    if (!user) {
+      return null;
+    }
+    const { password, ...rest } = user;
+    return rest;
+  }
+
   create(dto: CreateUserDto) {
     const { role, ...rest } = dto;
     const data = {
@@ -62,5 +70,21 @@ export class UsersService {
       where: { id: userId },
       data: { password: hashed },
     });
+  }
+
+  async getNGOById(id: string) {
+    const user = await this.prisma.user.findFirst({
+      where: { id, role: Role.NGO },
+    });
+
+    return this.sanitize(user);
+  }
+
+  async getCompanyById(id: string) {
+    const user = await this.prisma.user.findFirst({
+      where: { id, role: Role.COMPANY },
+    });
+
+    return this.sanitize(user);
   }
 }

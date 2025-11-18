@@ -77,6 +77,11 @@ This guide walks through verifying the ImpactBridge authentication and user prof
 - Include header `Authorization: Bearer <accessToken>` for protected endpoints.
 - `JwtAuthGuard` validates the token; `RolesGuard` honours `@Roles(...)` metadata to enforce RBAC.
 
+### Role-Based Lookups
+- `GET /users/ngos/{id}` → Requires token from SUPER_ADMIN or COMPANY.
+- `GET /users/companies/{id}` → Requires token from SUPER_ADMIN or NGO.
+- Both endpoints return sanitized profiles (no password).
+
 ## 4. Validate Authenticated Session
 
 **Method:** GET  

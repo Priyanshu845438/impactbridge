@@ -24,7 +24,7 @@
   - `user.service.ts`: profile lookups, strips passwords
   - `user.module.ts`: wires controller/service with `PrismaModule`
 - `users/`
-  - Legacy module for CRUD operations (to be unified later)
+  - CRUD services plus admin-specific lookups for NGO/Company profiles
 - `prisma/`
   - `prisma.service.ts` extends PrismaClient
   - `prisma.module.ts` exports `PrismaService`
