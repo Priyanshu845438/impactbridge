@@ -4,69 +4,69 @@
 
 - **Framework:** NestJS (modular, dependency injection driven)
 - **Persistence:** Prisma ORM targeting PostgreSQL
-- **Auth:** JWT-based authentication with bcrypt password hashing
-- **Validation:** Global `ValidationPipe` enforcing DTO schemas
+- **Auth:** JWT-based authentication with bcrypt hashing and RBAC
+- **Validation:** Global `ValidationPipe` with whitelist + forbidNonWhitelisted
 
 ## Module Structure
 
 - `auth/`
-  - `auth.controller.ts`: exposes `/auth/register` and `/auth/login`
-  - `auth.service.ts`: handles registration and login logic
-  - `utils/password.util.ts`: bcrypt hash/compare helpers
-  - `utils/jwt.util.ts`: JSON Web Token signing helper
+  - `auth.controller.ts`: `/auth/register`, `/auth/login`
+  - `auth.service.ts`: registration/login logic, JWT issuance
+  - `utils/password.util.ts`: bcrypt helpers
+  - `utils/jwt.util.ts`: JWT signing helper
+  - `guards/jwt-auth.guard.ts`: validates JWT and populates `request.user`
+  - `guards/roles.guard.ts`: enforces role-based access via metadata
+  - `decorators/current-user.decorator.ts`: retrieves authenticated user
+  - `decorators/roles.decorator.ts`: attaches required roles metadata
   - `dto/`: `LoginDto`, `RegisterDto`
+- `user/`
+  - `user.controller.ts`: `/users/:id` (public) and `/users/me` (JWT protected)
+  - `user.service.ts`: profile lookups, strips passwords
+  - `user.module.ts`: wires controller/service with `PrismaModule`
 - `users/`
-  - CRUD service wired to Prisma
-  - DTOs for create/update with role validation
+  - Legacy module for CRUD operations (to be unified later)
 - `prisma/`
   - `prisma.service.ts` extends PrismaClient
-  - `prisma.module.ts` exports service for others
+  - `prisma.module.ts` exports `PrismaService`
 
 ## Prisma Usage
 
 - Prisma Client generated under `prisma/generated`
-- All service classes inject `PrismaService`
-- User role enum sourced from Prisma’s generated `Role`
-- User creation/update cast to Prisma types to ensure type safety
-
-## DTO & Validation Strategy
-
-- DTOs leverage `class-validator` and `@nestjs/mapped-types`
-- Global `ValidationPipe` configured with `whitelist` + `forbidNonWhitelisted`
-- Ensures controllers receive sanitized payloads only
+- Services inject `PrismaService` for DB access
+- Role enum sourced from Prisma `Role`
+- User data sanitized (password removed) before returning to clients
 
 ## Authentication Flow
 
 1. **Registration**
    - Hash password via `hashPassword`
    - Persist user with Prisma
-   - Return user profile without password
+   - Return sanitized profile
 2. **Login**
-   - Verify password via `comparePassword`
-  - Sign JWT with `signToken({ sub: user.id, role: user.role })`
-   - Return profile + access token (1-day expiry)
-3. **Future Work**
-   - Implement JWT guard & strategy
-   - Add refresh tokens if needed
+   - Validate credentials via `comparePassword`
+   - Sign JWT with `signToken({ sub: user.id, role: user.role })`
+   - Return profile + token
+3. **Protected Access**
+   - Guard routes with `JwtAuthGuard`
+   - Apply `@Roles(...)` as needed; `RolesGuard` checks `request.user.role`
 
 ## Environment Variables
 
 - `JWT_SECRET`: required for JWT signing (throws if missing)
-- Database connection string managed via Prisma `.env`
+- Database connection string defined in Prisma configuration
 
 ## Validation & Error Handling
 
-- Uses NestJS exceptions (`BadRequestException` for auth errors)
-- Prisma errors can be surfaced via filters (future enhancement)
-- Validation errors returned automatically via `ValidationPipe`
+- Uses Nest exceptions (`BadRequestException`, `UnauthorizedException`, `ForbiddenException`)
+- Validation errors surfaced by `ValidationPipe`
 
 ## Build & Dev
 
-- Run `npm run start:dev` for hot reloading (requires permissions on `dist/` or adjust output path)
-- Codebase uses TypeScript; ensure `tsconfig.json` aligns with Nest defaults
+- `npm run start:dev` for hot reload
+- `npm run build` to compile TypeScript to `dist/`
 
 ## Testing & Tooling
 
-- Tests not yet implemented; recommended to add e2e tests for auth
-- Postman collection documented in `API_TESTING_GUIDE.md`
-- Linting via Nest/Nx tooling (see `package.json` scripts)
+- Tests not yet implemented; add e2e tests for auth/profile flows
+- Postman workflows outlined in `docs/API_TESTING_GUIDE.md`
+- Linting scripts defined in `package.json`

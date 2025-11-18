@@ -1,11 +1,11 @@
-# API Testing Guide – Auth Module
+# API Testing Guide – Auth & Users Module
 
-This guide walks through verifying the ImpactBridge auth APIs using Postman. All endpoints assume the backend runs locally at `http://localhost:3000` and global validation is enabled.
+This guide walks through verifying the ImpactBridge authentication and user profile APIs using Postman. All endpoints assume the backend runs at `http://localhost:3000`, the database is reachable, and `JWT_SECRET` is configured.
 
 ## Prerequisites
 
 - Backend running via `npm run start:dev`
-- Environment variable `JWT_SECRET` set (e.g. `export JWT_SECRET=dev-secret`)
+- `JWT_SECRET` environment variable exported (e.g. `export JWT_SECRET=dev-secret`)
 - Postman or similar REST client
 
 ## 1. Register User
@@ -24,8 +24,7 @@ This guide walks through verifying the ImpactBridge auth APIs using Postman. All
 ```
 
 ### Expected Response
-- HTTP 201 (if using default Nest behavior) or 200 depending on controller config
-- JSON payload without password:
+- Status 201 (or 200) with JSON payload excluding password:
 ```json
 {
   "id": "<uuid>",
@@ -38,8 +37,8 @@ This guide walks through verifying the ImpactBridge auth APIs using Postman. All
 ```
 
 ### Negative Tests
-- Reusing the same email should return `400 Bad Request` with message `Email already registered`.
-- Omitting required fields should trigger validation errors due to global `ValidationPipe`.
+- Reusing the same email → `400 Bad Request` (`Email already registered`).
+- Missing fields → validation error from global `ValidationPipe`.
 
 ## 2. Login User
 
@@ -70,17 +69,32 @@ This guide walks through verifying the ImpactBridge auth APIs using Postman. All
 ```
 
 ### Negative Tests
-- Wrong password: expect `400 Bad Request` with message `Invalid credentials`.
-- Unknown email: same error as above.
+- Wrong password or unknown email → `400 Bad Request` (`Invalid credentials`).
 
 ## 3. Using the JWT
 
-- Copy `accessToken` from login response.
-- Subsequent protected endpoints (to be implemented) should include header:  
-  `Authorization: Bearer <accessToken>`
+- Copy `accessToken` from the login response.
+- Include header `Authorization: Bearer <accessToken>` for protected endpoints.
+- `JwtAuthGuard` validates the token; `RolesGuard` honours `@Roles(...)` metadata to enforce RBAC.
+
+## 4. Validate Authenticated Session
+
+**Method:** GET  
+**URL:** `http://localhost:3000/users/me`
+
+- Requires `Authorization: Bearer <accessToken>`.
+- Returns the persisted user profile (password omitted). Use this to confirm authentication flow.
+
+## 5. Fetch Public User Profile
+
+**Method:** GET  
+**URL:** `http://localhost:3000/users/<userId>`
+
+- No authentication required.
+- Returns public profile details without password. Confirms sanitized output for arbitrary users.
 
 ## Tips
 
-- Configure a Postman environment variable `{{baseUrl}} = http://localhost:3000`.
-- Store JWT in Postman env and use it in subsequent requests.
-- Use Postman collection runner to automate regression tests once more endpoints are available.
+- Configure Postman env variable `{{baseUrl}}` for the host and reuse it across requests.
+- Store JWT in Postman environment for chaining.
+- Use the collection runner for regression testing once more endpoints exist.

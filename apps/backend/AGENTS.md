@@ -212,3 +212,55 @@ No business logic in controller—aims for clean request routing and validation 
 
 ---
 
+### **14. JWT Guard & CurrentUser Decorator Added**
+- Implemented `JwtAuthGuard` to validate bearer tokens and attach decoded payloads.
+- Created `@CurrentUser` decorator for convenient access to `request.user`.
+- Exported guard via `AuthModule` for use across protected modules.
+- Updated documentation to reflect guarded flows and decorator usage.
+
+---
+
+### **15. Protected /users/me Endpoint Added**
+- Added `UserController` hosting a JWT-guarded `GET /users/me` route.
+- Endpoint returns the decoded token payload via `@CurrentUser` for quick auth checks.
+- Documentation updated to mention the self-profile endpoint for testing guards.
+- Build verified after controller addition.
+
+---
+
+### **16. Role-Based Access Control (RBAC) Implemented**
+- Introduced `@Roles` decorator and `RolesGuard` to enforce metadata-driven access.
+- Wired guard into `AuthModule` so routes can stack `@UseGuards(JwtAuthGuard, RolesGuard)`.
+- Documentation updated to describe RBAC usage and testing steps.
+- Build confirmed to succeed post RBAC integration.
+
+---
+
+### **17. User Profile Endpoints Added**
+- Added `UserService` and `UserModule` to expose `/users/:id` (public) and `/users/me` (JWT protected).
+- `/users/me` now fetches the user profile by ID instead of returning raw token payload.
+- Documentation updated across API testing, frontend guide, and technical overview.
+- Build verified after profile endpoint enhancements.
+
+---
+
+### **18. User List Endpoint Added**
+- Added `GET /users` restricted to `SUPER_ADMIN` role via JWT + RolesGuard.
+- Implemented `UserService.findAll()` returning sanitized user data.
+- Build confirmed after RBAC-protected list endpoint.
+
+---
+
+### **19. User Self-Update Endpoint Added**
+- Added `PATCH /users/me` allowing authenticated users to update profile fields.
+- Introduced `UpdateUserDto` and `UserService.update` with sanitized responses.
+- Build verified after new DTO and endpoint enhancements.
+
+---
+
+### **20. Change Password API Added**
+- Added `POST /users/change-password` secured by JWT guard.
+- Implemented `ChangePasswordDto` and service logic to verify old password and hash the new one.
+- Build confirmed after password management updates.
+
+---

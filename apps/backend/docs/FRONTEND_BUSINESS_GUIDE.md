@@ -1,32 +1,38 @@
-# Frontend Business Guide – Auth & Roles
+# Frontend Business Guide – Auth & Profiles
 
-This document explains how the frontend should interact with ImpactBridge auth services, expected payloads, and business rules for user roles.
+This document outlines how the frontend should interact with ImpactBridge authentication and user profile APIs, expected payloads, and business rules for roles.
 
 ## Auth Flow Overview
 
 1. **User Registration**
-   - Frontend collects name, email, password, and role.
-   - Sends POST `/auth/register` with validated input.
-   - Receives user profile (no password).
-   - Optionally auto-login using the same credentials.
+   - Collect name, email, password, role.
+   - POST `/auth/register` with validated payload.
+   - Response contains created user (no password).
 
 2. **User Login**
-   - Send POST `/auth/login` with email/password.
-   - Receives sanitized user profile + `accessToken` (JWT valid for 1 day).
-   - Store JWT securely (e.g., HttpOnly cookie or memory + refresh strategy).
+   - POST `/auth/login` with email/password.
+   - Response includes sanitized user profile and `accessToken` (JWT valid for 1 day).
+   - Store JWT securely (e.g., HttpOnly cookie or in-memory + refresh token strategy).
 
 3. **Authenticated Requests**
    - Include `Authorization: Bearer <token>` header.
-   - Backend will validate JWT (guards to be implemented).
+   - `JwtAuthGuard` validates tokens; `CurrentUser` decorator exposes the decoded payload.
+   - `@Roles(...)` metadata with `RolesGuard` enforces role-based access.
+   - Example: `GET /users/me` returns the persisted user profile for the logged-in user.
+
+4. **Public Profiles**
+   - `GET /users/:id` returns a sanitized profile without requiring authentication.
 
 ## Roles & Permissions
 
-| Role         | Description                                                     | Typical Capabilities (future) |
-| ------------ | --------------------------------------------------------------- | ------------------------------ |
-| SUPER_ADMIN  | ImpactBridge operators managing platform-wide settings         | Full access                    |
-| NGO          | Nonprofit organizations running campaigns                      | Manage NGO profile, campaigns  |
-| COMPANY      | Corporate CSR partners funding initiatives                     | View reports, manage donations |
-| DONOR        | Individual donors tracking contributions                        | View personal impact           |
+| Role         | Description                                                     | Typical Future Capabilities |
+| ------------ | --------------------------------------------------------------- | --------------------------- |
+| SUPER_ADMIN  | ImpactBridge operators managing platform-wide settings         | Full access                 |
+| NGO          | Nonprofit organizations running campaigns                      | Manage NGO profile, campaigns|
+| COMPANY      | Corporate CSR partners funding initiatives                     | View reports, manage donations|
+| DONOR        | Individual donors tracking contributions                        | View personal impact        |
+
+Use roles to target dashboards, feature flags, and navigation states. Guard backend routes with `@Roles(...)` when access should be limited to specific roles.
 
 ## Payload Requirements
 
@@ -50,19 +56,19 @@ This document explains how the frontend should interact with ImpactBridge auth s
 
 ## UX Considerations
 
-- Display clear validation errors from backend (`ValidationPipe` ensures descriptive messages).
-- Prevent duplicate registrations by handling `Email already registered` response.
-- After login, route user based on role (e.g., dashboard per role).
-- Implement logout by clearing stored JWT.
+- Show clear validation errors (surfaced by `ValidationPipe`).
+- Block duplicate registrations by handling `Email already registered`.
+- After login, route user to role-specific dashboards.
+- Provide logout by clearing stored JWT and cached profile.
 
 ## Security Notes
 
-- Always use HTTPS in production.
-- Prefer HttpOnly cookies for JWT if feasible.
-- Plan for refresh token flow and role-based route guards.
+- Use HTTPS in production.
+- Prefer HttpOnly cookies for JWT where possible.
+- Plan for refresh tokens and session expiry handling.
 
 ## Future Integrations
 
-- MFA or OAuth providers for enterprise logins.
+- MFA or OAuth for enterprises.
 - Role-specific onboarding flows.
-- Analytics on login/registration events to monitor engagement.
+- Analytics for login/registration metrics.
