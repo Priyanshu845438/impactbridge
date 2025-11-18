@@ -271,3 +271,17 @@ No business logic in controller—aims for clean request routing and validation 
 - Build verified after RBAC extensions for targeted profile access.
 
 ---
+
+### **22. Documentation & QA Assets Updated**
+- Overhauled testing docs, added Postman collection, and created business status report.
+- API testing guide now lists coverage for each endpoint with success/failure cases.
+- Build confirmed after documentation updates.
+
+---
+
+### **23. Admin NGO Listing With Campaigns Added**
+- Added service/controller for listing NGOs with attached campaigns (RBAC restricted).
+- Responses sanitized using existing helper.
+- Build verified post-change.
+
+---

@@ -65,4 +65,11 @@ export class UsersController {
     }
     return company;
   }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.COMPANY)
+  @Get('ngos-with-campaigns')
+  getNGOsWithCampaigns() {
+    return this.usersService.getNGOsWithCampaigns();
+  }
 }

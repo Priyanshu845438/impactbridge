@@ -19,8 +19,9 @@ This document outlines how the frontend should interact with ImpactBridge authen
    - `JwtAuthGuard` validates tokens; `CurrentUser` decorator exposes the decoded payload.
    - `@Roles(...)` metadata with `RolesGuard` enforces role-based access.
    - Example: `GET /users/me` returns the persisted user profile for the logged-in user.
-   - Admin views: SUPER_ADMIN & COMPANY can view NGO profiles (`GET /users/ngos/:id`),
-     SUPER_ADMIN & NGO can view company profiles (`GET /users/companies/:id`).
+   - Admin views (JWT required):
+     - `GET /users/ngos/:id` → accessible to SUPER_ADMIN & COMPANY.
+     - `GET /users/companies/:id` → accessible to SUPER_ADMIN & NGO.
 
 4. **Public Profiles**
    - `GET /users/:id` returns a sanitized profile without requiring authentication.

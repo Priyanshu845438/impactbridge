@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma, Role } from 'prisma/generated';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { Role } from 'prisma/generated';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { comparePassword, hashPassword } from '../auth/utils/password.util';
 
@@ -86,5 +86,14 @@ export class UsersService {
     });
 
     return this.sanitize(user);
+  }
+
+  async getNGOsWithCampaigns() {
+    const ngos = await this.prisma.user.findMany({
+      where: { role: Role.NGO },
+      include: { campaigns: true },
+    } as Prisma.UserFindManyArgs);
+
+    return ngos.map((ngo) => this.sanitize(ngo));
   }
 }
