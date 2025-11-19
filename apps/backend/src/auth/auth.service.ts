@@ -5,10 +5,14 @@ import { RegisterDto } from './dto/register.dto';
 import { hashPassword, comparePassword } from './utils/password.util';
 import { signToken } from './utils/jwt.util';
 import { UserRole } from '../user/user-role.enum';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly usersService: UsersService,
+  ) {}
 
   async login(dto: LoginDto) {
     const user = await this.prisma.user.findUnique({
@@ -54,6 +58,20 @@ export class AuthService {
         role: dto.role ?? UserRole.DONOR,
       },
     });
+
+    const role = dto.role ?? UserRole.DONOR;
+
+    if (role === UserRole.NGO) {
+      await this.usersService.createNGOProfile(createdUser.id);
+    }
+
+    if (role === UserRole.COMPANY) {
+      await this.usersService.createCompanyProfile(createdUser.id);
+    }
+
+    if (role === UserRole.DONOR) {
+      await this.usersService.createDonorProfile(createdUser.id);
+    }
 
     const { password, ...userWithoutPassword } = createdUser;
     return userWithoutPassword;

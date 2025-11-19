@@ -72,4 +72,32 @@ export class UsersController {
   getNGOsWithCampaigns() {
     return this.usersService.getNGOsWithCampaigns();
   }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.SUPER_ADMIN)
+  @Get('companies-with-reports')
+  getCompaniesWithReports() {
+    return this.usersService.getCompaniesWithDonations();
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.SUPER_ADMIN)
+  @Get('/admin/ngos')
+  getAllNGOProfiles() {
+    return this.usersService.getAllNGOProfiles();
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.SUPER_ADMIN)
+  @Get('/admin/companies')
+  getAllCompanyProfiles() {
+    return this.usersService.getAllCompanyProfiles();
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.SUPER_ADMIN)
+  @Get('/admin/donors')
+  getAllDonorProfiles() {
+    return this.usersService.getAllDonorProfiles();
+  }
 }

@@ -98,16 +98,129 @@ exports.Prisma.UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   phone: 'phone',
-  pan: 'pan',
   password: 'password',
   role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.NGOProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  registrationType: 'registrationType',
+  registrationNumber: 'registrationNumber',
+  founderNames: 'founderNames',
+  yearEstablished: 'yearEstablished',
+  missionStatement: 'missionStatement',
+  impactSummary: 'impactSummary',
+  website: 'website',
+  twelveARegistered: 'twelveARegistered',
+  eightyGRegistered: 'eightyGRegistered',
+  csrEligibility: 'csrEligibility'
+};
+
+exports.Prisma.CompanyProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  cin: 'cin',
+  csrPolicyUrl: 'csrPolicyUrl',
+  industry: 'industry',
+  netWorth: 'netWorth',
+  averageProfit: 'averageProfit',
+  csrBudget: 'csrBudget',
+  csrCommittee: 'csrCommittee'
+};
+
+exports.Prisma.DonorProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  pan: 'pan',
+  occupation: 'occupation',
+  interests: 'interests'
+};
+
+exports.Prisma.CampaignScalarFieldEnum = {
+  id: 'id',
+  ngoId: 'ngoId',
+  title: 'title',
+  description: 'description',
+  category: 'category',
+  goalAmount: 'goalAmount',
+  raisedAmount: 'raisedAmount',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  status: 'status'
+};
+
+exports.Prisma.DonationScalarFieldEnum = {
+  id: 'id',
+  donorId: 'donorId',
+  companyId: 'companyId',
+  campaignId: 'campaignId',
+  amount: 'amount',
+  donationDate: 'donationDate',
+  paymentRef: 'paymentRef',
+  paymentMode: 'paymentMode'
+};
+
+exports.Prisma.BankDetailScalarFieldEnum = {
+  id: 'id',
+  ngoId: 'ngoId',
+  companyId: 'companyId',
+  accountHolder: 'accountHolder',
+  bankName: 'bankName',
+  accountNumber: 'accountNumber',
+  ifsc: 'ifsc',
+  branch: 'branch'
+};
+
+exports.Prisma.DocumentScalarFieldEnum = {
+  id: 'id',
+  ngoId: 'ngoId',
+  companyId: 'companyId',
+  campaignId: 'campaignId',
+  type: 'type',
+  title: 'title',
+  url: 'url',
+  uploadedAt: 'uploadedAt',
+  metadata: 'metadata'
+};
+
+exports.Prisma.AddressScalarFieldEnum = {
+  id: 'id',
+  ngoId: 'ngoId',
+  companyId: 'companyId',
+  donorId: 'donorId',
+  line1: 'line1',
+  line2: 'line2',
+  city: 'city',
+  state: 'state',
+  country: 'country',
+  postalCode: 'postalCode',
+  addressType: 'addressType'
+};
+
+exports.Prisma.AuditLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  ngoId: 'ngoId',
+  companyId: 'companyId',
+  donorId: 'donorId',
+  campaignId: 'campaignId',
+  donationId: 'donationId',
+  action: 'action',
+  details: 'details',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -119,6 +232,12 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
 exports.Role = exports.$Enums.Role = {
   SUPER_ADMIN: 'SUPER_ADMIN',
   NGO: 'NGO',
@@ -126,8 +245,46 @@ exports.Role = exports.$Enums.Role = {
   DONOR: 'DONOR'
 };
 
+exports.NGORegistrationType = exports.$Enums.NGORegistrationType = {
+  SOCIETY: 'SOCIETY',
+  TRUST: 'TRUST',
+  SECTION_8: 'SECTION_8',
+  COOPERATIVE: 'COOPERATIVE',
+  OTHER: 'OTHER'
+};
+
+exports.DocumentType = exports.$Enums.DocumentType = {
+  CSR_POLICY: 'CSR_POLICY',
+  REGISTRATION_CERTIFICATE: 'REGISTRATION_CERTIFICATE',
+  PAN: 'PAN',
+  TAN: 'TAN',
+  BANK_STATEMENT: 'BANK_STATEMENT',
+  AUDITED_FINANCIAL: 'AUDITED_FINANCIAL',
+  CSR_REPORT: 'CSR_REPORT',
+  OTHER: 'OTHER'
+};
+
+exports.CampaignCategory = exports.$Enums.CampaignCategory = {
+  EDUCATION: 'EDUCATION',
+  HEALTHCARE: 'HEALTHCARE',
+  ENVIRONMENT: 'ENVIRONMENT',
+  LIVELIHOOD: 'LIVELIHOOD',
+  WOMEN_EMPOWERMENT: 'WOMEN_EMPOWERMENT',
+  DISASTER_RELIEF: 'DISASTER_RELIEF',
+  OTHER: 'OTHER'
+};
+
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  NGOProfile: 'NGOProfile',
+  CompanyProfile: 'CompanyProfile',
+  DonorProfile: 'DonorProfile',
+  Campaign: 'Campaign',
+  Donation: 'Donation',
+  BankDetail: 'BankDetail',
+  Document: 'Document',
+  Address: 'Address',
+  AuditLog: 'AuditLog'
 };
 /**
  * Create the Client
@@ -168,7 +325,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -177,13 +333,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  SUPER_ADMIN\n  NGO\n  COMPANY\n  DONOR\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  name      String\n  email     String   @unique\n  phone     String?\n  pan       String?\n  password  String\n  role      Role\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n",
-  "inlineSchemaHash": "de020c3e6e8b889371888f6d9c01cecf2927a5d2ddbd23d5118813939099caae",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  SUPER_ADMIN\n  NGO\n  COMPANY\n  DONOR\n}\n\nenum NGORegistrationType {\n  SOCIETY\n  TRUST\n  SECTION_8\n  COOPERATIVE\n  OTHER\n}\n\nenum DocumentType {\n  CSR_POLICY\n  REGISTRATION_CERTIFICATE\n  PAN\n  TAN\n  BANK_STATEMENT\n  AUDITED_FINANCIAL\n  CSR_REPORT\n  OTHER\n}\n\nenum CampaignCategory {\n  EDUCATION\n  HEALTHCARE\n  ENVIRONMENT\n  LIVELIHOOD\n  WOMEN_EMPOWERMENT\n  DISASTER_RELIEF\n  OTHER\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  name      String\n  email     String   @unique\n  phone     String?\n  password  String\n  role      Role\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Relations to extended profiles\n  ngoProfile     NGOProfile?\n  companyProfile CompanyProfile?\n  donorProfile   DonorProfile?\n\n  auditLogs AuditLog[] @relation(\"UserToAuditLogs\")\n}\n\nmodel NGOProfile {\n  id                 String              @id @default(uuid())\n  userId             String              @unique\n  registrationType   NGORegistrationType\n  registrationNumber String\n  founderNames       String\n  yearEstablished    Int\n  missionStatement   String\n  impactSummary      String?\n  website            String?\n\n  // Financial + compliance\n  twelveARegistered Boolean @default(false)\n  eightyGRegistered Boolean @default(false)\n  csrEligibility    Boolean @default(false)\n\n  // Relations\n  user        User         @relation(fields: [userId], references: [id])\n  campaigns   Campaign[]\n  bankDetails BankDetail[] @relation(\"NGOBankDetails\")\n  documents   Document[]   @relation(\"NGODocuments\")\n  addresses   Address[]    @relation(\"NGOAddresses\")\n  auditLogs   AuditLog[]   @relation(\"NGOAuditLogs\")\n}\n\nmodel CompanyProfile {\n  id            String  @id @default(uuid())\n  userId        String  @unique\n  cin           String  @unique\n  csrPolicyUrl  String?\n  industry      String\n  netWorth      Float?\n  averageProfit Float?\n  csrBudget     Float?\n  csrCommittee  String?\n\n  user        User         @relation(fields: [userId], references: [id])\n  donations   Donation[]\n  documents   Document[]   @relation(\"CompanyDocuments\")\n  bankDetails BankDetail[] @relation(\"CompanyBankDetails\")\n  addresses   Address[]    @relation(\"CompanyAddresses\")\n  auditLogs   AuditLog[]   @relation(\"CompanyAuditLogs\")\n}\n\nmodel DonorProfile {\n  id         String  @id @default(uuid())\n  userId     String  @unique\n  pan        String?\n  occupation String?\n  interests  String?\n\n  user      User       @relation(fields: [userId], references: [id])\n  donations Donation[]\n  addresses Address[]  @relation(\"DonorAddresses\")\n  auditLogs AuditLog[] @relation(\"DonorAuditLogs\")\n}\n\nmodel Campaign {\n  id           String           @id @default(uuid())\n  ngoId        String\n  title        String\n  description  String\n  category     CampaignCategory\n  goalAmount   Float\n  raisedAmount Float            @default(0)\n  startDate    DateTime\n  endDate      DateTime?\n  status       String\n\n  ngo       NGOProfile @relation(fields: [ngoId], references: [id])\n  donations Donation[]\n  documents Document[] @relation(\"CampaignDocuments\")\n  auditLogs AuditLog[] @relation(\"CampaignAuditLogs\")\n}\n\nmodel Donation {\n  id           String   @id @default(uuid())\n  donorId      String?\n  companyId    String?\n  campaignId   String\n  amount       Float\n  donationDate DateTime @default(now())\n  paymentRef   String?\n  paymentMode  String?\n\n  donor     DonorProfile?   @relation(fields: [donorId], references: [id])\n  company   CompanyProfile? @relation(fields: [companyId], references: [id])\n  campaign  Campaign        @relation(fields: [campaignId], references: [id])\n  auditLogs AuditLog[]      @relation(\"DonationAuditLogs\")\n}\n\nmodel BankDetail {\n  id            String  @id @default(uuid())\n  ngoId         String?\n  companyId     String?\n  accountHolder String\n  bankName      String\n  accountNumber String\n  ifsc          String\n  branch        String?\n\n  ngo     NGOProfile?     @relation(\"NGOBankDetails\", fields: [ngoId], references: [id])\n  company CompanyProfile? @relation(\"CompanyBankDetails\", fields: [companyId], references: [id])\n}\n\nmodel Document {\n  id         String       @id @default(uuid())\n  ngoId      String?\n  companyId  String?\n  campaignId String?\n  type       DocumentType\n  title      String\n  url        String\n  uploadedAt DateTime     @default(now())\n  metadata   Json?\n\n  ngo      NGOProfile?     @relation(\"NGODocuments\", fields: [ngoId], references: [id])\n  company  CompanyProfile? @relation(\"CompanyDocuments\", fields: [companyId], references: [id])\n  campaign Campaign?       @relation(\"CampaignDocuments\", fields: [campaignId], references: [id])\n}\n\nmodel Address {\n  id          String  @id @default(uuid())\n  ngoId       String?\n  companyId   String?\n  donorId     String?\n  line1       String\n  line2       String?\n  city        String\n  state       String\n  country     String  @default(\"India\")\n  postalCode  String\n  addressType String?\n\n  ngo     NGOProfile?     @relation(\"NGOAddresses\", fields: [ngoId], references: [id])\n  company CompanyProfile? @relation(\"CompanyAddresses\", fields: [companyId], references: [id])\n  donor   DonorProfile?   @relation(\"DonorAddresses\", fields: [donorId], references: [id])\n}\n\nmodel AuditLog {\n  id         String   @id @default(uuid())\n  userId     String?\n  ngoId      String?\n  companyId  String?\n  donorId    String?\n  campaignId String?\n  donationId String?\n  action     String\n  details    Json?\n  createdAt  DateTime @default(now())\n\n  user     User?           @relation(\"UserToAuditLogs\", fields: [userId], references: [id])\n  ngo      NGOProfile?     @relation(\"NGOAuditLogs\", fields: [ngoId], references: [id])\n  company  CompanyProfile? @relation(\"CompanyAuditLogs\", fields: [companyId], references: [id])\n  donor    DonorProfile?   @relation(\"DonorAuditLogs\", fields: [donorId], references: [id])\n  campaign Campaign?       @relation(\"CampaignAuditLogs\", fields: [campaignId], references: [id])\n  donation Donation?       @relation(\"DonationAuditLogs\", fields: [donationId], references: [id])\n}\n",
+  "inlineSchemaHash": "890781aeb382167b7c8ed7fac6c7477eb98a54e34e266c72e77f0c690e5dbb9f",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"pan\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"ngoProfile\",\"kind\":\"object\",\"type\":\"NGOProfile\",\"relationName\":\"NGOProfileToUser\"},{\"name\":\"companyProfile\",\"kind\":\"object\",\"type\":\"CompanyProfile\",\"relationName\":\"CompanyProfileToUser\"},{\"name\":\"donorProfile\",\"kind\":\"object\",\"type\":\"DonorProfile\",\"relationName\":\"DonorProfileToUser\"},{\"name\":\"auditLogs\",\"kind\":\"object\",\"type\":\"AuditLog\",\"relationName\":\"UserToAuditLogs\"}],\"dbName\":null},\"NGOProfile\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"registrationType\",\"kind\":\"enum\",\"type\":\"NGORegistrationType\"},{\"name\":\"registrationNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"founderNames\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"yearEstablished\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"missionStatement\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"impactSummary\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"website\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"twelveARegistered\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"eightyGRegistered\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"csrEligibility\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"NGOProfileToUser\"},{\"name\":\"campaigns\",\"kind\":\"object\",\"type\":\"Campaign\",\"relationName\":\"CampaignToNGOProfile\"},{\"name\":\"bankDetails\",\"kind\":\"object\",\"type\":\"BankDetail\",\"relationName\":\"NGOBankDetails\"},{\"name\":\"documents\",\"kind\":\"object\",\"type\":\"Document\",\"relationName\":\"NGODocuments\"},{\"name\":\"addresses\",\"kind\":\"object\",\"type\":\"Address\",\"relationName\":\"NGOAddresses\"},{\"name\":\"auditLogs\",\"kind\":\"object\",\"type\":\"AuditLog\",\"relationName\":\"NGOAuditLogs\"}],\"dbName\":null},\"CompanyProfile\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cin\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"csrPolicyUrl\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"industry\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"netWorth\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"averageProfit\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"csrBudget\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"csrCommittee\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"CompanyProfileToUser\"},{\"name\":\"donations\",\"kind\":\"object\",\"type\":\"Donation\",\"relationName\":\"CompanyProfileToDonation\"},{\"name\":\"documents\",\"kind\":\"object\",\"type\":\"Document\",\"relationName\":\"CompanyDocuments\"},{\"name\":\"bankDetails\",\"kind\":\"object\",\"type\":\"BankDetail\",\"relationName\":\"CompanyBankDetails\"},{\"name\":\"addresses\",\"kind\":\"object\",\"type\":\"Address\",\"relationName\":\"CompanyAddresses\"},{\"name\":\"auditLogs\",\"kind\":\"object\",\"type\":\"AuditLog\",\"relationName\":\"CompanyAuditLogs\"}],\"dbName\":null},\"DonorProfile\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"pan\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"occupation\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"interests\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"DonorProfileToUser\"},{\"name\":\"donations\",\"kind\":\"object\",\"type\":\"Donation\",\"relationName\":\"DonationToDonorProfile\"},{\"name\":\"addresses\",\"kind\":\"object\",\"type\":\"Address\",\"relationName\":\"DonorAddresses\"},{\"name\":\"auditLogs\",\"kind\":\"object\",\"type\":\"AuditLog\",\"relationName\":\"DonorAuditLogs\"}],\"dbName\":null},\"Campaign\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ngoId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"category\",\"kind\":\"enum\",\"type\":\"CampaignCategory\"},{\"name\":\"goalAmount\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"raisedAmount\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"startDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ngo\",\"kind\":\"object\",\"type\":\"NGOProfile\",\"relationName\":\"CampaignToNGOProfile\"},{\"name\":\"donations\",\"kind\":\"object\",\"type\":\"Donation\",\"relationName\":\"CampaignToDonation\"},{\"name\":\"documents\",\"kind\":\"object\",\"type\":\"Document\",\"relationName\":\"CampaignDocuments\"},{\"name\":\"auditLogs\",\"kind\":\"object\",\"type\":\"AuditLog\",\"relationName\":\"CampaignAuditLogs\"}],\"dbName\":null},\"Donation\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"donorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"companyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"campaignId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"amount\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"donationDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"paymentRef\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"paymentMode\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"donor\",\"kind\":\"object\",\"type\":\"DonorProfile\",\"relationName\":\"DonationToDonorProfile\"},{\"name\":\"company\",\"kind\":\"object\",\"type\":\"CompanyProfile\",\"relationName\":\"CompanyProfileToDonation\"},{\"name\":\"campaign\",\"kind\":\"object\",\"type\":\"Campaign\",\"relationName\":\"CampaignToDonation\"},{\"name\":\"auditLogs\",\"kind\":\"object\",\"type\":\"AuditLog\",\"relationName\":\"DonationAuditLogs\"}],\"dbName\":null},\"BankDetail\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ngoId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"companyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accountHolder\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"bankName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accountNumber\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ifsc\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"branch\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ngo\",\"kind\":\"object\",\"type\":\"NGOProfile\",\"relationName\":\"NGOBankDetails\"},{\"name\":\"company\",\"kind\":\"object\",\"type\":\"CompanyProfile\",\"relationName\":\"CompanyBankDetails\"}],\"dbName\":null},\"Document\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ngoId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"companyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"campaignId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"type\",\"kind\":\"enum\",\"type\":\"DocumentType\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"uploadedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"metadata\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"ngo\",\"kind\":\"object\",\"type\":\"NGOProfile\",\"relationName\":\"NGODocuments\"},{\"name\":\"company\",\"kind\":\"object\",\"type\":\"CompanyProfile\",\"relationName\":\"CompanyDocuments\"},{\"name\":\"campaign\",\"kind\":\"object\",\"type\":\"Campaign\",\"relationName\":\"CampaignDocuments\"}],\"dbName\":null},\"Address\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ngoId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"companyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"donorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"line1\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"line2\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"city\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"state\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"country\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"postalCode\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"addressType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ngo\",\"kind\":\"object\",\"type\":\"NGOProfile\",\"relationName\":\"NGOAddresses\"},{\"name\":\"company\",\"kind\":\"object\",\"type\":\"CompanyProfile\",\"relationName\":\"CompanyAddresses\"},{\"name\":\"donor\",\"kind\":\"object\",\"type\":\"DonorProfile\",\"relationName\":\"DonorAddresses\"}],\"dbName\":null},\"AuditLog\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ngoId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"companyId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"donorId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"campaignId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"donationId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"action\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"details\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToAuditLogs\"},{\"name\":\"ngo\",\"kind\":\"object\",\"type\":\"NGOProfile\",\"relationName\":\"NGOAuditLogs\"},{\"name\":\"company\",\"kind\":\"object\",\"type\":\"CompanyProfile\",\"relationName\":\"CompanyAuditLogs\"},{\"name\":\"donor\",\"kind\":\"object\",\"type\":\"DonorProfile\",\"relationName\":\"DonorAuditLogs\"},{\"name\":\"campaign\",\"kind\":\"object\",\"type\":\"Campaign\",\"relationName\":\"CampaignAuditLogs\"},{\"name\":\"donation\",\"kind\":\"object\",\"type\":\"Donation\",\"relationName\":\"DonationAuditLogs\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

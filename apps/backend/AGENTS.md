@@ -285,3 +285,73 @@ No business logic in controller—aims for clean request routing and validation 
 - Build verified post-change.
 
 ---
+
+### **24. Company Listing With Donation Reports Added**
+- Added RBAC-protected endpoint returning companies with donation + campaign detail.
+- Service sanitizes user data while including nested donation info.
+- Build confirmed after addition.
+
+---
+
+### **25. Government-Compliant Schema Added**
+- Expanded Prisma models for NGO/Company/Donor profiles, documents, banking, campaigns, donations, and audit logs.
+- Enums align with CSR and NGO Darpan classifications.
+- Migration `add_government_compliant_models` applied successfully.
+
+---
+
+### **26. NGO Profile Auto-Creation Added**
+- NGO user registration now creates an empty `NGOProfile` record automatically.
+- Ensures new schema relations stay consistent without manual setup.
+- Build confirmed after service updates.
+
+---
+
+### **27. Company Profile Auto-Creation Added**
+- COMPANY registration now seeds a default `CompanyProfile`.
+- Guarantees CSR-ready data structure for corporate accounts.
+- Build confirmed after service updates.
+
+---
+
+### **28. Donor Profile Auto-Creation Added**
+- DONOR registrations now create baseline `DonorProfile` entries.
+- All role-specific profiles (NGO, Company, Donor) are initialized automatically.
+- Build confirmed after service updates.
+
+---
+
+### **29. Admin NGO Profiles Listing Added**
+- Added SUPER_ADMIN-only endpoint returning NGO profiles plus documents, bank, and address data.
+- Service sanitizes embedded user records before returning.
+- Build confirmed following enhancement.
+
+---
+
+### **30. Admin Company Profiles Listing Added**
+- Added SUPER_ADMIN-only endpoint returning company profiles with documents, bank details, and addresses.
+- Sanitization ensures embedded user data never exposes passwords.
+- Build confirmed after addition.
+
+---
+
+### **31. Admin Donor Profiles Listing Added**
+- Added SUPER_ADMIN-only endpoint returning donor profiles with addresses and PAN data.
+- Service sanitizes embedded user records for security.
+- Build confirmed after enhancement.
+
+---
+
+### **32. NGO Address Management Added**
+- Introduced address controller/service with DTO for NGO registered address updates.
+- Endpoint guarded for NGO role via JWT + RolesGuard.
+- Build confirmed after module wiring.
+
+---
+
+### **33. NGO Bank Details Management Added**
+- Added bank controller/service with DTO for NGO bank info updates.
+- Endpoint restricted to NGO role and masks account numbers.
+- Build confirmed after module integration.
+
+---

@@ -126,16 +126,129 @@ exports.Prisma.UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   phone: 'phone',
-  pan: 'pan',
   password: 'password',
   role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.NGOProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  registrationType: 'registrationType',
+  registrationNumber: 'registrationNumber',
+  founderNames: 'founderNames',
+  yearEstablished: 'yearEstablished',
+  missionStatement: 'missionStatement',
+  impactSummary: 'impactSummary',
+  website: 'website',
+  twelveARegistered: 'twelveARegistered',
+  eightyGRegistered: 'eightyGRegistered',
+  csrEligibility: 'csrEligibility'
+};
+
+exports.Prisma.CompanyProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  cin: 'cin',
+  csrPolicyUrl: 'csrPolicyUrl',
+  industry: 'industry',
+  netWorth: 'netWorth',
+  averageProfit: 'averageProfit',
+  csrBudget: 'csrBudget',
+  csrCommittee: 'csrCommittee'
+};
+
+exports.Prisma.DonorProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  pan: 'pan',
+  occupation: 'occupation',
+  interests: 'interests'
+};
+
+exports.Prisma.CampaignScalarFieldEnum = {
+  id: 'id',
+  ngoId: 'ngoId',
+  title: 'title',
+  description: 'description',
+  category: 'category',
+  goalAmount: 'goalAmount',
+  raisedAmount: 'raisedAmount',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  status: 'status'
+};
+
+exports.Prisma.DonationScalarFieldEnum = {
+  id: 'id',
+  donorId: 'donorId',
+  companyId: 'companyId',
+  campaignId: 'campaignId',
+  amount: 'amount',
+  donationDate: 'donationDate',
+  paymentRef: 'paymentRef',
+  paymentMode: 'paymentMode'
+};
+
+exports.Prisma.BankDetailScalarFieldEnum = {
+  id: 'id',
+  ngoId: 'ngoId',
+  companyId: 'companyId',
+  accountHolder: 'accountHolder',
+  bankName: 'bankName',
+  accountNumber: 'accountNumber',
+  ifsc: 'ifsc',
+  branch: 'branch'
+};
+
+exports.Prisma.DocumentScalarFieldEnum = {
+  id: 'id',
+  ngoId: 'ngoId',
+  companyId: 'companyId',
+  campaignId: 'campaignId',
+  type: 'type',
+  title: 'title',
+  url: 'url',
+  uploadedAt: 'uploadedAt',
+  metadata: 'metadata'
+};
+
+exports.Prisma.AddressScalarFieldEnum = {
+  id: 'id',
+  ngoId: 'ngoId',
+  companyId: 'companyId',
+  donorId: 'donorId',
+  line1: 'line1',
+  line2: 'line2',
+  city: 'city',
+  state: 'state',
+  country: 'country',
+  postalCode: 'postalCode',
+  addressType: 'addressType'
+};
+
+exports.Prisma.AuditLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  ngoId: 'ngoId',
+  companyId: 'companyId',
+  donorId: 'donorId',
+  campaignId: 'campaignId',
+  donationId: 'donationId',
+  action: 'action',
+  details: 'details',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -147,6 +260,12 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
 exports.Role = exports.$Enums.Role = {
   SUPER_ADMIN: 'SUPER_ADMIN',
   NGO: 'NGO',
@@ -154,8 +273,46 @@ exports.Role = exports.$Enums.Role = {
   DONOR: 'DONOR'
 };
 
+exports.NGORegistrationType = exports.$Enums.NGORegistrationType = {
+  SOCIETY: 'SOCIETY',
+  TRUST: 'TRUST',
+  SECTION_8: 'SECTION_8',
+  COOPERATIVE: 'COOPERATIVE',
+  OTHER: 'OTHER'
+};
+
+exports.CampaignCategory = exports.$Enums.CampaignCategory = {
+  EDUCATION: 'EDUCATION',
+  HEALTHCARE: 'HEALTHCARE',
+  ENVIRONMENT: 'ENVIRONMENT',
+  LIVELIHOOD: 'LIVELIHOOD',
+  WOMEN_EMPOWERMENT: 'WOMEN_EMPOWERMENT',
+  DISASTER_RELIEF: 'DISASTER_RELIEF',
+  OTHER: 'OTHER'
+};
+
+exports.DocumentType = exports.$Enums.DocumentType = {
+  CSR_POLICY: 'CSR_POLICY',
+  REGISTRATION_CERTIFICATE: 'REGISTRATION_CERTIFICATE',
+  PAN: 'PAN',
+  TAN: 'TAN',
+  BANK_STATEMENT: 'BANK_STATEMENT',
+  AUDITED_FINANCIAL: 'AUDITED_FINANCIAL',
+  CSR_REPORT: 'CSR_REPORT',
+  OTHER: 'OTHER'
+};
+
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  NGOProfile: 'NGOProfile',
+  CompanyProfile: 'CompanyProfile',
+  DonorProfile: 'DonorProfile',
+  Campaign: 'Campaign',
+  Donation: 'Donation',
+  BankDetail: 'BankDetail',
+  Document: 'Document',
+  Address: 'Address',
+  AuditLog: 'AuditLog'
 };
 
 /**

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Role } from 'prisma/generated';
+import { Prisma, Role, NGORegistrationType } from 'prisma/generated';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -95,5 +95,106 @@ export class UsersService {
     } as Prisma.UserFindManyArgs);
 
     return ngos.map((ngo) => this.sanitize(ngo));
+  }
+
+  async getCompaniesWithDonations() {
+    const companies = await this.prisma.user.findMany({
+      where: { role: Role.COMPANY },
+      include: {
+        donations: {
+          include: {
+            campaign: true,
+          },
+        },
+      },
+    } as Prisma.UserFindManyArgs);
+
+    return companies.map((company) => this.sanitize(company));
+  }
+
+  async createNGOProfile(userId: string) {
+    return this.prisma.nGOProfile.create({
+      data: {
+        userId,
+        registrationType: NGORegistrationType.OTHER,
+        registrationNumber: '',
+        founderNames: '',
+        yearEstablished: 0,
+        missionStatement: '',
+      },
+    });
+  }
+
+  async createCompanyProfile(userId: string) {
+    return this.prisma.companyProfile.create({
+      data: {
+        userId,
+        cin: '',
+        industry: '',
+      },
+    });
+  }
+
+  async createDonorProfile(userId: string) {
+    return this.prisma.donorProfile.create({
+      data: {
+        userId,
+      },
+    });
+  }
+
+  async getAllNGOProfiles() {
+    const ngos = await this.prisma.nGOProfile.findMany({
+      include: {
+        user: true,
+        bankDetails: true,
+        documents: true,
+        addresses: true,
+      },
+    });
+
+    return ngos.map((ngo) => {
+      const { user, ...rest } = ngo;
+      return {
+        ...rest,
+        user: user ? this.sanitize(user) : null,
+      };
+    });
+  }
+
+  async getAllCompanyProfiles() {
+    const companies = await this.prisma.companyProfile.findMany({
+      include: {
+        user: true,
+        bankDetails: true,
+        documents: true,
+        addresses: true,
+      },
+    });
+
+    return companies.map((company) => {
+      const { user, ...rest } = company;
+      return {
+        ...rest,
+        user: user ? this.sanitize(user) : null,
+      };
+    });
+  }
+
+  async getAllDonorProfiles() {
+    const donors = await this.prisma.donorProfile.findMany({
+      include: {
+        user: true,
+        addresses: true,
+      },
+    });
+
+    return donors.map((donor) => {
+      const { user, ...rest } = donor;
+      return {
+        ...rest,
+        user: user ? this.sanitize(user) : null,
+      };
+    });
   }
 }

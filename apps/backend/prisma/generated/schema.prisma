@@ -15,14 +15,208 @@ enum Role {
   DONOR
 }
 
+enum NGORegistrationType {
+  SOCIETY
+  TRUST
+  SECTION_8
+  COOPERATIVE
+  OTHER
+}
+
+enum DocumentType {
+  CSR_POLICY
+  REGISTRATION_CERTIFICATE
+  PAN
+  TAN
+  BANK_STATEMENT
+  AUDITED_FINANCIAL
+  CSR_REPORT
+  OTHER
+}
+
+enum CampaignCategory {
+  EDUCATION
+  HEALTHCARE
+  ENVIRONMENT
+  LIVELIHOOD
+  WOMEN_EMPOWERMENT
+  DISASTER_RELIEF
+  OTHER
+}
+
 model User {
   id        String   @id @default(uuid())
   name      String
   email     String   @unique
   phone     String?
-  pan       String?
   password  String
   role      Role
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Relations to extended profiles
+  ngoProfile     NGOProfile?
+  companyProfile CompanyProfile?
+  donorProfile   DonorProfile?
+
+  auditLogs AuditLog[] @relation("UserToAuditLogs")
+}
+
+model NGOProfile {
+  id                 String              @id @default(uuid())
+  userId             String              @unique
+  registrationType   NGORegistrationType
+  registrationNumber String
+  founderNames       String
+  yearEstablished    Int
+  missionStatement   String
+  impactSummary      String?
+  website            String?
+
+  // Financial + compliance
+  twelveARegistered Boolean @default(false)
+  eightyGRegistered Boolean @default(false)
+  csrEligibility    Boolean @default(false)
+
+  // Relations
+  user        User         @relation(fields: [userId], references: [id])
+  campaigns   Campaign[]
+  bankDetails BankDetail[] @relation("NGOBankDetails")
+  documents   Document[]   @relation("NGODocuments")
+  addresses   Address[]    @relation("NGOAddresses")
+  auditLogs   AuditLog[]   @relation("NGOAuditLogs")
+}
+
+model CompanyProfile {
+  id            String  @id @default(uuid())
+  userId        String  @unique
+  cin           String  @unique
+  csrPolicyUrl  String?
+  industry      String
+  netWorth      Float?
+  averageProfit Float?
+  csrBudget     Float?
+  csrCommittee  String?
+
+  user        User         @relation(fields: [userId], references: [id])
+  donations   Donation[]
+  documents   Document[]   @relation("CompanyDocuments")
+  bankDetails BankDetail[] @relation("CompanyBankDetails")
+  addresses   Address[]    @relation("CompanyAddresses")
+  auditLogs   AuditLog[]   @relation("CompanyAuditLogs")
+}
+
+model DonorProfile {
+  id         String  @id @default(uuid())
+  userId     String  @unique
+  pan        String?
+  occupation String?
+  interests  String?
+
+  user      User       @relation(fields: [userId], references: [id])
+  donations Donation[]
+  addresses Address[]  @relation("DonorAddresses")
+  auditLogs AuditLog[] @relation("DonorAuditLogs")
+}
+
+model Campaign {
+  id           String           @id @default(uuid())
+  ngoId        String
+  title        String
+  description  String
+  category     CampaignCategory
+  goalAmount   Float
+  raisedAmount Float            @default(0)
+  startDate    DateTime
+  endDate      DateTime?
+  status       String
+
+  ngo       NGOProfile @relation(fields: [ngoId], references: [id])
+  donations Donation[]
+  documents Document[] @relation("CampaignDocuments")
+  auditLogs AuditLog[] @relation("CampaignAuditLogs")
+}
+
+model Donation {
+  id           String   @id @default(uuid())
+  donorId      String?
+  companyId    String?
+  campaignId   String
+  amount       Float
+  donationDate DateTime @default(now())
+  paymentRef   String?
+  paymentMode  String?
+
+  donor     DonorProfile?   @relation(fields: [donorId], references: [id])
+  company   CompanyProfile? @relation(fields: [companyId], references: [id])
+  campaign  Campaign        @relation(fields: [campaignId], references: [id])
+  auditLogs AuditLog[]      @relation("DonationAuditLogs")
+}
+
+model BankDetail {
+  id            String  @id @default(uuid())
+  ngoId         String?
+  companyId     String?
+  accountHolder String
+  bankName      String
+  accountNumber String
+  ifsc          String
+  branch        String?
+
+  ngo     NGOProfile?     @relation("NGOBankDetails", fields: [ngoId], references: [id])
+  company CompanyProfile? @relation("CompanyBankDetails", fields: [companyId], references: [id])
+}
+
+model Document {
+  id         String       @id @default(uuid())
+  ngoId      String?
+  companyId  String?
+  campaignId String?
+  type       DocumentType
+  title      String
+  url        String
+  uploadedAt DateTime     @default(now())
+  metadata   Json?
+
+  ngo      NGOProfile?     @relation("NGODocuments", fields: [ngoId], references: [id])
+  company  CompanyProfile? @relation("CompanyDocuments", fields: [companyId], references: [id])
+  campaign Campaign?       @relation("CampaignDocuments", fields: [campaignId], references: [id])
+}
+
+model Address {
+  id          String  @id @default(uuid())
+  ngoId       String?
+  companyId   String?
+  donorId     String?
+  line1       String
+  line2       String?
+  city        String
+  state       String
+  country     String  @default("India")
+  postalCode  String
+  addressType String?
+
+  ngo     NGOProfile?     @relation("NGOAddresses", fields: [ngoId], references: [id])
+  company CompanyProfile? @relation("CompanyAddresses", fields: [companyId], references: [id])
+  donor   DonorProfile?   @relation("DonorAddresses", fields: [donorId], references: [id])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  ngoId      String?
+  companyId  String?
+  donorId    String?
+  campaignId String?
+  donationId String?
+  action     String
+  details    Json?
+  createdAt  DateTime @default(now())
+
+  user     User?           @relation("UserToAuditLogs", fields: [userId], references: [id])
+  ngo      NGOProfile?     @relation("NGOAuditLogs", fields: [ngoId], references: [id])
+  company  CompanyProfile? @relation("CompanyAuditLogs", fields: [companyId], references: [id])
+  donor    DonorProfile?   @relation("DonorAuditLogs", fields: [donorId], references: [id])
+  campaign Campaign?       @relation("CampaignAuditLogs", fields: [campaignId], references: [id])
+  donation Donation?       @relation("DonationAuditLogs", fields: [donationId], references: [id])
 }
