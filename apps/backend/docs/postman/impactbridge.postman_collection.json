@@ -2,8 +2,15 @@
   "info": {
     "name": "ImpactBridge Backend",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": "Collection covering authentication, self-service, NGO/Company admin, and compliance endpoints for ImpactBridge."
+    "description": "Auth, self-service, NGO compliance, and admin endpoints for ImpactBridge."
   },
+  "variable": [
+    {"key": "base_url", "value": "http://localhost:3000"},
+    {"key": "token", "value": ""},
+    {"key": "ngoId", "value": ""},
+    {"key": "companyId", "value": ""},
+    {"key": "donorId", "value": ""}
+  ],
   "item": [
     {
       "name": "Auth",
@@ -13,15 +20,15 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {"key": "Content-Type", "value": "application/json"}
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Alice Admin\",\n  \"email\": \"alice@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"SUPER_ADMIN\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/auth/register",
-              "host": ["{{baseUrl}}"],
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
               "path": ["auth", "register"]
             }
           }
@@ -33,9 +40,9 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "const jsonData = pm.response.json();",
-                  "if (jsonData.accessToken) { pm.environment.set('token', jsonData.accessToken); }",
-                  "if (jsonData.user && jsonData.user.id) { pm.environment.set('userId', jsonData.user.id); }"
+                  "const json = pm.response.json();",
+                  "if (json.accessToken) pm.collectionVariables.set('token', json.accessToken);",
+                  "if (json.user && json.user.id) pm.collectionVariables.set('userId', json.user.id);"
                 ],
                 "type": "text/javascript"
               }
@@ -44,15 +51,15 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {"key": "Content-Type", "value": "application/json"}
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"alice@example.com\",\n  \"password\": \"password123\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/auth/login",
-              "host": ["{{baseUrl}}"],
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
               "path": ["auth", "login"]
             }
           }
@@ -66,14 +73,8 @@
           "name": "Get My Profile",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/users/me",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "me"]
-            }
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {"raw": "{{base_url}}/users/me", "host": ["{{base_url}}"], "path": ["users", "me"]}
           }
         },
         {
@@ -81,18 +82,14 @@
           "request": {
             "method": "PATCH",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"phone\": \"+911234567890\",\n  \"address\": \"HQ Road\"\n}"
             },
-            "url": {
-              "raw": "{{baseUrl}}/users/me",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "me"]
-            }
+            "url": {"raw": "{{base_url}}/users/me", "host": ["{{base_url}}"], "path": ["users", "me"]}
           }
         },
         {
@@ -100,83 +97,44 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"oldPassword\": \"password123\",\n  \"newPassword\": \"newSecret456\"\n}"
             },
-            "url": {
-              "raw": "{{baseUrl}}/users/change-password",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "change-password"]
-            }
+            "url": {"raw": "{{base_url}}/users/change-password", "host": ["{{base_url}}"], "path": ["users", "change-password"]}
           }
         },
         {
-          "name": "Update NGO Registered Address",
+          "name": "Update Registered Address",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"line1\": \"123 Trust Lane\",\n  \"district\": \"Bengaluru Urban\",\n  \"state\": \"Karnataka\",\n  \"pincode\": \"560001\",\n  \"country\": \"India\"\n}"
             },
-            "url": {
-              "raw": "{{baseUrl}}/address/ngo",
-              "host": ["{{baseUrl}}"],
-              "path": ["address", "ngo"]
-            }
+            "url": {"raw": "{{base_url}}/address/ngo", "host": ["{{base_url}}"], "path": ["address", "ngo"]}
           }
         },
         {
-          "name": "Update NGO Bank Details",
+          "name": "Update Bank Details",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"accountHolder\": \"ImpactBridge NGO\",\n  \"accountNumber\": \"123456789012\",\n  \"ifscCode\": \"HDFC0001234\",\n  \"bankName\": \"HDFC Bank\",\n  \"branchName\": \"MG Road\"\n}"
             },
-            "url": {
-              "raw": "{{baseUrl}}/bank/ngo",
-              "host": ["{{baseUrl}}"],
-              "path": ["bank", "ngo"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Public & Legacy Users",
-      "item": [
-        {
-          "name": "List Users (Legacy)",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/users",
-              "host": ["{{baseUrl}}"],
-              "path": ["users"]
-            }
-          }
-        },
-        {
-          "name": "Get User by ID (Legacy)",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/users/{{userId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "{{userId}}"]
-            }
+            "url": {"raw": "{{base_url}}/bank/ngo", "host": ["{{base_url}}"], "path": ["bank", "ngo"]}
           }
         }
       ]
@@ -185,73 +143,62 @@
       "name": "Admin Insights",
       "item": [
         {
-          "name": "NGOs With Campaigns",
+          "name": "NGOs With Campaigns (SUPER_ADMIN/COMPANY)",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/users/ngos-with-campaigns",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "ngos-with-campaigns"]
-            }
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {"raw": "{{base_url}}/users/ngos-with-campaigns", "host": ["{{base_url}}"], "path": ["users", "ngos-with-campaigns"]}
           }
         },
         {
-          "name": "Companies With Donation Reports",
+          "name": "Companies With Reports (SUPER_ADMIN)",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/users/companies-with-reports",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "companies-with-reports"]
-            }
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {"raw": "{{base_url}}/users/companies-with-reports", "host": ["{{base_url}}"], "path": ["users", "companies-with-reports"]}
           }
         },
         {
-          "name": "Admin NGOs",
+          "name": "Admin NGO Profiles (SUPER_ADMIN)",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/users/admin/ngos",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "admin", "ngos"]
-            }
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {"raw": "{{base_url}}/users/admin/ngos", "host": ["{{base_url}}"], "path": ["users", "admin", "ngos"]}
           }
         },
         {
-          "name": "Admin Companies",
+          "name": "Admin Company Profiles (SUPER_ADMIN)",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/users/admin/companies",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "admin", "companies"]
-            }
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {"raw": "{{base_url}}/users/admin/companies", "host": ["{{base_url}}"], "path": ["users", "admin", "companies"]}
           }
         },
         {
-          "name": "Admin Donors",
+          "name": "Admin Donor Profiles (SUPER_ADMIN)",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Authorization", "value": "Bearer {{token}}" }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/users/admin/donors",
-              "host": ["{{baseUrl}}"],
-              "path": ["users", "admin", "donors"]
-            }
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {"raw": "{{base_url}}/users/admin/donors", "host": ["{{base_url}}"], "path": ["users", "admin", "donors"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Legacy Users (To Sunset)",
+      "item": [
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{base_url}}/users", "host": ["{{base_url}}"], "path": ["users"]}
+          }
+        },
+        {
+          "name": "Get User By ID",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "{{base_url}}/users/{{userId}}", "host": ["{{base_url}}"], "path": ["users", "{{userId}}"]}
           }
         }
       ]

@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { PrismaModule } from '../prisma/prisma.module';
+import { UsersModule } from '../users/users.module';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
@@ -10,6 +11,7 @@ import { APP_GUARD } from '@nestjs/core';
 @Module({
   imports: [
     PrismaModule,
+    UsersModule,
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,

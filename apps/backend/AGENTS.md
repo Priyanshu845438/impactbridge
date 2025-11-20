@@ -355,3 +355,31 @@ No business logic in controller—aims for clean request routing and validation 
 - Build confirmed after module integration.
 
 ---
+
+### **34. NGO Document Upload Added**
+- Added documents controller/service with DTO for NGO document uploads.
+- Endpoint restricted to NGO role via JWT + RolesGuard.
+- Build confirmed after module wiring.
+
+---
+
+### **35. NGO Campaign Creation Added**
+- Added campaign controller/service/DTO enabling NGOs to publish campaigns.
+- Endpoint locked to NGO role; campaigns store category, funding goals, visibility.
+- Build confirmed after module integration.
+
+---
+
+### **36. Public Campaign Listing Added**
+- Added public endpoints to browse campaigns and view campaign details.
+- Service returns sanitized campaign data with NGO info and donation stats.
+- Build confirmed after update.
+
+---
+
+### **37. Donation API Added**
+- Added donation DTO/service/controller enabling JWT users to donate to campaigns.
+- Campaign totals update after each donation; donor/company profiles linked automatically.
+- Build confirmed after module wiring.
+
+---

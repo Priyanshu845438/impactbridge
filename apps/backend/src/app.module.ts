@@ -8,9 +8,22 @@ import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
 import { AddressModule } from './address/address.module';
 import { BankModule } from './bank/bank.module';
+import { DocumentsModule } from './documents/documents.module';
+import { CampaignsModule } from './campaigns/campaigns.module';
+import { DonationsModule } from './donations/donations.module';
 
 @Module({
-  imports: [PrismaModule, UsersModule, AuthModule, UserModule, AddressModule, BankModule],
+  imports: [
+    PrismaModule,
+    UsersModule,
+    AuthModule,
+    UserModule,
+    AddressModule,
+    BankModule,
+    DocumentsModule,
+    CampaignsModule,
+    DonationsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

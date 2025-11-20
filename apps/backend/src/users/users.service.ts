@@ -80,6 +80,21 @@ export class UsersService {
     return this.sanitize(user);
   }
 
+  async getNGOProfileByUserId(userId: string) {
+    const profile = await this.prisma.nGOProfile.findUnique({
+      where: { userId },
+      include: { user: true },
+    });
+
+    if (!profile) return null;
+
+    const { user, ...rest } = profile;
+    return {
+      ...rest,
+      user: user ? this.sanitize(user) : null,
+    };
+  }
+
   async getCompanyById(id: string) {
     const user = await this.prisma.user.findFirst({
       where: { id, role: Role.COMPANY },
