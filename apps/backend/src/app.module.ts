@@ -11,6 +11,7 @@ import { BankModule } from './bank/bank.module';
 import { DocumentsModule } from './documents/documents.module';
 import { CampaignsModule } from './campaigns/campaigns.module';
 import { DonationsModule } from './donations/donations.module';
+import { ReceiptsModule } from './receipts/receipts.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { DonationsModule } from './donations/donations.module';
     DocumentsModule,
     CampaignsModule,
     DonationsModule,
+    ReceiptsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

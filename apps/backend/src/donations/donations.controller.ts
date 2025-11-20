@@ -3,6 +3,10 @@ import { DonationsService } from './donations.service';
 import { CreateDonationDto } from './dto/create-donation.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { Get } from '@nestjs/common';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../user/user-role.enum';
 
 @Controller('donations')
 export class DonationsController {
@@ -16,5 +20,25 @@ export class DonationsController {
     @Body() dto: CreateDonationDto,
   ) {
     return this.donationsService.createDonation(user?.sub, campaignId, dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  getMine(@CurrentUser() user: any) {
+    return this.donationsService.getMyDonations(user?.sub);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.NGO)
+  @Get('ngo')
+  getNgoDonations(@CurrentUser() user: any) {
+    return this.donationsService.getNGOCampaignDonations(user?.sub);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.SUPER_ADMIN)
+  @Get('admin/all')
+  getAll() {
+    return this.donationsService.getAllDonations();
   }
 }

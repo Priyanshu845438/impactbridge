@@ -188,7 +188,8 @@ exports.Prisma.DonationScalarFieldEnum = {
   amount: 'amount',
   donationDate: 'donationDate',
   paymentRef: 'paymentRef',
-  paymentMode: 'paymentMode'
+  paymentMode: 'paymentMode',
+  receiptUrl: 'receiptUrl'
 };
 
 exports.Prisma.BankDetailScalarFieldEnum = {

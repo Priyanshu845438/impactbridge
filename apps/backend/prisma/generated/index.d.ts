@@ -8259,6 +8259,7 @@ export namespace Prisma {
     donationDate: Date | null
     paymentRef: string | null
     paymentMode: string | null
+    receiptUrl: string | null
   }
 
   export type DonationMaxAggregateOutputType = {
@@ -8270,6 +8271,7 @@ export namespace Prisma {
     donationDate: Date | null
     paymentRef: string | null
     paymentMode: string | null
+    receiptUrl: string | null
   }
 
   export type DonationCountAggregateOutputType = {
@@ -8281,6 +8283,7 @@ export namespace Prisma {
     donationDate: number
     paymentRef: number
     paymentMode: number
+    receiptUrl: number
     _all: number
   }
 
@@ -8302,6 +8305,7 @@ export namespace Prisma {
     donationDate?: true
     paymentRef?: true
     paymentMode?: true
+    receiptUrl?: true
   }
 
   export type DonationMaxAggregateInputType = {
@@ -8313,6 +8317,7 @@ export namespace Prisma {
     donationDate?: true
     paymentRef?: true
     paymentMode?: true
+    receiptUrl?: true
   }
 
   export type DonationCountAggregateInputType = {
@@ -8324,6 +8329,7 @@ export namespace Prisma {
     donationDate?: true
     paymentRef?: true
     paymentMode?: true
+    receiptUrl?: true
     _all?: true
   }
 
@@ -8422,6 +8428,7 @@ export namespace Prisma {
     donationDate: Date
     paymentRef: string | null
     paymentMode: string | null
+    receiptUrl: string | null
     _count: DonationCountAggregateOutputType | null
     _avg: DonationAvgAggregateOutputType | null
     _sum: DonationSumAggregateOutputType | null
@@ -8452,6 +8459,7 @@ export namespace Prisma {
     donationDate?: boolean
     paymentRef?: boolean
     paymentMode?: boolean
+    receiptUrl?: boolean
     donor?: boolean | Donation$donorArgs<ExtArgs>
     company?: boolean | Donation$companyArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
@@ -8468,6 +8476,7 @@ export namespace Prisma {
     donationDate?: boolean
     paymentRef?: boolean
     paymentMode?: boolean
+    receiptUrl?: boolean
     donor?: boolean | Donation$donorArgs<ExtArgs>
     company?: boolean | Donation$companyArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
@@ -8482,6 +8491,7 @@ export namespace Prisma {
     donationDate?: boolean
     paymentRef?: boolean
     paymentMode?: boolean
+    receiptUrl?: boolean
     donor?: boolean | Donation$donorArgs<ExtArgs>
     company?: boolean | Donation$companyArgs<ExtArgs>
     campaign?: boolean | CampaignDefaultArgs<ExtArgs>
@@ -8496,9 +8506,10 @@ export namespace Prisma {
     donationDate?: boolean
     paymentRef?: boolean
     paymentMode?: boolean
+    receiptUrl?: boolean
   }
 
-  export type DonationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "donorId" | "companyId" | "campaignId" | "amount" | "donationDate" | "paymentRef" | "paymentMode", ExtArgs["result"]["donation"]>
+  export type DonationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "donorId" | "companyId" | "campaignId" | "amount" | "donationDate" | "paymentRef" | "paymentMode" | "receiptUrl", ExtArgs["result"]["donation"]>
   export type DonationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     donor?: boolean | Donation$donorArgs<ExtArgs>
     company?: boolean | Donation$companyArgs<ExtArgs>
@@ -8534,6 +8545,7 @@ export namespace Prisma {
       donationDate: Date
       paymentRef: string | null
       paymentMode: string | null
+      receiptUrl: string | null
     }, ExtArgs["result"]["donation"]>
     composites: {}
   }
@@ -8969,6 +8981,7 @@ export namespace Prisma {
     readonly donationDate: FieldRef<"Donation", 'DateTime'>
     readonly paymentRef: FieldRef<"Donation", 'String'>
     readonly paymentMode: FieldRef<"Donation", 'String'>
+    readonly receiptUrl: FieldRef<"Donation", 'String'>
   }
     
 
@@ -14345,7 +14358,8 @@ export namespace Prisma {
     amount: 'amount',
     donationDate: 'donationDate',
     paymentRef: 'paymentRef',
-    paymentMode: 'paymentMode'
+    paymentMode: 'paymentMode',
+    receiptUrl: 'receiptUrl'
   };
 
   export type DonationScalarFieldEnum = (typeof DonationScalarFieldEnum)[keyof typeof DonationScalarFieldEnum]
@@ -15040,6 +15054,7 @@ export namespace Prisma {
     donationDate?: DateTimeFilter<"Donation"> | Date | string
     paymentRef?: StringNullableFilter<"Donation"> | string | null
     paymentMode?: StringNullableFilter<"Donation"> | string | null
+    receiptUrl?: StringNullableFilter<"Donation"> | string | null
     donor?: XOR<DonorProfileNullableScalarRelationFilter, DonorProfileWhereInput> | null
     company?: XOR<CompanyProfileNullableScalarRelationFilter, CompanyProfileWhereInput> | null
     campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
@@ -15055,6 +15070,7 @@ export namespace Prisma {
     donationDate?: SortOrder
     paymentRef?: SortOrderInput | SortOrder
     paymentMode?: SortOrderInput | SortOrder
+    receiptUrl?: SortOrderInput | SortOrder
     donor?: DonorProfileOrderByWithRelationInput
     company?: CompanyProfileOrderByWithRelationInput
     campaign?: CampaignOrderByWithRelationInput
@@ -15073,6 +15089,7 @@ export namespace Prisma {
     donationDate?: DateTimeFilter<"Donation"> | Date | string
     paymentRef?: StringNullableFilter<"Donation"> | string | null
     paymentMode?: StringNullableFilter<"Donation"> | string | null
+    receiptUrl?: StringNullableFilter<"Donation"> | string | null
     donor?: XOR<DonorProfileNullableScalarRelationFilter, DonorProfileWhereInput> | null
     company?: XOR<CompanyProfileNullableScalarRelationFilter, CompanyProfileWhereInput> | null
     campaign?: XOR<CampaignScalarRelationFilter, CampaignWhereInput>
@@ -15088,6 +15105,7 @@ export namespace Prisma {
     donationDate?: SortOrder
     paymentRef?: SortOrderInput | SortOrder
     paymentMode?: SortOrderInput | SortOrder
+    receiptUrl?: SortOrderInput | SortOrder
     _count?: DonationCountOrderByAggregateInput
     _avg?: DonationAvgOrderByAggregateInput
     _max?: DonationMaxOrderByAggregateInput
@@ -15107,6 +15125,7 @@ export namespace Prisma {
     donationDate?: DateTimeWithAggregatesFilter<"Donation"> | Date | string
     paymentRef?: StringNullableWithAggregatesFilter<"Donation"> | string | null
     paymentMode?: StringNullableWithAggregatesFilter<"Donation"> | string | null
+    receiptUrl?: StringNullableWithAggregatesFilter<"Donation"> | string | null
   }
 
   export type BankDetailWhereInput = {
@@ -15944,6 +15963,7 @@ export namespace Prisma {
     donationDate?: Date | string
     paymentRef?: string | null
     paymentMode?: string | null
+    receiptUrl?: string | null
     donor?: DonorProfileCreateNestedOneWithoutDonationsInput
     company?: CompanyProfileCreateNestedOneWithoutDonationsInput
     campaign: CampaignCreateNestedOneWithoutDonationsInput
@@ -15959,6 +15979,7 @@ export namespace Prisma {
     donationDate?: Date | string
     paymentRef?: string | null
     paymentMode?: string | null
+    receiptUrl?: string | null
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutDonationInput
   }
 
@@ -15968,6 +15989,7 @@ export namespace Prisma {
     donationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     donor?: DonorProfileUpdateOneWithoutDonationsNestedInput
     company?: CompanyProfileUpdateOneWithoutDonationsNestedInput
     campaign?: CampaignUpdateOneRequiredWithoutDonationsNestedInput
@@ -15983,6 +16005,7 @@ export namespace Prisma {
     donationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     auditLogs?: AuditLogUncheckedUpdateManyWithoutDonationNestedInput
   }
 
@@ -15995,6 +16018,7 @@ export namespace Prisma {
     donationDate?: Date | string
     paymentRef?: string | null
     paymentMode?: string | null
+    receiptUrl?: string | null
   }
 
   export type DonationUpdateManyMutationInput = {
@@ -16003,6 +16027,7 @@ export namespace Prisma {
     donationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type DonationUncheckedUpdateManyInput = {
@@ -16014,6 +16039,7 @@ export namespace Prisma {
     donationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BankDetailCreateInput = {
@@ -16924,6 +16950,7 @@ export namespace Prisma {
     donationDate?: SortOrder
     paymentRef?: SortOrder
     paymentMode?: SortOrder
+    receiptUrl?: SortOrder
   }
 
   export type DonationAvgOrderByAggregateInput = {
@@ -16939,6 +16966,7 @@ export namespace Prisma {
     donationDate?: SortOrder
     paymentRef?: SortOrder
     paymentMode?: SortOrder
+    receiptUrl?: SortOrder
   }
 
   export type DonationMinOrderByAggregateInput = {
@@ -16950,6 +16978,7 @@ export namespace Prisma {
     donationDate?: SortOrder
     paymentRef?: SortOrder
     paymentMode?: SortOrder
+    receiptUrl?: SortOrder
   }
 
   export type DonationSumOrderByAggregateInput = {
@@ -19448,6 +19477,7 @@ export namespace Prisma {
     donationDate?: Date | string
     paymentRef?: string | null
     paymentMode?: string | null
+    receiptUrl?: string | null
     donor?: DonorProfileCreateNestedOneWithoutDonationsInput
     campaign: CampaignCreateNestedOneWithoutDonationsInput
     auditLogs?: AuditLogCreateNestedManyWithoutDonationInput
@@ -19461,6 +19491,7 @@ export namespace Prisma {
     donationDate?: Date | string
     paymentRef?: string | null
     paymentMode?: string | null
+    receiptUrl?: string | null
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutDonationInput
   }
 
@@ -19673,6 +19704,7 @@ export namespace Prisma {
     donationDate?: DateTimeFilter<"Donation"> | Date | string
     paymentRef?: StringNullableFilter<"Donation"> | string | null
     paymentMode?: StringNullableFilter<"Donation"> | string | null
+    receiptUrl?: StringNullableFilter<"Donation"> | string | null
   }
 
   export type DocumentUpsertWithWhereUniqueWithoutCompanyInput = {
@@ -19778,6 +19810,7 @@ export namespace Prisma {
     donationDate?: Date | string
     paymentRef?: string | null
     paymentMode?: string | null
+    receiptUrl?: string | null
     company?: CompanyProfileCreateNestedOneWithoutDonationsInput
     campaign: CampaignCreateNestedOneWithoutDonationsInput
     auditLogs?: AuditLogCreateNestedManyWithoutDonationInput
@@ -19791,6 +19824,7 @@ export namespace Prisma {
     donationDate?: Date | string
     paymentRef?: string | null
     paymentMode?: string | null
+    receiptUrl?: string | null
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutDonationInput
   }
 
@@ -20010,6 +20044,7 @@ export namespace Prisma {
     donationDate?: Date | string
     paymentRef?: string | null
     paymentMode?: string | null
+    receiptUrl?: string | null
     donor?: DonorProfileCreateNestedOneWithoutDonationsInput
     company?: CompanyProfileCreateNestedOneWithoutDonationsInput
     auditLogs?: AuditLogCreateNestedManyWithoutDonationInput
@@ -20023,6 +20058,7 @@ export namespace Prisma {
     donationDate?: Date | string
     paymentRef?: string | null
     paymentMode?: string | null
+    receiptUrl?: string | null
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutDonationInput
   }
 
@@ -21288,6 +21324,7 @@ export namespace Prisma {
     donationDate?: Date | string
     paymentRef?: string | null
     paymentMode?: string | null
+    receiptUrl?: string | null
     donor?: DonorProfileCreateNestedOneWithoutDonationsInput
     company?: CompanyProfileCreateNestedOneWithoutDonationsInput
     campaign: CampaignCreateNestedOneWithoutDonationsInput
@@ -21302,6 +21339,7 @@ export namespace Prisma {
     donationDate?: Date | string
     paymentRef?: string | null
     paymentMode?: string | null
+    receiptUrl?: string | null
   }
 
   export type DonationCreateOrConnectWithoutAuditLogsInput = {
@@ -21529,6 +21567,7 @@ export namespace Prisma {
     donationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     donor?: DonorProfileUpdateOneWithoutDonationsNestedInput
     company?: CompanyProfileUpdateOneWithoutDonationsNestedInput
     campaign?: CampaignUpdateOneRequiredWithoutDonationsNestedInput
@@ -21543,6 +21582,7 @@ export namespace Prisma {
     donationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AuditLogCreateManyUserInput = {
@@ -21839,6 +21879,7 @@ export namespace Prisma {
     donationDate?: Date | string
     paymentRef?: string | null
     paymentMode?: string | null
+    receiptUrl?: string | null
   }
 
   export type DocumentCreateManyCompanyInput = {
@@ -21893,6 +21934,7 @@ export namespace Prisma {
     donationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     donor?: DonorProfileUpdateOneWithoutDonationsNestedInput
     campaign?: CampaignUpdateOneRequiredWithoutDonationsNestedInput
     auditLogs?: AuditLogUpdateManyWithoutDonationNestedInput
@@ -21906,6 +21948,7 @@ export namespace Prisma {
     donationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     auditLogs?: AuditLogUncheckedUpdateManyWithoutDonationNestedInput
   }
 
@@ -21917,6 +21960,7 @@ export namespace Prisma {
     donationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type DocumentUpdateWithoutCompanyInput = {
@@ -22065,6 +22109,7 @@ export namespace Prisma {
     donationDate?: Date | string
     paymentRef?: string | null
     paymentMode?: string | null
+    receiptUrl?: string | null
   }
 
   export type AddressCreateManyDonorInput = {
@@ -22098,6 +22143,7 @@ export namespace Prisma {
     donationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     company?: CompanyProfileUpdateOneWithoutDonationsNestedInput
     campaign?: CampaignUpdateOneRequiredWithoutDonationsNestedInput
     auditLogs?: AuditLogUpdateManyWithoutDonationNestedInput
@@ -22111,6 +22157,7 @@ export namespace Prisma {
     donationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     auditLogs?: AuditLogUncheckedUpdateManyWithoutDonationNestedInput
   }
 
@@ -22122,6 +22169,7 @@ export namespace Prisma {
     donationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AddressUpdateWithoutDonorInput = {
@@ -22207,6 +22255,7 @@ export namespace Prisma {
     donationDate?: Date | string
     paymentRef?: string | null
     paymentMode?: string | null
+    receiptUrl?: string | null
   }
 
   export type DocumentCreateManyCampaignInput = {
@@ -22238,6 +22287,7 @@ export namespace Prisma {
     donationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     donor?: DonorProfileUpdateOneWithoutDonationsNestedInput
     company?: CompanyProfileUpdateOneWithoutDonationsNestedInput
     auditLogs?: AuditLogUpdateManyWithoutDonationNestedInput
@@ -22251,6 +22301,7 @@ export namespace Prisma {
     donationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
     auditLogs?: AuditLogUncheckedUpdateManyWithoutDonationNestedInput
   }
 
@@ -22262,6 +22313,7 @@ export namespace Prisma {
     donationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentRef?: NullableStringFieldUpdateOperationsInput | string | null
     paymentMode?: NullableStringFieldUpdateOperationsInput | string | null
+    receiptUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type DocumentUpdateWithoutCampaignInput = {

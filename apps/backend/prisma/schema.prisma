@@ -146,6 +146,7 @@ model Donation {
   donationDate  DateTime  @default(now())
   paymentRef    String?
   paymentMode   String?
+  receiptUrl    String?
 
   donor         DonorProfile? @relation(fields: [donorId], references: [id])
   company       CompanyProfile? @relation(fields: [companyId], references: [id])

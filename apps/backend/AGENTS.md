@@ -383,3 +383,17 @@ No business logic in controller—aims for clean request routing and validation 
 - Build confirmed after module wiring.
 
 ---
+
+### **38. Donation History Endpoints Added**
+- Added endpoints for donors (self), NGOs, and SUPER_ADMIN to review donation history.
+- Service returns sanitized records with campaign context.
+- Build confirmed after update.
+
+---
+
+### **39. Donation Receipt Generation Added**
+- Added receipts DTO/service/controller enabling NGOs to attach receipt URLs to donations.
+- Schema updated with `receiptUrl` field; migration applied successfully.
+- Build confirmed after changes.
+
+---

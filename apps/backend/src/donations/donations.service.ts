@@ -45,4 +45,55 @@ export class DonationsService {
     const profile = await this.prisma.companyProfile.findUnique({ where: { userId } });
     return profile?.id ?? null;
   }
+
+  async getMyDonations(userId: string) {
+    return this.prisma.donation.findMany({
+      where: {
+        OR: [
+          { donor: { userId } },
+          { company: { userId } },
+        ],
+      },
+      include: {
+        campaign: true,
+      },
+      orderBy: { donationDate: 'desc' },
+    });
+  }
+
+  async getNGOCampaignDonations(userId: string) {
+    const profile = await this.prisma.nGOProfile.findUnique({ where: { userId } });
+    if (!profile) return [];
+
+    return this.prisma.donation.findMany({
+      where: {
+        campaign: { ngoId: profile.id },
+      },
+      include: {
+        campaign: true,
+        donor: {
+          include: { user: { select: { name: true, email: true } } },
+        },
+        company: {
+          include: { user: { select: { name: true, email: true } } },
+        },
+      },
+      orderBy: { donationDate: 'desc' },
+    });
+  }
+
+  async getAllDonations() {
+    return this.prisma.donation.findMany({
+      include: {
+        campaign: true,
+        donor: {
+          include: { user: { select: { name: true, email: true } } },
+        },
+        company: {
+          include: { user: { select: { name: true, email: true } } },
+        },
+      },
+      orderBy: { donationDate: 'desc' },
+    });
+  }
 }
