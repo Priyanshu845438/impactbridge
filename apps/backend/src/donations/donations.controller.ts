@@ -19,20 +19,20 @@ export class DonationsController {
     @Param('campaignId') campaignId: string,
     @Body() dto: CreateDonationDto,
   ) {
-    return this.donationsService.createDonation(user?.sub, campaignId, dto);
+    return this.donationsService.createDonation(user?.id, campaignId, dto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
   getMine(@CurrentUser() user: any) {
-    return this.donationsService.getMyDonations(user?.sub);
+    return this.donationsService.getMyDonations(user?.id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.NGO)
   @Get('ngo')
   getNgoDonations(@CurrentUser() user: any) {
-    return this.donationsService.getNGOCampaignDonations(user?.sub);
+    return this.donationsService.getNGOCampaignDonations(user?.id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

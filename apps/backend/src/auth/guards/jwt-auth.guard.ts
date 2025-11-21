@@ -29,8 +29,11 @@ export class JwtAuthGuard implements CanActivate {
         throw new UnauthorizedException('Authentication unavailable');
       }
 
-      const decoded = verify(token, JWT_SECRET);
-      request.user = decoded;
+      const decoded = verify(token, JWT_SECRET) as { sub: string; role: string };
+      request.user = {
+        id: decoded.sub,
+        role: decoded.role,
+      };
       return true;
     } catch (error) {
       throw new UnauthorizedException('Invalid or expired token');

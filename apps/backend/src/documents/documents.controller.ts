@@ -19,7 +19,7 @@ export class DocumentsController {
   @Roles(UserRole.NGO)
   @Post('ngo')
   async uploadForNGO(@CurrentUser() user: any, @Body() dto: DocumentUploadDto) {
-    const profile = await this.usersService.getNGOProfileByUserId(user?.sub);
+    const profile = await this.usersService.getNGOProfileByUserId(user?.id);
     return this.documentsService.uploadForNGO(profile!.id, dto);
   }
 }

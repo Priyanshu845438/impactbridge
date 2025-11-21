@@ -11,26 +11,10 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.SUPER_ADMIN)
-  @Get()
-  async findAll() {
-    return this.userService.findAll();
-  }
-
-  @Get(':id')
-  async getById(@Param('id') id: string) {
-    const profile = await this.userService.findById(id);
-    if (!profile) {
-      throw new NotFoundException('User not found');
-    }
-    return profile;
-  }
-
   @UseGuards(JwtAuthGuard)
   @Get('me')
   async getMe(@CurrentUser() user: any) {
-    const profile = await this.userService.findById(user?.sub);
+    const profile = await this.userService.findById(user?.id);
     if (!profile) {
       throw new NotFoundException('User not found');
     }
@@ -40,6 +24,15 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Patch('me')
   async updateMe(@CurrentUser() user: any, @Body() dto: UpdateUserDto) {
-    return this.userService.update(user?.sub, dto);
+    return this.userService.update(user?.id, dto);
+  }
+
+  @Get(':id')
+  async getById(@Param('id') id: string) {
+    const profile = await this.userService.findById(id);
+    if (!profile) {
+      throw new NotFoundException('User not found');
+    }
+    return profile;
   }
 }

@@ -12,6 +12,9 @@ import { DocumentsModule } from './documents/documents.module';
 import { CampaignsModule } from './campaigns/campaigns.module';
 import { DonationsModule } from './donations/donations.module';
 import { ReceiptsModule } from './receipts/receipts.module';
+import { ActivityLogModule } from './activity/activity-log.module';
+import { AnalyticsModule } from './analytics/analytics.module';
+import { CSRReportsModule } from './csr/csr-reports.module';
 
 @Module({
   imports: [
@@ -25,6 +28,9 @@ import { ReceiptsModule } from './receipts/receipts.module';
     CampaignsModule,
     DonationsModule,
     ReceiptsModule,
+    ActivityLogModule,
+    AnalyticsModule,
+    CSRReportsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

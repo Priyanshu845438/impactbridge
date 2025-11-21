@@ -19,7 +19,7 @@ export class AddressController {
   @Roles(UserRole.NGO)
   @Post('ngo')
   async upsertNGOAddress(@CurrentUser() user: any, @Body() dto: AddressDto) {
-    const profile = await this.usersService.getNGOProfileByUserId(user?.sub);
+    const profile = await this.usersService.getNGOProfileByUserId(user?.id);
     return this.addressService.createOrUpdateForNGO(profile!.id, dto);
   }
 }

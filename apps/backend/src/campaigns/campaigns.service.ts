@@ -1,20 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { CampaignCategory } from 'prisma/generated';
+import { ActivityLogService } from '../activity/activity-log.service';
 
 @Injectable()
 export class CampaignsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly activityLog: ActivityLogService,
+  ) {}
 
   async createForNGO(userId: string, dto: CreateCampaignDto) {
     const profile = await this.prisma.nGOProfile.findUnique({ where: { userId } });
 
     if (!profile) {
-      throw new Error('NGO profile not found');
+      throw new NotFoundException('NGO profile not found');
     }
 
-    return this.prisma.campaign.create({
+    const campaign = await this.prisma.campaign.create({
       data: {
         ngoId: profile.id,
         title: dto.title,
@@ -26,6 +30,13 @@ export class CampaignsService {
         startDate: new Date(),
       },
     });
+
+    await this.activityLog.log(userId, 'CAMPAIGN_CREATED', {
+      campaignId: campaign.id,
+      title: dto.title,
+    });
+
+    return campaign;
   }
 
   async getPublicCampaigns() {
@@ -65,6 +76,32 @@ export class CampaignsService {
           },
         },
         donations: true,
+      },
+    });
+  }
+
+  async getPublicLink(id: string) {
+    const campaign = await this.prisma.campaign.findFirst({
+      where: { id, status: 'PUBLIC' },
+    });
+    if (!campaign) return null;
+    return {
+      campaign,
+      publicUrl: `/public/campaigns/${id}`,
+    };
+  }
+
+  async getPublicCampaignForDonation(id: string) {
+    return this.prisma.campaign.findFirst({
+      where: { id, status: 'PUBLIC' },
+      include: {
+        ngo: {
+          select: {
+            id: true,
+            missionStatement: true,
+            user: { select: { name: true, email: true } },
+          },
+        },
       },
     });
   }

@@ -34,7 +34,7 @@ export class BankService {
     const { accountNumber, ...rest } = record;
     return {
       ...rest,
-      accountNumber: accountNumber.replace(/.(?=.{4})/g, '*'),
+      accountNumberMasked: accountNumber.replace(/.(?=.{4})/g, '*'),
     };
   }
 }

@@ -1,47 +1,53 @@
 # Technical Overview – ImpactBridge Backend
 
-## Architecture Summary
-- **Framework:** NestJS with modular architecture & dependency injection.
-- **Persistence:** Prisma ORM targeting PostgreSQL.
-- **Auth:** JWT bearer tokens (1-day expiry) with role-based guards.
-- **Validation:** Global `ValidationPipe` enforcing DTO schemas.
+## Stack Overview
+- **Framework:** NestJS
+- **Language:** TypeScript
+- **Database:** PostgreSQL (Prisma ORM)
+- **Auth:** JWT Bearer tokens (1-day expiry)
+- **Validation:** global `ValidationPipe`
 
-## Module Structure
-- `auth/` – registration/login, password utils, JWT helper, guards, DTOs.
-- `users/` – legacy CRUD + admin insights (NGO/company/donor listings, campaigns, donations).
-- `user/` – public/self-service profile endpoints.
-- `address/` – registered address management for NGOs.
-- `bank/` – bank details management for NGOs (masked responses).
-- `prisma/` – shared Prisma service/module.
-- Address/bank modules depend on `UsersService` for profile lookups.
+## Module Architecture
+- `auth/` – registration & login; guards (`JwtAuthGuard`, `RolesGuard`); `ActivityLogService` called on register/login.
+- `users/` & `user/` – admin CRUD (legacy) + self-service endpoints (`/users/me`).
+- `address/` – NGO registered address management.
+- `bank/` – NGO bank details management (response masks account number).
+- `documents/` – NGO document uploads (CSR policy, PAN, etc.).
+- `campaigns/` – campaign creation + public browsing.
+- `donations/` – authenticated & anonymous donations, donation history APIs.
+- `receipts/` – attach receipt URLs to donations.
+- `analytics/` – SUPER_ADMIN aggregated metrics.
+- `activity/` – logging helper reused across modules.
 
 ## Prisma Schema Highlights
-- Government-compliant schema: `NGOProfile`, `CompanyProfile`, `DonorProfile`, `Campaign`, `Donation`, `Document`, `BankDetail`, `Address`, `AuditLog`.
-- Enums: `Role`, `NGORegistrationType`, `DocumentType`, `CampaignCategory`.
-- Auto-created profiles: NGO, Company, Donor profiles generated on registration.
+- **Models:** `User`, `NGOProfile`, `CompanyProfile`, `DonorProfile`, `Campaign`, `Donation`, `BankDetail`, `Document`, `Address`, `AuditLog`.
+- **Enums:** `Role`, `NGORegistrationType`, `DocumentType`, `CampaignCategory`.
+- Profiles auto-created after registration based on role (NGO/Company/Donor).
+- `Donation` includes `receiptUrl` for 80G receipts.
 
-## Authentication Flow
-1. Register user → hash password, persist user, create role-specific profile.
-2. Login → compare password, sign JWT (`{ sub, role }`).
-3. Protected routes → apply `JwtAuthGuard` + `RolesGuard`; use `@Roles(...)` decorators.
+## Request Flow
+1. **Auth:** `POST /auth/register`, `POST /auth/login` (returns JWT + user). Token payload includes `id`, `role`.
+2. **Guarding:** Controllers use `@UseGuards(JwtAuthGuard, RolesGuard)` + `@Roles(...)` to enforce roles.
+3. **Activity Logging:** `ActivityLogService.log()` called after key actions (login, profile update, campaign, donation, receipt).
 
-## Compliance & Admin Modules
-- NGO Address: POST `/address/ngo` (NGO role) upserts registered address.
-- NGO Bank: POST `/bank/ngo` (NGO role) upserts bank account (masked in responses).
-- Admin Insights: `/users/ngos-with-campaigns`, `/users/companies-with-reports`, `/users/admin/*` endpoints.
+## Compliance Modules
+- Address/bank/documents endpoints require NGO role.
+- Admin analytics and profile listings restricted to SUPER_ADMIN.
+- Donations update campaign totals and optionally log anonymous info.
 
-## Validation & Error Handling
-- Controllers defer to services; business logic is service-layer only.
-- Nest exceptions thrown for validation (400), auth (401), RBAC (403), not found (404).
-- Prisma-specific error handling pending future enhancements.
+## Error Handling
+- `JwtAuthGuard` throws 401 for missing/invalid tokens.
+- `RolesGuard` returns 403 for insufficient role.
+- Prisma `P2002` constraint caught when updating email (`Email already in use`).
 
-## Build & Dev Workflow
-- `npm run start:dev` – runs Nest in watch mode (requires DB access).
-- `npm run build` – compiles TypeScript to `dist/` (used for sanity checks).
-- Postman collection at `docs/postman/impactbridge.postman_collection.json` supports manual QA.
+## Build & Dev
+- `npm run start:dev` – watch mode (requires DB connection).
+- `npm run build` – compile TS to JS for deployment.
+- Postman collection at `docs/postman/impactbridge.postman_collection.json` aids manual testing.
 
-## Future Work
-- Merge legacy `users/` and `user/` modules.
-- Add end-to-end tests & CI automation.
-- Implement campaign CRUD, donation reporting UI, audit log surfacing.
-- Introduce refresh tokens / MFA for stronger auth flows.
+## Future Roadmap
+- Consolidate legacy `users/` module with self-service.
+- Campaign CRUD (update/archive) & donation reporting dashboards.
+- Donor receipts via email.
+- Refresh token rotation & MFA.
+

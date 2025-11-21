@@ -397,3 +397,53 @@ No business logic in controller—aims for clean request routing and validation 
 - Build confirmed after changes.
 
 ---
+
+### **40. Public Campaign Link & External Donation Added**
+- Added public campaign link endpoints and anonymous donation flow.
+- Campaign service now provides shareable URLs and donation-ready payloads.
+- Build confirmed after updates.
+
+---
+
+### **41. Global Activity Logging Added**
+- Introduced ActivityLogService and wired logs into auth, profile updates, donations, campaigns, receipts.
+- Prisma audit logs now capture action metadata for compliance.
+- Build confirmed after integration.
+
+---
+
+### **42. API Role Fixes & Postman Enhancements**
+- Restored self-service profile endpoints, fixed NGO permissions for address/bank/campaign/doc receipt flows.
+- Adjusted guards to rely on `req.user.sub`; DTOs accept editable fields.
+- Postman collection auto-applies base URL, injects token, and documents roles.
+- Build confirmed after fixes.
+
+---
+
+### **43. Admin Analytics Endpoints Added**
+- Added analytics service/controller returning donation, campaign, and user stats.
+- Endpoint secured for SUPER_ADMIN to support CSR reporting.
+- Build confirmed after addition.
+
+---
+
+### **44. Documentation Suite Refreshed**
+- Added docs/README.md index and enriched API/business/technical guides.
+- Postman collection includes base URL, auto-token, and tester notes.
+- Build confirmed; documentation ready for QA/onboarding.
+
+---
+
+### **45. CSR Compliance Reporting Added**
+- Implemented CSRReports service/controller for NGO/company compliance snapshots.
+- Added SUPER_ADMIN-only endpoints under `/admin/csr/*`.
+- Build confirmed after module addition.
+
+---
+
+### **46. Swagger API Docs Added**
+- Configured Swagger/OpenAPI at `/api-docs` with bearer auth definition.
+- Annotated users controller endpoints for example documentation.
+- Build confirmed after installing swagger dependencies.
+
+---

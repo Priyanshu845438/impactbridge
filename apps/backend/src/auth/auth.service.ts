@@ -6,12 +6,14 @@ import { hashPassword, comparePassword } from './utils/password.util';
 import { signToken } from './utils/jwt.util';
 import { UserRole } from '../user/user-role.enum';
 import { UsersService } from '../users/users.service';
+import { ActivityLogService } from '../activity/activity-log.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly usersService: UsersService,
+    private readonly activityLog: ActivityLogService,
   ) {}
 
   async login(dto: LoginDto) {
@@ -32,6 +34,8 @@ export class AuthService {
     const token = await signToken({ sub: user.id, role: user.role });
 
     const { password, ...userSafe } = user;
+
+    await this.activityLog.log(user.id, 'LOGIN_SUCCESS', { email: user.email });
 
     return {
       user: userSafe,
@@ -72,6 +76,8 @@ export class AuthService {
     if (role === UserRole.DONOR) {
       await this.usersService.createDonorProfile(createdUser.id);
     }
+
+    await this.activityLog.log(createdUser.id, 'REGISTRATION', { role });
 
     const { password, ...userWithoutPassword } = createdUser;
     return userWithoutPassword;

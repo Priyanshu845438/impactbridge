@@ -11,20 +11,20 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 export class CampaignsController {
   constructor(private readonly campaignsService: CampaignsService) {}
 
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserRole.NGO)
-@Post()
-create(@CurrentUser() user: any, @Body() dto: CreateCampaignDto) {
-  return this.campaignsService.createForNGO(user?.sub, dto);
-}
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.NGO)
+  @Post()
+  create(@CurrentUser() user: any, @Body() dto: CreateCampaignDto) {
+    return this.campaignsService.createForNGO(user?.id, dto);
+  }
 
-@Get('public')
-getPublicCampaigns() {
-  return this.campaignsService.getPublicCampaigns();
-}
+  @Get('public')
+  getPublicCampaigns() {
+    return this.campaignsService.getPublicCampaigns();
+  }
 
-@Get('public/:id')
-getPublicCampaign(@Param('id') id: string) {
-  return this.campaignsService.getCampaignById(id);
-}
+  @Get('public/:id')
+  getPublicCampaign(@Param('id') id: string) {
+    return this.campaignsService.getCampaignById(id);
+  }
 }

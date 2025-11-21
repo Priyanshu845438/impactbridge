@@ -1,10 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateDonationDto } from './dto/create-donation.dto';
+import { CreatePublicDonationDto } from '../campaigns/dto/create-public-donation.dto';
+import { ActivityLogService } from '../activity/activity-log.service';
 
 @Injectable()
 export class DonationsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly activityLog: ActivityLogService,
+  ) {}
 
   async createDonation(userId: string, campaignId: string, dto: CreateDonationDto) {
     const campaign = await this.prisma.campaign.findFirst({
@@ -31,6 +36,12 @@ export class DonationsService {
       data: {
         raisedAmount: campaign.raisedAmount + dto.amount,
       },
+    });
+
+    await this.activityLog.log(userId, 'DONATION_CREATED', {
+      campaignId,
+      amount: dto.amount,
+      donationId: donation.id,
     });
 
     return donation;
@@ -95,5 +106,41 @@ export class DonationsService {
       },
       orderBy: { donationDate: 'desc' },
     });
+  }
+
+  async createPublicDonation(campaignId: string, dto: CreatePublicDonationDto) {
+    const campaign = await this.prisma.campaign.findFirst({
+      where: { id: campaignId, status: 'PUBLIC' },
+    });
+
+    if (!campaign) {
+      throw new Error('Campaign not found or not public');
+    }
+
+    const donation = await this.prisma.donation.create({
+      data: {
+        campaignId,
+        amount: dto.amount,
+        paymentRef: dto.email,
+        paymentMode: 'PUBLIC_FORM',
+        donationDate: new Date(),
+      },
+    });
+
+    await this.prisma.campaign.update({
+      where: { id: campaignId },
+      data: {
+        raisedAmount: campaign.raisedAmount + dto.amount,
+      },
+    });
+
+    await this.activityLog.log(null, 'PUBLIC_DONATION_CREATED', {
+      campaignId,
+      amount: dto.amount,
+      donationId: donation.id,
+      email: dto.email,
+    });
+
+    return donation;
   }
 }

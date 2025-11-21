@@ -19,7 +19,7 @@ export class BankController {
   @Roles(UserRole.NGO)
   @Post('ngo')
   async upsertNGOBank(@CurrentUser() user: any, @Body() dto: BankDetailsDto) {
-    const profile = await this.usersService.getNGOProfileByUserId(user?.sub);
+    const profile = await this.usersService.getNGOProfileByUserId(user?.id);
     return this.bankService.updateNGOBankDetails(profile!.id, dto);
   }
 }
