@@ -11,7 +11,11 @@ export class DonationsService {
     private readonly activityLog: ActivityLogService,
   ) {}
 
-  async createDonation(userId: string, campaignId: string, dto: CreateDonationDto) {
+  async createDonation(
+    userId: string,
+    campaignId: string,
+    dto: CreateDonationDto,
+  ) {
     const campaign = await this.prisma.campaign.findFirst({
       where: { id: campaignId, status: 'PUBLIC' },
     });
@@ -48,22 +52,23 @@ export class DonationsService {
   }
 
   private async getDonorProfileId(userId: string) {
-    const profile = await this.prisma.donorProfile.findUnique({ where: { userId } });
+    const profile = await this.prisma.donorProfile.findUnique({
+      where: { userId },
+    });
     return profile?.id ?? null;
   }
 
   private async getCompanyProfileId(userId: string) {
-    const profile = await this.prisma.companyProfile.findUnique({ where: { userId } });
+    const profile = await this.prisma.companyProfile.findUnique({
+      where: { userId },
+    });
     return profile?.id ?? null;
   }
 
   async getMyDonations(userId: string) {
     return this.prisma.donation.findMany({
       where: {
-        OR: [
-          { donor: { userId } },
-          { company: { userId } },
-        ],
+        OR: [{ donor: { userId } }, { company: { userId } }],
       },
       include: {
         campaign: true,
@@ -73,7 +78,9 @@ export class DonationsService {
   }
 
   async getNGOCampaignDonations(userId: string) {
-    const profile = await this.prisma.nGOProfile.findUnique({ where: { userId } });
+    const profile = await this.prisma.nGOProfile.findUnique({
+      where: { userId },
+    });
     if (!profile) return [];
 
     return this.prisma.donation.findMany({

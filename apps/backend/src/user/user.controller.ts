@@ -1,10 +1,16 @@
-import { Body, Controller, Get, Param, Patch, UseGuards, NotFoundException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Patch,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { AuthUser } from '../auth/types/auth-user.type';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UserService } from './user.service';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { UserRole } from '../user/user-role.enum';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
@@ -13,8 +19,9 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  async getMe(@CurrentUser() user: any) {
-    const profile = await this.userService.findById(user?.id);
+  async getMe(@CurrentUser() user: AuthUser) {
+    const userId = user.sub;
+    const profile = await this.userService.findById(userId);
     if (!profile) {
       throw new NotFoundException('User not found');
     }
@@ -23,8 +30,9 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Patch('me')
-  async updateMe(@CurrentUser() user: any, @Body() dto: UpdateUserDto) {
-    return this.userService.update(user?.id, dto);
+  async updateMe(@CurrentUser() user: AuthUser, @Body() dto: UpdateUserDto) {
+    const userId = user.sub;
+    return this.userService.update(userId, dto);
   }
 
   @Get(':id')

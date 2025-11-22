@@ -5,7 +5,11 @@ import { PrismaService } from '../prisma/prisma.service';
 export class ActivityLogService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async log(userId: string | null, action: string, metadata?: Record<string, unknown>) {
+  async log(
+    userId: string | null,
+    action: string,
+    metadata?: Record<string, unknown>,
+  ) {
     await this.prisma.auditLog.create({
       data: {
         userId: userId ?? undefined,

@@ -1,8 +1,12 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ActivityLogService } from '../activity/activity-log.service';
-import { Prisma } from 'prisma/generated';
+import { Prisma, User } from 'prisma/generated';
 
 @Injectable()
 export class UserService {
@@ -11,16 +15,15 @@ export class UserService {
     private readonly activityLog: ActivityLogService,
   ) {}
 
-  async findById(id: string) {
+  async findById(id: string): Promise<Omit<User, 'password'> | null> {
     const user = await this.prisma.user.findUnique({ where: { id } });
-    if (!user) {
-      return null;
-    }
-    const { password, ...rest } = user;
-    return rest;
+    return this.sanitize(user);
   }
 
-  async update(id: string, dto: UpdateUserDto) {
+  async update(
+    id: string,
+    dto: UpdateUserDto,
+  ): Promise<Omit<User, 'password'>> {
     const user = await this.prisma.user.findUnique({ where: { id } });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -28,14 +31,17 @@ export class UserService {
 
     const { address, ...userUpdates } = dto;
 
-    let updatedUser;
+    let updatedUser: User;
     try {
       updatedUser = await this.prisma.user.update({
         where: { id },
         data: userUpdates,
       });
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
         throw new BadRequestException('Email already in use');
       }
       throw error;
@@ -57,8 +63,18 @@ export class UserService {
     }
 
     await this.activityLog.log(id, 'PROFILE_UPDATE', { updatedFields: dto });
+    return this.sanitize(updatedUser)!;
+  }
 
-    const { password, ...safe } = updatedUser;
-    return safe;
+  private sanitize<T extends { password?: string | null }>(
+    user: T | null,
+  ): Omit<T, 'password'> | null {
+    if (!user) {
+      return null;
+    }
+
+    const { password: _password, ...rest } = user;
+    void _password;
+    return rest;
   }
 }

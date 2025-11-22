@@ -1,4 +1,10 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  NotFoundException,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AddressService } from './address.service';
 import { AddressDto } from './dto/address.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -7,6 +13,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '../user/user-role.enum';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UsersService } from '../users/users.service';
+import { AuthUser } from '../auth/types/auth-user.type';
 
 @Controller('address')
 export class AddressController {
@@ -18,8 +25,17 @@ export class AddressController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.NGO)
   @Post('ngo')
-  async upsertNGOAddress(@CurrentUser() user: any, @Body() dto: AddressDto) {
-    const profile = await this.usersService.getNGOProfileByUserId(user?.id);
-    return this.addressService.createOrUpdateForNGO(profile!.id, dto);
+  async upsertNGOAddress(
+    @CurrentUser() user: AuthUser,
+    @Body() dto: AddressDto,
+  ) {
+    const userId = user.sub;
+    const profile = await this.usersService.getNGOProfileByUserId(userId);
+
+    if (!profile) {
+      throw new NotFoundException('NGO profile not found');
+    }
+
+    return this.addressService.createOrUpdateForNGO(profile.id, dto);
   }
 }

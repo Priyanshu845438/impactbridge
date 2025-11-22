@@ -1,4 +1,12 @@
-import { IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsString, Min, MinLength } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  Min,
+  MinLength,
+} from 'class-validator';
 import { CampaignCategory } from 'prisma/generated';
 
 export class CreateCampaignDto {

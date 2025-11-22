@@ -26,10 +26,14 @@ export class ReceiptsService {
       },
     });
 
-    await this.activityLog.log(donation.companyId ?? donation.donorId ?? null, 'RECEIPT_GENERATED', {
-      donationId: donation.id,
-      receiptUrl: dto.receiptUrl,
-    });
+    await this.activityLog.log(
+      donation.companyId ?? donation.donorId ?? null,
+      'RECEIPT_GENERATED',
+      {
+        donationId: donation.id,
+        receiptUrl: dto.receiptUrl,
+      },
+    );
 
     return updated;
   }

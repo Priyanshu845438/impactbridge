@@ -8,6 +8,6 @@ if (!JWT_SECRET) {
 
 const defaultSignOptions: SignOptions = { expiresIn: '1d' };
 
-export async function signToken(payload: object): Promise<string> {
+export function signToken(payload: object): string {
   return jwt.sign(payload, JWT_SECRET, defaultSignOptions);
 }

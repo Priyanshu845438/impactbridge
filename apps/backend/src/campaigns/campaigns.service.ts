@@ -12,7 +12,9 @@ export class CampaignsService {
   ) {}
 
   async createForNGO(userId: string, dto: CreateCampaignDto) {
-    const profile = await this.prisma.nGOProfile.findUnique({ where: { userId } });
+    const profile = await this.prisma.nGOProfile.findUnique({
+      where: { userId },
+    });
 
     if (!profile) {
       throw new NotFoundException('NGO profile not found');

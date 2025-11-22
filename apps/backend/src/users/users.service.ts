@@ -11,11 +11,14 @@ import { comparePassword, hashPassword } from '../auth/utils/password.util';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  private sanitize<T extends { password?: string }>(user: T | null) {
+  private sanitize<T extends { password?: string | null }>(
+    user: T | null,
+  ): Omit<T, 'password'> | null {
     if (!user) {
       return null;
     }
-    const { password, ...rest } = user;
+    const { password: _password, ...rest } = user;
+    void _password;
     return rest;
   }
 
@@ -41,7 +44,7 @@ export class UsersService {
     const { role, ...rest } = dto;
     const data = {
       ...rest,
-      ...(role !== undefined ? { role: role as Role } : {}),
+      ...(role !== undefined ? { role: role } : {}),
     };
 
     return this.prisma.user.update({ where: { id }, data });

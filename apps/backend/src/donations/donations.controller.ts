@@ -1,12 +1,12 @@
-import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { DonationsService } from './donations.service';
 import { CreateDonationDto } from './dto/create-donation.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { Get } from '@nestjs/common';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '../user/user-role.enum';
+import { AuthUser } from '../auth/types/auth-user.type';
 
 @Controller('donations')
 export class DonationsController {
@@ -15,24 +15,27 @@ export class DonationsController {
   @UseGuards(JwtAuthGuard)
   @Post(':campaignId')
   create(
-    @CurrentUser() user: any,
+    @CurrentUser() user: AuthUser,
     @Param('campaignId') campaignId: string,
     @Body() dto: CreateDonationDto,
   ) {
-    return this.donationsService.createDonation(user?.id, campaignId, dto);
+    const userId = user.sub;
+    return this.donationsService.createDonation(userId, campaignId, dto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  getMine(@CurrentUser() user: any) {
-    return this.donationsService.getMyDonations(user?.id);
+  getMine(@CurrentUser() user: AuthUser) {
+    const userId = user.sub;
+    return this.donationsService.getMyDonations(userId);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.NGO)
   @Get('ngo')
-  getNgoDonations(@CurrentUser() user: any) {
-    return this.donationsService.getNGOCampaignDonations(user?.id);
+  getNgoDonations(@CurrentUser() user: AuthUser) {
+    const userId = user.sub;
+    return this.donationsService.getNGOCampaignDonations(userId);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

@@ -31,9 +31,9 @@ export class AuthService {
       throw new BadRequestException('Invalid credentials');
     }
 
-    const token = await signToken({ sub: user.id, role: user.role });
-
-    const { password, ...userSafe } = user;
+    const token = signToken({ sub: user.id, role: user.role });
+    const { password: _password, ...userSafe } = user;
+    void _password;
 
     await this.activityLog.log(user.id, 'LOGIN_SUCCESS', { email: user.email });
 
@@ -79,7 +79,8 @@ export class AuthService {
 
     await this.activityLog.log(createdUser.id, 'REGISTRATION', { role });
 
-    const { password, ...userWithoutPassword } = createdUser;
+    const { password: _createdPassword, ...userWithoutPassword } = createdUser;
+    void _createdPassword;
     return userWithoutPassword;
   }
 }

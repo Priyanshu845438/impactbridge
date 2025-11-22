@@ -1,8 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, NotFoundException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { AuthUser } from '../auth/types/auth-user.type';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
@@ -25,8 +33,12 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Change my password' })
   @Post('change-password')
-  changePassword(@CurrentUser() user: any, @Body() dto: ChangePasswordDto) {
-    return this.usersService.changePassword(user?.sub, dto);
+  changePassword(
+    @CurrentUser() user: AuthUser,
+    @Body() dto: ChangePasswordDto,
+  ) {
+    const userId = user.sub;
+    return this.usersService.changePassword(userId, dto);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
