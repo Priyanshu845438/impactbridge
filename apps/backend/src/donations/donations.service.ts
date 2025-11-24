@@ -3,12 +3,14 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateDonationDto } from './dto/create-donation.dto';
 import { CreatePublicDonationDto } from '../campaigns/dto/create-public-donation.dto';
 import { ActivityLogService } from '../activity/activity-log.service';
+import { CSRService } from '../csr/csr.service';
 
 @Injectable()
 export class DonationsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly activityLog: ActivityLogService,
+    private readonly csrService: CSRService,
   ) {}
 
   async createDonation(
@@ -34,6 +36,11 @@ export class DonationsService {
         companyId: await this.getCompanyProfileId(userId),
       },
     });
+
+    const companyProfileId = await this.getCompanyProfileId(userId);
+    if (companyProfileId) {
+      await this.csrService.updateSpent(companyProfileId, dto.amount);
+    }
 
     await this.prisma.campaign.update({
       where: { id: campaignId },

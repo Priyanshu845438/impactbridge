@@ -461,3 +461,75 @@ No business logic in controller—aims for clean request routing and validation 
 
 ### **49. PROJECT_MASTER_CONTEXT.md refreshed**
 - Added detailed project summary, stack, modules, rules, workflows, Postman conventions, and agent guidance.
+
+---
+
+### **54. User Invitation System Added**
+- Extended Role enum and Prisma schema to support reviewer/auditor roles and invitation records.
+- Built InvitationsModule with DTOs, service, and controller for SUPER_ADMIN invite flow and public acceptance.
+- Auto-creates role-specific profiles upon invite acceptance; lint/tests pass.
+
+---
+
+### **55. Build Fixes After Invitation Module**
+- Converted AuthUser imports to type-only to satisfy isolated module builds.
+- Mapped Prisma Role values back to UserRole enum inside invitation service.
+- Verified lint and `npm run build` both succeed.
+
+---
+
+### **56. NGO Verification Workflow Added**
+- Added verification status fields to NGO profiles with approve/reject/pending endpoints.
+- Introduced VerificationModule handling status changes via SUPER_ADMIN guard.
+- Campaign creation now restricted to verified NGOs; lint/build remain green.
+
+---
+
+### **57. CSR Budget + Spending Tracking Added**
+- Added company CSR budget endpoints with dedicated module/service and DTOs.
+- Company donations now update CSR spend automatically to keep totals in sync.
+- Lint and build verified after schema and module wiring changes.
+
+---
+
+### **58. NGO Financial Reporting Module Added**
+- Implemented FinancialModule with upload/list endpoints for NGO and admin access.
+- Prisma schema now stores quarterly/annual report URLs linked to NGO profiles.
+- Lint/build verified after integrating new DTOs, service, and controller.
+---
+
+### **59. Company–NGO Project Approval Workflow Added**
+- Added campaign-approval schema with NGO/company relations and endpoints for requests/approvals.
+- Wired approvals module into donations to enforce company approval before contributions.
+- Updated Postman/docs to cover approval flows; lint/build remain green.
+
+---
+
+### **59. Milestone-Based Project Tracking Added**
+- Added campaign milestone schema with DTOs, service, and controller for NGO progress tracking.
+- Companies and admins can view milestones (with company access gated by campaign approval).
+- Lint and build verified after wiring new module.
+
+---
+
+### **60. Impact Metrics & Outcome Reporting Added**
+- Added impact metrics schema with optional milestone linkage and NGO-only creation endpoint.
+- Campaign and milestone metrics now readable by all roles for transparency dashboards.
+- Lint and build verified after wiring ImpactModule.
+
+---
+
+### **61. Project Fund Utilization Reports Added**
+- Implemented utilization reports schema with campaign/milestone linkage and NGO submission endpoint.
+- Added list endpoints for campaign, milestone, and admin-wide reporting with role-based guards.
+- Lint and build verified after wiring UtilizationModule.
+
+---
+
+### **62. CSR Annual Summary Builder Added**
+- Introduced CSR summary DTO/endpoint to aggregate budgets, utilization, and impact metrics per financial year.
+- CSRService now computes CSR-2 style summaries (obligation, spent, unspent, project breakdown, beneficiaries).
+- Lint and build verified after updating CSR module.
+
+---
+

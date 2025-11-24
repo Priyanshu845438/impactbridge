@@ -25,6 +25,9 @@ ImpactBridge is a compliance-focused CSR platform that connects NGOs, corporates
 12. CSR Reports
 13. Analytics
 14. Activity Logs (central audit trail)
+15. Milestones (campaign progress tracking)
+16. Impact Metrics (campaign & milestone outcomes)
+17. Utilization Reports (fund usage with proofs)
 
 ## Core Backend Rules
 - Follow strict `controller → service → prisma` layering.
@@ -77,3 +80,18 @@ ImpactBridge is a compliance-focused CSR platform that connects NGOs, corporates
 - Mirror the linting and testing rituals; never ignore build output.
 - Update `AGENTS.md` with concise summaries and rationale.
 - When in doubt, ask for a micro-task breakdown before large refactors.
+
+## Impact Measurement Modules
+- **Milestones Module** – NGOs create milestones per campaign with target dates, budgets, and status updates.
+- **Impact Module** – NGOs log outcome metrics (e.g., people served) per campaign or per milestone.
+- **Access** – Metrics readable by all roles; creation restricted to owning NGO.
+
+## Utilization Report Module
+- NGOs submit fund usage statements including amount used, description, and a proof URL.
+- Optional milestone linkage ties spending to specific project phases.
+- Campaign/milestone reports are visible to companies, donors, and admins; a global ledger exists for SUPER_ADMIN.
+
+## CSR Summary Builder
+- Endpoint: `POST /csr/summary` (COMPANY, SUPER_ADMIN).
+- Aggregates budgets, approved projects, disbursed amounts, utilization reports, and impact metrics.
+- Outputs CSR-2 style fields: obligation, amount spent, unspent, project list, beneficiary totals, admin notes.

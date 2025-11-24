@@ -1,12 +1,15 @@
 # API Testing Guide – ImpactBridge Backend
 
-This guide explains how to validate each API using the Postman collection located at `docs/postman/impactbridge.postman_collection.json`. The collection already sets `{{base_url}} = http://localhost:3000` and automatically injects the JWT token after login.
+This guide explains how to validate every production-ready API using the bundled Postman collection (`docs/postman/impactbridge.postman_collection.json`). The collection already sets `{{base_url}} = http://localhost:3000`, injects the JWT token after login, and exposes helper variables such as `{{campaignId}}`, `{{donationId}}`, `{{invitationToken}}`, `{{ngoProfileId}}`, and `{{milestoneId}}`.
 
-## 1. Authentication
+> **Tip:** Execute requests in sequence (Auth → NGO → Company → Milestones → Admin) so that dynamic variables captured from responses are available to later steps.
+
+---
+
+## 1. Authentication & Invitations
+
 ### 1.1 Register User
-- **Method:** POST
-- **URL:** `{{base_url}}/auth/register`
-- **Body (required fields):**
+- **POST** `{{base_url}}/auth/register`
 ```json
 {
   "name": "Alice NGO",
@@ -17,37 +20,51 @@ This guide explains how to validate each API using the Postman collection locate
 ```
 
 ### 1.2 Login User
-- **Method:** POST
-- **URL:** `{{base_url}}/auth/login`
-- **Body:**
+- **POST** `{{base_url}}/auth/login`
 ```json
 {
   "email": "ngo@example.com",
   "password": "password123"
 }
 ```
-- **Response:** contains `accessToken` which collection stores automatically.
+- Postman test stores `accessToken` in `{{token}}`.
 
-## 2. NGO Self-Service APIs (requires NGO login)
-### 2.1 Get My Profile
-- **Method:** GET `{{base_url}}/users/me`
-- **Description:** Returns the authenticated NGO user record.
+### 1.3 Invite Reviewer/Auditor (SUPER_ADMIN)
+- **POST** `{{base_url}}/admin/invite`
+```json
+{
+  "email": "reviewer@example.com",
+  "role": "REVIEWER"
+}
+```
+- Test script pulls invite token into `{{invitationToken}}`.
 
-### 2.2 Update My Profile
-- **Method:** PATCH `{{base_url}}/users/me`
-- **Body (all optional):**
+### 1.4 Accept Invitation
+- **POST** `{{base_url}}/auth/accept-invite`
+```json
+{
+  "token": "{{invitationToken}}",
+  "password": "StrongPass!1"
+}
+```
+
+---
+
+## 2. NGO Self-Service & Milestones (requires NGO login)
+
+### 2.1 Get / Update Profile
+- `GET {{base_url}}/users/me`
+- `PATCH {{base_url}}/users/me`
 ```json
 {
   "name": "ImpactBridge Foundation",
   "email": "updated-ngo@example.com",
-  "phone": "+911234567890",
-  "address": "221B Baker Street"
+  "phone": "+911234567890"
 }
 ```
 
-### 2.3 Change Password
-- **Method:** POST `{{base_url}}/users/change-password`
-- **Body (required):**
+### 2.2 Change Password
+- `POST {{base_url}}/users/change-password`
 ```json
 {
   "oldPassword": "password123",
@@ -55,46 +72,13 @@ This guide explains how to validate each API using the Postman collection locate
 }
 ```
 
-### 2.4 Update Registered Address
-- **Method:** POST `{{base_url}}/address/ngo`
-- **Body (required):**
-```json
-{
-  "line1": "123 Trust Lane",
-  "line2": "Suite 2",
-  "district": "Bengaluru Urban",
-  "state": "Karnataka",
-  "pincode": "560001",
-  "country": "India"
-}
-```
+### 2.3 Compliance Modules
+- Address: `POST {{base_url}}/address/ngo`
+- Bank: `POST {{base_url}}/bank/ngo`
+- Documents: `POST {{base_url}}/documents/ngo`
 
-### 2.5 Update Bank Details
-- **Method:** POST `{{base_url}}/bank/ngo`
-- **Body (required fields):**
-```json
-{
-  "accountHolder": "ImpactBridge NGO",
-  "accountNumber": "123456789012",
-  "ifscCode": "HDFC0001234",
-  "bankName": "HDFC Bank",
-  "branchName": "MG Road"
-}
-```
-
-### 2.6 Upload NGO Document
-- **Method:** POST `{{base_url}}/documents/ngo`
-- **Body (required):**
-```json
-{
-  "type": "CSR_POLICY",
-  "fileUrl": "https://files.example.com/csr-policy.pdf"
-}
-```
-
-### 2.7 Create Campaign
-- **Method:** POST `{{base_url}}/campaigns`
-- **Body (required):**
+### 2.4 Create Campaign (after verification)
+- `POST {{base_url}}/campaigns`
 ```json
 {
   "title": "Clean Water Drive",
@@ -105,24 +89,87 @@ This guide explains how to validate each API using the Postman collection locate
 }
 ```
 
-### 2.8 Generate Donation Receipt
-- **Method:** POST `{{base_url}}/receipts`
-- **Body (required):**
+### 2.5 Milestone Management
+1. **Create Milestone** (NGO)
+   - `POST {{base_url}}/milestones/{{campaignId}}`
 ```json
 {
-  "donationId": "<existingDonationId>",
-  "receiptUrl": "https://files.example.com/receipt.pdf"
+  "title": "Procure Filters",
+  "description": "Purchase 100 filtration units",
+  "targetDate": "2025-12-31",
+  "budget": 150000
+}
+```
+   - Postman test saves `{{milestoneId}}`.
+
+2. **Update Milestone Status** (NGO)
+   - `PATCH {{base_url}}/milestones/status/{{milestoneId}}`
+```json
+{
+  "status": "IN_PROGRESS",
+  "progressPercent": 40
+}
+```
+3. **List Milestones**
+   - NGO / Company (if approved) / SUPER_ADMIN: `GET {{base_url}}/milestones/{{campaignId}}`
+
+### 2.6 Impact Metrics
+1. **Add Impact Metric** (NGO)
+   - `POST {{base_url}}/impact/{{campaignId}}`
+```json
+{
+  "name": "Households Served",
+  "value": 250,
+  "unit": "families",
+  "milestoneId": "{{milestoneId}}"
+}
+```
+   - `milestoneId` optional; omit to log a campaign-level metric.
+2. **Get Campaign Metrics** (all roles)
+   - `GET {{base_url}}/impact/campaign/{{campaignId}}`
+3. **Get Milestone Metrics** (all roles)
+   - `GET {{base_url}}/impact/milestone/{{milestoneId}}`
+
+### 2.6 Donation Receipt & History
+- Generate receipt: `POST {{base_url}}/receipts`
+- View donation history: `GET {{base_url}}/donations/ngo`
+
+### 2.7 Utilization Reports
+1. **Submit Utilization Report** (NGO)
+   - `POST {{base_url}}/utilization/{{campaignId}}`
+```json
+{
+  "amountUsed": 120000,
+  "description": "Procured filters for 4 villages",
+  "proofUrl": "https://files.example.com/proof.pdf",
+  "milestoneId": "{{milestoneId}}"
+}
+```
+2. **Campaign Utilization Reports** (NGO/Company/SUPER_ADMIN)
+   - `GET {{base_url}}/utilization/campaign/{{campaignId}}`
+3. **Milestone Utilization Reports** (All roles)
+   - `GET {{base_url}}/utilization/milestone/{{milestoneId}}`
+4. **Admin Utilization Ledger**
+   - `GET {{base_url}}/utilization/admin/all`
+
+---
+
+## 3. Company CSR Management
+
+### 3.1 Set / View Budget
+- `POST {{base_url}}/csr/company/budget`
+- `GET {{base_url}}/csr/company/status`
+
+### 3.2 Manual Spend Adjustment
+- `POST {{base_url}}/csr/company/spent`
+```json
+{
+  "spent": 25000
 }
 ```
 
-### 2.9 NGO Donation History
-- **Method:** GET `{{base_url}}/donations/ngo`
-- **Description:** Lists all donations across campaigns owned by the NGO.
-
-## 3. Donation APIs
-### 3.1 Authenticated Donation (Company/Donor)
-- **Method:** POST `{{base_url}}/donations/{{campaignId}}`
-- **Body:**
+### 3.3 Donation
+- `POST {{base_url}}/donations/{{campaignId}}`
 ```json
 {
   "amount": 5000,
@@ -131,13 +178,20 @@ This guide explains how to validate each API using the Postman collection locate
   "isForeignDonor": false
 }
 ```
+- CSR spend auto-updated server-side.
 
-### 3.2 My Donations
-- **Method:** GET `{{base_url}}/donations/me`
+### 3.4 View Company Donation History
+- `GET {{base_url}}/donations/me`
 
-### 3.3 Public Donation (no auth)
-- **Method:** POST `{{base_url}}/public/campaigns/{{campaignId}}/donate`
-- **Body:**
+### 3.5 Milestones for Approved Campaigns
+- `GET {{base_url}}/milestones/{{campaignId}}`
+  - Requires campaign approval (future workflow) or SUPER_ADMIN role.
+
+---
+
+## 4. Donation Flows
+- Public browse: `GET /campaigns/public`, `GET /campaigns/public/{{campaignId}}`
+- Anonymous donation: `POST /public/campaigns/{{campaignId}}/donate`
 ```json
 {
   "amount": 2000,
@@ -145,25 +199,38 @@ This guide explains how to validate each API using the Postman collection locate
   "email": "guest@example.com"
 }
 ```
+- Personal history: `GET /donations/me`
+- Admin ledger: `GET /donations/admin/all`
 
-## 4. Public Campaign Browsing
-- **GET** `{{base_url}}/campaigns/public`
-- **GET** `{{base_url}}/campaigns/public/{{campaignId}}`
+---
 
-## 5. Admin Insights (SUPER_ADMIN token)
-- **GET** `{{base_url}}/users/admin/ngos`
-- **GET** `{{base_url}}/users/admin/companies`
-- **GET** `{{base_url}}/users/admin/donors`
-- **GET** `{{base_url}}/donations/admin/all`
-- **GET** `{{base_url}}/admin/analytics`
+## 5. Admin & Compliance
+- Verify NGOs: `POST /admin/verification/ngos/{{ngoProfileId}}/(approve|reject|pending)`
+- Lists: `GET /users/admin/(ngos|companies|donors)`
+- Analytics: `GET /admin/analytics`
 
-## 6. Legacy Endpoints (Audit Only)
-- **GET** `{{base_url}}/users`
-- **GET** `{{base_url}}/users/{{userId}}`
+---
 
-## Negative Cases
-- Missing token → 401 Unauthorized.
-- Wrong role (e.g., donor hitting NGO-only endpoint) → 403 Forbidden.
-- Invalid payload → 400 with validation details.
+## 6. Negative Test Scenarios
+- Missing JWT → `401 Unauthorized`
+- Wrong role → `403 Forbidden`
+- Invalid payloads → `400` with validation messages
+- Duplicate email on profile update → `400 Email already registered`
+- Milestone progress outside 0–100 → `403`
 
-Use the Postman collection runners to execute full flows in order: Auth → NGO Self-Service → Donations → Admin. Populate campaign/donation IDs from earlier responses when needed.
+Run the Postman collection runner to automate these flows. Reset or seed the database as needed so IDs remain valid for chained requests.
+
+## 7. CSR Annual Summary
+- **POST** `{{base_url}}/csr/summary` (roles: COMPANY, SUPER_ADMIN)
+```json
+{
+  "companyId": "<companyProfileId>",
+  "financialYear": "2024-2025"
+}
+```
+- **Response Fields:**
+  - `company` (id, name, email, financialYear)
+  - `summary` (csrObligation, amountSpent, amountUtilized, unspentAmount)
+  - `projectList` (goal amount, raised amount, impact metrics, utilization reports)
+  - `beneficiaries` (total people reached based on impact metrics)
+  - `adminNotes` (auto-generated note)

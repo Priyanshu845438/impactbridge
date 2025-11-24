@@ -5,10 +5,34 @@
     "description": "Collection covering authentication, NGO self-service, donations, and admin APIs."
   },
   "variable": [
-    { "key": "base_url", "value": "http://localhost:3000" },
-    { "key": "token", "value": "" },
-    { "key": "campaignId", "value": "" },
-    { "key": "donationId", "value": "" }
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "campaignId",
+      "value": ""
+    },
+    {
+      "key": "donationId",
+      "value": ""
+    },
+    {
+      "key": "invitationToken",
+      "value": ""
+    },
+    {
+      "key": "ngoProfileId",
+      "value": ""
+    },
+    {
+      "key": "milestoneId",
+      "value": ""
+    }
   ],
   "event": [
     {
@@ -32,12 +56,26 @@
           "name": "Register",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Alice NGO\",\n  \"email\": \"ngo@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"NGO\"\n}"
             },
-            "url": { "raw": "{{base_url}}/auth/register", "host": ["{{base_url}}"], "path": ["auth", "register"] }
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
           }
         },
         {
@@ -56,12 +94,94 @@
           ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"ngo@example.com\",\n  \"password\": \"password123\"\n}"
             },
-            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Invite User (SUPER_ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"reviewer@example.com\",\n  \"role\": \"REVIEWER\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/invite",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "invite"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const jsonRes = pm.response.json();",
+                  "if (jsonRes.inviteLink) {",
+                  "  const url = new URL(jsonRes.inviteLink);",
+                  "  const token = url.searchParams.get('token');",
+                  "  if (token) { pm.collectionVariables.set('invitationToken', token); }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Accept Invite",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"{{invitationToken}}\",\n  \"password\": \"StrongPass!1\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/accept-invite",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "accept-invite"
+              ]
+            }
           }
         }
       ]
@@ -71,65 +191,189 @@
       "item": [
         {
           "name": "Get My Profile",
-          "request": { "method": "GET", "url": { "raw": "{{base_url}}/users/me", "host": ["{{base_url}}"], "path": ["users", "me"] } }
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/users/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "me"
+              ]
+            }
+          }
         },
         {
           "name": "Update My Profile",
           "request": {
             "method": "PATCH",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{\n  \"name\": \"ImpactBridge NGO\",\n  \"phone\": \"+911234567890\"\n}" },
-            "url": { "raw": "{{base_url}}/users/me", "host": ["{{base_url}}"], "path": ["users", "me"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"ImpactBridge NGO\",\n  \"phone\": \"+911234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "me"
+              ]
+            }
           }
         },
         {
           "name": "Update Address",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{\n  \"line1\": \"123 Trust Lane\",\n  \"district\": \"Bengaluru Urban\",\n  \"state\": \"Karnataka\",\n  \"pincode\": \"560001\",\n  \"country\": \"India\"\n}" },
-            "url": { "raw": "{{base_url}}/address/ngo", "host": ["{{base_url}}"], "path": ["address", "ngo"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"line1\": \"123 Trust Lane\",\n  \"district\": \"Bengaluru Urban\",\n  \"state\": \"Karnataka\",\n  \"pincode\": \"560001\",\n  \"country\": \"India\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/address/ngo",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "address",
+                "ngo"
+              ]
+            }
           }
         },
         {
           "name": "Update Bank Details",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{\n  \"accountHolder\": \"ImpactBridge NGO\",\n  \"accountNumber\": \"123456789012\",\n  \"ifscCode\": \"HDFC0001234\",\n  \"bankName\": \"HDFC Bank\"\n}" },
-            "url": { "raw": "{{base_url}}/bank/ngo", "host": ["{{base_url}}"], "path": ["bank", "ngo"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountHolder\": \"ImpactBridge NGO\",\n  \"accountNumber\": \"123456789012\",\n  \"ifscCode\": \"HDFC0001234\",\n  \"bankName\": \"HDFC Bank\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/bank/ngo",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bank",
+                "ngo"
+              ]
+            }
           }
         },
         {
           "name": "Create Campaign",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Clean Water Drive\",\n  \"description\": \"Provide clean water filters to rural schools.\",\n  \"category\": \"HEALTHCARE\",\n  \"targetAmount\": 500000,\n  \"isPublic\": true\n}" },
-            "url": { "raw": "{{base_url}}/campaigns", "host": ["{{base_url}}"], "path": ["campaigns"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Clean Water Drive\",\n  \"description\": \"Provide clean water filters to rural schools.\",\n  \"category\": \"HEALTHCARE\",\n  \"targetAmount\": 500000,\n  \"isPublic\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/campaigns",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "campaigns"
+              ]
+            }
           }
         },
         {
           "name": "Upload Document",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{\n  \"type\": \"CSR_POLICY\",\n  \"fileUrl\": \"https://files.example.com/csr-policy.pdf\"\n}" },
-            "url": { "raw": "{{base_url}}/documents/ngo", "host": ["{{base_url}}"], "path": ["documents", "ngo"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"CSR_POLICY\",\n  \"fileUrl\": \"https://files.example.com/csr-policy.pdf\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/documents/ngo",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "documents",
+                "ngo"
+              ]
+            }
           }
         },
         {
           "name": "Generate Receipt",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{\n  \"donationId\": \"{{donationId}}\",\n  \"receiptUrl\": \"https://files.example.com/receipt.pdf\"\n}" },
-            "url": { "raw": "{{base_url}}/receipts", "host": ["{{base_url}}"], "path": ["receipts"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"donationId\": \"{{donationId}}\",\n  \"receiptUrl\": \"https://files.example.com/receipt.pdf\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/receipts",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "receipts"
+              ]
+            }
           }
         },
         {
           "name": "NGO Donation History",
-          "request": { "method": "GET", "url": { "raw": "{{base_url}}/donations/ngo", "host": ["{{base_url}}"], "path": ["donations", "ngo"] } }
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/donations/ngo",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "donations",
+                "ngo"
+              ]
+            }
+          }
         }
       ]
     },
@@ -138,19 +382,63 @@
       "item": [
         {
           "name": "List Public Campaigns",
-          "request": { "method": "GET", "url": { "raw": "{{base_url}}/campaigns/public", "host": ["{{base_url}}"], "path": ["campaigns", "public"] } }
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/campaigns/public",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "campaigns",
+                "public"
+              ]
+            }
+          }
         },
         {
           "name": "Get Campaign Details",
-          "request": { "method": "GET", "url": { "raw": "{{base_url}}/campaigns/public/{{campaignId}}", "host": ["{{base_url}}"], "path": ["campaigns", "public", "{{campaignId}}"] } }
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/campaigns/public/{{campaignId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "campaigns",
+                "public",
+                "{{campaignId}}"
+              ]
+            }
+          }
         },
         {
           "name": "Public Donate",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{\n  \"amount\": 2000,\n  \"donorName\": \"Guest Donor\",\n  \"email\": \"guest@example.com\"\n}" },
-            "url": { "raw": "{{base_url}}/public/campaigns/{{campaignId}}/donate", "host": ["{{base_url}}"], "path": ["public", "campaigns", "{{campaignId}}", "donate"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 2000,\n  \"donorName\": \"Guest Donor\",\n  \"email\": \"guest@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/public/campaigns/{{campaignId}}/donate",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "public",
+                "campaigns",
+                "{{campaignId}}",
+                "donate"
+              ]
+            }
           }
         }
       ]
@@ -162,24 +450,507 @@
           "name": "Create Donation",
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "body": { "mode": "raw", "raw": "{\n  \"amount\": 5000,\n  \"paymentRef\": \"TXN123\",\n  \"csrEligible\": true,\n  \"isForeignDonor\": false\n}" },
-            "url": { "raw": "{{base_url}}/donations/{{campaignId}}", "host": ["{{base_url}}"], "path": ["donations", "{{campaignId}}"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 5000,\n  \"paymentRef\": \"TXN123\",\n  \"csrEligible\": true,\n  \"isForeignDonor\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/donations/{{campaignId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "donations",
+                "{{campaignId}}"
+              ]
+            }
           }
         },
         {
           "name": "My Donations",
-          "request": { "method": "GET", "url": { "raw": "{{base_url}}/donations/me", "host": ["{{base_url}}"], "path": ["donations", "me"] } }
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/donations/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "donations",
+                "me"
+              ]
+            }
+          }
         }
       ]
     },
     {
       "name": "Admin",
       "item": [
-        { "name": "NGO Profiles", "request": { "method": "GET", "url": { "raw": "{{base_url}}/users/admin/ngos", "host": ["{{base_url}}"], "path": ["users", "admin", "ngos"] } } },
-        { "name": "Company Profiles", "request": { "method": "GET", "url": { "raw": "{{base_url}}/users/admin/companies", "host": ["{{base_url}}"], "path": ["users", "admin", "companies"] } } },
-        { "name": "Donor Profiles", "request": { "method": "GET", "url": { "raw": "{{base_url}}/users/admin/donors", "host": ["{{base_url}}"], "path": ["users", "admin", "donors"] } } },
-        { "name": "All Donations", "request": { "method": "GET", "url": { "raw": "{{base_url}}/donations/admin/all", "host": ["{{base_url}}"], "path": ["donations", "admin", "all"] } } }
+        {
+          "name": "NGO Profiles",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/users/admin/ngos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "admin",
+                "ngos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Company Profiles",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/users/admin/companies",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "admin",
+                "companies"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Donor Profiles",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/users/admin/donors",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "admin",
+                "donors"
+              ]
+            }
+          }
+        },
+        {
+          "name": "All Donations",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/donations/admin/all",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "donations",
+                "admin",
+                "all"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Approve NGO",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APPROVED\",\n  \"remarks\": \"All checks complete\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/verification/ngos/{{ngoProfileId}}/approve",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "verification",
+                "ngos",
+                "{{ngoProfileId}}",
+                "approve"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reject NGO",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"REJECTED\",\n  \"remarks\": \"Missing CSR policy\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/verification/ngos/{{ngoProfileId}}/reject",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "verification",
+                "ngos",
+                "{{ngoProfileId}}",
+                "reject"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mark NGO Pending",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{base_url}}/admin/verification/ngos/{{ngoProfileId}}/pending",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "verification",
+                "ngos",
+                "{{ngoProfileId}}",
+                "pending"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Analytics",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/admin/analytics",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "analytics"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Milestones",
+      "item": [
+        {
+          "name": "Create Milestone",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.id) pm.collectionVariables.set('milestoneId', json.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Procure Filters\",\n  \"description\": \"Purchase 100 filtration units\",\n  \"targetDate\": \"2025-12-31\",\n  \"budget\": 150000\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/milestones/{{campaignId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "milestones",
+                "{{campaignId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Milestone Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"IN_PROGRESS\",\n  \"progressPercent\": 40\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/milestones/status/{{milestoneId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "milestones",
+                "status",
+                "{{milestoneId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Campaign Milestones",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/milestones/{{campaignId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "milestones",
+                "{{campaignId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Impact Metrics",
+      "item": [
+        {
+          "name": "Add Impact Metric",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Households Served\",\n  \"value\": 250,\n  \"unit\": \"families\",\n  \"milestoneId\": \"{{milestoneId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/impact/{{campaignId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "impact",
+                "{{campaignId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Campaign Metrics",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/impact/campaign/{{campaignId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "impact",
+                "campaign",
+                "{{campaignId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Milestone Metrics",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/impact/milestone/{{milestoneId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "impact",
+                "milestone",
+                "{{milestoneId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Utilization Reports",
+      "item": [
+        {
+          "name": "Submit Utilization Report",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amountUsed\": 120000,\n  \"description\": \"Procured filters for 4 villages\",\n  \"proofUrl\": \"https://files.example.com/proof.pdf\",\n  \"milestoneId\": \"{{milestoneId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/utilization/{{campaignId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "utilization",
+                "{{campaignId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Campaign Utilization",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/utilization/campaign/{{campaignId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "utilization",
+                "campaign",
+                "{{campaignId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Milestone Utilization",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/utilization/milestone/{{milestoneId}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "utilization",
+                "milestone",
+                "{{milestoneId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Admin Utilization Ledger",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/utilization/admin/all",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "utilization",
+                "admin",
+                "all"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "CSR",
+      "item": [
+        {
+          "name": "Generate CSR Summary",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyId\": \"<companyProfileId>\",\n  \"financialYear\": \"2024-2025\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/csr/summary",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "csr",
+                "summary"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Automation Flow",
+      "item": [
+        {
+          "name": "README",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Automation instructions', function () {",
+                  "    console.log('Use Collection Runner to execute folders Auth \u2192 NGO Self-Service \u2192 Milestones \u2192 Impact Metrics \u2192 Utilization Reports \u2192 CSR.');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
       ]
     }
   ]

@@ -6,7 +6,7 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '../user/user-role.enum';
-import { AuthUser } from '../auth/types/auth-user.type';
+import type { AuthUser } from '../auth/types/auth-user.type';
 
 @Controller('donations')
 export class DonationsController {

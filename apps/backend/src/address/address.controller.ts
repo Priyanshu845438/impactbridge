@@ -13,7 +13,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '../user/user-role.enum';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UsersService } from '../users/users.service';
-import { AuthUser } from '../auth/types/auth-user.type';
+import type { AuthUser } from '../auth/types/auth-user.type';
 
 @Controller('address')
 export class AddressController {

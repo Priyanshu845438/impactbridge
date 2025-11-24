@@ -3,4 +3,6 @@ export enum UserRole {
   NGO = 'NGO',
   COMPANY = 'COMPANY',
   DONOR = 'DONOR',
+  REVIEWER = 'REVIEWER',
+  AUDITOR = 'AUDITOR',
 }

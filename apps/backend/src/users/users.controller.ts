@@ -10,7 +10,7 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { AuthUser } from '../auth/types/auth-user.type';
+import type { AuthUser } from '../auth/types/auth-user.type';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';

@@ -8,11 +8,282 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id             String          @id @default(uuid())
+  name           String
+  email          String          @unique
+  phone          String?
+  password       String
+  role           Role
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  deletedAt      DateTime?
+  auditLogs      AuditLog[]      @relation("UserToAuditLogs")
+  companyProfile CompanyProfile?
+  donorProfile   DonorProfile?
+  ngoProfile     NGOProfile?
+  invitations    Invitation[]    @relation("UserInvitations")
+}
+
+model Invitation {
+  id        String   @id @default(uuid())
+  email     String
+  role      Role
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  createdBy String
+
+  creator   User     @relation("UserInvitations", fields: [createdBy], references: [id])
+}
+
+model NGOProfile {
+  id                 String              @id @default(uuid())
+  userId             String              @unique
+  registrationType   NGORegistrationType
+  registrationNumber String
+  founderNames       String
+  yearEstablished    Int
+  missionStatement   String
+  impactSummary      String?
+  website            String?
+  twelveARegistered  Boolean             @default(false)
+  eightyGRegistered  Boolean             @default(false)
+  csrEligibility     Boolean             @default(false)
+  deletedAt          DateTime?
+  verificationStatus String              @default("PENDING")
+  verificationRemarks String?
+  addresses          Address[]           @relation("NGOAddresses")
+  auditLogs          AuditLog[]          @relation("NGOAuditLogs")
+  bankDetails        BankDetail[]        @relation("NGOBankDetails")
+  campaigns          Campaign[]
+  documents          Document[]          @relation("NGODocuments")
+  financialReports   FinancialReport[]   @relation("NGOFinancialReports")
+  approvals          CampaignApproval[]  @relation("NGOCampaignApprovals")
+  user               User                @relation(fields: [userId], references: [id])
+}
+
+model CompanyProfile {
+  id            String       @id @default(uuid())
+  userId        String       @unique
+  cin           String       @unique
+  csrPolicyUrl  String?
+  industry      String
+  netWorth        Float?
+  averageProfit   Float?
+  csrAnnualBudget Float?
+  csrAllocated    Float?
+  csrSpent        Float?
+  csrCommittee  String?
+  deletedAt     DateTime?
+  addresses     Address[]    @relation("CompanyAddresses")
+  auditLogs     AuditLog[]   @relation("CompanyAuditLogs")
+  bankDetails   BankDetail[] @relation("CompanyBankDetails")
+  user          User         @relation(fields: [userId], references: [id])
+  documents     Document[]   @relation("CompanyDocuments")
+  donations     Donation[]
+  approvals     CampaignApproval[]  @relation("CompanyCampaignApprovals")
+  utilizationReports   UtilizationReport[]
+}
+
+model DonorProfile {
+  id         String     @id @default(uuid())
+  userId     String     @unique
+  pan        String?
+  occupation String?
+  interests  String?
+  addresses  Address[]  @relation("DonorAddresses")
+  auditLogs  AuditLog[] @relation("DonorAuditLogs")
+  donations  Donation[]
+  user       User       @relation(fields: [userId], references: [id])
+}
+
+model Campaign {
+  id           String           @id @default(uuid())
+  ngoId        String
+  title        String
+  description  String
+  category     CampaignCategory
+  goalAmount   Float
+  raisedAmount Float            @default(0)
+  startDate    DateTime
+  endDate      DateTime?
+  status       String
+  deletedAt    DateTime?
+  auditLogs    AuditLog[]       @relation("CampaignAuditLogs")
+  ngo          NGOProfile       @relation(fields: [ngoId], references: [id])
+  documents    Document[]       @relation("CampaignDocuments")
+  donations    Donation[]
+  milestones   Milestone[]
+  approvals    CampaignApproval[] @relation("CampaignApprovals")
+  impactMetrics ImpactMetric[]
+  utilizationReports UtilizationReport[]
+}
+
+model Donation {
+  id           String          @id @default(uuid())
+  donorId      String?
+  companyId    String?
+  campaignId   String
+  amount       Float
+  donationDate DateTime        @default(now())
+  paymentRef   String?
+  paymentMode  String?
+  receiptUrl   String?
+  deletedAt    DateTime?
+  auditLogs    AuditLog[]      @relation("DonationAuditLogs")
+  campaign     Campaign        @relation(fields: [campaignId], references: [id])
+  company      CompanyProfile? @relation(fields: [companyId], references: [id])
+  donor        DonorProfile?   @relation(fields: [donorId], references: [id])
+}
+
+model BankDetail {
+  id            String          @id @default(uuid())
+  ngoId         String?
+  companyId     String?
+  accountHolder String
+  bankName      String
+  accountNumber String
+  ifsc          String
+  branch        String?
+  company       CompanyProfile? @relation("CompanyBankDetails", fields: [companyId], references: [id])
+  ngo           NGOProfile?     @relation("NGOBankDetails", fields: [ngoId], references: [id])
+}
+
+model Document {
+  id         String          @id @default(uuid())
+  ngoId      String?
+  companyId  String?
+  campaignId String?
+  type       DocumentType
+  title      String
+  url        String
+  uploadedAt DateTime        @default(now())
+  metadata   Json?
+  campaign   Campaign?       @relation("CampaignDocuments", fields: [campaignId], references: [id])
+  company    CompanyProfile? @relation("CompanyDocuments", fields: [companyId], references: [id])
+  ngo        NGOProfile?     @relation("NGODocuments", fields: [ngoId], references: [id])
+}
+
+model FinancialReport {
+  id        String   @id @default(uuid())
+  ngoId     String
+  period    String
+  year      Int
+  reportUrl String
+  createdAt DateTime @default(now())
+
+  ngo NGOProfile @relation("NGOFinancialReports", fields: [ngoId], references: [id])
+}
+
+model CampaignApproval {
+  id         String   @id @default(uuid())
+  campaignId String
+  companyId  String
+  ngoId      String
+  status     String   @default("PENDING")
+  remarks    String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  campaign Campaign       @relation("CampaignApprovals", fields: [campaignId], references: [id])
+  company  CompanyProfile @relation("CompanyCampaignApprovals", fields: [companyId], references: [id])
+  ngo      NGOProfile     @relation("NGOCampaignApprovals", fields: [ngoId], references: [id])
+
+  @@unique([campaignId, companyId])
+}
+
+model ImpactMetric {
+  id          String   @id @default(uuid())
+  campaignId  String
+  milestoneId String?
+  name        String
+  value       Float
+  unit        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  campaign  Campaign  @relation(fields: [campaignId], references: [id])
+  milestone Milestone? @relation(fields: [milestoneId], references: [id])
+}
+
+model UtilizationReport {
+  id          String   @id @default(uuid())
+  campaignId  String
+  milestoneId String?
+  amountUsed  Float
+  description String
+  proofUrl    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  companyId   String?
+
+  campaign  Campaign  @relation(fields: [campaignId], references: [id])
+  milestone Milestone? @relation(fields: [milestoneId], references: [id])
+  company   CompanyProfile? @relation(fields: [companyId], references: [id])
+}
+
+model Milestone {
+  id             String   @id @default(uuid())
+  campaignId     String
+  title          String
+  description    String
+  targetDate     DateTime
+  budget         Float
+  status         String   @default("PENDING")
+  progressPercent Float   @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  impactMetrics ImpactMetric[]
+  utilizationReports UtilizationReport[]
+}
+
+model Address {
+  id          String          @id @default(uuid())
+  ngoId       String?
+  companyId   String?
+  donorId     String?
+  line1       String
+  line2       String?
+  city        String
+  state       String
+  country     String          @default("India")
+  postalCode  String
+  addressType String?
+  company     CompanyProfile? @relation("CompanyAddresses", fields: [companyId], references: [id])
+  donor       DonorProfile?   @relation("DonorAddresses", fields: [donorId], references: [id])
+  ngo         NGOProfile?     @relation("NGOAddresses", fields: [ngoId], references: [id])
+}
+
+model AuditLog {
+  id         String          @id @default(uuid())
+  userId     String?
+  ngoId      String?
+  companyId  String?
+  donorId    String?
+  campaignId String?
+  donationId String?
+  action     String
+  details    Json?
+  createdAt  DateTime        @default(now())
+  campaign   Campaign?       @relation("CampaignAuditLogs", fields: [campaignId], references: [id])
+  company    CompanyProfile? @relation("CompanyAuditLogs", fields: [companyId], references: [id])
+  donation   Donation?       @relation("DonationAuditLogs", fields: [donationId], references: [id])
+  donor      DonorProfile?   @relation("DonorAuditLogs", fields: [donorId], references: [id])
+  ngo        NGOProfile?     @relation("NGOAuditLogs", fields: [ngoId], references: [id])
+  user       User?           @relation("UserToAuditLogs", fields: [userId], references: [id])
+}
+
 enum Role {
   SUPER_ADMIN
   NGO
   COMPANY
   DONOR
+  REVIEWER
+  AUDITOR
 }
 
 enum NGORegistrationType {
@@ -42,182 +313,4 @@ enum CampaignCategory {
   WOMEN_EMPOWERMENT
   DISASTER_RELIEF
   OTHER
-}
-
-model User {
-  id            String            @id @default(uuid())
-  name          String
-  email         String            @unique
-  phone         String?
-  password      String
-  role          Role
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
-
-  // Relations to extended profiles
-  ngoProfile     NGOProfile?
-  companyProfile CompanyProfile?
-  donorProfile   DonorProfile?
-
-  auditLogs      AuditLog[]       @relation("UserToAuditLogs")
-}
-
-model NGOProfile {
-  id               String              @id @default(uuid())
-  userId           String              @unique
-  registrationType NGORegistrationType
-  registrationNumber String
-  founderNames     String
-  yearEstablished  Int
-  missionStatement String
-  impactSummary    String?
-  website          String?
-
-  // Financial + compliance
-  twelveARegistered Boolean            @default(false)
-  eightyGRegistered Boolean            @default(false)
-  csrEligibility    Boolean            @default(false)
-
-  // Relations
-  user          User                  @relation(fields: [userId], references: [id])
-  campaigns     Campaign[]
-  bankDetails   BankDetail[]          @relation("NGOBankDetails")
-  documents     Document[]            @relation("NGODocuments")
-  addresses     Address[]             @relation("NGOAddresses")
-  auditLogs     AuditLog[]            @relation("NGOAuditLogs")
-}
-
-model CompanyProfile {
-  id             String       @id @default(uuid())
-  userId         String       @unique
-  cin            String       @unique
-  csrPolicyUrl   String?
-  industry       String
-  netWorth       Float?
-  averageProfit  Float?
-  csrBudget      Float?
-  csrCommittee   String?
-
-  user        User            @relation(fields: [userId], references: [id])
-  donations   Donation[]
-  documents   Document[]      @relation("CompanyDocuments")
-  bankDetails BankDetail[]    @relation("CompanyBankDetails")
-  addresses   Address[]       @relation("CompanyAddresses")
-  auditLogs   AuditLog[]      @relation("CompanyAuditLogs")
-}
-
-model DonorProfile {
-  id         String    @id @default(uuid())
-  userId     String    @unique
-  pan        String?
-  occupation String?
-  interests  String?
-
-  user      User       @relation(fields: [userId], references: [id])
-  donations Donation[]
-  addresses Address[]  @relation("DonorAddresses")
-  auditLogs AuditLog[] @relation("DonorAuditLogs")
-}
-
-model Campaign {
-  id            String            @id @default(uuid())
-  ngoId         String
-  title         String
-  description   String
-  category      CampaignCategory
-  goalAmount    Float
-  raisedAmount  Float            @default(0)
-  startDate     DateTime
-  endDate       DateTime?
-  status        String
-
-  ngo           NGOProfile        @relation(fields: [ngoId], references: [id])
-  donations     Donation[]
-  documents     Document[]        @relation("CampaignDocuments")
-  auditLogs     AuditLog[]        @relation("CampaignAuditLogs")
-}
-
-model Donation {
-  id            String    @id @default(uuid())
-  donorId       String?
-  companyId     String?
-  campaignId    String
-  amount        Float
-  donationDate  DateTime  @default(now())
-  paymentRef    String?
-  paymentMode   String?
-  receiptUrl    String?
-
-  donor         DonorProfile? @relation(fields: [donorId], references: [id])
-  company       CompanyProfile? @relation(fields: [companyId], references: [id])
-  campaign      Campaign @relation(fields: [campaignId], references: [id])
-  auditLogs     AuditLog[] @relation("DonationAuditLogs")
-}
-
-model BankDetail {
-  id            String    @id @default(uuid())
-  ngoId         String?
-  companyId     String?
-  accountHolder String
-  bankName      String
-  accountNumber String
-  ifsc          String
-  branch        String?
-
-  ngo           NGOProfile?     @relation("NGOBankDetails", fields: [ngoId], references: [id])
-  company       CompanyProfile? @relation("CompanyBankDetails", fields: [companyId], references: [id])
-}
-
-model Document {
-  id          String       @id @default(uuid())
-  ngoId       String?
-  companyId   String?
-  campaignId  String?
-  type        DocumentType
-  title       String
-  url         String
-  uploadedAt  DateTime     @default(now())
-  metadata    Json?
-
-  ngo         NGOProfile?     @relation("NGODocuments", fields: [ngoId], references: [id])
-  company     CompanyProfile? @relation("CompanyDocuments", fields: [companyId], references: [id])
-  campaign    Campaign?       @relation("CampaignDocuments", fields: [campaignId], references: [id])
-}
-
-model Address {
-  id         String   @id @default(uuid())
-  ngoId     String?
-  companyId String?
-  donorId   String?
-  line1     String
-  line2     String?
-  city      String
-  state     String
-  country   String   @default("India")
-  postalCode String
-  addressType String?
-
-  ngo       NGOProfile?     @relation("NGOAddresses", fields: [ngoId], references: [id])
-  company   CompanyProfile? @relation("CompanyAddresses", fields: [companyId], references: [id])
-  donor     DonorProfile?   @relation("DonorAddresses", fields: [donorId], references: [id])
-}
-
-model AuditLog {
-  id          String   @id @default(uuid())
-  userId      String?
-  ngoId       String?
-  companyId   String?
-  donorId     String?
-  campaignId  String?
-  donationId  String?
-  action      String
-  details     Json?
-  createdAt   DateTime @default(now())
-
-  user        User?            @relation("UserToAuditLogs", fields: [userId], references: [id])
-  ngo         NGOProfile?      @relation("NGOAuditLogs", fields: [ngoId], references: [id])
-  company     CompanyProfile?  @relation("CompanyAuditLogs", fields: [companyId], references: [id])
-  donor       DonorProfile?    @relation("DonorAuditLogs", fields: [donorId], references: [id])
-  campaign    Campaign?        @relation("CampaignAuditLogs", fields: [campaignId], references: [id])
-  donation    Donation?        @relation("DonationAuditLogs", fields: [donationId], references: [id])
 }

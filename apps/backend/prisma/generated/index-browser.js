@@ -129,7 +129,18 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password',
   role: 'role',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.InvitationScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  role: 'role',
+  token: 'token',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy'
 };
 
 exports.Prisma.NGOProfileScalarFieldEnum = {
@@ -144,7 +155,10 @@ exports.Prisma.NGOProfileScalarFieldEnum = {
   website: 'website',
   twelveARegistered: 'twelveARegistered',
   eightyGRegistered: 'eightyGRegistered',
-  csrEligibility: 'csrEligibility'
+  csrEligibility: 'csrEligibility',
+  deletedAt: 'deletedAt',
+  verificationStatus: 'verificationStatus',
+  verificationRemarks: 'verificationRemarks'
 };
 
 exports.Prisma.CompanyProfileScalarFieldEnum = {
@@ -155,8 +169,11 @@ exports.Prisma.CompanyProfileScalarFieldEnum = {
   industry: 'industry',
   netWorth: 'netWorth',
   averageProfit: 'averageProfit',
-  csrBudget: 'csrBudget',
-  csrCommittee: 'csrCommittee'
+  csrAnnualBudget: 'csrAnnualBudget',
+  csrAllocated: 'csrAllocated',
+  csrSpent: 'csrSpent',
+  csrCommittee: 'csrCommittee',
+  deletedAt: 'deletedAt'
 };
 
 exports.Prisma.DonorProfileScalarFieldEnum = {
@@ -177,7 +194,8 @@ exports.Prisma.CampaignScalarFieldEnum = {
   raisedAmount: 'raisedAmount',
   startDate: 'startDate',
   endDate: 'endDate',
-  status: 'status'
+  status: 'status',
+  deletedAt: 'deletedAt'
 };
 
 exports.Prisma.DonationScalarFieldEnum = {
@@ -189,7 +207,8 @@ exports.Prisma.DonationScalarFieldEnum = {
   donationDate: 'donationDate',
   paymentRef: 'paymentRef',
   paymentMode: 'paymentMode',
-  receiptUrl: 'receiptUrl'
+  receiptUrl: 'receiptUrl',
+  deletedAt: 'deletedAt'
 };
 
 exports.Prisma.BankDetailScalarFieldEnum = {
@@ -213,6 +232,62 @@ exports.Prisma.DocumentScalarFieldEnum = {
   url: 'url',
   uploadedAt: 'uploadedAt',
   metadata: 'metadata'
+};
+
+exports.Prisma.FinancialReportScalarFieldEnum = {
+  id: 'id',
+  ngoId: 'ngoId',
+  period: 'period',
+  year: 'year',
+  reportUrl: 'reportUrl',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.CampaignApprovalScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  companyId: 'companyId',
+  ngoId: 'ngoId',
+  status: 'status',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ImpactMetricScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  milestoneId: 'milestoneId',
+  name: 'name',
+  value: 'value',
+  unit: 'unit',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UtilizationReportScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  milestoneId: 'milestoneId',
+  amountUsed: 'amountUsed',
+  description: 'description',
+  proofUrl: 'proofUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  companyId: 'companyId'
+};
+
+exports.Prisma.MilestoneScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  title: 'title',
+  description: 'description',
+  targetDate: 'targetDate',
+  budget: 'budget',
+  status: 'status',
+  progressPercent: 'progressPercent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.AddressScalarFieldEnum = {
@@ -271,7 +346,9 @@ exports.Role = exports.$Enums.Role = {
   SUPER_ADMIN: 'SUPER_ADMIN',
   NGO: 'NGO',
   COMPANY: 'COMPANY',
-  DONOR: 'DONOR'
+  DONOR: 'DONOR',
+  REVIEWER: 'REVIEWER',
+  AUDITOR: 'AUDITOR'
 };
 
 exports.NGORegistrationType = exports.$Enums.NGORegistrationType = {
@@ -305,6 +382,7 @@ exports.DocumentType = exports.$Enums.DocumentType = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Invitation: 'Invitation',
   NGOProfile: 'NGOProfile',
   CompanyProfile: 'CompanyProfile',
   DonorProfile: 'DonorProfile',
@@ -312,6 +390,11 @@ exports.Prisma.ModelName = {
   Donation: 'Donation',
   BankDetail: 'BankDetail',
   Document: 'Document',
+  FinancialReport: 'FinancialReport',
+  CampaignApproval: 'CampaignApproval',
+  ImpactMetric: 'ImpactMetric',
+  UtilizationReport: 'UtilizationReport',
+  Milestone: 'Milestone',
   Address: 'Address',
   AuditLog: 'AuditLog'
 };

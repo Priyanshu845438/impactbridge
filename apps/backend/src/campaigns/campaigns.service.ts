@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { CampaignCategory } from 'prisma/generated';
@@ -18,6 +22,12 @@ export class CampaignsService {
 
     if (!profile) {
       throw new NotFoundException('NGO profile not found');
+    }
+
+    if (profile.verificationStatus !== 'APPROVED') {
+      throw new ForbiddenException(
+        'NGO must be verified before creating campaigns',
+      );
     }
 
     const campaign = await this.prisma.campaign.create({

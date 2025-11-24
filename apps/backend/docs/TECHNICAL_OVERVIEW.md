@@ -1,53 +1,85 @@
 # Technical Overview – ImpactBridge Backend
 
-## Stack Overview
-- **Framework:** NestJS
-- **Language:** TypeScript
-- **Database:** PostgreSQL (Prisma ORM)
-- **Auth:** JWT Bearer tokens (1-day expiry)
-- **Validation:** global `ValidationPipe`
+## Stack & Conventions
+- **NestJS 11 (TypeScript)** with strict controller → service → Prisma layering.
+- **Prisma ORM** with Neon PostgreSQL; migrations tracked under `prisma/migrations/*`.
+- **Auth** via JWT (1-day expiry) + bcrypt hashed passwords.
+- **Validation** using DTOs (`class-validator`); global `ValidationPipe` enforces input hygiene.
+- **Tooling**: ESLint, Prettier, Postman collection, Activity logging.
 
-## Module Architecture
-- `auth/` – registration & login; guards (`JwtAuthGuard`, `RolesGuard`); `ActivityLogService` called on register/login.
-- `users/` & `user/` – admin CRUD (legacy) + self-service endpoints (`/users/me`).
-- `address/` – NGO registered address management.
-- `bank/` – NGO bank details management (response masks account number).
-- `documents/` – NGO document uploads (CSR policy, PAN, etc.).
-- `campaigns/` – campaign creation + public browsing.
-- `donations/` – authenticated & anonymous donations, donation history APIs.
-- `receipts/` – attach receipt URLs to donations.
-- `analytics/` – SUPER_ADMIN aggregated metrics.
-- `activity/` – logging helper reused across modules.
+## Module Inventory
+- `auth` – register/login, invitation acceptance, guards/decorators, password utilities.
+- `users` & `user` – self-service (`/users/me`, change password) + legacy admin endpoints.
+- `address`, `bank`, `documents` – NGO compliance data.
+- `campaigns` – creation (NGO approval enforced) + public listing.
+- `milestones` – per-campaign project milestones with status/progress tracking.
+- `donations` – authenticated & anonymous donations, histories, CSR integration.
+- `receipts` – attach donation receipt URLs.
+- `csr` – company budget + auto-spend tracking for donations.
+- `verification` – SUPER_ADMIN approval for NGOs.
+- `invitations` – SUPER_ADMIN invite flow with public acceptance.
+- `analytics` – platform-wide stats for admins.
+- `activity` – audit logging utility.
+- `financial` – placeholder module for future NGO financial reports (schema primed).
 
 ## Prisma Schema Highlights
-- **Models:** `User`, `NGOProfile`, `CompanyProfile`, `DonorProfile`, `Campaign`, `Donation`, `BankDetail`, `Document`, `Address`, `AuditLog`.
-- **Enums:** `Role`, `NGORegistrationType`, `DocumentType`, `CampaignCategory`.
-- Profiles auto-created after registration based on role (NGO/Company/Donor).
-- `Donation` includes `receiptUrl` for 80G receipts.
+- `User` → one-to-one relationship with `NGOProfile`, `CompanyProfile`, `DonorProfile`.
+- `NGOProfile` includes `verificationStatus`/`verificationRemarks` plus relations to campaigns, documents, financial reports, milestones (via campaigns).
+- `CompanyProfile` now tracks `csrAnnualBudget`, `csrAllocated`, `csrSpent` and relates to approvals (future workflow).
+- `Campaign` links to `Milestone` records for project tracking.
+- `Donation` includes optional company/donor pointers and `receiptUrl`.
+- `Milestone` captures title/description/targetDate/budget + status/progress (0–100).
+- `CampaignApproval` (planned workflow) ensures company-ngo approvals before donations (logic pending completion).
+- `FinancialReport` (future module ready for service layer).
 
-## Request Flow
-1. **Auth:** `POST /auth/register`, `POST /auth/login` (returns JWT + user). Token payload includes `id`, `role`.
-2. **Guarding:** Controllers use `@UseGuards(JwtAuthGuard, RolesGuard)` + `@Roles(...)` to enforce roles.
-3. **Activity Logging:** `ActivityLogService.log()` called after key actions (login, profile update, campaign, donation, receipt).
+## Request & Guard Pipeline
+1. **Authentication**: `/auth/login` issues JWT with `{ sub: userId, role }` payload.
+2. **Guards**: `JwtAuthGuard` checks token → `RolesGuard` enforces role metadata (`@Roles(...)`).
+3. **DTO Validation**: All controllers accept DTO classes to validate payloads.
+4. **Business Services**: Services handle Prisma access and enforce domain rules (e.g., NGO must own campaign to create milestone).
+5. **Activity Logging**: `ActivityLogService` persists metadata after critical operations.
 
-## Compliance Modules
-- Address/bank/documents endpoints require NGO role.
-- Admin analytics and profile listings restricted to SUPER_ADMIN.
-- Donations update campaign totals and optionally log anonymous info.
+## Role-Based Access Summary
+- **NGO**: can manage profile/compliance, create campaigns, manage milestones, views donation history.
+- **COMPANY**: manages CSR, donates to campaigns, views milestones when approved.
+- **DONOR**: donates (auth or public) and views personal history.
+- **SUPER_ADMIN**: invites users, verifies NGOs, sees analytics, accesses admin lists.
 
-## Error Handling
-- `JwtAuthGuard` throws 401 for missing/invalid tokens.
-- `RolesGuard` returns 403 for insufficient role.
-- Prisma `P2002` constraint caught when updating email (`Email already in use`).
+## Milestone Module Details
+- **DTOs**: `CreateMilestoneDto`, `UpdateMilestoneStatusDto` (status + progress 0–100).
+- **Service**: `create`, `updateStatus`, `listForCampaign` (access checks for NGO ownership or company approval).
+- **Controller**: 
+  - `POST /milestones/:campaignId` (NGO)
+  - `PATCH /milestones/status/:milestoneId` (NGO)
+  - `GET /milestones/:campaignId` (NGO owning campaign, approved company, or SUPER_ADMIN)
 
-## Build & Dev
-- `npm run start:dev` – watch mode (requires DB connection).
-- `npm run build` – compile TS to JS for deployment.
-- Postman collection at `docs/postman/impactbridge.postman_collection.json` aids manual testing.
+## CSR & Donation Integration
+- Company donations trigger `CSRService.updateSpent` to keep budgets aligned.
+- Future: Campaign approvals will gate company donations (schema in place).
 
-## Future Roadmap
-- Consolidate legacy `users/` module with self-service.
-- Campaign CRUD (update/archive) & donation reporting dashboards.
-- Donor receipts via email.
-- Refresh token rotation & MFA.
+## Observability & Docs
+- Audit logs (login, profile updates, campaign creation, donations, receipts, CSR, milestones) stored in `AuditLog` table.
+- Documentation set:
+  - `PROJECT_MASTER_CONTEXT.md` – architecture summary.
+  - `PROJECT_FULL_STATUS.md` – non-technical working overview + status.
+  - `API_TESTING_GUIDE.md` – Postman instructions.
+  - `FRONTEND_BUSINESS_GUIDE.md` – role-based business flows.
+- Postman collection auto-injects tokens, captures IDs (`campaignId`, `donationId`, `milestoneId`).
 
+## Pending Roadmap
+- Company–NGO approvals (service partially drafted; full integration pending).
+- NGO financial reporting endpoints.
+- Pagination/search for admin lists.
+- Soft delete handling (`deletedAt`).
+- Notification service (email/SMS) and reviewer dashboards.
+- Automated integration tests.
+
+
+## Utilization Reporting
+- NGOs submit fund usage reports (amount, description, proof URL, optional milestone) via the Utilization module.
+- Campaign-level (`GET /utilization/campaign/:id`) and milestone-level (`GET /utilization/milestone/:id`) endpoints expose spending to relevant roles.
+- SUPER_ADMIN ledger (`GET /utilization/admin/all`) aggregates all reports for compliance.
+
+## CSR Summary Builder
+- `POST /csr/summary` aggregates CSR-2 style metrics (obligation, spend, utilization, unspent, project breakdown, beneficiaries).
+- Reuses Utilization and Impact modules to build a comprehensive annual report per company.

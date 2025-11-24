@@ -1,68 +1,121 @@
 # Frontend Business Guide – ImpactBridge Backend
 
-This guide explains how frontend clients should interact with the backend. A separate API Testing guide exists for Postman flows; here we focus on business logic, payloads, and user journeys.
+This handbook explains how each user role experiences the platform, the key API calls your frontend should orchestrate, and the current completion status of major features.
 
-## Roles & Permissions
-| Role | Description | Typical Permissions |
-| ---- | ----------- | ------------------- |
-| `SUPER_ADMIN` | Platform administrators | Access admin insights/analytics and audit data |
-| `NGO` | Registered non-profit | Manage profile, address, bank, campaigns, documents, donations |
-| `COMPANY` | Corporate CSR team | Donate to campaigns, view admin NGO endpoints |
-| `DONOR` | Individual donor | Donate and view personal history |
+---
 
-## Authentication Flow
-1. **Register** – `POST /auth/register` with name, email, password, role (see API Testing guide for exact body).
-2. **Login** – `POST /auth/login`; response returns `accessToken` and sanitized user. Store token securely (HttpOnly cookie or memory + refresh strategy).
-3. **Authenticated Requests** – send `Authorization: Bearer <token>` header. JWT payload contains `id` and `role`.
-4. **Role Guarding** – backend guards apply `JwtAuthGuard` first, then `@Roles(...)` for RBAC.
+## 1. Roles & Journeys
 
-## NGO Journey
-1. **Complete Profile** – `GET /users/me` / `PATCH /users/me` to update name/email/phone.
-2. **Compliance Setup**
-   - Registered address: `POST /address/ngo`
-   - Bank details: `POST /bank/ngo` (account number masked in responses)
-   - Document uploads: `POST /documents/ngo` (CSR policy, PAN, etc.)
-3. **Campaign Management**
-   - Create campaign: `POST /campaigns`
-   - Public share link: `GET /campaigns/public/:id` (and note `public/campaigns/:id` for donors)
-4. **Donations & Receipts**
-   - View donations: `GET /donations/ngo`
-   - Generate donation receipt: `POST /receipts`
+### SUPER_ADMIN
+- **What they do:** Invite new users (reviewers/auditors), verify NGO applications, monitor analytics and donation ledgers.
+- **Key APIs:**
+  - `/admin/invite` → issue invite links (auto populates Postman token).
+  - `/admin/verification/ngos/:id/(approve|reject|pending)` → gate campaigns.
+  - `/users/admin/(ngos|companies|donors)` → compliance dashboards.
+  - `/admin/analytics`, `/donations/admin/all` → platform-wide insight.
+- **UI Hints:** Provide queue of NGO submissions, quick approve/reject buttons, and analytics dashboards.
 
-## Company Journey
-1. Register/login as `COMPANY`.
-2. Donate via `POST /donations/:campaignId` (CSR contributions tracked).
-3. View reports via admin endpoints if granted (requires `SUPER_ADMIN` token currently; plan future company dashboards).
+### NGO
+1. **Sign-up/Login** → `/auth/register` + `/auth/login`.
+2. **Compliance Setup:**
+   - `/users/me` (GET/PATCH) for profile.
+   - `/address/ngo`, `/bank/ngo`, `/documents/ngo` for regulatory data.
+3. **Await Verification:** admins must approve before campaigns go live.
+4. **Campaign Management:** `POST /campaigns`; list is public once approved.
+5. **Milestone Tracking:**
+   - `POST /milestones/:campaignId` to create project milestones with budget/target dates.
+   - `PATCH /milestones/status/:milestoneId` to update status + progress.
+   - `GET /milestones/:campaignId` to review progress.
+6. **Donations & Receipts:**
+   - `GET /donations/ngo` for history.
+   - `POST /receipts` to upload acknowledgement URLs.
 
-## Donor Journey
-1. Register/login as `DONOR` (or donate anonymously using public campaign endpoint).
-2. Donate via `POST /donations/:campaignId` (when logged in) or `POST /public/campaigns/:id/donate` (anonymous).
-3. View personal donations via `GET /donations/me`.
+### COMPANY
+1. **Login** as company.
+2. **CSR Budgeting:** `POST /csr/company/budget`, `GET /csr/company/status`, `POST /csr/company/spent`.
+3. **Donations:** `POST /donations/:campaignId` (auto-logs CSR spend), `GET /donations/me`.
+4. **Milestone Visibility:** `GET /milestones/:campaignId` if approval is granted (future workflow).
 
-## Admin Insights
-- `GET /users/admin/ngos` | `/admin/companies` | `/admin/donors` – compliance reporting.
-- `GET /donations/admin/all` – donation roll-ups.
-- `GET /admin/analytics` – aggregated statistics.
+### DONOR
+- **Authenticated donors:** donate via `/donations/:campaignId`, track via `/donations/me`.
+- **Anonymous donors:** `/public/campaigns/:campaignId/donate` with name/email for receipt emails (future notification service).
 
-## Compliance Modules
-- **Activity Logs** – critical actions log to Prisma `AuditLog` (login, profile update, campaign created, donation made, receipt generated).
-- **Campaigns** – campaign status stored as `PUBLIC` (shareable) or `DRAFT`.
-- **Documents** – documents are stored with `type` and `url`; clients should ensure upload to secure storage before calling API.
+### REVIEWER / AUDITOR (Invited Roles)
+- Accounts are provisioned via `/admin/invite` → `/auth/accept-invite`.
+- Read-only dashboards are planned (currently no dedicated endpoints beyond core admin views).
 
-## Payload References (Required vs Optional)
-- Address: `{ line1*, line2?, district*, state*, pincode*, country* }`
-- Bank: `{ accountHolder*, accountNumber*, ifscCode*, bankName*, branchName? }`
-- Campaign: `{ title*, description*, category*, targetAmount*, isPublic* }`
-- Receipt: `{ donationId*, receiptUrl* }`
+---
 
-## Error Handling
-- Validation errors include detailed field messages from class-validator.
-- Duplicate emails when updating profile return `400 Email already in use`.
-- All protected routes respond with `401` (no token) or `403` (role mismatch).
+## 2. Current Feature Coverage
+- **Auth & Invitations** ✔
+- **NGO Compliance** (address, bank, documents) ✔
+- **NGO Verification Workflow** ✔
+- **Campaign Creation & Public Listing** ✔
+- **Milestone Tracking for Campaigns** ✔ (create/update/list) – supports progress dashboards.
+- **Donations & Receipts** ✔ (authenticated + anonymous)
+- **CSR Budget Tracking** ✔ (auto-updates on donations)
+- **Admin Analytics & Profiles** ✔
+- **Activity Logging** ✔
+- **Company-NGO Approvals** 🔄 (schema ready; UI/workflow pending)
+- **NGO Financial Reports** 🔄 (service endpoints pending)
+- **Pagination, Soft Delete, Notifications** 🔄 future enhancements
+- **Automated Tests** 🔄 planned
 
-## Future Enhancements
-- Merge legacy user modules.
-- Company dashboards with donation analytics.
-- Donor receipts and shareable donation summaries.
-- Refresh tokens / MFA for enterprise accounts.
+Legend: ✔ Delivered | 🔄 Planned/In progress
 
+---
+
+## 3. UX Considerations by Module
+
+### Campaign Milestones
+- Each milestone includes **title**, **description**, **target date**, **budget**, **status**, and **progress percent**.
+- Use a timeline or progress bar to visualize `pending → in progress → completed`.
+- Only the owning NGO can create/update milestones; companies/admins have read-only access.
+- Companies should only see milestones for campaigns they are approved to fund (approval workflow forthcoming).
+
+### CSR Budget Dashboard
+- Display `annualBudget`, `allocated`, `spent`, `remaining` from `/csr/company/status`.
+- Combine with donation history to show how spend accrues over time.
+
+### Verification Queue
+- Show NGO submissions with compliance data (documents, address, bank status) so admins can approve quickly.
+- After approval, notify the NGO (future email hook) and unlock campaign creation.
+
+### Donation Receipts
+- After successful donation, provide NGOs a form to upload receipt URLs via `/receipts`.
+- Donors should be able to download/view receipt links.
+
+---
+
+## 4. Operational Notes for Frontend Teams
+- Always attach `Authorization: Bearer <token>` header (Postman script handles this automatically).
+- Use the Postman collection as a reference for required payloads.
+- Handle errors gracefully:
+  - `401` → prompt login.
+  - `403` → show “insufficient permissions” or “verification pending”.
+  - `400` → display validation messages returned by backend.
+- Remember to sanitize sensitive fields: account numbers are masked in responses; never display raw passwords.
+- Activity logs can be tapped for audit screens (future enhancement).
+
+---
+
+## 5. Roadmap Impact on Frontends
+- **Company–NGO approvals** will introduce new screens for requesting approvals and showing status before donations.
+- **NGO financial reporting** will require upload forms + admin viewers for quarterly/annual disclosures.
+- **Pagination/soft delete** will alter list endpoints; prepare UI to handle page/limit response metadata.
+- **Notifications** will surface receipt emails and invite reminders; frontends should expose toggles as needed.
+
+Keep this document handy alongside `PROJECT_FULL_STATUS.md` to align design and development teams on what’s live versus upcoming.
+
+
+### Utilization Reports
+NGOs provide detailed fund usage reports to maintain transparency:
+- Submit reports via `POST /utilization/:campaignId` including amount used, description, proof URL, and optional milestone reference.
+- NGO, company, and SUPER_ADMIN roles can view campaign-level reports (`GET /utilization/campaign/:id`).
+- All roles (including donors) can view milestone-level reports (`GET /utilization/milestone/:id`) to track outcomes per phase.
+- SUPER_ADMIN has an aggregate ledger via `/utilization/admin/all`.
+
+### CSR Annual Summary
+- Frontend should collect `companyId` and `financialYear`, then call `POST /csr/summary`.
+- Display obligation, spent, utilized, unspent amounts plus project breakdown (impact + utilization).
+- Offer export/download options for CSR-2 compliance reports.

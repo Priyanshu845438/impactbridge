@@ -14,6 +14,13 @@ import { ReceiptsModule } from './receipts/receipts.module';
 import { ActivityLogModule } from './activity/activity-log.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { CSRReportsModule } from './csr/csr-reports.module';
+import { InvitationsModule } from './invitations/invitations.module';
+import { VerificationModule } from './verification/verification.module';
+import { CSRModule } from './csr/csr.module';
+import { FinancialModule } from './financial/financial.module';
+import { MilestonesModule } from './milestones/milestones.module';
+import { ImpactModule } from './impact/impact.module';
+import { UtilizationModule } from './utilization/utilization.module';
 
 @Module({
   imports: [
@@ -30,6 +37,13 @@ import { CSRReportsModule } from './csr/csr-reports.module';
     ActivityLogModule,
     AnalyticsModule,
     CSRReportsModule,
+    InvitationsModule,
+    VerificationModule,
+    CSRModule,
+    FinancialModule,
+    MilestonesModule,
+    ImpactModule,
+    UtilizationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
