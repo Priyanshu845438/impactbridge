@@ -42,3 +42,5 @@ Frontend stabilized: folder structure corrected, assets moved to public/, config
 [FE] Auth UX unified across login + register, verified responsive layout and functional auth flows.
 
 [FE] Forgot + reset password flow UI created with consistent auth styling.
+Fixed API route prefix and removed incorrect auth path generation.
+Fixed API route prefix and removed incorrect auth path generation.

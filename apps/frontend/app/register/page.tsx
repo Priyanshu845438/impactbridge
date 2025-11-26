@@ -75,13 +75,15 @@ export default function RegisterPage() {
     try {
       setLoading(true);
       setError(null);
-      await apiClient.post("/auth/register", {
-        name: values.name,
-        email: values.email,
-        password: values.password,
-        role: values.role,
+      await apiClient.post("auth/register", {
+        json: {
+          name: values.name,
+          email: values.email,
+          password: values.password,
+          role: values.role,
+        },
       });
-      router.push("/public/login");
+      router.push("/login");
     } catch (err) {
       console.error(err);
       setError("Registration failed, please try again.");
@@ -110,7 +112,7 @@ export default function RegisterPage() {
           ImpactBridge
         </Link>
         <nav className="hidden items-center gap-6 text-sm font-medium text-white/75 md:flex">
-          <Link href="/public/login" className="transition hover:text-white">
+          <Link href="/login" className="transition hover:text-white">
             Already have an account?
           </Link>
           <Link href="/docs" className="transition hover:text-white">
@@ -277,7 +279,7 @@ export default function RegisterPage() {
 
               <p className="text-center text-xs text-slate-500">
                 Already onboarded?{' '}
-                <Link href="/public/login" className="font-medium text-indigo-600 hover:text-indigo-500">
+                <Link href="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
                   Sign in instead
                 </Link>
               </p>

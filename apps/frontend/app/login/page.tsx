@@ -57,8 +57,9 @@ export default function LoginPage() {
       setLoading(true);
       setError(null);
 
-      const data = await apiClient.post<
-        {
+      const response = await apiClient
+        .post("auth/login", { json: values })
+        .json<{
           accessToken: string;
           user: {
             id: string;
@@ -66,18 +67,16 @@ export default function LoginPage() {
             name: string;
             email: string;
           };
-        },
-        z.infer<typeof schema>
-      >("/auth/login", values);
+        }>();
 
-      login(data.accessToken, data.user);
+      login(response.accessToken, response.user);
 
       const nextRoute = {
         SUPER_ADMIN: "/dashboard/admin",
         NGO: "/dashboard/ngo",
         COMPANY: "/dashboard/company",
         DONOR: "/dashboard/donor",
-      }[data.user.role];
+      }[response.user.role];
 
       router.push(nextRoute ?? "/dashboard");
     } catch (err) {
@@ -108,7 +107,7 @@ export default function LoginPage() {
           ImpactBridge
         </Link>
         <nav className="hidden items-center gap-6 text-sm font-medium text-white/75 md:flex">
-          <Link href="/public/register" className="transition hover:text-white">
+          <Link href="/register" className="transition hover:text-white">
             Become a partner
           </Link>
           <Link href="/docs" className="transition hover:text-white">
@@ -205,7 +204,7 @@ export default function LoginPage() {
                     <Link href="/public/forgot-password" className="font-medium text-indigo-600 hover:text-indigo-500">
                       Forgot password?
                     </Link>
-                    <Link href="/public/register" className="font-medium text-indigo-600 hover:text-indigo-500">
+                  <Link href="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
                       Create account
                     </Link>
                   </div>
