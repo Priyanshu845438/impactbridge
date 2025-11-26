@@ -24,3 +24,19 @@
 ## 8. [FE] Updated login/register background with full-screen CSR image and responsive layout.
 - Swapped gradient wrappers for shared CSR hero image with full-bleed cover styling.
 - Kept auth cards centered via flex to ensure consistent responsiveness.
+
+## 9. [FE] Fixed asset path handling, moved images to public/, enabled standalone output and ensured stable build.
+- Renamed assets directory, relocated background image to public/images, and updated references.
+- Simplified next.config.js with standalone output + appDir flag; cleared .next cache and verified clean build.
+
+## 10. [FE] Auth screens now full-width responsive with contrast overlay and card blur.
+- Added full-screen CSR background with gradient overlay, blur, and translucent panels.
+- Tuned card padding/fonts for sub-480px layouts; lint/build remain clean.
+
+## 11. [FE] Resolved Next.js 404 build issues, stabilized asset delivery.
+- Simplified next.config.js to standalone output and added pages/_document.tsx for App Router build compatibility.
+- Relocated CSR hero image to public/images; cleared .next cache and confirmed lint/build success.
+
+Frontend stabilized: folder structure corrected, assets moved to public/, configuration fixed, unused code removed.
+
+[FE] Auth UX unified across login + register, verified responsive layout and functional auth flows.

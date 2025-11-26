@@ -1,45 +1,48 @@
-# ImpactBridge Frontend Setup
+# ImpactBridge Frontend Guide
 
-## Summary
-- Next.js 14 (App Router + TypeScript)
-- TailwindCSS + Tailwind Merge + Radix utilities
-- React Query provider (`providers/query-provider.tsx`)
-- Auth context storing JWT in memory
-- API wrapper in `lib/api-client.ts`
-- Route groups for `(public)` and `(dashboard)` flows.
+## Project Layout
+- `app/` — Next.js App Router routes
+  - `public/login`, `public/register` — auth screens
+  - `dashboard/` — shell for protected routes
+- `components/` — shared UI primitives (shadcn-based)
+- `context/`, `providers/` — React context providers (auth, React Query)
+- `lib/` — API client + utilities
+- `public/images` — static assets (CSR background)
 
-## Directory Layout
+## Styling & Theme
+- TailwindCSS + custom `globals.css` for brand colors (navy #0A2540, purple #5b2bea)
+- Glassmorphism cards via `backdrop-blur`, frost overlays
+- Responsive tweaks using Tailwind breakpoints and `max-[480px]` utilities
+
+## Auth Flow
+1. User visits `/public/login` or `/public/register`
+2. Forms use `react-hook-form` + `zod` validation
+3. Submit via `apiClient` (fetch wrapper with base URL from `NEXT_PUBLIC_API_BASE_URL`)
+4. Successful auth stores JWT in `AuthProvider` state and redirects by role
+
+## API Client
 ```
-app/
-  layout.tsx
-  page.tsx
-  (public)/login/page.tsx
-  (public)/register/page.tsx
-  (dashboard)/layout.tsx
-  (dashboard)/page.tsx
-components/ui/navbar.tsx
-providers/
-  auth-context.tsx
-  query-provider.tsx
-lib/
-  api-client.ts
-  fetcher.ts
-styles/globals.css
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
+```
+- `lib/api-client.ts` handles token injection
+- Use `setApiClientToken` post-login
+
+## Running Locally
+```bash
+npm install
+npm run dev -- --port 3400
+```
+Prod build
+```bash
+npm run lint
+npx next build
 ```
 
-## Configuration
-- `tailwind.config.js` (dark mode + content globs)
-- `postcss.config.js`
-- `tsconfig.json` alias `@/*`
-- `.env.local` should include `NEXT_PUBLIC_API_BASE_URL`
+## Assets
+- Background: `public/images/login_signup_bg.webp`
+- Update new images under `public/images` and reference via `/images/...`
 
-## Scripts
-- `npm run dev`
-- `npm run lint`
-- `npm run build`
-
-## Next Steps
-- Wire login/register to real backend endpoints
-- Expand dashboard routes with actual content
-- Add shadcn/ui components as needed
-- Persist auth token via cookies/local storage if required
+## Notes
+- Avoid duplicating route groups; single `app` directory only
+- Keep config at `next.config.js` with `experimental.appDir`, `output: "standalone"`
+- Clear `.next` when adjusting config or assets
