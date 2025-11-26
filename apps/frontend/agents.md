@@ -40,3 +40,5 @@
 Frontend stabilized: folder structure corrected, assets moved to public/, configuration fixed, unused code removed.
 
 [FE] Auth UX unified across login + register, verified responsive layout and functional auth flows.
+
+[FE] Forgot + reset password flow UI created with consistent auth styling.
