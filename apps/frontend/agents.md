@@ -37,10 +37,28 @@
 - Simplified next.config.js to standalone output and added pages/_document.tsx for App Router build compatibility.
 - Relocated CSR hero image to public/images; cleared .next cache and confirmed lint/build success.
 
-Frontend stabilized: folder structure corrected, assets moved to public/, configuration fixed, unused code removed.
+## 12. [FE] Auth UX unified across login + register, verified responsive layout and functional auth flows.
+- Refined responsive spacing, consistent validation feedback, and ensured role redirects land on correct dashboards.
 
-[FE] Auth UX unified across login + register, verified responsive layout and functional auth flows.
+## 13. [FE] Forgot + reset password flow UI created with consistent auth styling.
+- Added placeholder forms for email capture/reset with shared CSR backdrop and card treatment.
 
-[FE] Forgot + reset password flow UI created with consistent auth styling.
-Fixed API route prefix and removed incorrect auth path generation.
-Fixed API route prefix and removed incorrect auth path generation.
+## 14. Fixed API route prefix and removed incorrect auth path generation.
+- Normalised routes to `/login`, `/register`, etc. and ensured API wrapper points to `/auth/login` & `/auth/register`.
+
+## 15. Frontend stabilized: folder structure corrected, assets moved to public/, configuration fixed, unused code removed.
+- Removed duplicate route groups, consolidated assets under `public/images`, and verified clean Next build.
+
+## 16. [FE] Auth UX unified across login + register, verified responsive layout and functional auth flows.
+- Maintained naming consistency after structure cleanup (dedicated confirmation entry).
+
+## 17. [FE] Forgot + reset password flow UI created with consistent auth styling.
+- Recorded final UI pass to prevent duplicate worklogs.
+
+## 18. Fixed API route prefix and removed incorrect auth path generation.
+- Added final confirmation entry post refactor.
+
+## 19. [FE] Base dashboard skeleton with protected layout and role placeholders.
+- Added `app/dashboard/layout.tsx` with auth guard, header, sidebar, and mobile drawer.
+- Created role-specific placeholder pages for Super Admin, NGO, Company, and Donor flows.
+- Documented structure in `docs/FRONTEND_DASHBOARD.md` and refreshed setup guide.

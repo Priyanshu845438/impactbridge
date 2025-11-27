@@ -104,7 +104,7 @@ export default function RegisterPage() {
       />
       <div className="absolute inset-0 bg-gradient-to-br from-slate-950/90 via-slate-950/70 to-slate-900/40" />
 
-      <header className="relative z-10 flex w-full items-center justify-between px-6 py-6 lg:px-12">
+      <header className="relative z-10 flex w-full items-center justify-between px-6 py-6 lg:px-10">
         <Link href="/" className="flex items-center gap-3 text-lg font-semibold sm:text-xl">
           <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-base font-bold text-white">
             IB
@@ -121,8 +121,8 @@ export default function RegisterPage() {
         </nav>
       </header>
 
-      <main className="relative z-10 flex w-full flex-1 flex-col gap-10 px-6 pb-12 lg:flex-row lg:items-center lg:justify-between lg:px-12">
-        <section className="max-w-xl space-y-6 text-center lg:text-left">
+      <main className="relative z-10 flex w-full flex-1 flex-col gap-10 px-6 pb-12 lg:flex-row lg:items-center lg:justify-between lg:px-10">
+        <section className="w-full space-y-6 text-center lg:w-1/2 lg:text-left">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/80">
             Join the ImpactBridge Network
           </span>
@@ -149,8 +149,8 @@ export default function RegisterPage() {
           </div>
         </section>
 
-        <section className="flex w-full max-w-md justify-center">
-          <Card className="w-full rounded-3xl border border-white/10 bg-white/70 shadow-2xl backdrop-blur-xl">
+        <section className="flex w-full justify-center lg:w-1/2">
+          <Card className="w-full rounded-3xl border border-white/10 bg-white/70 shadow-2xl backdrop-blur-xl lg:w-4/5">
             <CardHeader className="space-y-3 text-center text-slate-900">
               <CardTitle className="text-2xl font-semibold sm:text-3xl">
                 Create your ImpactBridge account

@@ -2,8 +2,8 @@
 
 ## Project Layout
 - `app/` — Next.js App Router routes
-  - `public/login`, `public/register` — auth screens
-  - `dashboard/` — shell for protected routes
+  - `login`, `register`, `forgot-password`, `reset-password` — auth screens
+  - `dashboard/` — protected workspace (layout + role-specific pages)
 - `components/` — shared UI primitives (shadcn-based)
 - `context/`, `providers/` — React context providers (auth, React Query)
 - `lib/` — API client + utilities
@@ -15,14 +15,14 @@
 - Responsive tweaks using Tailwind breakpoints and `max-[480px]` utilities
 
 ## Auth Flow
-1. User visits `/public/login` or `/public/register`
+1. User visits `/login` or `/register`
 2. Forms use `react-hook-form` + `zod` validation
-3. Submit via `apiClient` (fetch wrapper with base URL from `NEXT_PUBLIC_API_BASE_URL`)
+3. Submit via `apiClient` (fetch wrapper with base URL from `NEXT_PUBLIC_API_URL`)
 4. Successful auth stores JWT in `AuthProvider` state and redirects by role
 
 ## API Client
 ```
-NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 - `lib/api-client.ts` handles token injection
 - Use `setApiClientToken` post-login

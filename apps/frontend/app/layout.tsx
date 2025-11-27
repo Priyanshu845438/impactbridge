@@ -16,10 +16,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className={cn('min-h-screen bg-background font-sans antialiased')}>
+      <body className={cn('w-full min-h-screen flex flex-col bg-neutral-50 overflow-hidden font-sans antialiased')}>
         <AuthProvider>
           <QueryProvider>
-            <main className="mx-auto w-full max-w-6xl px-4 py-6">{children}</main>
+            <main className="flex-1 w-full">{children}</main>
           </QueryProvider>
         </AuthProvider>
       </body>
