@@ -62,3 +62,39 @@
 - Added `app/dashboard/layout.tsx` with auth guard, header, sidebar, and mobile drawer.
 - Created role-specific placeholder pages for Super Admin, NGO, Company, and Donor flows.
 - Documented structure in `docs/FRONTEND_DASHBOARD.md` and refreshed setup guide.
+
+## 20. [FE] Sidebar navigation powered by shared config and role guards.
+- Introduced `lib/nav-menu.ts` describing items, icons, and allowed roles.
+- Dashboard layout now filters menu items per user role, applies active styling, and keeps mobile drawer in sync.
+- Verified lint/build to ensure no regressions.
+
+## 21. [FE] Admin quick-action cards + full-width dashboard layout.
+- Added reusable `QuickActionCard` component and wired four cards into the admin page for verification, CSR programmes, NGO registry, and reports.
+- Adjusted dashboard layout to `flex w-full h-screen` so the content column sits flush with the fixed 260px sidebar across breakpoints.
+- Updated dashboard docs to capture card usage and new layout details.
+
+## 22. [FE] Documentation suite refreshed after dashboard enhancements.
+- Reauthored `docs/FRONTEND_SETUP.md` with architecture map, tooling, scripts, and auth lifecycle.
+- Expanded `docs/FRONTEND_DASHBOARD.md` to cover layout, widgets, reusable components, and roadmap notes.
+- Ran `npm run lint` to confirm repo health while publishing updated docs.
+
+## 23. [FE] Admin module scaffolding with nested navigation.
+- Added `/app/dashboard/admin/modules/*` placeholders for NGOs, CSR programmes, reports, and settings with consistent section headers.
+- Extended `nav-menu.ts` to support nested items and wired collapsible sidebar behaviour across desktop + mobile.
+- Verified lint passes after layout updates.
+
+## 24. [FE] Frontend build stabilized; static asset 404s resolved.
+- Ran fresh `next build` ensuring `_next/static` artefacts regenerate correctly.
+- Confirmed no layout/menu functionality regressed; existing implementations unaffected.
+
+## 25. [FE] Rebuilt frontend after cache purge to resolve missing webpack chunks.
+- Deleted `.next` and executed fresh `next build` to regenerate server/runtime bundles (e.g., ./948.js).
+- Validated build output table confirms modules present; existing UI left untouched.
+
+## 26. [FE] Documentation refreshed post admin module scaffolding.
+- Updated `FRONTEND_SETUP.md` and `FRONTEND_DASHBOARD.md` to cover nested admin modules, sidebar behaviour, and build/reset guidelines.
+- Ensured guides reflect latest architecture while backend/API wiring remains TODO.
+
+## 27. [FE] Comprehensive documentation suite authored.
+- Added guides covering project overview, auth flow, routing, style system, component catalog, contribution process, and TODO roadmap.
+- Ensured lint remains clean after documentation pass.

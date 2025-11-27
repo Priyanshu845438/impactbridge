@@ -1,31 +1,53 @@
-# ImpactBridge Dashboard Skeleton
+# ImpactBridge Dashboard Overview
 
-## Overview
-The dashboard workspace introduces a protected, role-aware layout for authenticated users. All dashboard routes share a common shell that delivers consistent navigation and branding while keeping the code ready for future feature modules.
+## Purpose
+The admin/NGO/company/donor workspaces provide a central home for compliance tasks, campaign oversight, and engagement metrics. The current implementation is a polished skeleton ready to be wired into backend APIs while already conveying the brand look & feel.
 
-## Layout
-- **File**: `app/dashboard/layout.tsx`
-- **Highlights**:
-  - Header with ImpactBridge brand, active user badge, and logout control.
-  - Desktop sidebar + mobile drawer sourced from a single `navLinks` config.
-  - Uses `useAuth()` to guard against unauthenticated access and to filter visible links by user role.
-  - Provides a shared welcome block (`Welcome to ImpactBridge Dashboard`) where cross-role announcements can live.
+## Shared Layout (`app/dashboard/layout.tsx`)
+- **Auth guard**: consumes `useAuth()` and redirects to `/login` if token missing
+- **Sidebar**: 260px fixed panel with nav items derived from `lib/nav-menu.ts`; filters links per user role and supports collapsible admin modules
+- **Header**: sticky top bar with brand mark, breadcrumb slot, and logout button
+- **Main content**: `flex-1` scrollable region with gradient background and responsive padding
+- **Mobile**: hamburger toggles a drawer sidebar; desktop view stays fixed; nested sections collapse/expand with Chevron indicators
+- **Utilities**: uses `SectionHeader` for consistent titling and `QuickActionCard` for highlight blocks
 
-## Role Pages
-Each role currently renders a placeholder ready for widgets:
-- `app/dashboard/admin/page.tsx`
-- `app/dashboard/ngo/page.tsx`
-- `app/dashboard/company/page.tsx`
-- `app/dashboard/donor/page.tsx`
+## Admin Dashboard (`app/dashboard/admin/page.tsx`)
+- Welcome hero with role-aware greeting
+- Quick metrics row featuring:
+  - `Total Users`
+  - `Pending Approvals`
+  - `Last Login Activity`
+- Quick action grid (`QuickActionCard`) suggesting follow-up tasks (verification queue, CSR programmes, analytics)
+- **Recent Activity** list with icons, timestamps, statuses (static for now)
+- Ready for future data hooks (see TODO comment inside file)
 
-These components will eventually surface insights such as pending verifications, campaign milestones, or donor receipts once backend APIs are connected.
+## Admin Modules (`app/dashboard/admin/modules/*`)
+- `ngos/page.tsx`: NGO management placeholder
+- `programmes/page.tsx`: CSR programme pipeline placeholder
+- `reports/page.tsx`: analytics/reporting placeholder
+- `settings/page.tsx`: platform-wide settings placeholder
+Each module uses `SectionHeader`, divider, and frosted card with “Coming soon” copy.
 
-## Auth Integration
-- `AuthProvider` keeps JWT + user object in memory only; layout observes this context.
-- Logout clears the token via `logout()` and redirects back to `/login`.
-- Navigation updates automatically when additional roles or sections join the `navLinks` array.
+## Other Role Pages
+- `dashboard/ngo`, `dashboard/company`, `dashboard/donor`
+  - Minimal placeholder card per role; adopt same layout once their widgets are defined
+  - Ready to host campaign progress, donation summaries, or compliance status once APIs exist
+
+## Reusable Components
+- `components/dashboard/section-header.tsx`
+  - Accepts `title`, `subtitle`, optional `action`
+  - Renders CTA slot on the right (e.g., “Create Campaign”)
+- `components/dashboard/quick-action-card.tsx`
+  - Accepts icon, title, body, and action label
+  - Hover animation and gradient border for interactive feel
 
 ## Next Steps
-1. Wire each role page to actual backend data (campaigns, compliance tasks, CSR budgets).
-2. Add quick stats cards inside the shared hero block for an “at a glance” experience.
-3. Extend the layout with breadcrumbs and contextual actions (e.g., “Create campaign”).
+1. Move static metrics to hooks (e.g., `useAdminStats`) that call backend microservices
+2. Add charts (shadcn chart components) for donation distribution and impact metrics
+3. Introduce role-specific notifications center and task lists
+4. Integrate breadcrumbs and tabbed sub-navigation inside the content area
+
+## Dev Tips
+- Keep sections responsive by leveraging Tailwind grid utilities (`grid-cols-1 sm:grid-cols-2 xl:grid-cols-3`)
+- When adding new dashboard widgets, document them in this file for stakeholders
+- Ensure data fetching hooks handle loading/empty/error states gracefully to preserve polished UX
