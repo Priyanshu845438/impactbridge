@@ -1,4 +1,8 @@
 
+"use client";
+
+import { useEffect, useRef } from "react";
+
 import {
   ActivitySquare,
   ClipboardCheck,
@@ -11,8 +15,19 @@ import {
 
 import { QuickActionCard } from "@/components/dashboard/quick-action-card";
 import { SectionHeader } from "@/components/dashboard/section-header";
+import { useAuth } from "@/providers/auth-context";
 
 export default function AdminDashboard() {
+  const { user } = useAuth();
+  const didToast = useRef(false);
+
+  useEffect(() => {
+    if (user && !didToast.current) {
+      console.log(`Welcome, ${user.name}`);
+      didToast.current = true;
+    }
+  }, [user]);
+
   const activity = [
     {
       title: "New NGO registered",
@@ -38,13 +53,6 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-8">
-      <div className="space-y-3">
-        <h1 className="text-3xl font-bold text-slate-900">Admin dashboard — placeholder</h1>
-        <p className="text-slate-600">
-          Super admin view to oversee NGO verifications, CSR compliance, and platform metrics.
-        </p>
-      </div>
-
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <StatCard
           icon={Users2}

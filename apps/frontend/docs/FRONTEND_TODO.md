@@ -20,5 +20,7 @@
 - Role-aware dashboard layout + quick cards
 - Admin module placeholders and collapsible navigation
 - Documentation suite refreshed (`project_overview`, `auth_flow`, `style_guide`)
+- Client-component conversion for admin dashboard with toast greeting
+- Build pipeline cleansed (cache purge + standalone output)
 
 Update this file as features ship or priorities shift.

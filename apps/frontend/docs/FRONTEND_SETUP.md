@@ -66,6 +66,8 @@ npm run dev -- --port 3400    # start dev server (port 3400)
 npm run lint                  # lint check
 npm run build                 # production build
 npm run start                 # serve built app
+# clean rebuild when chunks mismatch
+rm -rf .next node_modules/.cache && npm install && npm run build
 ```
 If static assets or config change: `rm -rf .next` before a rebuild
 

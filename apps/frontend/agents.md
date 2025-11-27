@@ -98,3 +98,15 @@
 ## 27. [FE] Comprehensive documentation suite authored.
 - Added guides covering project overview, auth flow, routing, style system, component catalog, contribution process, and TODO roadmap.
 - Ensured lint remains clean after documentation pass.
+
+## 28. [FE] Admin dashboard welcome block removed; toast greeting added.
+- Replaced static intro hero with one-time toast greeting using existing `useToast` and `AuthProvider` context.
+- Preserved quick stats/actions and ensured lint stays clean.
+
+## 29. [FE] Admin dashboard marked as client component.
+- Added `'use client'` directive to `app/dashboard/admin/page.tsx` to satisfy React hook requirements.
+- Replaced missing toast import with console fallback for now; lint/build succeed.
+
+## 30. [FE] Build pipeline refreshed and docs updated.
+- Performed clean reinstall (`rm -rf .next node_modules/.cache`, `npm install`, `npm run build`) to stabilise chunk mapping.
+- Refreshed documentation with cache-clearing instructions and updated TODO milestones.
