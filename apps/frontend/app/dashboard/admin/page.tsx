@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 import {
   ActivitySquare,
@@ -16,15 +16,19 @@ import {
 import { QuickActionCard } from "@/components/dashboard/quick-action-card";
 import { SectionHeader } from "@/components/dashboard/section-header";
 import { useAuth } from "@/providers/auth-context";
+import { toast } from "sonner";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
-  const didToast = useRef(false);
 
   useEffect(() => {
-    if (user && !didToast.current) {
-      console.log(`Welcome, ${user.name}`);
-      didToast.current = true;
+    if (!user || typeof window === "undefined") {
+      return;
+    }
+
+    if (!sessionStorage.getItem("impactbridge:admin-welcomed")) {
+      toast.success(`Welcome ${user.name}`);
+      sessionStorage.setItem("impactbridge:admin-welcomed", "true");
     }
   }, [user]);
 

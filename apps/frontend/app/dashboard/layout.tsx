@@ -1,6 +1,6 @@
 "use client";
 
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronRight, LogOut, Menu, ShieldCheck, X } from "lucide-react";
@@ -22,65 +22,70 @@ function SidebarLink({
   onNavigate?: () => void;
 }) {
   const hasChildren = Array.isArray(item.children) && item.children.length > 0;
-  const [open, setOpen] = useState(
+  const childActive = useMemo(
     () => hasChildren && item.children?.some((child) => child.href === pathname),
+    [hasChildren, item.children, pathname],
   );
+  const [open, setOpen] = useState(() => childActive);
+  useEffect(() => {
+    if (childActive && !open) {
+      setOpen(true);
+    }
+  }, [childActive, open]);
+
   const isActive = item.href ? pathname === item.href : false;
+  const isCurrent = isActive || childActive;
   const Icon = item.icon;
+  const indentation = depth > 0 ? "ml-4" : "";
+
+  const containerClasses = cn(
+    "group flex items-center justify-between rounded-xl border-l-4 border-transparent px-4 py-2 font-medium transition",
+    isCurrent ? "bg-slate-900 text-white border-emerald-500" : "text-white/75 hover:bg-white/10 hover:text-white",
+    indentation,
+  );
 
   return (
     <div>
-      <button
-        type="button"
-        className={cn(
-          "flex w-full items-center justify-between rounded-xl px-4 py-2 text-left font-medium transition border-l-4 border-transparent",
-          isActive
-            ? "bg-slate-900 text-white border-emerald-500"
-            : "text-white/75 hover:bg-white/10 hover:text-white",
-          depth > 0 && "ml-4", // indent child links
-        )}
-        onClick={() => {
-          if (hasChildren) {
-            setOpen((prev) => !prev);
-          } else if (item.href) {
-            onNavigate?.();
-          }
-        }}
-      >
-        <span className="flex items-center gap-3">
-          {Icon ? <Icon className="h-4 w-4" /> : null}
-          {item.href ? (
-            <Link
-              href={item.href}
-              onClick={(event) => {
-                if (hasChildren) {
-                  event.preventDefault();
-                  setOpen((prev) => !prev);
-                } else {
-                  onNavigate?.();
-                }
-              }}
-            >
-              {item.label}
-            </Link>
-          ) : (
+      <div className={containerClasses}>
+        {item.href ? (
+          <Link
+            prefetch
+            href={item.href}
+            className="flex flex-1 items-center gap-3"
+            onClick={() => {
+              if (!hasChildren) {
+                onNavigate?.();
+              }
+            }}
+          >
+            {Icon ? <Icon className="h-4 w-4" /> : null}
             <span>{item.label}</span>
-          )}
-        </span>
+          </Link>
+        ) : (
+          <span className="flex flex-1 items-center gap-3">
+            {Icon ? <Icon className="h-4 w-4" /> : null}
+            <span>{item.label}</span>
+          </span>
+        )}
         {hasChildren ? (
-          <ChevronRight
-            className={cn(
-              "h-4 w-4 transition-transform",
-              open ? "rotate-90" : "rotate-0",
-            )}
-          />
+          <button
+            type="button"
+            onClick={() => setOpen((prev) => !prev)}
+            aria-label={open ? "Collapse section" : "Expand section"}
+            aria-expanded={open}
+            className="ml-2 flex h-6 w-6 items-center justify-center rounded-full bg-white/5 text-white/70 transition hover:bg-white/10"
+          >
+            <ChevronRight
+              className={cn("h-4 w-4 transition-transform", open ? "rotate-90" : "rotate-0")}
+            />
+          </button>
         ) : null}
-      </button>
+      </div>
       {hasChildren && open ? (
         <div className="mt-2 space-y-1">
           {item.children?.map((child) => (
             <SidebarLink
-              key={child.href}
+              key={child.href ?? child.label}
               item={child}
               depth={depth + 1}
               pathname={pathname}
@@ -99,17 +104,21 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const userRole = user?.role;
+  const availableLinks = useMemo(() => {
+    if (!userRole) {
+      return [];
+    }
+    return navMenu.filter((link) => link.roles.includes(userRole));
+  }, [userRole]);
+
   useEffect(() => {
-    if (!token) {
+    if (!token || !userRole) {
       router.replace("/login");
     }
-  }, [token, router]);
+  }, [router, token, userRole]);
 
-  const availableLinks = navMenu.filter((link) =>
-    user ? link.roles.includes(user.role) : false,
-  );
-
-  if (!token || !user) {
+  if (!token || !userRole) {
     return null;
   }
 

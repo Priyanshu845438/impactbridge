@@ -110,3 +110,30 @@
 ## 30. [FE] Build pipeline refreshed and docs updated.
 - Performed clean reinstall (`rm -rf .next node_modules/.cache`, `npm install`, `npm run build`) to stabilise chunk mapping.
 - Refreshed documentation with cache-clearing instructions and updated TODO milestones.
+
+## 31. [FE] Sonner toast provider wired at root layout.
+- Introduced `components/ui/sonner.tsx` with client Toaster and wrapped `app/layout.tsx` body to provide rich toasts globally.
+- Removed server-only metadata export after marking layout client; lint/build pass successfully.
+
+## 32. [FE] Docs refreshed for global toaster integration.
+- Updated setup, dashboard, and auth documentation to reference the new sonner provider.
+- Confirmed lint passes post-doc edits.
+
+## 33. [FE] Sidebar links now prefetch with reduced rerenders.
+- Refactored dashboard sidebar to use `Link prefetch` wrappers for navigation, added memoized child state, and collapsed unnecessary effects.
+- Added role-filter memo + guard to avoid redundant rerenders; lint/build succeed.
+
+## 34. [FE] Auth context now persists JWT + user via localStorage.
+- Updated `AuthProvider` to store token/user in localStorage, restore on mount, and redirect to login when absent.
+- Lint/build still pass with no regressions.
+
+## 35. [FE] Auth redirect updated to /auth/login for storage bootstrap.
+- Adjusted localStorage bootstrap redirect to point at `/auth/login` per requirement; lint/build stay green.
+
+## 36. [FE] Admin welcome toast now session-scoped.
+- Replaced console greeting with Sonner toast guarded by `sessionStorage` so it fires only once per authenticated session.
+- Lint/build remain successful.
+
+## 37. [FE] Docs updated for persistent auth & session toast.
+- Refreshed `AUTH_FLOW.md` and `FRONTEND_DASHBOARD.md` to cover localStorage-backed sessions and sessionStorage welcome toast.
+- Confirmed lint/build remain clean after documentation pass.

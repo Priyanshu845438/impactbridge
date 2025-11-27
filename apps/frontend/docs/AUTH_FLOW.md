@@ -7,6 +7,7 @@ This document explains how authentication is implemented on the ImpactBridge fro
 - `app/register/page.tsx` – role-aware signup form (name, email, password, role)
 - `contexts/auth-context.tsx` – holds user + token state in memory
 - `lib/api-client.ts` – wrapper around `ky` for calling backend APIs
+- `components/ui/sonner.tsx` – global Toaster used for auth notifications
 - `middleware.ts` (planned) – will enforce server-side guard once backend is ready
 
 ## Login Flow
@@ -14,7 +15,8 @@ This document explains how authentication is implemented on the ImpactBridge fro
 2. `apiClient.post('auth/login')` is called
 3. On success, response returns `{ user, accessToken }`
 4. `AuthProvider` stores token + user, and `setApiClientToken` applies bearer header
-5. Based on `user.role`, the router redirects to the corresponding dashboard route
+5. Toast can be triggered for success or errors via `toast.success()` / `toast.error()` (global provider already mounted)
+6. Based on `user.role`, the router redirects to the corresponding dashboard route
 
 Redirect mapping:
 - `SUPER_ADMIN` → `/dashboard/admin`
@@ -40,18 +42,24 @@ const value = {
   logout: () => { ... },
 };
 ```
-- Stores data in React state (no localStorage for security reasons)
-- `logout()` clears token and resets API headers
+- Stores token + user in React state and mirrors them to `localStorage`
+- On mount, reads from `localStorage` to auto-authenticate returning users
+- If storage empty, redirects to `/auth/login`
+- `logout()` clears both state and `localStorage`, then resets API headers
 - If `token` is absent, the dashboard layout redirects to `/login`
 
 ## Route Guarding
 - Dashboard layout checks for `token` and `user`; if missing, it returns `null` and triggers router replace
 - Plan: add Next.js `middleware.ts` to block direct navigation to protected routes before hydration
 
-## Testing Guidance
-- Use browser devtools to ensure requests include `Authorization: Bearer <token>` header
-- Simulate missing token by refreshing the page; layout should drop user back to `/login`
-- When backend is ready, add integration tests (Playwright/Cypress) for login & redirection flows
+## Toast Usage
+- Import `import { toast } from 'sonner';`
+- Examples:
+  ```tsx
+  toast.success('Logged in successfully');
+  toast.error('Invalid credentials');
+  ```
+- Global Toaster lives inside `app/layout.tsx`, so no extra provider wiring is needed
 
 ## Future Enhancements
 - Persist session via HTTP-only cookies when backend supports it

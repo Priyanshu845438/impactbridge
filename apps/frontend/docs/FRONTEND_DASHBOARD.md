@@ -9,10 +9,10 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - **Header**: sticky top bar with brand mark, breadcrumb slot, and logout button
 - **Main content**: `flex-1` scrollable region with gradient background and responsive padding
 - **Mobile**: hamburger toggles a drawer sidebar; desktop view stays fixed; nested sections collapse/expand with Chevron indicators
-- **Utilities**: uses `SectionHeader` for consistent titling and `QuickActionCard` for highlight blocks
+- **Utilties**: `SectionHeader` for consistent titling, `QuickActionCard` for highlight blocks, and root-level `Toaster` for global feedback
 
 ## Admin Dashboard (`app/dashboard/admin/page.tsx`)
-- Welcome hero with role-aware greeting
+- Toast greeting fires once per session (sessionStorage guard + sonner Toaster)
 - Quick metrics row featuring:
   - `Total Users`
   - `Pending Approvals`
@@ -40,6 +40,8 @@ Each module uses `SectionHeader`, divider, and frosted card with â€œComing soonâ
 - `components/dashboard/quick-action-card.tsx`
   - Accepts icon, title, body, and action label
   - Hover animation and gradient border for interactive feel
+- `components/ui/sonner.tsx`
+  - Exposes Toaster; already mounted in root layout
 
 ## Next Steps
 1. Move static metrics to hooks (e.g., `useAdminStats`) that call backend microservices
@@ -51,3 +53,4 @@ Each module uses `SectionHeader`, divider, and frosted card with â€œComing soonâ
 - Keep sections responsive by leveraging Tailwind grid utilities (`grid-cols-1 sm:grid-cols-2 xl:grid-cols-3`)
 - When adding new dashboard widgets, document them in this file for stakeholders
 - Ensure data fetching hooks handle loading/empty/error states gracefully to preserve polished UX
+- Use the global Toaster for success/error feedback instead of inline alerts

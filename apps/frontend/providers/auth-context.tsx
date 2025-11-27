@@ -1,7 +1,15 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useMemo, useState, PropsWithChildren } from 'react';
-import { setApiClientToken } from '@/lib/api-client';
+import {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+  PropsWithChildren,
+  useEffect,
+} from "react";
+import { useRouter } from "next/navigation";
+import { setApiClientToken } from "@/lib/api-client";
 
 export interface AuthUser {
   id: string;
@@ -24,6 +32,7 @@ let userStore: AuthUser | null = null;
 export function AuthProvider({ children }: PropsWithChildren) {
   const [token, setTokenState] = useState<string | null>(tokenStore);
   const [user, setUserState] = useState<AuthUser | null>(userStore);
+  const router = useRouter();
 
   const login = (jwt: string, authUser: AuthUser) => {
     tokenStore = jwt;
@@ -31,6 +40,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
     setApiClientToken(jwt);
     setTokenState(jwt);
     setUserState(authUser);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("impactbridge:token", jwt);
+      localStorage.setItem("impactbridge:user", JSON.stringify(authUser));
+    }
   };
 
   const logout = () => {
@@ -39,7 +52,36 @@ export function AuthProvider({ children }: PropsWithChildren) {
     setApiClientToken(null);
     setTokenState(null);
     setUserState(null);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("impactbridge:token");
+      localStorage.removeItem("impactbridge:user");
+    }
   };
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const storedToken = localStorage.getItem("impactbridge:token");
+    const storedUser = localStorage.getItem("impactbridge:user");
+
+    if (storedToken && storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser) as AuthUser;
+        tokenStore = storedToken;
+        userStore = parsedUser;
+        setApiClientToken(storedToken);
+        setTokenState(storedToken);
+        setUserState(parsedUser);
+      } catch (error) {
+        localStorage.removeItem("impactbridge:token");
+        localStorage.removeItem("impactbridge:user");
+      }
+    } else {
+      router.replace("/auth/login");
+    }
+  }, [router]);
 
   const value = useMemo(() => ({ token, user, login, logout }), [token, user]);
 

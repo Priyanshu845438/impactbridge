@@ -6,11 +6,12 @@
 - **shadcn/ui** components layered with custom tokens
 - **React Hook Form + Zod** for validated forms
 - **React Query** & custom `AuthProvider` for session state
+- **sonner** toaster (`components/ui/sonner`) for global notifications
 - **ky** based API client (`lib/api-client.ts`) with JWT header support
 
 ## Directory Overview
 - `app/`
-  - `layout.tsx` global shell (fonts, providers, metadata)
+  - `layout.tsx` client root shell (fonts, providers, toaster)
   - `page.tsx` root redirect → `/login`
   - `login`, `register`, `forgot-password`, `reset-password`
   - `dashboard/`
@@ -21,7 +22,9 @@
   - `dashboard/`
     - `section-header.tsx` shared heading + actions
     - `quick-action-card.tsx` stat/action widgets
-  - `ui/` shadcn primitives (Button, Card, Input, etc.)
+  - `ui/`
+    - shadcn primitives (Button, Card, Input, etc.)
+    - `sonner.tsx` exposing the Toaster provider
 - `context/auth-context.tsx` in-memory auth state
 - `providers/QueryProvider.tsx` React Query wrapper
 - `lib/`
@@ -29,7 +32,7 @@
   - `fetcher.ts` typed fetch helper
   - `nav-menu.ts` role-aware (and nested) sidebar config
 - `public/images/` background assets for auth screens
-- `docs/` living documentation (setup, dashboard)
+- `docs/` living documentation (setup, dashboard, style, routing)
 - `agents.md` running changelog per instruction
 
 ## Styling & Theme Layers
@@ -76,3 +79,4 @@ If static assets or config change: `rm -rf .next` before a rebuild
 - When wiring APIs, prefer React Query hooks for caching; place them in `lib/queries`
 - Maintain docs/ alongside feature work so stakeholders stay informed
 - Update `agents.md` with a short bullet per major change (timestamp optional)
+- Use the global `Toaster` for user feedback (`import { Toaster } from '@/components/ui/sonner'`)
