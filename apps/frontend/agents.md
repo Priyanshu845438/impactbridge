@@ -137,3 +137,16 @@
 ## 37. [FE] Docs updated for persistent auth & session toast.
 - Refreshed `AUTH_FLOW.md` and `FRONTEND_DASHBOARD.md` to cover localStorage-backed sessions and sessionStorage welcome toast.
 - Confirmed lint/build remain clean after documentation pass.
+
+## 38. [FE] Dashboard skeleton loaders introduced.
+- Added reusable shimmer skeletons (`components/ui/skeleton`) and animated keyframes.
+- Admin dashboard now displays stat/cards/activity placeholders during an initial 650ms delay before rendering real data.
+- Lint/build verified clean.
+
+## 39. [FE] Documentation refreshed for skeleton loading experience.
+- Updated setup & dashboard docs to highlight shimmer components and initial load delay.
+- Lint confirmed clean after doc updates.
+
+## 40. [FE] Detailed progress report documented.
+- Added `docs/PROGRESS_REPORT.md` summarising completed milestones, pending work, risks, and next steps.
+- Lint confirmed clean after documentation addition.

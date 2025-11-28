@@ -7,6 +7,7 @@
 - **React Hook Form + Zod** for validated forms
 - **React Query** & custom `AuthProvider` for session state
 - **sonner** toaster (`components/ui/sonner`) for global notifications
+- **Skeleton system** (`components/ui/skeleton.tsx`) for shimmer loading states
 - **ky** based API client (`lib/api-client.ts`) with JWT header support
 
 ## Directory Overview
@@ -25,8 +26,10 @@
   - `ui/`
     - shadcn primitives (Button, Card, Input, etc.)
     - `sonner.tsx` exposing the Toaster provider
-- `context/auth-context.tsx` in-memory auth state
-- `providers/QueryProvider.tsx` React Query wrapper
+    - `skeleton.tsx` shimmer placeholders for stats/cards/activity
+- `providers/`
+  - `auth-context.tsx` persistent JWT + auto-redirect handling
+  - `query-provider.tsx` React Query wrapper
 - `lib/`
   - `api-client.ts` fetch wrapper
   - `fetcher.ts` typed fetch helper
@@ -37,7 +40,7 @@
 
 ## Styling & Theme Layers
 - Brand palette anchored on navy `#0A2540` with violet accent `#5B2BEA`
-- `globals.css` applies body gradient, glassmorphism helpers, typography resets
+- `globals.css` applies body gradient, glassmorphism helpers, shimmer keyframes
 - Cards use `backdrop-blur`, translucent whites, and responsive padding (`max-[480px]`)
 - Dashboard shell uses `flex w-full h-screen` to avoid gaps between sidebar/content
 
@@ -45,7 +48,7 @@
 1. User hits `/login` or `/register`
 2. Forms validate via Zod + RHF, display inline feedback
 3. Submit uses `apiClient.post` to `/auth/login` or `/auth/register`
-4. Token stored in `AuthProvider` (memory only); `setApiClientToken` injects Authorization header
+4. Token stored in `AuthProvider` (state + `localStorage`); `setApiClientToken` injects Authorization header
 5. Role-based redirect: `SUPER_ADMIN → /dashboard/admin`, `NGO → /dashboard/ngo`, `COMPANY → /dashboard/company`, `DONOR → /dashboard/donor`
 6. `middleware.ts` (planned) will gate dashboard routes once server enforcement is required
 
@@ -53,7 +56,8 @@
 - `dashboard/layout.tsx` guards access using `useAuth()`
 - Sidebar sources `navMenu`; collapsible groups render nested admin modules when role is SUPER_ADMIN
 - Sticky header for quick actions/log out
-- Main pane hosts widgets like quick cards and activity feeds (documented in `FRONTEND_DASHBOARD.md`)
+- Main pane hosts widgets like quick cards, stats, and activity (documented in `FRONTEND_DASHBOARD.md`)
+- Skeleton placeholders provide a smooth transition before real data appears
 
 ## Environment Variables
 Create `.env.local`:
@@ -76,6 +80,7 @@ If static assets or config change: `rm -rf .next` before a rebuild
 
 ## Development Notes
 - Keep dashboard additions modular; place shared components in `components/dashboard`
+- Use skeletons for optimistic UX when wiring future data fetches
 - When wiring APIs, prefer React Query hooks for caching; place them in `lib/queries`
 - Maintain docs/ alongside feature work so stakeholders stay informed
 - Update `agents.md` with a short bullet per major change (timestamp optional)

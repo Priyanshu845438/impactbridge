@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   ActivitySquare,
@@ -17,9 +17,11 @@ import { QuickActionCard } from "@/components/dashboard/quick-action-card";
 import { SectionHeader } from "@/components/dashboard/section-header";
 import { useAuth } from "@/providers/auth-context";
 import { toast } from "sonner";
+import { SkeletonCard, SkeletonStat, SkeletonActivityItem } from "@/components/ui/skeleton";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user || typeof window === "undefined") {
@@ -32,12 +34,21 @@ export default function AdminDashboard() {
     }
   }, [user]);
 
-  const activity = [
-    {
-      title: "New NGO registered",
-      detail: "Swasthya Seva Trust onboarding submitted",
-      time: "5 minutes ago",
-    },
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+    const timer = window.setTimeout(() => setLoading(false), 650);
+    return () => window.clearTimeout(timer);
+  }, [user]);
+
+  const activity = useMemo(
+    () => [
+      {
+        title: "New NGO registered",
+        detail: "Swasthya Seva Trust onboarding submitted",
+        time: "5 minutes ago",
+      },
     {
       title: "CSR programme pending",
       detail: "Green Earth Initiative awaiting approval",
@@ -50,10 +61,78 @@ export default function AdminDashboard() {
     },
     {
       title: "User login",
-      detail: "Corporate admin (Reliance CSR) accessed dashboard",
-      time: "3 hours ago",
-    },
-  ];
+        detail: "Corporate admin (Reliance CSR) accessed dashboard",
+        time: "3 hours ago",
+      },
+    ],
+    [],
+  );
+
+  const quickActions = (
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <QuickActionCard
+        title="NGO verification queue"
+        description="Review newly registered organisations awaiting compliance diligence."
+        ctaLabel="Review"
+        href="#"
+        icon={ClipboardCheck}
+      />
+      <QuickActionCard
+        title="Pending CSR programmes"
+        description="Approve incoming CSR initiatives and match them with vetted NGOs."
+        ctaLabel="Manage"
+        href="#"
+        icon={HandshakeIcon}
+      />
+      <QuickActionCard
+        title="Registered NGOs"
+        description="Browse and update partner profiles, documents, and compliance states."
+        ctaLabel="Open"
+        href="#"
+        icon={Files}
+      />
+      <QuickActionCard
+        title="Reports & insights"
+        description="Launch consolidated CSR-2 reports and impact analytics dashboards."
+        ctaLabel="View"
+        href="#"
+        icon={LineChart}
+      />
+    </div>
+  );
+
+  if (loading) {
+    return (
+      <div className="space-y-8">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <SkeletonStat />
+          <SkeletonStat />
+          <SkeletonStat />
+        </div>
+
+        <div className="space-y-4">
+          <SectionHeader title="Quick actions" subtitle="Common control centre tasks for administrators" />
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <SectionHeader title="Recent activity" subtitle="Live audit feed across compliance, programmes, and access" />
+          <div className="rounded-2xl border border-slate-200 bg-white/90 shadow-sm">
+            <ul className="max-h-72 divide-y divide-slate-100">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <SkeletonActivityItem key={index} />
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -80,37 +159,7 @@ export default function AdminDashboard() {
 
       <div className="space-y-4">
         <SectionHeader title="Quick actions" subtitle="Common control centre tasks for administrators" />
-
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <QuickActionCard
-          title="NGO verification queue"
-          description="Review newly registered organisations awaiting compliance diligence."
-          ctaLabel="Review"
-          href="#"
-          icon={ClipboardCheck}
-        />
-        <QuickActionCard
-          title="Pending CSR programmes"
-          description="Approve incoming CSR initiatives and match them with vetted NGOs."
-          ctaLabel="Manage"
-          href="#"
-          icon={HandshakeIcon}
-        />
-        <QuickActionCard
-          title="Registered NGOs"
-          description="Browse and update partner profiles, documents, and compliance states."
-          ctaLabel="Open"
-          href="#"
-          icon={Files}
-        />
-        <QuickActionCard
-          title="Reports & insights"
-          description="Launch consolidated CSR-2 reports and impact analytics dashboards."
-          ctaLabel="View"
-          href="#"
-          icon={LineChart}
-        />
-      </div>
+        {quickActions}
       </div>
 
       <div className="space-y-4">
