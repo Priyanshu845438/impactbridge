@@ -159,3 +159,28 @@
 - Updated dashboard brand link to point at `/dashboard/admin` and added `/app/dashboard/page.tsx` redirect to avoid 404s when hitting `/dashboard` directly.
 - Inserted centered header search input (logs query on Enter) plus profile drawer trigger tweaks; ensured sidebar and mobile drawer are scrollable for long menus and close after navigation.
 - Refreshed `docs/FRONTEND_DASHBOARD.md` and `docs/FRONTEND_SETUP.md` to describe the new header search and sidebar scrolling behaviour.
+
+## 43. [FE] Admin NGO management table (mock data) implemented.
+- Rebuilt `app/dashboard/admin/modules/ngos/page.tsx` with search/filter controls, shadcn table, responsive card layout, and status badges backed by a local dataset.
+- Added reusable `components/ui/table.tsx` + `components/ui/badge.tsx`, expanded `SectionHeader` to accept custom action nodes, and confirmed lint/build succeed.
+- Updated dashboard/setup docs to capture the new NGO management experience and noted the change in `agents.md`.
+
+## 44. [FE] NGO management sorting, pagination, and detail drawer.
+- Enhanced NGO admin screen with sortable columns, mock pagination, and a right-side preview drawer surfaced on row click.
+- Added lightweight `components/ui/drawer.tsx`, integrated mobile sorting dropdown, and preserved responsive card layout.
+- Refreshed docs to describe the richer NGO workspace and verified lint/build.
+
+## 45. [FE] NGO smart filters + global search.
+- Added registration/compliance/region dropdown filters, enhanced search across name/email/registration, and introduced clear/reset states.
+- Implemented “No results” empty state, ensured filters stack with sort/pagination, and kept mobile filters in an accordion.
+- Updated dashboard/setup docs and confirmed lint/build.
+
+## 46. [FE] NGO detail drawer with tabs and approval actions.
+- Completed NGO admin module with mobile-friendly detail drawer showcasing overview, documents, activity timeline, and compliance progress.
+- Added reusable `Tabs` primitive, polished document status icons, and wired mock approve/reject toasts.
+- Refreshed dashboard/TODO/component docs and recorded detailed progress report update; lint/build verified.
+
+## 47. [FE] Admin dashboard analytics refresh.
+- Replaced legacy welcome panel with analytics hero row (area chart + KPI spark cards) and animated four-card metrics grid.
+- Added reusable SVG helpers for sparklines, trend deltas, and hover-scale animations across quick actions.
+- Updated dashboard docs, component catalog, and progress report; lint/build confirmed clean.

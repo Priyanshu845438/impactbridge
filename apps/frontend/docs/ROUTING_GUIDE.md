@@ -14,7 +14,7 @@
 ### Protected Routes
 - `/dashboard` (layout only; actual content renders via nested routes)
 - `/dashboard/admin`
-- `/dashboard/admin/modules/ngos`
+- `/dashboard/admin/modules/ngos` + nested tabs for approvals, profiles (UI-only)
 - `/dashboard/admin/modules/programmes`
 - `/dashboard/admin/modules/reports`
 - `/dashboard/admin/modules/settings`

@@ -14,13 +14,11 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 ## Admin Dashboard (`app/dashboard/admin/page.tsx`)
 - Toast greeting fires once per session (sessionStorage guard + sonner Toaster)
 - 650ms skeleton delay on initial load to prevent abrupt flashes before auth/session data settles
-- Quick metrics row featuring:
-  - `Total Users`
-  - `Pending Approvals`
-  - `Last Login Activity`
-- Quick action grid (`QuickActionCard`) suggesting follow-up tasks (verification queue, CSR programmes, analytics)
+- Analytics hero row combines a primary activity area chart with three KPI spark cards (new NGOs, CSR commitments, active users)
+- Metric grid now spans four animated cards (user count with sparkline, approvals + delta, last-login highlight, platform health score)
+- Quick action grid (`QuickActionCard`) suggests follow-up tasks (verification queue, CSR programmes, analytics)
 - **Recent Activity** list with icons, timestamps, statuses (static for now)
-- Skeleton variants mirror stats/cards/activity design so transitions feel intentional
+- Skeleton variants mirror chart + card layout so transitions stay intentional
 
 ## Skeleton Components
 - `Skeleton`, `SkeletonText`, `SkeletonCard`, `SkeletonStat`, `SkeletonActivityItem`
@@ -28,7 +26,7 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Ready to reuse across other dashboards once API wiring begins
 
 ## Admin Modules (`app/dashboard/admin/modules/*`)
-- `ngos/page.tsx`: NGO management placeholder
+- `ngos/page.tsx`: NGO management workspace with mock dataset, multi-filter controls (search + registration/compliance/region), column sorting, pagination UI, responsive table + card layout, row preview drawer, and detailed tabs for overview/documents/activity + approval toasts
 - `programmes/page.tsx`: CSR programme pipeline placeholder
 - `reports/page.tsx`: analytics/reporting placeholder
 - `settings/page.tsx`: platform-wide settings placeholder

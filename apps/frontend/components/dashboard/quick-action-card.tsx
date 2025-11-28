@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface QuickActionCardProps {
   title: string;
@@ -9,6 +10,7 @@ interface QuickActionCardProps {
   href?: string;
   ctaLabel?: string;
   icon?: LucideIcon;
+  className?: string;
 }
 
 export function QuickActionCard({
@@ -17,9 +19,16 @@ export function QuickActionCard({
   href = "#",
   ctaLabel = "Open",
   icon: Icon,
+  className,
 }: QuickActionCardProps) {
   return (
-    <div className="group rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md">
+    <div
+      className={cn(
+        "group rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 ease-out",
+        "hover:scale-[1.01] hover:shadow-md",
+        className,
+      )}
+    >
       <div className="flex h-full flex-col justify-between gap-6">
         <div className="space-y-3">
           {Icon ? (

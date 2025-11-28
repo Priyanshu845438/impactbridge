@@ -236,13 +236,16 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
               <ProfileDrawer onSignOut={handleLogout}>
                 <button
                   type="button"
-                  className="hidden items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-left shadow-sm transition hover:border-slate-300 hover:shadow md:flex"
+                  className="group hidden items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-left shadow-sm transition md:flex hover:border-transparent hover:bg-[#0B5C4B] hover:text-white"
+                  style={{ transitionDuration: "180ms" }}
                 >
                   <div className="text-right">
-                    <p className="text-sm font-semibold text-slate-800">{user.name}</p>
-                    <p className="text-xs uppercase text-slate-500">{user.role.replace("_", " ")}</p>
+                    <p className="text-sm font-semibold text-slate-800 transition group-hover:text-white">{user.name}</p>
+                    <p className="text-xs uppercase text-slate-500 transition group-hover:text-slate-200">
+                      {user.role.replace("_", " ")}
+                    </p>
                   </div>
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900/10 text-sm font-semibold text-slate-700">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900/10 text-sm font-semibold text-slate-700 transition group-hover:bg-emerald-600/30 group-hover:text-white">
                     {user.name
                       .split(" ")
                       .map((part) => part.charAt(0))
@@ -304,10 +307,6 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
         ) : null}
         <main className="flex-1 overflow-y-auto p-6 lg:p-10">
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm lg:p-8">
-            <div className="mb-6 space-y-2">
-              <h1 className="text-2xl font-semibold text-slate-900">ImpactBridge workspace</h1>
-              <p className="text-sm text-slate-600">Navigate the tools and knowledge library tailored to your role.</p>
-            </div>
             <div className="space-y-8">{children}</div>
           </section>
         </main>

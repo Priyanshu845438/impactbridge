@@ -18,7 +18,7 @@
   - `dashboard/`
     - `layout.tsx` protected workspace + nested sidebar
     - role pages: `admin`, `ngo`, `company`, `donor`
-    - admin modules: `app/dashboard/admin/modules/{ngos,programmes,reports,settings}`
+    - admin modules: `app/dashboard/admin/modules/{ngos,programmes,reports,settings}` (NGO screen now includes mock table UI with sorting, pagination, drawer, and multi-filter controls)
 - `components/`
   - `dashboard/`
     - `section-header.tsx` shared heading + actions

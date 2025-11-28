@@ -6,7 +6,7 @@
 - Connect dashboard stats/activity widgets to backend APIs via React Query
 
 ## Medium Priority
-- Build dynamic tables for admin modules (NGO approvals, CSR programmes)
+- Build dynamic tables for admin programmes / reports modules (NGO management view already scaffolded with sorting + filters + drawer)
 - Add charts/visualisations (donation totals, impact metrics)
 - Introduce notifications/toasts for key actions
 

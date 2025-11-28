@@ -16,9 +16,22 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 ```
 
 ### `components/dashboard/quick-action-card.tsx`
-- Props: `{ title, description, actionLabel, icon: LucideIcon, onClick? }`
+- Props: `{ title, description, actionLabel, icon: LucideIcon, onClick?, className? }`
 - Usage: Highlight next best steps (e.g., “Review NGOs”, “Open reports”).
-- Styling: gradient border, subtle hover animation.
+- Styling: gradient border, subtle hover animation + hover scale.
+
+### Dashboard visualisations (inline helpers in `admin/page.tsx`)
+- `AreaChart` & `Sparkline` render lightweight SVG trendlines for analytics hero row and KPI cards.
+- Both accept mock data arrays; replace with service results once analytics APIs exist.
+
+### `components/ui/drawer.tsx`
+- Controlled slideover used across admin modules (e.g., NGO detail preview).
+- Props: `{ open, onClose, title?, description?, children, footer }`
+- Handles Escape key + backdrop clicks; auto-resizes for mobile.
+
+### `components/ui/tabs.tsx`
+- Lightweight tabs primitive (list/trigger/content) for app router client components.
+- NGO drawer uses it to switch between overview, documents, and activity views.
 
 ## UI Primitives (shadcn wrappers)
 ### Buttons – `components/ui/button.tsx`
