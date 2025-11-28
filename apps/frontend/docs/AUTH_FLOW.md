@@ -50,6 +50,7 @@ const value = {
 
 ## Route Guarding
 - Dashboard layout checks for `token` and `user`; if missing, it returns `null` and triggers router replace
+- Header exposes a profile drawer with quick summary and sign-out option instead of inline logout button
 - Plan: add Next.js `middleware.ts` to block direct navigation to protected routes before hydration
 
 ## Toast Usage

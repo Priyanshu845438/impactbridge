@@ -5,8 +5,8 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 
 ## Shared Layout (`app/dashboard/layout.tsx`)
 - **Auth guard**: consumes `useAuth()` and redirects to `/login` if token missing
-- **Sidebar**: 260px fixed panel with nav items derived from `lib/nav-menu.ts`; filters links per user role and supports collapsible admin modules
-- **Header**: sticky top bar with brand mark, breadcrumb slot, and logout button
+- **Sidebar**: 260px fixed panel with nav items derived from `lib/nav-menu.ts`; filters links per user role, supports collapsible admin modules, and is fully scrollable for long menus
+- **Header**: sticky top bar with brand mark (links to `/dashboard/admin`), centered search input, breadcrumb slot, and profile drawer trigger (inline dropdown with quick actions + sign out)
 - **Main content**: `flex-1` scrollable region with gradient background and responsive padding
 - **Mobile**: hamburger toggles a drawer sidebar; desktop view stays fixed; nested sections collapse/expand with Chevron indicators
 - **Utilities**: `SectionHeader` for consistent titling, `QuickActionCard` for highlight blocks, root-level `Toaster` for global feedback, and `Skeleton` components for polished loading states

@@ -54,8 +54,8 @@
 
 ## Dashboard Shell Highlights
 - `dashboard/layout.tsx` guards access using `useAuth()`
-- Sidebar sources `navMenu`; collapsible groups render nested admin modules when role is SUPER_ADMIN
-- Sticky header for quick actions/log out
+- Sidebar sources `navMenu`; collapsible groups render nested admin modules when role is SUPER_ADMIN, and the panel now allows vertical scrolling for large menus
+- Sticky header with profile drawer trigger (quick access + sign out) and mirrored mobile menu
 - Main pane hosts widgets like quick cards, stats, and activity (documented in `FRONTEND_DASHBOARD.md`)
 - Skeleton placeholders provide a smooth transition before real data appears
 

@@ -154,3 +154,8 @@
 ## 41. [FE] Static admin activity feed added.
 - Created `components/dashboard/activity-feed.tsx` with timeline styling and injected it beneath quick actions on the admin dashboard.
 - Ensured lint/build pass; layout remains responsive and consistent.
+
+## 42. [FE] Dashboard UX polish: search bar, scrollable nav, safe redirects.
+- Updated dashboard brand link to point at `/dashboard/admin` and added `/app/dashboard/page.tsx` redirect to avoid 404s when hitting `/dashboard` directly.
+- Inserted centered header search input (logs query on Enter) plus profile drawer trigger tweaks; ensured sidebar and mobile drawer are scrollable for long menus and close after navigation.
+- Refreshed `docs/FRONTEND_DASHBOARD.md` and `docs/FRONTEND_SETUP.md` to describe the new header search and sidebar scrolling behaviour.

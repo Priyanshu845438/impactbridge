@@ -29,7 +29,7 @@ The ImpactBridge frontend has matured into a production-ready Next.js 14 applica
 - Admin module pages scaffolded for NGOs, Programmes, Reports, and Settings.
 
 ### 4. Admin Dashboard UX
-- Quick stats, quick action cards, and recent activity list implemented with reusable components.
+- Quick stats, quick action cards, profile drawer, and recent activity list implemented with reusable components.
 - Session-scoped welcome toast triggered once per visit via `sessionStorage`.
 - Shimmering skeleton loaders for stats/cards/activity to smooth initial load (650 ms delay mimicking data fetch).
 

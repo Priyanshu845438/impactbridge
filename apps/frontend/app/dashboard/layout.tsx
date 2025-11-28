@@ -3,12 +3,13 @@
 import { PropsWithChildren, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ChevronRight, LogOut, Menu, ShieldCheck, X } from "lucide-react";
+import { ChevronRight, Menu, Search, ShieldCheck, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-context";
-import { Button } from "@/components/ui/button";
 import { navMenu, NavItem } from "@/lib/nav-menu";
+import { Button } from "@/components/ui/button";
+import { ProfileDrawer } from "@/components/dashboard/profile-drawer";
 
 function SidebarLink({
   item,
@@ -160,8 +161,11 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
   return (
     <div className="flex h-screen w-full bg-gradient-to-br from-slate-50 via-white to-slate-100">
       <aside className="hidden h-full w-[270px] md:flex">
-        <div className="sticky top-0 flex h-full w-full flex-col border-r border-slate-200 bg-white px-6 py-8 text-slate-800">
-          <Link href="/dashboard" className="mb-6 flex items-center gap-3 text-lg font-semibold text-slate-900">
+        <div className="sticky top-0 flex h-full w-full flex-col overflow-y-auto border-r border-slate-200 bg-white px-6 py-8 text-slate-800">
+          <Link
+            href="/dashboard/admin"
+            className="mb-6 flex items-center gap-3 text-lg font-semibold text-slate-900"
+          >
             <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-sm">
               <ShieldCheck className="h-5 w-5 text-slate-600" />
             </span>
@@ -213,15 +217,41 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
               <span className="text-base font-semibold text-slate-800">Unified CSR Intelligence</span>
             </div>
 
-            <div className="flex items-center gap-3">
-              <div className="hidden text-right md:block">
-                <p className="text-sm font-semibold text-slate-800">{user.name}</p>
-                <p className="text-xs uppercase text-slate-500">{user.role.replace("_", " ")}</p>
+            <div className="flex flex-1 items-center justify-center gap-4 md:justify-end">
+              <div className="flex w-full max-w-md items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-1.5 shadow-sm transition focus-within:border-slate-300 focus-within:shadow">
+                <Search className="h-4 w-4 text-slate-400" />
+                <input
+                  type="search"
+                  placeholder="Search users…"
+                  className="w-full bg-transparent text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      const value = (event.currentTarget as HTMLInputElement).value.trim();
+                      console.log("Search query:", value);
+                    }
+                  }}
+                />
               </div>
-              <Button variant="outline" size="sm" onClick={handleLogout}>
-                <LogOut className="mr-2 h-4 w-4" />
-                Sign out
-              </Button>
+
+              <ProfileDrawer onSignOut={handleLogout}>
+                <button
+                  type="button"
+                  className="hidden items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-left shadow-sm transition hover:border-slate-300 hover:shadow md:flex"
+                >
+                  <div className="text-right">
+                    <p className="text-sm font-semibold text-slate-800">{user.name}</p>
+                    <p className="text-xs uppercase text-slate-500">{user.role.replace("_", " ")}</p>
+                  </div>
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900/10 text-sm font-semibold text-slate-700">
+                    {user.name
+                      .split(" ")
+                      .map((part) => part.charAt(0))
+                      .join("")
+                      .slice(0, 2)
+                      .toUpperCase()}
+                  </span>
+                </button>
+              </ProfileDrawer>
             </div>
           </div>
         </header>
@@ -243,7 +273,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                   <X className="h-5 w-5" />
                 </button>
               </div>
-              <nav className="grid gap-4 text-sm">
+              <nav className="grid max-h-[calc(100vh-200px)] gap-4 overflow-y-auto text-sm">
                 {groupedLinks.map((group) => (
                   <div key={group.name}>
                     <p className="pb-2 text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
@@ -267,7 +297,6 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                 onClick={handleLogout}
                 className="mt-auto border-slate-300 text-slate-700 hover:bg-slate-100"
               >
-                <LogOut className="mr-2 h-4 w-4" />
                 Sign out
               </Button>
             </div>
