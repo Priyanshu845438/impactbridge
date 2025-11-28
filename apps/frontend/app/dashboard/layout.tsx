@@ -23,7 +23,12 @@ function SidebarLink({
 }) {
   const hasChildren = Array.isArray(item.children) && item.children.length > 0;
   const childActive = useMemo(
-    () => hasChildren && item.children?.some((child) => child.href === pathname),
+    () =>
+      hasChildren &&
+      item.children?.some((child) => {
+        if (!child.href) return false;
+        return pathname.startsWith(child.href);
+      }),
     [hasChildren, item.children, pathname],
   );
   const [open, setOpen] = useState(() => childActive);
@@ -36,11 +41,13 @@ function SidebarLink({
   const isActive = item.href ? pathname === item.href : false;
   const isCurrent = isActive || childActive;
   const Icon = item.icon;
-  const indentation = depth > 0 ? "ml-4" : "";
+  const indentation = depth > 0 ? "pl-8" : "pl-4";
 
   const containerClasses = cn(
-    "group flex items-center justify-between rounded-xl border-l-4 border-transparent px-4 py-2 font-medium transition",
-    isCurrent ? "bg-slate-900 text-white border-emerald-500" : "text-white/75 hover:bg-white/10 hover:text-white",
+    "group flex items-center justify-between rounded-xl border border-transparent py-2 font-medium transition",
+    isCurrent
+      ? "bg-slate-100 text-slate-900 border-slate-300"
+      : "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
     indentation,
   );
 
@@ -58,12 +65,12 @@ function SidebarLink({
               }
             }}
           >
-            {Icon ? <Icon className="h-4 w-4" /> : null}
+            {Icon ? <Icon className="h-4 w-4 text-slate-500" /> : null}
             <span>{item.label}</span>
           </Link>
         ) : (
           <span className="flex flex-1 items-center gap-3">
-            {Icon ? <Icon className="h-4 w-4" /> : null}
+            {Icon ? <Icon className="h-4 w-4 text-slate-500" /> : null}
             <span>{item.label}</span>
           </span>
         )}
@@ -73,7 +80,7 @@ function SidebarLink({
             onClick={() => setOpen((prev) => !prev)}
             aria-label={open ? "Collapse section" : "Expand section"}
             aria-expanded={open}
-            className="ml-2 flex h-6 w-6 items-center justify-center rounded-full bg-white/5 text-white/70 transition hover:bg-white/10"
+            className="mr-2 flex h-6 w-6 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-400/10"
           >
             <ChevronRight
               className={cn("h-4 w-4 transition-transform", open ? "rotate-90" : "rotate-0")}
@@ -82,7 +89,7 @@ function SidebarLink({
         ) : null}
       </div>
       {hasChildren && open ? (
-        <div className="mt-2 space-y-1">
+        <div className="mt-1 space-y-1">
           {item.children?.map((child) => (
             <SidebarLink
               key={child.href ?? child.label}
@@ -112,6 +119,28 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
     return navMenu.filter((link) => link.roles.includes(userRole));
   }, [userRole]);
 
+  const groupedLinks = useMemo(() => {
+    const groups: Array<{ name: string; items: NavItem[] }> = [];
+    if (!availableLinks.length) {
+      return groups;
+    }
+
+    const orderMap = new Map<string, NavItem[]>();
+    availableLinks.forEach((link) => {
+      const key = link.group ?? "Workspace";
+      if (!orderMap.has(key)) {
+        orderMap.set(key, []);
+      }
+      orderMap.get(key)!.push(link);
+    });
+
+    orderMap.forEach((items, name) => {
+      groups.push({ name, items });
+    });
+
+    return groups;
+  }, [availableLinks]);
+
   useEffect(() => {
     if (!token || !userRole) {
       router.replace("/login");
@@ -129,32 +158,38 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
   };
 
   return (
-    <div className="flex w-full h-screen bg-gradient-to-br from-[#F9FAFB] to-[#EFF4F9]">
-      <aside className="hidden h-full w-[260px] md:flex">
-        <div className="sticky top-0 flex h-full w-full flex-col border-r border-slate-800/30 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 px-6 py-8 text-white">
-          <Link href="/dashboard" className="mb-8 flex items-center gap-3 text-lg font-semibold">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-400/90 text-slate-900">
-              <ShieldCheck className="h-5 w-5" />
+    <div className="flex h-screen w-full bg-gradient-to-br from-slate-50 via-white to-slate-100">
+      <aside className="hidden h-full w-[270px] md:flex">
+        <div className="sticky top-0 flex h-full w-full flex-col border-r border-slate-200 bg-white px-6 py-8 text-slate-800">
+          <Link href="/dashboard" className="mb-6 flex items-center gap-3 text-lg font-semibold text-slate-900">
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <ShieldCheck className="h-5 w-5 text-slate-600" />
             </span>
             ImpactBridge
           </Link>
-          <div className="space-y-6 text-xs uppercase tracking-[0.28em] text-white/60">
-            <p>Workspace</p>
-          </div>
-          <nav className="mt-6 flex flex-col gap-1 text-sm">
-            {availableLinks.map((link) => (
-              <SidebarLink
-                key={link.label}
-                item={link}
-                pathname={pathname}
-                onNavigate={() => setMobileOpen(false)}
-              />
+          <nav className="mt-4 flex flex-col gap-6 text-sm">
+            {groupedLinks.map((group) => (
+              <div key={group.name}>
+                <p className="px-4 pb-2 text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
+                  {group.name}
+                </p>
+                <div className="space-y-1">
+                  {group.items.map((link) => (
+                    <SidebarLink
+                      key={link.label}
+                      item={link}
+                      pathname={pathname}
+                      onNavigate={() => setMobileOpen(false)}
+                    />
+                  ))}
+                </div>
+              </div>
             ))}
           </nav>
 
-          <div className="mt-auto pt-8 text-xs text-white/60">
-            <p>Secured CSR Environment</p>
-            <p className="mt-1 text-[11px] text-white/40">Powered by ImpactBridge</p>
+          <div className="mt-auto rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-500">
+            <p className="font-semibold text-slate-700">Secure CSR environment</p>
+            <p className="mt-1 leading-relaxed">Built for compliant collaboration across NGOs, companies, and donors.</p>
           </div>
         </div>
       </aside>
@@ -208,17 +243,30 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                   <X className="h-5 w-5" />
                 </button>
               </div>
-              <nav className="grid gap-2">
-                {availableLinks.map((link) => (
-                  <SidebarLink
-                    key={link.label}
-                    item={link}
-                    pathname={pathname}
-                    onNavigate={() => setMobileOpen(false)}
-                  />
+              <nav className="grid gap-4 text-sm">
+                {groupedLinks.map((group) => (
+                  <div key={group.name}>
+                    <p className="pb-2 text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
+                      {group.name}
+                    </p>
+                    <div className="space-y-1">
+                      {group.items.map((link) => (
+                        <SidebarLink
+                          key={link.label}
+                          item={link}
+                          pathname={pathname}
+                          onNavigate={() => setMobileOpen(false)}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </nav>
-              <Button variant="outline" onClick={handleLogout} className="mt-auto">
+              <Button
+                variant="outline"
+                onClick={handleLogout}
+                className="mt-auto border-slate-300 text-slate-700 hover:bg-slate-100"
+              >
                 <LogOut className="mr-2 h-4 w-4" />
                 Sign out
               </Button>
@@ -226,12 +274,10 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
           </div>
         ) : null}
         <main className="flex-1 overflow-y-auto p-6 lg:p-10">
-          <section className="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm shadow-slate-100 lg:p-8">
-            <div className="mb-8 space-y-2">
-              <h1 className="text-2xl font-bold text-slate-900">Welcome to ImpactBridge Dashboard</h1>
-              <p className="text-sm text-slate-600">
-                Access role-specific tools to manage compliance, programmes, and impact delivery.
-              </p>
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm lg:p-8">
+            <div className="mb-6 space-y-2">
+              <h1 className="text-2xl font-semibold text-slate-900">ImpactBridge workspace</h1>
+              <p className="text-sm text-slate-600">Navigate the tools and knowledge library tailored to your role.</p>
             </div>
             <div className="space-y-8">{children}</div>
           </section>

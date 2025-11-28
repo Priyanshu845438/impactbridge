@@ -79,7 +79,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         localStorage.removeItem("impactbridge:user");
       }
     } else {
-      router.replace("/auth/login");
+      router.replace("/login");
     }
   }, [router]);
 

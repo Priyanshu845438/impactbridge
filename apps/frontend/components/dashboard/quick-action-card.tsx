@@ -19,11 +19,11 @@ export function QuickActionCard({
   icon: Icon,
 }: QuickActionCardProps) {
   return (
-    <div className="group rounded-xl bg-gradient-to-br from-emerald-400/25 via-sky-400/15 to-transparent p-[1px] transition-transform duration-200 hover:scale-[1.01]">
-      <div className="flex h-full flex-col justify-between rounded-[11px] bg-white/95 p-5 shadow-sm">
+    <div className="group rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md">
+      <div className="flex h-full flex-col justify-between gap-6">
         <div className="space-y-3">
           {Icon ? (
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-600">
               <Icon className="h-5 w-5" />
             </span>
           ) : null}
@@ -32,7 +32,7 @@ export function QuickActionCard({
             <p className="text-sm text-slate-600">{description}</p>
           </div>
         </div>
-        <Button asChild size="sm" variant="outline" className="mt-6 w-fit">
+        <Button asChild size="sm" variant="ghost" className="w-fit px-0 text-sm font-semibold text-slate-700 hover:text-slate-900">
           <Link href={href}>{ctaLabel}</Link>
         </Button>
       </div>

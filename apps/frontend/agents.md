@@ -150,3 +150,7 @@
 ## 40. [FE] Detailed progress report documented.
 - Added `docs/PROGRESS_REPORT.md` summarising completed milestones, pending work, risks, and next steps.
 - Lint confirmed clean after documentation addition.
+
+## 41. [FE] Static admin activity feed added.
+- Created `components/dashboard/activity-feed.tsx` with timeline styling and injected it beneath quick actions on the admin dashboard.
+- Ensured lint/build pass; layout remains responsive and consistent.

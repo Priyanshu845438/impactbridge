@@ -1,20 +1,13 @@
 
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
-import {
-  ActivitySquare,
-  ClipboardCheck,
-  Clock4,
-  Files,
-  HandshakeIcon,
-  LineChart,
-  Users2,
-} from "lucide-react";
+import { ClipboardCheck, Clock4, Files, HandshakeIcon, LineChart, Users2 } from "lucide-react";
 
 import { QuickActionCard } from "@/components/dashboard/quick-action-card";
 import { SectionHeader } from "@/components/dashboard/section-header";
+import { ActivityFeed } from "@/components/dashboard/activity-feed";
 import { useAuth } from "@/providers/auth-context";
 import { toast } from "sonner";
 import { SkeletonCard, SkeletonStat, SkeletonActivityItem } from "@/components/ui/skeleton";
@@ -41,32 +34,6 @@ export default function AdminDashboard() {
     const timer = window.setTimeout(() => setLoading(false), 650);
     return () => window.clearTimeout(timer);
   }, [user]);
-
-  const activity = useMemo(
-    () => [
-      {
-        title: "New NGO registered",
-        detail: "Swasthya Seva Trust onboarding submitted",
-        time: "5 minutes ago",
-      },
-    {
-      title: "CSR programme pending",
-      detail: "Green Earth Initiative awaiting approval",
-      time: "22 minutes ago",
-    },
-    {
-      title: "Verification completed",
-      detail: "Hope for Tomorrow Foundation",
-      time: "1 hour ago",
-    },
-    {
-      title: "User login",
-        detail: "Corporate admin (Reliance CSR) accessed dashboard",
-        time: "3 hours ago",
-      },
-    ],
-    [],
-  );
 
   const quickActions = (
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -162,25 +129,7 @@ export default function AdminDashboard() {
         {quickActions}
       </div>
 
-      <div className="space-y-4">
-        <SectionHeader title="Recent activity" subtitle="Live audit feed across compliance, programmes, and access" />
-        <div className="rounded-2xl border border-slate-200 bg-white/90 shadow-sm">
-          <ul className="max-h-72 overflow-y-auto divide-y divide-slate-100">
-            {activity.map((item) => (
-              <li key={`${item.title}-${item.time}`} className="flex items-start gap-4 px-5 py-4">
-                <span className="mt-1 inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-                  <ActivitySquare className="h-5 w-5" />
-                </span>
-                <div className="flex-1 space-y-1">
-                  <p className="text-sm font-semibold text-slate-900">{item.title}</p>
-                  <p className="text-xs text-slate-600">{item.detail}</p>
-                  <p className="text-[11px] uppercase tracking-wider text-slate-400">{item.time}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      <ActivityFeed className="pt-4" />
     </div>
   );
 }
