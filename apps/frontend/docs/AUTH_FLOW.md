@@ -5,7 +5,7 @@ This document explains how authentication is implemented on the ImpactBridge fro
 ## Components Involved
 - `app/login/page.tsx` – sign-in form with email/password
 - `app/register/page.tsx` – role-aware signup form (name, email, password, role)
-- `contexts/auth-context.tsx` – holds user + token state in memory
+- `providers/auth-context.tsx` – holds user + token state in memory, mirrors to `localStorage`, and tracks unread notification count
 - `lib/api-client.ts` – wrapper around `ky` for calling backend APIs
 - `components/ui/sonner.tsx` – global Toaster used for auth notifications
 - `middleware.ts` (planned) – will enforce server-side guard once backend is ready
@@ -44,9 +44,10 @@ const value = {
 ```
 - Stores token + user in React state and mirrors them to `localStorage`
 - On mount, reads from `localStorage` to auto-authenticate returning users
-- If storage empty, redirects to `/auth/login`
+- If storage empty, redirects to `/login`
 - `logout()` clears both state and `localStorage`, then resets API headers
 - If `token` is absent, the dashboard layout redirects to `/login`
+- Notification badge uses `unreadNotifications` state within AuthProvider, persisting counts across sessions.
 
 ## Route Guarding
 - Dashboard layout checks for `token` and `user`; if missing, it returns `null` and triggers router replace

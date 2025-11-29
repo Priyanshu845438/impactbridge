@@ -3,7 +3,7 @@
 import { PropsWithChildren, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ChevronRight, Menu, Search, ShieldCheck, X } from "lucide-react";
+import { Bell, ChevronRight, Menu, Search, ShieldCheck, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-context";
@@ -107,7 +107,7 @@ function SidebarLink({
 }
 
 export default function DashboardLayout({ children }: PropsWithChildren) {
-  const { token, user, logout } = useAuth();
+  const { token, user, logout, unreadNotifications, resetNotifications } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -117,7 +117,17 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
     if (!userRole) {
       return [];
     }
-    return navMenu.filter((link) => link.roles.includes(userRole));
+    const enhanced = navMenu.filter((link) => link.roles.includes(userRole));
+    return [
+      {
+        label: "My profile",
+        href: "/dashboard/profile",
+        roles: [userRole],
+        icon: ShieldCheck,
+        group: "Workspace",
+      },
+      ...enhanced,
+    ];
   }, [userRole]);
 
   const groupedLinks = useMemo(() => {
@@ -232,6 +242,20 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                   }}
                 />
               </div>
+
+              <Link
+                href="/dashboard/notifications"
+                className="relative flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+                aria-label="View notifications"
+                onClick={() => resetNotifications()}
+              >
+                <Bell className="h-5 w-5" />
+                {unreadNotifications > 0 ? (
+                  <span className="absolute -top-1.5 -right-1.5 h-5 min-w-[1.25rem] rounded-full bg-emerald-500 px-1 text-center text-[10px] font-semibold text-white shadow-sm">
+                    {unreadNotifications > 9 ? "9+" : unreadNotifications}
+                  </span>
+                ) : null}
+              </Link>
 
               <ProfileDrawer onSignOut={handleLogout}>
                 <button

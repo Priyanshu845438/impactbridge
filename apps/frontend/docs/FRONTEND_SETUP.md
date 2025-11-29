@@ -16,9 +16,10 @@
   - `page.tsx` root redirect → `/login`
   - `login`, `register`, `forgot-password`, `reset-password`
   - `dashboard/`
-    - `layout.tsx` protected workspace + nested sidebar
-    - role pages: `admin`, `ngo`, `company`, `donor`
+  - `layout.tsx` protected workspace + nested sidebar
+  - role pages: `admin`, `ngo`, `company`, `donor`
     - admin modules: `app/dashboard/admin/modules/{ngos,programmes,reports,settings}` (NGO screen now includes mock table UI with sorting, pagination, drawer, and multi-filter controls)
+    - super admin utilities: `app/dashboard/users` (global user directory), `notifications`, `profile`
 - `components/`
   - `dashboard/`
     - `section-header.tsx` shared heading + actions
@@ -28,7 +29,7 @@
     - `sonner.tsx` exposing the Toaster provider
     - `skeleton.tsx` shimmer placeholders for stats/cards/activity
 - `providers/`
-  - `auth-context.tsx` persistent JWT + auto-redirect handling
+  - `auth-context.tsx` persistent JWT + auto-redirect handling + notification badge state
   - `query-provider.tsx` React Query wrapper
 - `lib/`
   - `api-client.ts` fetch wrapper
@@ -69,7 +70,7 @@ Optional: configure backend CORS to allow `http://localhost:3400`
 ## Scripts
 ```bash
 npm install                   # install deps
-npm run dev -- --port 3400    # start dev server (port 3400)
+npm run dev -- --port 3400    # start dev server (port 3400, /dashboard redirects → /dashboard/admin)
 npm run lint                  # lint check
 npm run build                 # production build
 npm run start                 # serve built app

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { LogOut, User2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { useAuth } from "@/providers/auth-context";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ export function ProfileDrawer({ children, onSignOut }: ProfileDrawerProps) {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (!open) return;
@@ -69,7 +71,14 @@ export function ProfileDrawer({ children, onSignOut }: ProfileDrawerProps) {
           <div className="mt-5 space-y-3">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Quick access</p>
-              <Button variant="outline" className="mt-2 flex w-full items-center justify-between text-sm">
+              <Button
+                variant="outline"
+                className="mt-2 flex w-full items-center justify-between text-sm"
+                onClick={() => {
+                  setOpen(false);
+                  router.push("/dashboard/profile");
+                }}
+              >
                 <span className="flex items-center gap-2">
                   <User2 className="h-4 w-4 text-slate-500" />
                   My profile

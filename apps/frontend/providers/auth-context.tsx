@@ -23,15 +23,21 @@ interface AuthState {
   user: AuthUser | null;
   login: (token: string, user: AuthUser) => void;
   logout: () => void;
+  unreadNotifications: number;
+  markNotificationRead: (count?: number) => void;
+  resetNotifications: () => void;
+  syncNotificationsCount: (count: number) => void;
 }
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
 let tokenStore: string | null = null;
 let userStore: AuthUser | null = null;
+let unreadStore = 0;
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const [token, setTokenState] = useState<string | null>(tokenStore);
   const [user, setUserState] = useState<AuthUser | null>(userStore);
+  const [unreadNotifications, setUnreadNotifications] = useState<number>(unreadStore);
   const router = useRouter();
 
   const login = (jwt: string, authUser: AuthUser) => {
@@ -43,6 +49,18 @@ export function AuthProvider({ children }: PropsWithChildren) {
     if (typeof window !== "undefined") {
       localStorage.setItem("impactbridge:token", jwt);
       localStorage.setItem("impactbridge:user", JSON.stringify(authUser));
+      const storedUnread = localStorage.getItem("impactbridge:notifications:unread");
+      if (storedUnread) {
+        const parsedUnread = Number.parseInt(storedUnread, 10);
+        if (!Number.isNaN(parsedUnread)) {
+          unreadStore = parsedUnread;
+          setUnreadNotifications(parsedUnread);
+        }
+      } else {
+        unreadStore = 3;
+        setUnreadNotifications(3);
+        localStorage.setItem("impactbridge:notifications:unread", "3");
+      }
     }
   };
 
@@ -52,9 +70,40 @@ export function AuthProvider({ children }: PropsWithChildren) {
     setApiClientToken(null);
     setTokenState(null);
     setUserState(null);
+    setUnreadNotifications(0);
+    unreadStore = 0;
     if (typeof window !== "undefined") {
       localStorage.removeItem("impactbridge:token");
       localStorage.removeItem("impactbridge:user");
+      localStorage.removeItem("impactbridge:notifications:unread");
+    }
+  };
+
+  const markNotificationRead = (count = 1) => {
+    setUnreadNotifications((prev) => {
+      const next = Math.max(prev - count, 0);
+      unreadStore = next;
+      if (typeof window !== "undefined") {
+        localStorage.setItem("impactbridge:notifications:unread", String(next));
+      }
+      return next;
+    });
+  };
+
+  const resetNotifications = () => {
+    setUnreadNotifications(0);
+    unreadStore = 0;
+    if (typeof window !== "undefined") {
+      localStorage.setItem("impactbridge:notifications:unread", "0");
+    }
+  };
+
+  const syncNotificationsCount = (count: number) => {
+    const safeCount = Number.isFinite(count) && count >= 0 ? Math.round(count) : 0;
+    setUnreadNotifications(safeCount);
+    unreadStore = safeCount;
+    if (typeof window !== "undefined") {
+      localStorage.setItem("impactbridge:notifications:unread", String(safeCount));
     }
   };
 
@@ -65,25 +114,52 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
     const storedToken = localStorage.getItem("impactbridge:token");
     const storedUser = localStorage.getItem("impactbridge:user");
+    const storedUnread = localStorage.getItem("impactbridge:notifications:unread");
 
     if (storedToken && storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser) as AuthUser;
         tokenStore = storedToken;
         userStore = parsedUser;
+        if (storedUnread) {
+          const parsedUnread = Number.parseInt(storedUnread, 10);
+          if (!Number.isNaN(parsedUnread)) {
+            unreadStore = parsedUnread;
+            setUnreadNotifications(parsedUnread);
+          } else {
+            unreadStore = 0;
+            setUnreadNotifications(0);
+          }
+        } else {
+          unreadStore = 0;
+          setUnreadNotifications(0);
+        }
         setApiClientToken(storedToken);
         setTokenState(storedToken);
         setUserState(parsedUser);
       } catch (error) {
         localStorage.removeItem("impactbridge:token");
         localStorage.removeItem("impactbridge:user");
+        localStorage.removeItem("impactbridge:notifications:unread");
       }
     } else {
       router.replace("/login");
     }
   }, [router]);
 
-  const value = useMemo(() => ({ token, user, login, logout }), [token, user]);
+  const value = useMemo(
+    () => ({
+      token,
+      user,
+      login,
+      logout,
+      unreadNotifications,
+      markNotificationRead,
+      resetNotifications,
+      syncNotificationsCount,
+    }),
+    [token, user, unreadNotifications],
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

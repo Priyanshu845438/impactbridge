@@ -8,6 +8,9 @@
 ## Medium Priority
 - Build dynamic tables for admin programmes / reports modules (NGO management view already scaffolded with sorting + filters + drawer)
 - Add charts/visualisations (donation totals, impact metrics)
+- Wire profile editor to backend update endpoint with optimistic feedback
+- Hook notifications and user directory to backend services (REST/GraphQL) with pagination + actions
+- Add backend wiring for user detail view (tabs, status toggles, audit log)
 - Introduce notifications/toasts for key actions
 
 ## Low Priority / Nice to Have
@@ -22,5 +25,7 @@
 - Documentation suite refreshed (`project_overview`, `auth_flow`, `style_guide`)
 - Client-component conversion for admin dashboard with toast greeting
 - Build pipeline cleansed (cache purge + standalone output)
+- Super Admin profile view with skeleton loading + toast save confirmation
+- Notifications route with badge sync and per-item read controls
 
 Update this file as features ship or priorities shift.

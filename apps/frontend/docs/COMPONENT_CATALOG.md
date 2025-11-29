@@ -20,9 +20,36 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - Usage: Highlight next best steps (e.g., “Review NGOs”, “Open reports”).
 - Styling: gradient border, subtle hover animation + hover scale.
 
+### `components/dashboard/stat-card.tsx`
+- Props: `{ icon, label, value, trend, statusColor, helper?, children? }`
+- Displays a metric with trend pill (↑/↓), brand-aware tones, and optional slot (used for sparklines).
+- Utilised in admin dashboard metric grid for consistent analytics visuals.
+
+### `components/dashboard/activity-feed.tsx`
+- Static list of recent events with icon, title, description, and timestamp.
+- Layout: column timeline with vertical accent line and responsive spacing.
+- Planned upgrade: consume real audit/activity API once available.
+
+### `components/dashboard/profile-drawer.tsx`
+- Right-side sheet for account quick actions; triggered from dashboard header.
+- Shows avatar initials, name, role badge, contact info, "My Profile" shortcut, and logout button.
+- Re-uses Drawer primitive for responsive full-screen behaviour on mobile.
+
+### Notifications UI (page-level pattern)
+- `app/dashboard/notifications/page.tsx` consumes SectionHeader, skeletons, and AuthProvider badge state to surface mock alerts.
+- Demonstrates list rendering with type badges (info/warning/action) and per-item mark-as-read actions.
+
+### User directory (page-level pattern)
+- `app/dashboard/users/page.tsx` showcases table layout with search bar, role/status filters, pagination footer, and responsive row design.
+- Uses existing Button/Select/Skeleton components to keep interactions consistent until API wiring.
+
+### User detail view (page-level pattern)
+- `app/dashboard/users/[id]/page.tsx` demonstrates dynamic routing with tabs (overview/activity/permissions), action toasts, and responsive two-column layout.
+- Reuses `Tabs`, `SectionHeader`, skeleton loaders, and toast feedback for mock actions.
+
 ### Dashboard visualisations (inline helpers in `admin/page.tsx`)
 - `AreaChart` & `Sparkline` render lightweight SVG trendlines for analytics hero row and KPI cards.
-- Both accept mock data arrays; replace with service results once analytics APIs exist.
+- Recharts LineChart drives CSR submissions view; skeletons keep layout stable before data resolves.
 
 ### `components/ui/drawer.tsx`
 - Controlled slideover used across admin modules (e.g., NGO detail preview).
@@ -32,6 +59,10 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 ### `components/ui/tabs.tsx`
 - Lightweight tabs primitive (list/trigger/content) for app router client components.
 - NGO drawer uses it to switch between overview, documents, and activity views.
+
+### `components/ui/skeleton.tsx`
+- Suite of shimmer placeholders (`Skeleton`, `SkeletonText`, `SkeletonCard`, `SkeletonStat`, etc.).
+- Keeps dashboards polished during async loads and mirrors final layout dimensions.
 
 ## UI Primitives (shadcn wrappers)
 ### Buttons – `components/ui/button.tsx`

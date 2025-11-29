@@ -9,6 +9,7 @@ import {
   LucideIcon,
   Settings2,
   ShieldCheck,
+  Users,
   Users2,
 } from "lucide-react";
 
@@ -44,6 +45,13 @@ export const navMenu: NavItem[] = [
         roles: ["SUPER_ADMIN"],
       },
     ],
+  },
+  {
+    label: "Users",
+    icon: Users,
+    roles: ["SUPER_ADMIN"],
+    group: "Administration",
+    href: "/dashboard/users",
   },
   {
     label: "NGO management",

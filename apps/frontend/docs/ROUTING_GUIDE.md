@@ -18,6 +18,7 @@
 - `/dashboard/admin/modules/programmes`
 - `/dashboard/admin/modules/reports`
 - `/dashboard/admin/modules/settings`
+- `/dashboard/notifications`
 - `/dashboard/ngo`
 - `/dashboard/company`
 - `/dashboard/donor`

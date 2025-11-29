@@ -184,3 +184,30 @@
 - Replaced legacy welcome panel with analytics hero row (area chart + KPI spark cards) and animated four-card metrics grid.
 - Added reusable SVG helpers for sparklines, trend deltas, and hover-scale animations across quick actions.
 - Updated dashboard docs, component catalog, and progress report; lint/build confirmed clean.
+
+## 48. [FE] Dashboard StatCard + CSR submissions chart.
+- Introduced reusable `components/dashboard/stat-card.tsx` powering the admin metric grid with trend pills and sparklines.
+- Wired Recharts line chart for CSR submissions, added skeleton placeholders, and integrated new metrics into admin dashboard.
+- Refreshed docs (`FRONTEND_DASHBOARD.md`, `COMPONENT_CATALOG.md`, `PROGRESS_REPORT.md`) to describe the smarter analytics view; lint/build verified.
+
+## 49. [FE] Super Admin profile page hardened + docs refreshed.
+- Guarded profile form against null auth state to keep builds clean while session restores.
+- Updated dashboard, component catalog, progress report, auth, setup, and TODO docs to capture new profile view, drawer, and persistence behaviour.
+- Lint/build executed successfully after documentation pass.
+
+## 50. [FE] Notifications hub + header badge.
+- Added `/dashboard/notifications` route with mock feed, skeleton loading, per-item mark read, and empty state.
+- Extended `AuthProvider` to track unread counts in localStorage and surfaced badge on header bell + sidebar nav.
+- Synced docs (dashboard, component catalog, TODO, auth, setup, progress report) and confirmed lint/build success.
+
+## 51. [FE] README refreshed for current dashboard + notifications scope.
+- Replaced legacy README with updated project overview covering dashboards, profile, notifications, docs, and setup flow.
+- Ensured lint/build remain green after documentation update.
+
+## 52. [FE] User directory added for super admins.
+- Built `/dashboard/users` with mock dataset, search, role/status filters, pagination, skeleton/empty states, and action buttons.
+- Added sidebar link for super admins, updated dashboard/setup/docs to reference the directory, and verified lint/build.
+
+## 53. [FE] User detail view with tabs + actions.
+- Added dynamic `/dashboard/users/[id]` route showing overview, activity timeline, and permissions tabs with responsive layout and mock toast actions.
+- Enhanced Tabs utility to support controlled usage, linked directory rows to detail pages, refreshed docs, and reran lint/build.

@@ -1,6 +1,6 @@
 # ImpactBridge Frontend Progress Report
 
-_Last updated: 2025-11-28 15:58 IST_
+_Last updated: 2025-11-28 17:46 IST_
 
 ## Overview
 The ImpactBridge frontend has matured into a production-ready Next.js 14 application featuring role-based dashboards, polished authentication flows, and a documented UI system. This report summarises the work completed to date as well as the remaining backlog items so stakeholders can track delivery status and plan the next milestones.
@@ -30,11 +30,16 @@ The ImpactBridge frontend has matured into a production-ready Next.js 14 applica
 
 ### 4. Admin Dashboard UX
 - Analytics hero row with area chart and KPI spark cards paints platform momentum visually.
-- Quick stats grid upgraded with trend deltas, sparklines, and hover animation for richer telemetry.
+- CSR submissions chart leverages Recharts with mock data + tooltip and skeleton fallbacks to keep layout stable.
+- Metric grid now uses reusable `StatCard` components with trend pills, sparklines, and colour-coded deltas.
 - Quick action cards, profile drawer, and recent activity list implemented with reusable components.
 - Session-scoped welcome toast triggered once per visit via `sessionStorage`.
 - Shimmering skeleton loaders for charts/cards/activity smooth the initial load (650 ms delay mimicking data fetch).
 - NGO management module upgraded with multi-filter search, sorting, pagination, responsive cards, and detailed drawer tabs.
+- Super Admin profile view added (`/dashboard/profile`) with editable form, skeleton fallbacks, and toast-driven save confirmation.
+- Notifications hub added with mock feed, mark-as-read controls, and header badge synced to AuthProvider.
+- User directory added for super admins with search, filters, and pagination to preview global users.
+- User detail view delivers tabs for overview/activity/permissions with mock action buttons for reset/deactivation.
 
 ### 5. Documentation & Tooling
 - Comprehensive docs in `docs/` covering setup, dashboard architecture, auth flow, style guide, routing, component catalog, TODO roadmap, and project overview.
@@ -81,7 +86,10 @@ The ImpactBridge frontend has matured into a production-ready Next.js 14 applica
 ## Next Steps
 1. Coordinate with backend to obtain authenticated endpoints for admin metrics and activity feeds.
 2. Implement React Query hooks with optimistic skeletons replacing the artificial delay.
-3. Begin building dynamic NGO/programme management tables with role-based actions.
-4. Introduce automated end-to-end tests covering auth and dashboard landing flow.
+3. Wire user profile save flow to backend update endpoint and handle optimistic updates.
+4. Replace mock notifications with API-driven feed and real-time updates.
+5. Back the user directory with real API data, bulk actions, and detail drawers.
+6. Begin building dynamic NGO/programme management tables with role-based actions.
+7. Introduce automated end-to-end tests covering auth, profile editing, notifications, user directory, and dashboard landing flow.
 
 Keeping this report updated alongside `agents.md` will ensure the team and stakeholders have real-time visibility into progress and outstanding work.

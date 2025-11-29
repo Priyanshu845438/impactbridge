@@ -15,10 +15,18 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Toast greeting fires once per session (sessionStorage guard + sonner Toaster)
 - 650ms skeleton delay on initial load to prevent abrupt flashes before auth/session data settles
 - Analytics hero row combines a primary activity area chart with three KPI spark cards (new NGOs, CSR commitments, active users)
-- Metric grid now spans four animated cards (user count with sparkline, approvals + delta, last-login highlight, platform health score)
+- CSR submissions chart powered by Recharts line chart shows 30-day trend with mock data + tooltip
+- Metric grid now uses reusable `StatCard` components (user count, approvals, last login, platform health) with sparklines and colour-coded deltas
 - Quick action grid (`QuickActionCard`) suggests follow-up tasks (verification queue, CSR programmes, analytics)
 - **Recent Activity** list with icons, timestamps, statuses (static for now)
 - Skeleton variants mirror chart + card layout so transitions stay intentional
+- Profile drawer (`components/dashboard/profile-drawer.tsx`) opens from header and links to the dedicated profile page
+- `app/dashboard/profile/page.tsx` provides user settings page with editable fields, skeleton loading state, and Sonner success toast
+- Profile page guards against null auth state (renders skeleton until `user` ready) ensuring clean build
+- Notifications page (`app/dashboard/notifications/page.tsx`) lists pending alerts with per-item read controls, skeleton fallback, and empty state.
+- Header bell badge reflects unread count stored in AuthProvider; accessing notifications or marking items read syncs local storage.
+- User directory (`app/dashboard/users/page.tsx`) gives super admins a global view with search, filters, pagination, and mock view actions.
+- User detail view (`app/dashboard/users/[id]/page.tsx`) adds tabs for overview/activity/permissions with mock toasts for reset/deactivate actions.
 
 ## Skeleton Components
 - `Skeleton`, `SkeletonText`, `SkeletonCard`, `SkeletonStat`, `SkeletonActivityItem`

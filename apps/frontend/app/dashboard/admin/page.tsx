@@ -19,10 +19,12 @@ import {
 import { QuickActionCard } from "@/components/dashboard/quick-action-card";
 import { SectionHeader } from "@/components/dashboard/section-header";
 import { ActivityFeed } from "@/components/dashboard/activity-feed";
+import { StatCard } from "@/components/dashboard/stat-card";
 import { useAuth } from "@/providers/auth-context";
 import { toast } from "sonner";
 import { SkeletonCard, SkeletonStat, SkeletonActivityItem } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { CartesianGrid, Line, LineChart as RechartsLineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -59,6 +61,8 @@ export default function AdminDashboard() {
   const userStatSeries = useMemo(() => generateSeries(8, 900, 1300), []);
   const approvalStatSeries = useMemo(() => generateSeries(8, 12, 28), []);
   const healthSeries = useMemo(() => generateSeries(8, 70, 98), []);
+  const lastLoginSeries = useMemo(() => generateSeries(8, 3, 14), []);
+  const csrSubmissions = useMemo(() => createCSRSubmissionsData(30), []);
 
   const quickActions = [
     {
@@ -109,6 +113,8 @@ export default function AdminDashboard() {
           <SkeletonStat />
           <SkeletonStat />
         </div>
+
+        <SkeletonCard className="h-80" />
 
         <div className="space-y-4">
           <SectionHeader title="Quick actions" subtitle="Common control centre tasks for administrators" />
@@ -184,38 +190,71 @@ export default function AdminDashboard() {
         </div>
       </div>
 
+      <div className="rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm transition-all duration-200 hover:scale-[1.01]">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">CSR submissions</p>
+            <h3 className="text-xl font-semibold text-slate-900">Last 30 days</h3>
+          </div>
+          <span className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
+            <TrendingUp className="h-3.5 w-3.5" />
+            {calculateCSRDelta(csrSubmissions).toFixed(1)}% vs prev
+          </span>
+        </div>
+        <div className="mt-4 h-72 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <RechartsLineChart data={csrSubmissions} margin={{ top: 12, right: 18, left: -6, bottom: 8 }}>
+              <CartesianGrid strokeDasharray="4 6" stroke="#e2e8f0" vertical={false} />
+              <XAxis dataKey="label" tickLine={false} axisLine={false} interval={5} tick={{ fill: "#94a3b8", fontSize: 11 }} />
+              <YAxis hide domain={[0, "dataMax + 6"]} />
+              <Tooltip cursor={{ stroke: "#6366f1", strokeWidth: 1, strokeDasharray: "3 3" }} content={<CustomTooltip />} />
+              <Line type="monotone" dataKey="value" stroke="#4f46e5" strokeWidth={2.5} dot={false} activeDot={{ r: 6 }} />
+            </RechartsLineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <MetricCard
+        <StatCard
           icon={Users2}
-          title="User count"
+          label="User count"
           value="1,248"
           helper="Across NGOs, corporates, and donors"
-          data={userStatSeries}
-        />
-        <MetricCard
+          trend={calculateDelta(userStatSeries)}
+          statusColor="emerald"
+        >
+          <Sparkline data={userStatSeries} height={64} area tone="emerald" />
+        </StatCard>
+        <StatCard
           icon={ClipboardCheck}
-          title="Pending approvals"
+          label="Pending approvals"
           value="18"
           helper="Awaiting verification review"
-          data={approvalStatSeries}
           trend={calculateDelta(approvalStatSeries)}
-        />
-        <MetricCard
+          statusColor="amber"
+        >
+          <Sparkline data={approvalStatSeries} height={64} area tone="amber" />
+        </StatCard>
+        <StatCard
           icon={Clock4}
-          title="Last login"
+          label="Last login"
           value="04:21 PM"
           helper="Most recent platform access"
-          data={generateSeries(8, 3, 14)}
-          highlight
-        />
-        <MetricCard
+          trend={calculateDelta(lastLoginSeries)}
+          statusColor="indigo"
+        >
+          <Sparkline data={lastLoginSeries} height={64} area tone="indigo" />
+        </StatCard>
+        <StatCard
           icon={ShieldCheck}
-          title="Platform health"
+          label="Platform health"
           value="94%"
           helper="SLA coverage across services"
-          data={healthSeries}
-          tone="emerald"
-        />
+          trend={calculateDelta(healthSeries)}
+          statusColor="emerald"
+        >
+          <Sparkline data={healthSeries} height={64} area tone="emerald" />
+        </StatCard>
       </div>
 
       <div className="space-y-4">
@@ -274,50 +313,6 @@ function KpiCard({ label, value, delta, data, tone = "slate" }: KpiCardProps) {
   );
 }
 
-type MetricCardProps = {
-  title: string;
-  value: string;
-  helper: string;
-  icon: typeof Users2;
-  data: SparkData;
-  trend?: number;
-  highlight?: boolean;
-  tone?: "emerald" | "indigo" | "slate";
-};
-
-function MetricCard({ title, value, helper, icon: Icon, data, trend, highlight, tone = "slate" }: MetricCardProps) {
-  const delta = trend ?? calculateDelta(data);
-  const isPositive = delta >= 0;
-  return (
-    <div className="rounded-3xl border border-slate-200 bg-white/95 p-5 shadow-sm transition-all duration-200 hover:scale-[1.01]">
-      <div className="flex items-start justify-between gap-3">
-        <div className="space-y-2">
-          <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-slate-100 text-slate-600">
-            <Icon className="h-5 w-5" />
-          </span>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">{title}</p>
-            <p className={cn("text-2xl font-semibold text-slate-900", highlight && "text-indigo-600")}>{value}</p>
-          </div>
-        </div>
-        <span
-          className={cn(
-            "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold",
-            isPositive ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700",
-          )}
-        >
-          {isPositive ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />} 
-          {Math.abs(delta).toFixed(1)}%
-        </span>
-      </div>
-      <p className="mt-3 text-xs text-slate-500">{helper}</p>
-      <div className="mt-4">
-        <Sparkline data={data} height={64} area tone={tone} />
-      </div>
-    </div>
-  );
-}
-
 type ChartProps = {
   data: SparkData;
   height?: number;
@@ -346,7 +341,7 @@ type SparklineProps = {
   data: SparkData;
   height?: number;
   area?: boolean;
-  tone?: "emerald" | "indigo" | "slate";
+  tone?: "emerald" | "indigo" | "slate" | "amber";
 };
 
 function Sparkline({ data, height = 48, area = false, tone = "slate" }: SparklineProps) {
@@ -357,6 +352,7 @@ function Sparkline({ data, height = 48, area = false, tone = "slate" }: Sparklin
     emerald: "#10b981",
     indigo: "#6366f1",
     slate: "#475569",
+    amber: "#f59e0b",
   }[tone];
 
   return (
@@ -406,4 +402,37 @@ function calculateDelta(data: SparkData) {
   const first = data[0];
   const last = data[data.length - 1];
   return ((last - first) / first) * 100;
+}
+
+type CSRPoint = { label: string; value: number; previous: number };
+
+function createCSRSubmissionsData(days: number): CSRPoint[] {
+  let current = 28;
+  let previous = current - Math.random() * 5;
+  const result: CSRPoint[] = [];
+  for (let day = days; day >= 1; day -= 1) {
+    const change = (Math.random() - 0.4) * 6;
+    previous = current;
+    current = Math.max(6, current + change);
+    result.unshift({ label: `Day ${day}`, value: Math.round(current), previous: Math.round(previous) });
+  }
+  return result;
+}
+
+function calculateCSRDelta(data: CSRPoint[]) {
+  if (data.length < 2) return 0;
+  const first = data[0].previous || data[0].value;
+  const last = data[data.length - 1].value;
+  return ((last - first) / first) * 100;
+}
+
+function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<{ value: number; payload: CSRPoint }> }) {
+  if (!active || !payload?.length) return null;
+  const point = payload[0].payload;
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-600 shadow-sm">
+      <p className="font-semibold text-slate-800">{point.label}</p>
+      <p className="mt-1">Submissions: {point.value}</p>
+    </div>
+  );
 }
