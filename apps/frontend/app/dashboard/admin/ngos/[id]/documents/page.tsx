@@ -3,10 +3,14 @@
 import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import {
+  AlertCircle,
   AlertTriangle,
   CheckCircle2,
   Clock,
+  EllipsisVertical,
   FileText,
+  MessageCircle,
+  MessageSquareReply,
   Search,
   ShieldCheck,
   Tag,
@@ -18,6 +22,7 @@ import { toast } from "sonner";
 import { SectionHeader } from "@/components/dashboard/section-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -77,9 +82,28 @@ type DocumentActivity = {
   tone: "info" | "success" | "danger" | "warning";
 };
 
+type CommentStatus = "Open" | "Resolved" | "Needs revision";
+
+interface CommentEntry {
+  id: string;
+  author: string;
+  avatar?: string;
+  timestamp: string;
+  status: CommentStatus;
+  message: string;
+  section: string;
+  replies?: CommentEntry[];
+}
+
 const availableTags = ["Legal", "Financial", "Compliance", "Personal"] as const;
 
-const mockNgoDocuments: Record<string, NgoDocumentProfile & { activities: Record<string, DocumentActivity[]> }> = {
+const mockNgoDocuments: Record<
+  string,
+  NgoDocumentProfile & {
+    activities: Record<string, DocumentActivity[]>;
+    comments: Record<string, CommentEntry[]>;
+  }
+> = {
   "ngo-001": {
     id: "ngo-001",
     ngoName: "Swasthya Seva Foundation",
@@ -222,6 +246,46 @@ const mockNgoDocuments: Record<string, NgoDocumentProfile & { activities: Record
         },
       ],
     },
+    comments: {
+      "doc-1": [
+        {
+          id: "comment-1",
+          author: "Karan Patel",
+          timestamp: "12 Feb 2025 · 09:10 AM",
+          status: "Resolved",
+          message: "Confirmed PAN details against Income Tax records. No discrepancies found.",
+          section: "pan-heading",
+          replies: [
+            {
+              id: "reply-1",
+              author: "Ananya Rao",
+              timestamp: "12 Feb 2025 · 09:24 AM",
+              status: "Resolved",
+              message: "Thanks for cross-checking. Closing this thread.",
+              section: "pan-heading",
+            },
+          ],
+        },
+        {
+          id: "comment-2",
+          author: "Finance Review",
+          timestamp: "12 Feb 2025 · 11:45 AM",
+          status: "Open",
+          message: "Please upload the signed declaration page as well for our archives.",
+          section: "pan-attachment",
+        },
+      ],
+      "doc-2": [
+        {
+          id: "comment-3",
+          author: "Compliance Bot",
+          timestamp: "13 Feb 2025 · 08:02 AM",
+          status: "Needs revision",
+          message: "Stamp imprint is slightly faded on page 3. Kindly re-scan at higher contrast.",
+          section: "80g-page-3",
+        },
+      ],
+    },
   },
   "ngo-002": {
     id: "ngo-002",
@@ -337,6 +401,38 @@ const mockNgoDocuments: Record<string, NgoDocumentProfile & { activities: Record
         },
       ],
     },
+    comments: {
+      "doc-6": [
+        {
+          id: "comment-4",
+          author: "Meera Singh",
+          timestamp: "05 Feb 2025 · 03:18 PM",
+          status: "Resolved",
+          message: "Uploaded revised PAN with clearer signature. Please confirm.",
+          section: "pan-signature",
+          replies: [
+            {
+              id: "reply-2",
+              author: "Finance Reviewer",
+              timestamp: "05 Feb 2025 · 03:40 PM",
+              status: "Resolved",
+              message: "Looks great now. Thank you!",
+              section: "pan-signature",
+            },
+          ],
+        },
+      ],
+      "doc-7": [
+        {
+          id: "comment-5",
+          author: "Board Liaison",
+          timestamp: "10 Feb 2025 · 10:05 AM",
+          status: "Open",
+          message: "Board meeting scheduled Friday to confirm details. Will update afterwards.",
+          section: "fcra-board",
+        },
+      ],
+    },
   },
 };
 
@@ -358,6 +454,23 @@ const statusTone: Record<DocumentStatus, string> = {
   Missing: "bg-slate-200 text-slate-600",
   "Update Requested": "border border-amber-200 bg-amber-50 text-amber-700",
 };
+
+const commentFilters: Array<"All" | CommentStatus> = ["All", "Open", "Resolved", "Needs revision"];
+
+const commentStatusTone: Record<CommentStatus, string> = {
+  Open: "bg-emerald-100 text-emerald-700",
+  Resolved: "bg-slate-200 text-slate-600",
+  "Needs revision": "bg-amber-100 text-amber-700",
+};
+
+const getInitials = (name: string) =>
+  name
+    .trim()
+    .split(/\s+/)
+    .map((part) => part.charAt(0))
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
 const activityIcons: Record<
   DocumentActivity["tone"],
@@ -386,6 +499,16 @@ export default function NgoDocumentsPage() {
     if (!profile) return {};
     return Object.fromEntries(profile.documents.map((doc) => [doc.id, null]));
   });
+  const [commentMap, setCommentMap] = useState<Record<string, CommentEntry[]>>(
+    () => profile?.comments ?? {},
+  );
+  const [commentFilter, setCommentFilter] = useState<"All" | CommentStatus>("All");
+  const [selectedThread, setSelectedThread] = useState<{ commentId: string; section: string } | null>(
+    null,
+  );
+  const [isCommentPanelOpen, setCommentPanelOpen] = useState(true);
+  const [draftComment, setDraftComment] = useState("");
+  const [openCommentMenu, setOpenCommentMenu] = useState<string | null>(null);
 
   useEffect(() => {
     if (ngoId && !profile) {
@@ -401,6 +524,7 @@ export default function NgoDocumentsPage() {
         Object.fromEntries(profile.documents.map((doc) => [doc.id, doc.tags ?? []])),
       );
       setPreviewVersion(Object.fromEntries(profile.documents.map((doc) => [doc.id, null])));
+      setCommentMap(profile.comments);
     }
   }, [profile]);
 
@@ -417,6 +541,12 @@ export default function NgoDocumentsPage() {
     const timer = window.setTimeout(() => setLoading(false), 600);
     return () => window.clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (!isCommentPanelOpen) {
+      setOpenCommentMenu(null);
+    }
+  }, [isCommentPanelOpen]);
 
   const filteredDocuments = useMemo(() => {
     if (!profile) {
@@ -648,15 +778,68 @@ export default function NgoDocumentsPage() {
           (() => {
             const effectiveDocument = getEffectiveDocument(selectedDocument);
             const selectedTags = tagSelections[selectedDocument.id] ?? [];
-            const availableTagOptions = availableTags.filter(
-              (tag) => !selectedTags.includes(tag),
+            const availableTagOptions = availableTags.filter((tag) => !selectedTags.includes(tag));
+            const threads = commentMap[selectedDocument.id] ?? [];
+            const filteredThreads = threads.filter((thread) =>
+              commentFilter === "All" ? true : thread.status === commentFilter,
             );
+            const commentCounts: Record<"All" | CommentStatus, number> = {
+              All: threads.length,
+              Open: threads.filter((thread) => thread.status === "Open").length,
+              Resolved: threads.filter((thread) => thread.status === "Resolved").length,
+              "Needs revision": threads.filter((thread) => thread.status === "Needs revision").length,
+            };
+
+            const handleCommentMenuAction = (
+              commentId: string,
+              action: "edit" | "delete" | "resolve",
+            ) => {
+              setOpenCommentMenu(null);
+              if (!selectedDocument) return;
+
+              if (action === "edit") {
+                toast.info("Edit comment (mock)");
+                return;
+              }
+
+              setCommentMap((prev) => {
+                const existingThreads = prev[selectedDocument.id] ?? [];
+                const updatedThreads = existingThreads
+                  .map((thread) => {
+                    if (thread.id !== commentId) {
+                      return thread;
+                    }
+                    if (action === "resolve") {
+                      return { ...thread, status: "Resolved" as CommentStatus };
+                    }
+                    return null;
+                  })
+                  .filter(Boolean) as CommentEntry[];
+                return { ...prev, [selectedDocument.id]: updatedThreads };
+              });
+
+              if (action === "delete") {
+                if (selectedThread?.commentId === commentId) {
+                  setSelectedThread(null);
+                }
+                toast.success("Comment removed (mock)");
+              }
+
+              if (action === "resolve") {
+                toast.success("Comment marked resolved (mock)");
+              }
+            };
 
             return (
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-600 lg:flex-row">
-                  <div className="lg:w-1/2">
-                    <div className="relative flex h-[22rem] items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white text-slate-400">
+              <div className="space-y-6">
+                <div className="flex flex-col gap-4 xl:flex-row">
+                  <div className="flex flex-1 flex-col gap-4">
+                    <div
+                      className={cn(
+                        "relative flex h-[22rem] flex-1 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white text-slate-400 transition",
+                        selectedThread && selectedThread.section ? "ring-2 ring-emerald-400/80 ring-offset-4" : "",
+                      )}
+                    >
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div className="pointer-events-none whitespace-nowrap text-center text-lg font-semibold uppercase tracking-[0.6em] text-slate-200">
                           CONFIDENTIAL — ImpactBridge
@@ -667,43 +850,47 @@ export default function NgoDocumentsPage() {
                         <p className="mt-3 text-sm text-slate-500">Document preview placeholder</p>
                         <p className="text-xs text-slate-400">Embed PDF/image viewer once backend storage integrates.</p>
                       </div>
+                      {selectedThread ? (
+                        <div className="pointer-events-none absolute inset-4 rounded-2xl border-4 border-emerald-400/50 shadow-[0_0_25px_rgba(16,185,129,0.35)] transition" />
+                      ) : null}
                     </div>
-                  </div>
-                  <div className="flex flex-1 flex-col gap-4 lg:w-1/2">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <Badge
-                        variant="outline"
-                        className={cn("border px-3 py-1", statusTone[effectiveDocument.status])}
-                      >
-                        {effectiveDocument.status}
-                      </Badge>
-                      <span className="inline-flex items-center gap-2 text-xs text-slate-500">
-                        <ShieldCheck className="h-4 w-4 text-slate-400" />
-                        {effectiveDocument.fileType.toUpperCase()} preview
-                      </span>
-                    </div>
-                    <div className="grid gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Uploaded by</span>
-                        <span className="font-medium text-slate-800">
-                          {effectiveDocument.uploadedBy ?? "Not provided"}
+
+                    <div className="space-y-4 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <Badge
+                          variant="outline"
+                          className={cn("border px-3 py-1", statusTone[effectiveDocument.status])}
+                        >
+                          {effectiveDocument.status}
+                        </Badge>
+                        <span className="inline-flex items-center gap-2 text-xs text-slate-500">
+                          <ShieldCheck className="h-4 w-4 text-slate-400" />
+                          {effectiveDocument.fileType.toUpperCase()} preview
                         </span>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Uploaded on</span>
-                        <span className="font-medium text-slate-800">
-                          {effectiveDocument.uploadedAt ?? "Not provided"}
-                        </span>
-                      </div>
-                      <div className="flex items-start justify-between gap-3">
-                        <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Notes</span>
-                        <span className="max-w-[360px] text-right leading-relaxed text-slate-600">
-                          {effectiveDocument.notes ?? "No reviewer notes attached yet."}
-                        </span>
+                      <div className="grid gap-3 text-sm text-slate-600">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Uploaded by</span>
+                          <span className="font-medium text-slate-800">
+                            {effectiveDocument.uploadedBy ?? "Not provided"}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Uploaded on</span>
+                          <span className="font-medium text-slate-800">
+                            {effectiveDocument.uploadedAt ?? "Not provided"}
+                          </span>
+                        </div>
+                        <div className="flex items-start justify-between gap-3">
+                          <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Notes</span>
+                          <span className="max-w-[360px] text-right leading-relaxed text-slate-600">
+                            {effectiveDocument.notes ?? "No reviewer notes attached yet."}
+                          </span>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="space-y-2">
+                    <div className="space-y-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
                       <div className="flex items-center justify-between">
                         <h4 className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
                           Tags
@@ -765,9 +952,216 @@ export default function NgoDocumentsPage() {
                       </div>
                     </div>
                   </div>
+                  <aside
+                    className={cn(
+                      "flex w-full flex-col rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-sm transition-all",
+                      isCommentPanelOpen ? "xl:w-80" : "xl:w-14",
+                    )}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <MessageCircle className="h-4 w-4 text-emerald-600" />
+                        <span className="text-sm font-semibold text-slate-900">Collaboration</span>
+                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600">
+                          {threads.length}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+                        onClick={() => setCommentPanelOpen((prev) => !prev)}
+                        aria-label="Toggle comments"
+                      >
+                        {isCommentPanelOpen ? <X className="h-4 w-4" /> : <MessageCircle className="h-4 w-4" />}
+                      </button>
+                    </div>
+
+                    {isCommentPanelOpen ? (
+                      <>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {commentFilters.map((filter) => (
+                            <button
+                              key={filter}
+                              type="button"
+                              onClick={() => setCommentFilter(filter)}
+                              className={cn(
+                                "rounded-full px-3 py-1 text-xs font-semibold transition",
+                                commentFilter === filter
+                                  ? "bg-emerald-600 text-white"
+                                  : "bg-slate-100 text-slate-600 hover:bg-slate-200",
+                              )}
+                            >
+                              {filter}
+                              <span className="ml-1 text-[10px] font-normal text-slate-500">
+                                {commentCounts[filter] ?? 0}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+
+                        <div className="mt-3 flex-1 space-y-3 overflow-y-auto pr-1 text-sm text-slate-600">
+                          {filteredThreads.length === 0 ? (
+                            <div className="flex h-36 flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 text-center">
+                              <AlertCircle className="h-5 w-5 text-slate-400" />
+                              <p className="text-xs text-slate-500">No comments yet under this filter.</p>
+                            </div>
+                          ) : (
+                            filteredThreads.map((comment) => (
+                              <div
+                                key={comment.id}
+                                className={cn(
+                                  "space-y-2 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-sm transition",
+                                  selectedThread?.commentId === comment.id
+                                    ? "border-emerald-300 shadow-[0_0_0_2px_rgba(16,185,129,0.2)]"
+                                    : null,
+                                )}
+                              >
+                                <div className="flex items-start justify-between gap-2">
+                                  <div className="flex items-start gap-2">
+                                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-sm font-semibold text-emerald-700">
+                                      {getInitials(comment.author)}
+                                    </span>
+                                    <div>
+                                      <p className="text-sm font-semibold text-slate-900">{comment.author}</p>
+                                      <p className="text-xs text-slate-400">{comment.timestamp}</p>
+                                    </div>
+                                  </div>
+                                  <div className="relative flex items-center gap-2">
+                                    <span
+                                      className={cn(
+                                        "rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
+                                        commentStatusTone[comment.status],
+                                      )}
+                                    >
+                                      {comment.status}
+                                    </span>
+                                    <button
+                                      type="button"
+                                      className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+                                      aria-label="Comment actions"
+                                      onClick={() =>
+                                        setOpenCommentMenu((prev) =>
+                                          prev === comment.id ? null : comment.id,
+                                        )
+                                      }
+                                    >
+                                      <EllipsisVertical className="h-4 w-4" />
+                                    </button>
+                                    {openCommentMenu === comment.id ? (
+                                      <div className="absolute right-0 top-10 z-20 w-40 rounded-xl border border-slate-200 bg-white p-1 shadow-xl">
+                                        <button
+                                          type="button"
+                                          className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-600 transition hover:bg-slate-100"
+                                          onClick={() => handleCommentMenuAction(comment.id, "edit")}
+                                        >
+                                          Edit
+                                          <span className="text-[10px] uppercase tracking-wide text-slate-400">
+                                            Mock
+                                          </span>
+                                        </button>
+                                        <button
+                                          type="button"
+                                          className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-600 transition hover:bg-emerald-50"
+                                          onClick={() => handleCommentMenuAction(comment.id, "resolve")}
+                                        >
+                                          Mark resolved
+                                          <span className="text-[10px] uppercase tracking-wide text-slate-400">
+                                            Mock
+                                          </span>
+                                        </button>
+                                        <button
+                                          type="button"
+                                          className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs font-medium text-rose-600 transition hover:bg-rose-50"
+                                          onClick={() => handleCommentMenuAction(comment.id, "delete")}
+                                        >
+                                          Delete
+                                          <span className="text-[10px] uppercase tracking-wide text-rose-400">
+                                            Mock
+                                          </span>
+                                        </button>
+                                      </div>
+                                    ) : null}
+                                  </div>
+                                </div>
+
+                                <p className="text-sm leading-relaxed text-slate-700">{comment.message}</p>
+
+                                <div className="flex items-center justify-between text-xs text-slate-400">
+                                  <button
+                                    type="button"
+                                    onClick={() => setSelectedThread({ commentId: comment.id, section: comment.section })}
+                                    className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700"
+                                  >
+                                    <MessageSquareReply className="h-3.5 w-3.5" />
+                                    View context
+                                  </button>
+                                  <span className="italic text-slate-400">Linked section: {comment.section}</span>
+                                </div>
+
+                                {(comment.replies ?? []).length > 0 ? (
+                                  <div className="space-y-2 border-l-2 border-slate-200 pl-4">
+                                    {comment.replies?.map((reply) => (
+                                      <div key={reply.id} className="space-y-1">
+                                        <div className="flex items-center justify-between">
+                                          <div className="flex items-center gap-2">
+                                            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-200 text-[10px] font-semibold text-slate-600">
+                                              {getInitials(reply.author)}
+                                            </span>
+                                            <p className="text-xs font-semibold text-slate-700">{reply.author}</p>
+                                          </div>
+                                          <span className="text-[10px] text-slate-400">{reply.timestamp}</span>
+                                        </div>
+                                        <p className="text-xs leading-relaxed text-slate-600">{reply.message}</p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                ) : null}
+                              </div>
+                            ))
+                          )}
+                        </div>
+
+                        <div className="mt-3 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-sm">
+                          <Textarea
+                            placeholder="Leave a review note…"
+                            value={draftComment}
+                            onChange={(event) => setDraftComment(event.target.value)}
+                            className="min-h-[96px]"
+                          />
+                          <div className="mt-2 flex items-center justify-end">
+                            <Button
+                              size="sm"
+                              disabled={draftComment.trim().length === 0}
+                              onClick={() => {
+                                if (!selectedDocument) return;
+                                const newComment: CommentEntry = {
+                                  id: `comment-${Date.now()}`,
+                                  author: "You",
+                                  timestamp: new Date().toLocaleString(),
+                                  status: "Open",
+                                  message: draftComment.trim(),
+                                  section: "general",
+                                  replies: [],
+                                };
+                                setCommentMap((prev) => {
+                                  const existing = prev[selectedDocument.id] ?? [];
+                                  return { ...prev, [selectedDocument.id]: [newComment, ...existing] };
+                                });
+                                setDraftComment("");
+                                setSelectedThread({ commentId: newComment.id, section: newComment.section });
+                                toast.success("Comment added (mock)");
+                              }}
+                            >
+                              Add comment
+                            </Button>
+                          </div>
+                        </div>
+                      </>
+                    ) : null}
+                  </aside>
                 </div>
 
-                <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
+                <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(260px,1fr)]">
                   <div className="space-y-3 rounded-2xl border border-slate-200 bg-white px-5 py-4">
                     <h4 className="text-sm font-semibold text-slate-900">Version history</h4>
                     <div className="space-y-2 text-sm text-slate-600">
@@ -844,7 +1238,7 @@ export default function NgoDocumentsPage() {
         ) : null}
       </Drawer>
 
-      <Modal
+            <Modal
         open={Boolean(pendingAction)}
         onClose={() => setPendingAction(null)}
         title="Confirm action"

@@ -243,3 +243,8 @@
 - Revamped NGO document drawer with split preview, watermark, metadata panel, tag management UI, and mock version history swapping.
 - Added tag state handling, version selection, and improved activity feed layout; ensured responsive behaviour on desktop/tablet.
 - Updated dashboard/progress docs and verified clean lint run.
+
+## 61. [FE] Document collaboration panel delivered.
+- Finalised NGO document drawer with threaded comment sidebar, filters, contextual highlights, mock action menus, and add-comment form.
+- Extended action flow with confirmation modal, status badge updates, tag removal controls, and richer metadata panel while keeping build green.
+- Updated dashboard/component/progress docs to describe the collaboration experience and reran lint/build successfully.

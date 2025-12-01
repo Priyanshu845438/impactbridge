@@ -61,7 +61,8 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 
 ### `app/dashboard/admin/ngos/[id]/documents/page.tsx`
 - Page-level pattern for compliance reviews with searchable table, status badges, and drawer actions (approve/reject/request update) powered by `toast`.
-- Demonstrates reuse of `Drawer`, `Badge`, `SectionHeader`, and skeleton components for load states.
+- Drawer now features a split preview (document pane, metadata/tags board, watermark) plus collaboration sidebar for threaded comments, filters, quick actions, and add-comment form.
+- Demonstrates reuse of `Drawer`, `Badge`, `SectionHeader`, `Textarea`, and skeleton components for load states.
 
 ### `components/ui/tabs.tsx`
 - Lightweight tabs primitive (list/trigger/content) for app router client components.

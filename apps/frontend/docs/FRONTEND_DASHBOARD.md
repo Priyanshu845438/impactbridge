@@ -36,7 +36,7 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 
 ## Admin Modules (`app/dashboard/admin/modules/*`)
 - `ngos/page.tsx`: NGO management workspace with mock dataset, multi-filter controls (search + registration/compliance/region), column sorting, pagination UI, responsive table + card layout, row preview drawer, and detailed tabs for overview/documents/activity + approval toasts; search/filters now stack on small screens and tables gain horizontal scroll wrappers
-- `ngos/[id]/documents/page.tsx`: compliance review surface displaying per-NGO document inventory with status filters, search, a split preview (document pane + metadata/tags panel), confirmation dialogs, status badge updates, sonner toasts, mock version history, and an activity log.
+- `ngos/[id]/documents/page.tsx`: compliance review surface displaying per-NGO document inventory with status filters, search, a split preview (document pane + metadata/tags panel), confirmation dialogs, status badge updates, sonner toasts, mock version history, an activity log, and a collaboration sidebar with threaded comments, filters, contextual highlights, and tag management.
 - `programmes/page.tsx`: CSR programme pipeline placeholder
 - `reports/page.tsx`: analytics/reporting placeholder
 - `settings/page.tsx`: platform-wide settings placeholder
