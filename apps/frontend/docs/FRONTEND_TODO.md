@@ -6,12 +6,13 @@
 - Connect dashboard stats/activity widgets to backend APIs via React Query
 
 ## Medium Priority
-- Build dynamic tables for admin programmes / reports modules (NGO management view already scaffolded with sorting + filters + drawer)
+- Build dynamic tables for admin programmes / reports modules (NGO management + document review views already scaffolded with sorting/filtering/drawers)
 - Add charts/visualisations (donation totals, impact metrics)
 - Wire profile editor to backend update endpoint with optimistic feedback
 - Hook notifications and user directory to backend services (REST/GraphQL) with pagination + actions
 - Add backend wiring for user detail view (tabs, status toggles, audit log)
 - Introduce notifications/toasts for key actions
+- Ensure future header/profile tweaks preserve single-button triggers to avoid hydration warnings
 
 ## Low Priority / Nice to Have
 - Dark mode toggle using shadcn theme utilities

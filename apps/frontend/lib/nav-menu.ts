@@ -74,6 +74,11 @@ export const navMenu: NavItem[] = [
         href: "/dashboard/admin/modules/ngos/impact-portfolio",
         roles: ["SUPER_ADMIN"],
       },
+      {
+        label: "Compliance documents",
+        href: "/dashboard/admin/modules/ngos/compliance-documents",
+        roles: ["SUPER_ADMIN"],
+      },
     ],
   },
   {

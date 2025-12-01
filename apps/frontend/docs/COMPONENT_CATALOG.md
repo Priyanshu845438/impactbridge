@@ -34,6 +34,7 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - Right-side sheet for account quick actions; triggered from dashboard header.
 - Shows avatar initials, name, role badge, contact info, "My Profile" shortcut, and logout button.
 - Re-uses Drawer primitive for responsive full-screen behaviour on mobile.
+- Trigger now clones the supplied button so only one `<button>` renders, avoiding nested-button hydration warnings.
 
 ### Notifications UI (page-level pattern)
 - `app/dashboard/notifications/page.tsx` consumes SectionHeader, skeletons, and AuthProvider badge state to surface mock alerts.
@@ -55,6 +56,10 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - Controlled slideover used across admin modules (e.g., NGO detail preview).
 - Props: `{ open, onClose, title?, description?, children, footer }`
 - Handles Escape key + backdrop clicks; auto-resizes for mobile.
+
+### `app/dashboard/admin/ngos/[id]/documents/page.tsx`
+- Page-level pattern for compliance reviews with searchable table, status badges, and drawer actions (approve/reject/request update) powered by `toast`.
+- Demonstrates reuse of `Drawer`, `Badge`, `SectionHeader`, and skeleton components for load states.
 
 ### `components/ui/tabs.tsx`
 - Lightweight tabs primitive (list/trigger/content) for app router client components.

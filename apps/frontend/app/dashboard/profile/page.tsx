@@ -41,9 +41,19 @@ type ProfileFormState = {
 };
 
 function createInitialState(user: AuthUser | null): ProfileFormState {
+  if (!user) {
+    return {
+      name: "",
+      email: "",
+      phone: "",
+      timezone: "Asia/Kolkata",
+      theme: "system",
+    };
+  }
+
   return {
-    name: user?.name ?? "",
-    email: user?.email ?? "",
+    name: user.name ?? "",
+    email: user.email ?? "",
     phone: "+91 98765 43210",
     timezone: "Asia/Kolkata",
     theme: "system",

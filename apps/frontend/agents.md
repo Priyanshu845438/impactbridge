@@ -211,3 +211,11 @@
 ## 53. [FE] User detail view with tabs + actions.
 - Added dynamic `/dashboard/users/[id]` route showing overview, activity timeline, and permissions tabs with responsive layout and mock toast actions.
 - Enhanced Tabs utility to support controlled usage, linked directory rows to detail pages, refreshed docs, and reran lint/build.
+
+## 54. [FE] NGO compliance documents workspace documented.
+- Added `app/dashboard/admin/ngos/[id]/documents/page.tsx` to surface mock document inventory with status filters, preview drawer, and approve/reject/request-update toasts.
+- Synced dashboard, component catalog, progress report, and TODO docs to capture the new compliance review flow; reran lint/build to confirm repo health.
+
+## 55. [FE] Profile drawer trigger de-nested to eliminate hydration warning.
+- Refactored `components/dashboard/profile-drawer.tsx` to clone the trigger button instead of wrapping it, removing nested `<button>` markup and hydration noise.
+- Updated dashboard/setup/component docs and refreshed the progress report/TODO with guidance on keeping single-button triggers intact; lint/build confirmed clean.

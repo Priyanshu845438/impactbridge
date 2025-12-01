@@ -23,6 +23,7 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Profile drawer (`components/dashboard/profile-drawer.tsx`) opens from header and links to the dedicated profile page
 - `app/dashboard/profile/page.tsx` provides user settings page with editable fields, skeleton loading state, and Sonner success toast
 - Profile page guards against null auth state (renders skeleton until `user` ready) ensuring clean build
+- Profile drawer trigger now clones the child element to reuse its button instead of nesting buttons, resolving hydration warnings
 - Notifications page (`app/dashboard/notifications/page.tsx`) lists pending alerts with per-item read controls, skeleton fallback, and empty state.
 - Header bell badge reflects unread count stored in AuthProvider; accessing notifications or marking items read syncs local storage.
 - User directory (`app/dashboard/users/page.tsx`) gives super admins a global view with search, filters, pagination, and mock view actions.
@@ -35,6 +36,7 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 
 ## Admin Modules (`app/dashboard/admin/modules/*`)
 - `ngos/page.tsx`: NGO management workspace with mock dataset, multi-filter controls (search + registration/compliance/region), column sorting, pagination UI, responsive table + card layout, row preview drawer, and detailed tabs for overview/documents/activity + approval toasts
+- `ngos/[id]/documents/page.tsx`: compliance review surface displaying per-NGO document inventory with status filters, search, and a preview drawer that exposes approve/reject/request-update CTA toasts (mock wiring)
 - `programmes/page.tsx`: CSR programme pipeline placeholder
 - `reports/page.tsx`: analytics/reporting placeholder
 - `settings/page.tsx`: platform-wide settings placeholder

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { cloneElement, isValidElement, useEffect, useMemo, useRef, useState } from "react";
 import { LogOut, User2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -8,7 +8,7 @@ import { useAuth } from "@/providers/auth-context";
 import { Button } from "@/components/ui/button";
 
 interface ProfileDrawerProps {
-  children: React.ReactNode;
+  children: React.ReactElement;
   onSignOut?: () => void;
 }
 
@@ -50,11 +50,26 @@ export function ProfileDrawer({ children, onSignOut }: ProfileDrawerProps) {
     return `${first}${second}`.toUpperCase() || "IB";
   }, [user?.name]);
 
+  const trigger = useMemo(() => {
+    if (!isValidElement<{ onClick?: React.MouseEventHandler }>(children)) {
+      return children;
+    }
+
+    const existingOnClick = children.props.onClick;
+
+    const handleClick: React.MouseEventHandler = (event) => {
+      existingOnClick?.(event);
+      setOpen((prev) => !prev);
+    };
+
+    return cloneElement(children, {
+      onClick: handleClick,
+    });
+  }, [children]);
+
   return (
     <div className="relative" ref={containerRef}>
-      <button type="button" onClick={() => setOpen((prev) => !prev)} className="contents">
-        {children}
-      </button>
+      {trigger}
       {open ? (
         <div className="absolute right-0 mt-3 w-72 rounded-2xl border border-slate-200 bg-white p-4 shadow-xl">
           <div className="flex items-start gap-3">

@@ -24,6 +24,7 @@
   - `dashboard/`
     - `section-header.tsx` shared heading + actions
     - `quick-action-card.tsx` stat/action widgets
+    - `profile-drawer.tsx` clones supplied trigger button so only a single `<button>` is rendered
   - `ui/`
     - shadcn primitives (Button, Card, Input, etc.)
     - `sonner.tsx` exposing the Toaster provider

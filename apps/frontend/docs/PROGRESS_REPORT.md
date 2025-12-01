@@ -1,6 +1,6 @@
 # ImpactBridge Frontend Progress Report
 
-_Last updated: 2025-11-28 17:46 IST_
+_Last updated: 2025-11-28 18:32 IST_
 
 ## Overview
 The ImpactBridge frontend has matured into a production-ready Next.js 14 application featuring role-based dashboards, polished authentication flows, and a documented UI system. This report summarises the work completed to date as well as the remaining backlog items so stakeholders can track delivery status and plan the next milestones.
@@ -36,10 +36,12 @@ The ImpactBridge frontend has matured into a production-ready Next.js 14 applica
 - Session-scoped welcome toast triggered once per visit via `sessionStorage`.
 - Shimmering skeleton loaders for charts/cards/activity smooth the initial load (650 ms delay mimicking data fetch).
 - NGO management module upgraded with multi-filter search, sorting, pagination, responsive cards, and detailed drawer tabs.
+- NGO compliance documents view (`/dashboard/admin/modules/ngos/compliance-documents` → dynamic route) delivers per-organisation file inventory with filtering, search, and approve/reject/request-update toasts.
 - Super Admin profile view added (`/dashboard/profile`) with editable form, skeleton fallbacks, and toast-driven save confirmation.
 - Notifications hub added with mock feed, mark-as-read controls, and header badge synced to AuthProvider.
 - User directory added for super admins with search, filters, and pagination to preview global users.
 - User detail view delivers tabs for overview/activity/permissions with mock action buttons for reset/deactivation.
+- Profile drawer trigger refactored to reuse the supplied button instead of wrapping it, eliminating nested-button hydration warnings.
 
 ### 5. Documentation & Tooling
 - Comprehensive docs in `docs/` covering setup, dashboard architecture, auth flow, style guide, routing, component catalog, TODO roadmap, and project overview.
