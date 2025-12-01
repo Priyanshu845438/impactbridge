@@ -134,7 +134,7 @@ export default function ProfilePage() {
         }
       />
 
-      <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
+      <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)]">
         <aside className="space-y-6 rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm">
           <div className="flex flex-col items-center text-center">
             <div className="relative">
@@ -189,7 +189,7 @@ export default function ProfilePage() {
           </div>
         </aside>
 
-        <section className="space-y-6 rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm lg:p-8">
+        <section className="space-y-6 rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm md:p-8">
           <div className="grid gap-6 md:grid-cols-2">
             <Field
               label="Full name"

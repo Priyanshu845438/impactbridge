@@ -219,8 +219,8 @@ export default function UserDirectoryPage() {
           <p className="mt-1 text-xs">Try adjusting your search terms or filter selections.</p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white/95 shadow-sm">
-          <div className="hidden grid-cols-[2fr_1fr_2fr_1fr_1.5fr_1fr] bg-slate-50/80 px-6 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 md:grid">
+        <div className="overflow-x-auto rounded-3xl border border-slate-200 bg-white/95 shadow-sm">
+          <div className="hidden min-w-[720px] grid-cols-[2fr_1fr_2fr_1fr_1.5fr_1fr] bg-slate-50/80 px-6 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 md:grid">
             <span>Name</span>
             <span>Role</span>
             <span>Email</span>
@@ -229,7 +229,7 @@ export default function UserDirectoryPage() {
             <span className="text-right">Action</span>
           </div>
 
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-slate-100 md:min-w-[720px]">
             {paginatedUsers.map((user) => (
               <div
                 key={user.id}

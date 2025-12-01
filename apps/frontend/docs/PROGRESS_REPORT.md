@@ -35,13 +35,14 @@ The ImpactBridge frontend has matured into a production-ready Next.js 14 applica
 - Quick action cards, profile drawer, and recent activity list implemented with reusable components.
 - Session-scoped welcome toast triggered once per visit via `sessionStorage`.
 - Shimmering skeleton loaders for charts/cards/activity smooth the initial load (650 ms delay mimicking data fetch).
-- NGO management module upgraded with multi-filter search, sorting, pagination, responsive cards, and detailed drawer tabs.
-- NGO compliance documents view (`/dashboard/admin/modules/ngos/compliance-documents` → dynamic route) delivers per-organisation file inventory with filtering, search, and approve/reject/request-update toasts.
+- NGO management module upgraded with multi-filter search, sorting, pagination, responsive cards, and detailed drawer tabs; controls now reflow cleanly on mobile and tables use horizontal scrolling without breaking layout.
+- NGO compliance documents view (`/dashboard/admin/modules/ngos/compliance-documents` → dynamic route) delivers per-organisation file inventory with filtering, search, split preview (live/document pane + metadata/tags/versions), confirmation-driven approve/reject/request-update flows, and a recent activity log.
 - Super Admin profile view added (`/dashboard/profile`) with editable form, skeleton fallbacks, and toast-driven save confirmation.
 - Notifications hub added with mock feed, mark-as-read controls, and header badge synced to AuthProvider.
-- User directory added for super admins with search, filters, and pagination to preview global users.
+- User directory added for super admins with search, filters, pagination, responsive fallback scroll to preview global users on narrow viewports, and a reorganised sidebar sequence (Executive suite → People → Programs → Platform → Guides & support) for faster discovery.
+- Root layout/body now preserves vertical scrolling so login, register, and dashboard surfaces remain accessible on mobile/tablet devices.
 - User detail view delivers tabs for overview/activity/permissions with mock action buttons for reset/deactivation.
-- Profile drawer trigger refactored to reuse the supplied button instead of wrapping it, eliminating nested-button hydration warnings.
+- Profile drawer trigger refactored to reuse the supplied button instead of wrapping it, eliminating nested-button hydration warnings, and core dashboard widgets received responsive polish plus memoisation where needed (StatCard, ActivityFeed).
 
 ### 5. Documentation & Tooling
 - Comprehensive docs in `docs/` covering setup, dashboard architecture, auth flow, style guide, routing, component catalog, TODO roadmap, and project overview.

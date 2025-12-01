@@ -14,6 +14,7 @@ This catalog lists the key reusable components in the frontend, their purpose, a
   action={<Button>Create NGO</Button>}
 />
 ```
+- Responsive: stacks on mobile (`flex-col`) and keeps CTAs full-width before sm breakpoint.
 
 ### `components/dashboard/quick-action-card.tsx`
 - Props: `{ title, description, actionLabel, icon: LucideIcon, onClick?, className? }`
@@ -23,11 +24,12 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 ### `components/dashboard/stat-card.tsx`
 - Props: `{ icon, label, value, trend, statusColor, helper?, children? }`
 - Displays a metric with trend pill (↑/↓), brand-aware tones, and optional slot (used for sparklines).
+- Memoized to avoid unnecessary re-renders when surrounding dashboards refresh.
 - Utilised in admin dashboard metric grid for consistent analytics visuals.
 
 ### `components/dashboard/activity-feed.tsx`
 - Static list of recent events with icon, title, description, and timestamp.
-- Layout: column timeline with vertical accent line and responsive spacing.
+- Memoized; layout stacks items vertically on small screens and uses timeline affordance on md+.
 - Planned upgrade: consume real audit/activity API once available.
 
 ### `components/dashboard/profile-drawer.tsx`
@@ -55,7 +57,7 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 ### `components/ui/drawer.tsx`
 - Controlled slideover used across admin modules (e.g., NGO detail preview).
 - Props: `{ open, onClose, title?, description?, children, footer }`
-- Handles Escape key + backdrop clicks; auto-resizes for mobile.
+- Handles Escape key + backdrop clicks; auto-resizes for mobile and supports full-width handset view.
 
 ### `app/dashboard/admin/ngos/[id]/documents/page.tsx`
 - Page-level pattern for compliance reviews with searchable table, status badges, and drawer actions (approve/reject/request update) powered by `toast`.

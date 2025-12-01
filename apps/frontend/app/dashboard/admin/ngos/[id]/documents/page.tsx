@@ -2,7 +2,17 @@
 
 import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { FileText, Search, ShieldCheck } from "lucide-react";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Clock,
+  FileText,
+  Search,
+  ShieldCheck,
+  Tag,
+  X,
+  XCircle,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { SectionHeader } from "@/components/dashboard/section-header";
@@ -19,9 +29,25 @@ import { Badge } from "@/components/ui/badge";
 import { Drawer } from "@/components/ui/drawer";
 import { SkeletonCard, SkeletonText } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Modal } from "@/components/ui/modal";
 import { cn } from "@/lib/utils";
 
-type DocumentStatus = "Uploaded" | "Pending Review" | "Approved" | "Rejected" | "Missing";
+type DocumentStatus =
+  | "Uploaded"
+  | "Pending Review"
+  | "Approved"
+  | "Rejected"
+  | "Missing"
+  | "Update Requested";
+
+interface DocumentVersion {
+  id: string;
+  label: string;
+  uploadedAt: string;
+  uploadedBy: string;
+  fileType: "pdf" | "image";
+  notes?: string;
+}
 
 interface NgoDocument {
   id: string;
@@ -31,6 +57,8 @@ interface NgoDocument {
   uploadedBy?: string;
   fileType: "pdf" | "image";
   notes?: string;
+  tags?: string[];
+  versions?: DocumentVersion[];
 }
 
 interface NgoDocumentProfile {
@@ -40,7 +68,18 @@ interface NgoDocumentProfile {
   documents: NgoDocument[];
 }
 
-const mockNgoDocuments: Record<string, NgoDocumentProfile> = {
+type ActionType = "approve" | "reject" | "update";
+
+type DocumentActivity = {
+  id: string;
+  message: string;
+  timestamp: string;
+  tone: "info" | "success" | "danger" | "warning";
+};
+
+const availableTags = ["Legal", "Financial", "Compliance", "Personal"] as const;
+
+const mockNgoDocuments: Record<string, NgoDocumentProfile & { activities: Record<string, DocumentActivity[]> }> = {
   "ngo-001": {
     id: "ngo-001",
     ngoName: "Swasthya Seva Foundation",
@@ -54,6 +93,17 @@ const mockNgoDocuments: Record<string, NgoDocumentProfile> = {
         uploadedBy: "Ananya Rao",
         fileType: "pdf",
         notes: "Verified PAN matching registration.",
+        tags: ["Compliance", "Personal"],
+        versions: [
+          {
+            id: "doc-1-v1",
+            label: "Version 1",
+            uploadedAt: "03 Feb 2025",
+            uploadedBy: "Ananya Rao",
+            fileType: "pdf",
+            notes: "Initial submission from NGO portal.",
+          },
+        ],
       },
       {
         id: "doc-2",
@@ -63,6 +113,17 @@ const mockNgoDocuments: Record<string, NgoDocumentProfile> = {
         uploadedBy: "Ananya Rao",
         fileType: "pdf",
         notes: "Awaiting finance team confirmation.",
+        tags: ["Financial", "Compliance"],
+        versions: [
+          {
+            id: "doc-2-v1",
+            label: "Original upload",
+            uploadedAt: "01 Feb 2025",
+            uploadedBy: "Ananya Rao",
+            fileType: "pdf",
+            notes: "Initial 80G upload before revision.",
+          },
+        ],
       },
       {
         id: "doc-3",
@@ -71,6 +132,8 @@ const mockNgoDocuments: Record<string, NgoDocumentProfile> = {
         uploadedAt: "10 Feb 2025",
         uploadedBy: "ImpactBridge Intake",
         fileType: "pdf",
+        tags: ["Compliance"],
+        versions: [],
       },
       {
         id: "doc-4",
@@ -79,14 +142,86 @@ const mockNgoDocuments: Record<string, NgoDocumentProfile> = {
         uploadedAt: "05 Feb 2025",
         uploadedBy: "Compliance Bot",
         fileType: "image",
+        tags: ["Legal"],
+        versions: [
+          {
+            id: "doc-4-v1",
+            label: "Scan upload",
+            uploadedAt: "28 Jan 2025",
+            uploadedBy: "Compliance Bot",
+            fileType: "image",
+          },
+        ],
       },
       {
         id: "doc-5",
         name: "Audit Report FY 23-24",
         status: "Missing",
         fileType: "pdf",
+        tags: ["Financial"],
+        versions: [],
       },
     ],
+    activities: {
+      "doc-1": [
+        {
+          id: "doc-1-activity-1",
+          message: "Admin approved this document at 09:40 AM",
+          timestamp: "05 Feb 2025",
+          tone: "success",
+        },
+        {
+          id: "doc-1-activity-2",
+          message: "Compliance bot verified PAN metadata",
+          timestamp: "05 Feb 2025",
+          tone: "info",
+        },
+        {
+          id: "doc-1-activity-3",
+          message: "Document uploaded by Ananya Rao",
+          timestamp: "05 Feb 2025",
+          tone: "info",
+        },
+      ],
+      "doc-2": [
+        {
+          id: "doc-2-activity-1",
+          message: "Finance reviewer marked document pending at 03:15 PM",
+          timestamp: "08 Feb 2025",
+          tone: "warning",
+        },
+        {
+          id: "doc-2-activity-2",
+          message: "Document uploaded by Ananya Rao",
+          timestamp: "08 Feb 2025",
+          tone: "info",
+        },
+      ],
+      "doc-3": [
+        {
+          id: "doc-3-activity-1",
+          message: "CSR-1 uploaded by ImpactBridge Intake",
+          timestamp: "10 Feb 2025",
+          tone: "info",
+        },
+      ],
+      "doc-4": [
+        {
+          id: "doc-4-activity-1",
+          message: "Compliance bot approved registration proof",
+          timestamp: "05 Feb 2025",
+          tone: "success",
+        },
+      ],
+      "doc-5": [
+        {
+          id: "doc-5-activity-1",
+          message: "Audit report pending upload reminder sent",
+          timestamp: "11 Feb 2025",
+          tone: "warning",
+        },
+      ],
+    },
   },
   "ngo-002": {
     id: "ngo-002",
@@ -100,6 +235,16 @@ const mockNgoDocuments: Record<string, NgoDocumentProfile> = {
         uploadedAt: "12 Jan 2025",
         uploadedBy: "Meera Singh",
         fileType: "pdf",
+        tags: ["Compliance", "Personal"],
+        versions: [
+          {
+            id: "doc-6-v1",
+            label: "Earlier upload",
+            uploadedAt: "05 Jan 2025",
+            uploadedBy: "Meera Singh",
+            fileType: "pdf",
+          },
+        ],
       },
       {
         id: "doc-7",
@@ -109,6 +254,16 @@ const mockNgoDocuments: Record<string, NgoDocumentProfile> = {
         uploadedBy: "Meera Singh",
         fileType: "pdf",
         notes: "Requires board verification update.",
+        tags: ["Legal", "Compliance"],
+        versions: [
+          {
+            id: "doc-7-v1",
+            label: "Submission draft",
+            uploadedAt: "02 Feb 2025",
+            uploadedBy: "Meera Singh",
+            fileType: "pdf",
+          },
+        ],
       },
       {
         id: "doc-8",
@@ -118,8 +273,70 @@ const mockNgoDocuments: Record<string, NgoDocumentProfile> = {
         uploadedBy: "Finance Reviewer",
         fileType: "pdf",
         notes: "Signatory mismatch, ask to reupload.",
+        tags: ["Financial"],
+        versions: [
+          {
+            id: "doc-8-v1",
+            label: "Auditor upload",
+            uploadedAt: "20 Jan 2025",
+            uploadedBy: "Finance Reviewer",
+            fileType: "pdf",
+            notes: "First draft shared post-audit.",
+          },
+          {
+            id: "doc-8-v2",
+            label: "Second revision",
+            uploadedAt: "28 Jan 2025",
+            uploadedBy: "Finance Reviewer",
+            fileType: "pdf",
+          },
+        ],
       },
     ],
+    activities: {
+      "doc-6": [
+        {
+          id: "doc-6-activity-1",
+          message: "Admin approved this document at 11:10 AM",
+          timestamp: "12 Jan 2025",
+          tone: "success",
+        },
+      ],
+      "doc-7": [
+        {
+          id: "doc-7-activity-1",
+          message: "Marked pending for board verification",
+          timestamp: "09 Feb 2025",
+          tone: "warning",
+        },
+        {
+          id: "doc-7-activity-2",
+          message: "Document uploaded by Meera Singh",
+          timestamp: "09 Feb 2025",
+          tone: "info",
+        },
+      ],
+      "doc-8": [
+        {
+          id: "doc-8-activity-1",
+          message: "Admin rejected this document at 05:22 PM",
+          timestamp: "02 Feb 2025",
+          tone: "danger",
+        },
+        {
+          id: "doc-8-activity-2",
+          message: "Finance reviewer flagged signatory mismatch",
+          timestamp: "02 Feb 2025",
+          tone: "warning",
+        },
+        {
+          id: "doc-8-activity-3",
+          message: "Document uploaded by Finance Reviewer",
+          timestamp: "02 Feb 2025",
+          tone: "info",
+        },
+      ],
+    },
   },
 };
 
@@ -130,6 +347,7 @@ const statuses: Array<"all" | DocumentStatus> = [
   "Approved",
   "Rejected",
   "Missing",
+  "Update Requested",
 ];
 
 const statusTone: Record<DocumentStatus, string> = {
@@ -138,6 +356,17 @@ const statusTone: Record<DocumentStatus, string> = {
   Approved: "bg-emerald-100 text-emerald-700",
   Rejected: "bg-rose-100 text-rose-700",
   Missing: "bg-slate-200 text-slate-600",
+  "Update Requested": "border border-amber-200 bg-amber-50 text-amber-700",
+};
+
+const activityIcons: Record<
+  DocumentActivity["tone"],
+  { icon: React.ComponentType<{ className?: string }>; toneClass: string }
+> = {
+  info: { icon: Clock, toneClass: "bg-slate-100 text-slate-600" },
+  warning: { icon: AlertTriangle, toneClass: "bg-amber-100 text-amber-700" },
+  success: { icon: CheckCircle2, toneClass: "bg-emerald-100 text-emerald-700" },
+  danger: { icon: XCircle, toneClass: "bg-rose-100 text-rose-700" },
 };
 
 export default function NgoDocumentsPage() {
@@ -145,6 +374,18 @@ export default function NgoDocumentsPage() {
   const router = useRouter();
   const ngoId = Array.isArray(params?.id) ? params.id[0] : (params?.id as string | undefined);
   const profile = ngoId ? mockNgoDocuments[ngoId] : undefined;
+  const [documents, setDocuments] = useState<NgoDocument[]>(() => profile?.documents ?? []);
+  const [activityMap, setActivityMap] = useState<Record<string, DocumentActivity[]>>(
+    () => profile?.activities ?? {},
+  );
+  const [tagSelections, setTagSelections] = useState<Record<string, string[]>>(() => {
+    if (!profile) return {};
+    return Object.fromEntries(profile.documents.map((doc) => [doc.id, doc.tags ?? []]));
+  });
+  const [previewVersion, setPreviewVersion] = useState<Record<string, string | null>>(() => {
+    if (!profile) return {};
+    return Object.fromEntries(profile.documents.map((doc) => [doc.id, null]));
+  });
 
   useEffect(() => {
     if (ngoId && !profile) {
@@ -152,10 +393,25 @@ export default function NgoDocumentsPage() {
     }
   }, [ngoId, profile]);
 
+  useEffect(() => {
+    if (profile) {
+      setDocuments(profile.documents);
+      setActivityMap(profile.activities);
+      setTagSelections(
+        Object.fromEntries(profile.documents.map((doc) => [doc.id, doc.tags ?? []])),
+      );
+      setPreviewVersion(Object.fromEntries(profile.documents.map((doc) => [doc.id, null])));
+    }
+  }, [profile]);
+
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<(typeof statuses)[number]>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDocument, setSelectedDocument] = useState<NgoDocument | null>(null);
+  const [pendingAction, setPendingAction] = useState<
+    { type: ActionType; document: NgoDocument } | null
+  >(null);
+  const [tagPickerNonce, setTagPickerNonce] = useState(0);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setLoading(false), 600);
@@ -167,12 +423,12 @@ export default function NgoDocumentsPage() {
       return [] as NgoDocument[];
     }
     const query = searchQuery.trim().toLowerCase();
-    return profile.documents.filter((document) => {
+    return documents.filter((document) => {
       const matchesStatus = statusFilter === "all" || document.status === statusFilter;
       const matchesQuery = query.length === 0 || document.name.toLowerCase().includes(query);
       return matchesStatus && matchesQuery;
     });
-  }, [profile, searchQuery, statusFilter]);
+  }, [profile, documents, searchQuery, statusFilter]);
 
   if (!profile) {
     return null;
@@ -188,21 +444,83 @@ export default function NgoDocumentsPage() {
     );
   }
 
-  const handleApprove = () => {
-    if (!selectedDocument) return;
-    toast.success(`${selectedDocument.name} approved (mock)`);
-    setSelectedDocument(null);
+  const confirmAction = (type: ActionType, document: NgoDocument) => {
+    setPendingAction({ type, document });
   };
 
-  const handleReject = () => {
-    if (!selectedDocument) return;
-    toast.error(`${selectedDocument.name} rejected (mock)`);
-    setSelectedDocument(null);
+  const getEffectiveDocument = (document: NgoDocument) => {
+    const activeVersionId = previewVersion[document.id];
+    if (!activeVersionId) {
+      return document;
+    }
+
+    const version = document.versions?.find((item) => item.id === activeVersionId);
+    if (!version) {
+      return document;
+    }
+
+    return {
+      ...document,
+      uploadedAt: version.uploadedAt,
+      uploadedBy: version.uploadedBy,
+      fileType: version.fileType,
+      notes: version.notes ?? document.notes,
+    } as NgoDocument;
   };
 
-  const handleRequestUpdate = () => {
-    if (!selectedDocument) return;
-    toast.info(`Requested update for ${selectedDocument.name} (mock)`);
+  const applyAction = () => {
+    if (!pendingAction) return;
+    const { type, document } = pendingAction;
+
+    setDocuments((prev) =>
+      prev.map((item) => {
+        if (item.id !== document.id) return item;
+        if (type === "approve") {
+          return { ...item, status: "Approved" };
+        }
+        if (type === "reject") {
+          return { ...item, status: "Rejected" };
+        }
+        return { ...item, status: "Update Requested" };
+      }),
+    );
+
+    const newEntry: DocumentActivity = {
+      id: `${document.id}-activity-${Date.now()}`,
+      message:
+        type === "approve"
+          ? `Admin approved this document at ${new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}`
+          : type === "reject"
+          ? `Admin rejected this document at ${new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}`
+          : `Admin requested an update at ${new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}`,
+      timestamp: new Date().toLocaleDateString(),
+      tone: type === "approve" ? "success" : type === "reject" ? "danger" : "warning",
+    };
+
+    setActivityMap((prev) => {
+      const existing = prev[document.id] ?? [];
+      const updated = [newEntry, ...existing].slice(0, 5);
+      return { ...prev, [document.id]: updated };
+    });
+
+    if (type === "approve") {
+      toast.success(`${document.name} approved.`);
+    } else if (type === "reject") {
+      toast.error(`${document.name} rejected.`);
+    } else {
+      toast.warning(`Update requested for ${document.name}.`);
+    }
+
+    setPendingAction(null);
     setSelectedDocument(null);
   };
 
@@ -266,7 +584,12 @@ export default function NgoDocumentsPage() {
                 <TableRow key={document.id} className="text-sm text-slate-700">
                   <TableCell className="font-semibold text-slate-900">{document.name}</TableCell>
                   <TableCell>
-                    <span className={cn("inline-flex rounded-full px-3 py-1 text-xs font-semibold", statusTone[document.status])}>
+                    <span
+                      className={cn(
+                        "inline-flex rounded-full px-3 py-1 text-xs font-semibold",
+                        statusTone[document.status],
+                      )}
+                    >
                       {document.status}
                     </span>
                   </TableCell>
@@ -297,13 +620,24 @@ export default function NgoDocumentsPage() {
         footer={
           selectedDocument ? (
             <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
-              <Button variant="outline" className="gap-2" onClick={handleRequestUpdate}>
+              <Button
+                variant="outline"
+                className="gap-2 border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100"
+                onClick={() => confirmAction("update", selectedDocument)}
+              >
                 Request Update
               </Button>
-              <Button variant="outline" className="gap-2 border-rose-200 text-rose-600 hover:bg-rose-50" onClick={handleReject}>
+              <Button
+                variant="outline"
+                className="gap-2 border-rose-300 bg-rose-50 text-rose-600 hover:bg-rose-100"
+                onClick={() => confirmAction("reject", selectedDocument)}
+              >
                 Reject
               </Button>
-              <Button className="gap-2" onClick={handleApprove}>
+              <Button
+                className="gap-2 bg-emerald-600 hover:bg-emerald-500"
+                onClick={() => confirmAction("approve", selectedDocument)}
+              >
                 Approve
               </Button>
             </div>
@@ -311,46 +645,248 @@ export default function NgoDocumentsPage() {
         }
       >
         {selectedDocument ? (
-          <div className="space-y-5">
-            <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600">
-              <Badge variant="outline" className={cn("border px-3 py-1", statusTone[selectedDocument.status])}>
-                {selectedDocument.status}
-              </Badge>
-              <span className="inline-flex items-center gap-2 text-xs text-slate-500">
-                <ShieldCheck className="h-4 w-4 text-slate-400" />
-                {selectedDocument.fileType.toUpperCase()} preview
-              </span>
-            </div>
+          (() => {
+            const effectiveDocument = getEffectiveDocument(selectedDocument);
+            const selectedTags = tagSelections[selectedDocument.id] ?? [];
+            const availableTagOptions = availableTags.filter(
+              (tag) => !selectedTags.includes(tag),
+            );
 
-            <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-600">
-              <div className="flex flex-wrap gap-6">
-                <div>
-                  <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Uploaded by</span>
-                  <p className="mt-1 font-medium text-slate-800">{selectedDocument.uploadedBy ?? "Not provided"}</p>
-                </div>
-                <div>
-                  <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Uploaded on</span>
-                  <p className="mt-1 font-medium text-slate-800">{selectedDocument.uploadedAt ?? "Not provided"}</p>
-                </div>
-              </div>
-              <div>
-                <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Notes</span>
-                <p className="mt-1 leading-relaxed text-slate-600">
-                  {selectedDocument.notes ?? "No reviewer notes attached yet."}
-                </p>
-              </div>
-            </div>
+            return (
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-600 lg:flex-row">
+                  <div className="lg:w-1/2">
+                    <div className="relative flex h-[22rem] items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white text-slate-400">
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="pointer-events-none whitespace-nowrap text-center text-lg font-semibold uppercase tracking-[0.6em] text-slate-200">
+                          CONFIDENTIAL — ImpactBridge
+                        </div>
+                      </div>
+                      <div className="relative z-10 text-center">
+                        <FileText className="mx-auto h-12 w-12" />
+                        <p className="mt-3 text-sm text-slate-500">Document preview placeholder</p>
+                        <p className="text-xs text-slate-400">Embed PDF/image viewer once backend storage integrates.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-1 flex-col gap-4 lg:w-1/2">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <Badge
+                        variant="outline"
+                        className={cn("border px-3 py-1", statusTone[effectiveDocument.status])}
+                      >
+                        {effectiveDocument.status}
+                      </Badge>
+                      <span className="inline-flex items-center gap-2 text-xs text-slate-500">
+                        <ShieldCheck className="h-4 w-4 text-slate-400" />
+                        {effectiveDocument.fileType.toUpperCase()} preview
+                      </span>
+                    </div>
+                    <div className="grid gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Uploaded by</span>
+                        <span className="font-medium text-slate-800">
+                          {effectiveDocument.uploadedBy ?? "Not provided"}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Uploaded on</span>
+                        <span className="font-medium text-slate-800">
+                          {effectiveDocument.uploadedAt ?? "Not provided"}
+                        </span>
+                      </div>
+                      <div className="flex items-start justify-between gap-3">
+                        <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Notes</span>
+                        <span className="max-w-[360px] text-right leading-relaxed text-slate-600">
+                          {effectiveDocument.notes ?? "No reviewer notes attached yet."}
+                        </span>
+                      </div>
+                    </div>
 
-            <div className="flex h-72 w-full items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white text-slate-400">
-              <div className="text-center">
-                <FileText className="mx-auto h-10 w-10" />
-                <p className="mt-2 text-sm">Document preview placeholder</p>
-                <p className="text-xs">Embed PDF/image viewer once backend storage integrates.</p>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+                          Tags
+                        </h4>
+                        {availableTagOptions.length > 0 ? (
+                          <Select
+                            key={`${selectedDocument.id}-${availableTagOptions.length}-${tagPickerNonce}`}
+                            onValueChange={(value) => {
+                              const nextTag = value as (typeof availableTags)[number];
+                              setTagSelections((prev) => {
+                                const current = prev[selectedDocument.id] ?? [];
+                                return { ...prev, [selectedDocument.id]: [...current, nextTag] };
+                              });
+                              setTagPickerNonce((prev) => prev + 1);
+                            }}
+                          >
+                            <SelectTrigger className="h-8 w-32 rounded-full border-slate-200 bg-white text-xs font-medium text-slate-600 shadow-sm transition hover:border-slate-300">
+                              <SelectValue placeholder="Add tag" />
+                            </SelectTrigger>
+                            <SelectContent className="rounded-xl border border-slate-200 bg-white shadow-lg">
+                              {availableTagOptions.map((tag) => (
+                                <SelectItem key={tag} value={tag}>
+                                  {tag}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        ) : null}
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedTags.length === 0 ? (
+                          <span className="text-xs text-slate-400">No tags yet</span>
+                        ) : null}
+                        {selectedTags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700"
+                          >
+                            <Tag className="h-3.5 w-3.5 text-slate-500" />
+                            {tag}
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setTagSelections((prev) => {
+                                  const current = prev[selectedDocument.id] ?? [];
+                                  return {
+                                    ...prev,
+                                    [selectedDocument.id]: current.filter((item) => item !== tag),
+                                  };
+                                })
+                              }
+                              className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white text-slate-400 transition hover:bg-slate-200 hover:text-slate-600"
+                              aria-label={`Remove ${tag}`}
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
+                  <div className="space-y-3 rounded-2xl border border-slate-200 bg-white px-5 py-4">
+                    <h4 className="text-sm font-semibold text-slate-900">Version history</h4>
+                    <div className="space-y-2 text-sm text-slate-600">
+                      {(selectedDocument.versions ?? []).length === 0 ? (
+                        <p className="text-xs text-slate-400">No prior versions uploaded.</p>
+                      ) : null}
+                      {selectedDocument.versions?.map((version) => {
+                        const isActive = previewVersion[selectedDocument.id] === version.id;
+                        return (
+                          <button
+                            key={version.id}
+                            type="button"
+                            onClick={() =>
+                              setPreviewVersion((prev) => ({
+                                ...prev,
+                                [selectedDocument.id]: isActive ? null : version.id,
+                              }))
+                            }
+                            className={cn(
+                              "flex w-full items-center justify-between rounded-xl border px-4 py-2 text-left transition",
+                              isActive
+                                ? "border-emerald-300 bg-emerald-50"
+                                : "border-slate-200 hover:border-slate-300 hover:bg-slate-50",
+                            )}
+                          >
+                            <div>
+                              <p className="text-sm font-semibold text-slate-800">{version.label}</p>
+                              <p className="text-xs text-slate-500">
+                                Uploaded {version.uploadedAt} · {version.uploadedBy}
+                              </p>
+                            </div>
+                            <span className="text-xs font-semibold text-slate-500">
+                              {isActive ? "Viewing" : "View"}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 rounded-2xl border border-slate-200 bg-white px-5 py-4">
+                    <h4 className="text-sm font-semibold text-slate-900">Recent activity</h4>
+                    <div className="space-y-2">
+                      {(activityMap[selectedDocument.id] ?? []).map((entry) => {
+                        const Icon = activityIcons[entry.tone].icon;
+                        return (
+                          <div
+                            key={entry.id}
+                            className="flex items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50/70 px-3 py-2 text-xs text-slate-600"
+                          >
+                            <span
+                              className={cn(
+                                "flex h-8 w-8 items-center justify-center rounded-2xl",
+                                activityIcons[entry.tone].toneClass,
+                              )}
+                            >
+                              <Icon className="h-3.5 w-3.5" />
+                            </span>
+                            <div className="flex flex-1 flex-col gap-0.5">
+                              <span className="font-medium text-slate-700">{entry.message}</span>
+                              <span className="text-[10px] uppercase tracking-wide text-slate-400">
+                                {entry.timestamp}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            );
+          })()
         ) : null}
       </Drawer>
+
+      <Modal
+        open={Boolean(pendingAction)}
+        onClose={() => setPendingAction(null)}
+        title="Confirm action"
+        description={
+          pendingAction
+            ? `Are you sure you want to ${
+                pendingAction.type === "approve"
+                  ? "approve"
+                  : pendingAction.type === "reject"
+                  ? "reject"
+                  : "request an update for"
+              } ${pendingAction.document.name}?`
+            : undefined
+        }
+        size="sm"
+        footer={
+          pendingAction ? (
+            <>
+              <Button variant="outline" onClick={() => setPendingAction(null)}>
+                Cancel
+              </Button>
+              <Button
+                className={cn(
+                  pendingAction.type === "approve" && "bg-emerald-600 hover:bg-emerald-500",
+                  pendingAction.type === "reject" && "bg-rose-600 hover:bg-rose-500",
+                  pendingAction.type === "update" && "bg-amber-600 hover:bg-amber-500",
+                )}
+                onClick={applyAction}
+              >
+                Confirm
+              </Button>
+            </>
+          ) : null
+        }
+      >
+        {pendingAction ? (
+          <p className="text-sm text-slate-600">
+            This action will update the document status and log an activity entry so the NGO can track the
+            decision.
+          </p>
+        ) : null}
+      </Modal>
     </div>
   );
 }

@@ -169,8 +169,8 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
   };
 
   return (
-    <div className="flex h-screen w-full bg-gradient-to-br from-slate-50 via-white to-slate-100">
-      <aside className="hidden h-full w-[270px] md:flex">
+    <div className="flex min-h-screen w-full bg-gradient-to-br from-slate-50 via-white to-slate-100">
+      <aside className="hidden h-full w-[260px] md:flex">
         <div className="sticky top-0 flex h-full w-full flex-col overflow-y-auto border-r border-slate-200 bg-white px-6 py-8 text-slate-800">
           <Link
             href="/dashboard/admin"
@@ -208,7 +208,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
         </div>
       </aside>
 
-      <div className="flex flex-1 flex-col">
+      <div className="flex w-full flex-1 flex-col overflow-hidden">
         <header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200 bg-white/95 px-4 py-4 shadow-sm backdrop-blur sm:px-6 lg:px-10">
           <button
             type="button"
@@ -285,7 +285,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
 
         {mobileOpen ? (
           <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm md:hidden">
-            <div className="absolute inset-y-0 right-0 flex w-72 flex-col gap-6 bg-white p-6 shadow-2xl">
+            <div className="absolute inset-y-0 right-0 flex w-full max-w-xs flex-col gap-6 bg-white p-6 shadow-2xl">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-semibold text-slate-900">{user?.name}</p>
@@ -329,8 +329,8 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
             </div>
           </div>
         ) : null}
-        <main className="flex-1 overflow-y-auto p-6 lg:p-10">
-          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm lg:p-8">
+        <main className="flex-1 overflow-y-auto px-4 py-4 sm:px-6 sm:py-6 lg:px-10 lg:py-8">
+          <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 lg:p-8">
             <div className="space-y-8">{children}</div>
           </section>
         </main>

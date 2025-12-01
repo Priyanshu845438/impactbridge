@@ -2,7 +2,7 @@
 
 ## Brand Palette
 - Primary Blue: `#0A2540`
-- Highlight Violet: `#5B2BEA`
+- Highlight Blue: `#4A6DFB`
 - Accent Emerald: `#10B981`
 - Supporting Slate tones via Tailwind slate scale
 

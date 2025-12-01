@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import type { LucideIcon } from "lucide-react";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -37,7 +38,7 @@ type StatCardProps = {
   children?: React.ReactNode;
 };
 
-export function StatCard({
+export const StatCard = React.memo(function StatCard({
   icon: Icon,
   label,
   value,
@@ -76,5 +77,4 @@ export function StatCard({
       {children ? <div className="mt-4">{children}</div> : null}
     </article>
   );
-}
-
+});

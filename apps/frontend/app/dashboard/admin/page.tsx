@@ -95,6 +95,65 @@ export default function AdminDashboard() {
     },
   ] as const;
 
+  const oversightSnapshot = [
+    {
+      title: "Verifications due",
+      metric: "12 NGOs",
+      helper: "Across legal, financial, compliance tracks",
+      tone: "amber" as const,
+    },
+    {
+      title: "Funds disbursing",
+      metric: "₹2.4 Cr",
+      helper: "In settlement over next 7 days",
+      tone: "indigo" as const,
+    },
+    {
+      title: "Impact reports",
+      metric: "9 due",
+      helper: "Awaiting quarterly validation",
+      tone: "slate" as const,
+    },
+  ];
+
+  const pipelineMilestones = [
+    {
+      label: "CSR-1 onboarding",
+      owner: "Compliance desk",
+      status: "On track",
+      eta: "Mar 04",
+    },
+    {
+      label: "Green Earth audit",
+      owner: "Finance ops",
+      status: "Attention",
+      eta: "Feb 28",
+    },
+    {
+      label: "North region due diligence",
+      owner: "Field review",
+      status: "Scheduled",
+      eta: "Mar 12",
+    },
+    {
+      label: "Platform policy refresh",
+      owner: "Governance",
+      status: "Drafting",
+      eta: "Mar 20",
+    },
+  ];
+
+  const assuranceNotes = [
+    {
+      title: "Weekly compliance window",
+      detail: "Finance and legal teams aligned on dual approvals for high-value CSR uploads.",
+    },
+    {
+      title: "Partner sentiment",
+      detail: "Average donor NPS 4.6/5 across the past fortnight with positive comments on reporting cadence.",
+    },
+  ];
+
   if (loading) {
     return (
       <div className="space-y-8">
@@ -143,58 +202,67 @@ export default function AdminDashboard() {
   return (
     <div
       className={cn(
-        "space-y-8 opacity-0",
+        "space-y-10 opacity-0",
         mounted ? "animate-in fade-in duration-500 opacity-100" : "",
       )}
     >
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-        <div className="rounded-3xl border border-slate-200/70 bg-white/95 p-6 shadow-sm transition-all duration-200 hover:scale-[1.01]">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-                Platform activity last 30 days
+      <section className="rounded-3xl border border-slate-200/80 bg-white/95 p-6 shadow-sm">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,2.4fr)_minmax(0,1.6fr)]">
+          <div className="flex flex-col justify-between gap-6">
+            <div className="space-y-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Executive overview</p>
+              <h1 className="text-2xl font-semibold text-slate-900">
+                Platform engagement across the last 30 days
+              </h1>
+              <p className="text-sm text-slate-600">
+                Monitor activity velocity, programme submissions, and user sentiment to keep CSR operations predictable.
               </p>
-              <h2 className="text-2xl font-semibold text-slate-900">Engagement pulse</h2>
             </div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
-              <TrendingUp className="h-3.5 w-3.5" />
-              +18% vs previous
-            </span>
+            <div className="rounded-2xl border border-slate-200 bg-white/95 p-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
+                  Platform activity
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
+                  <TrendingUp className="h-3.5 w-3.5" />
+                  +18% vs previous
+                </span>
+              </div>
+              <div className="mt-4">
+                <AreaChart data={activitySeries} height={180} />
+              </div>
+            </div>
           </div>
-          <div className="mt-6">
-            <AreaChart data={activitySeries} height={180} />
+          <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+            <KpiCard
+              label="New NGOs this month"
+              value="42"
+              delta={calculateDelta(ngoSeries)}
+              data={ngoSeries}
+            />
+            <KpiCard
+              label="CSR funds committed"
+              value="₹4.8 Cr"
+              delta={calculateDelta(fundsSeries)}
+              data={fundsSeries}
+              tone="emerald"
+            />
+            <KpiCard
+              label="Active users trend"
+              value="1.8k"
+              delta={calculateDelta(activeUserSeries)}
+              data={activeUserSeries}
+              tone="indigo"
+            />
           </div>
         </div>
+      </section>
 
-        <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
-          <KpiCard
-            label="New NGOs this month"
-            value="42"
-            delta={calculateDelta(ngoSeries)}
-            data={ngoSeries}
-          />
-          <KpiCard
-            label="CSR funds committed"
-            value="₹4.8 Cr"
-            delta={calculateDelta(fundsSeries)}
-            data={fundsSeries}
-            tone="emerald"
-          />
-          <KpiCard
-            label="Active users trend"
-            value="1.8k"
-            delta={calculateDelta(activeUserSeries)}
-            data={activeUserSeries}
-            tone="indigo"
-          />
-        </div>
-      </div>
-
-      <div className="rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm transition-all duration-200 hover:scale-[1.01]">
+      <section className="rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">CSR submissions</p>
-            <h3 className="text-xl font-semibold text-slate-900">Last 30 days</h3>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">CSR submissions</p>
+            <h3 className="text-xl font-semibold text-slate-900">Performance over the last month</h3>
           </div>
           <span className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
             <TrendingUp className="h-3.5 w-3.5" />
@@ -208,13 +276,13 @@ export default function AdminDashboard() {
               <XAxis dataKey="label" tickLine={false} axisLine={false} interval={5} tick={{ fill: "#94a3b8", fontSize: 11 }} />
               <YAxis hide domain={[0, "dataMax + 6"]} />
               <Tooltip cursor={{ stroke: "#6366f1", strokeWidth: 1, strokeDasharray: "3 3" }} content={<CustomTooltip />} />
-              <Line type="monotone" dataKey="value" stroke="#4f46e5" strokeWidth={2.5} dot={false} activeDot={{ r: 6 }} />
+              <Line type="monotone" dataKey="value" stroke="#4a6dfb" strokeWidth={2.5} dot={false} activeDot={{ r: 6 }} />
             </RechartsLineChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </section>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
           icon={Users2}
           label="User count"
@@ -255,18 +323,73 @@ export default function AdminDashboard() {
         >
           <Sparkline data={healthSeries} height={64} area tone="emerald" />
         </StatCard>
-      </div>
+      </section>
 
-      <div className="space-y-4">
+      <section className="space-y-6 rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm">
+        <SectionHeader title="Operational oversight" subtitle="Live workload, milestones, and governance notes" />
+        <div className="grid gap-4 md:grid-cols-3">
+          {oversightSnapshot.map((item) => (
+            <div
+              key={item.title}
+              className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white px-4 py-4"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
+                {item.title}
+              </p>
+              <p className="mt-2 text-xl font-semibold text-slate-900">{item.metric}</p>
+              <p className="mt-1 text-xs text-slate-500">{item.helper}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+          <div className="rounded-2xl border border-slate-200 bg-white/90 p-4">
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-semibold text-slate-900">Programme milestones</h4>
+              <span className="text-xs uppercase tracking-[0.28em] text-slate-400">2 week view</span>
+            </div>
+            <div className="mt-3 divide-y divide-slate-100 text-sm text-slate-600">
+              {pipelineMilestones.map((milestone) => (
+                <div key={milestone.label} className="flex flex-col gap-1 py-3 md:flex-row md:items-center md:justify-between">
+                  <div className="space-y-1">
+                    <p className="font-medium text-slate-800">{milestone.label}</p>
+                    <p className="text-xs text-slate-500">Owner: {milestone.owner}</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                      {milestone.status}
+                    </span>
+                    <span className="text-xs text-slate-500">ETA {milestone.eta}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-3 rounded-2xl border border-slate-200 bg-white/90 p-4">
+            <h4 className="text-sm font-semibold text-slate-900">Risk & assurance notes</h4>
+            <div className="space-y-3 text-sm text-slate-600">
+              {assuranceNotes.map((note) => (
+                <div key={note.title} className="rounded-xl border border-slate-100 bg-slate-50/70 px-4 py-3">
+                  <p className="text-sm font-semibold text-slate-800">{note.title}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-slate-600">{note.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="space-y-4">
         <SectionHeader title="Quick actions" subtitle="Common control centre tasks for administrators" />
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {quickActions.map((action) => (
             <QuickActionCard key={action.title} {...action} />
           ))}
         </div>
-      </div>
+      </section>
 
-      <ActivityFeed className="pt-4" />
+      <ActivityFeed className="pt-2" />
     </div>
   );
 }
@@ -290,7 +413,7 @@ function KpiCard({ label, value, delta, data, tone = "slate" }: KpiCardProps) {
   }[tone];
 
   return (
-    <div className={cn("rounded-3xl border border-slate-200 bg-gradient-to-br p-4 shadow-sm transition-all duration-200 hover:scale-[1.01]", toneClasses)}>
+    <div className={cn("rounded-3xl border border-slate-200 bg-gradient-to-br p-4 shadow-sm", toneClasses)}>
       <div className="flex items-start justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">{label}</p>

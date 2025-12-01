@@ -219,3 +219,27 @@
 ## 55. [FE] Profile drawer trigger de-nested to eliminate hydration warning.
 - Refactored `components/dashboard/profile-drawer.tsx` to clone the trigger button instead of wrapping it, removing nested `<button>` markup and hydration noise.
 - Updated dashboard/setup/component docs and refreshed the progress report/TODO with guidance on keeping single-button triggers intact; lint/build confirmed clean.
+
+## 56. [FE] Responsive polish + memoization pass across dashboards.
+- Adjusted dashboard shell, NGO management tables, cards, and profile forms to tighten mobile/tablet breakpoints (flex reflow, scrollable tables, drawer widths) without altering design intent.
+- Added memoization to stat/activity widgets, tweaked SectionHeader/table primitives, and updated docs to reflect the responsiveness/performance sweep; lint/build remain green.
+
+## 57. [FE] Global scrolling + auth layout responsiveness.
+- Enabled vertical scrolling across auth flows and dashboard by removing body-level overflow lock and updating login/register/forgot/reset wrappers.
+- Tuned dashboard shell to preserve overflow handling, ensured admin tables use horizontal scroll on narrow viewports, and validated NGO/user modules on mobile.
+- Refreshed dashboard + progress docs with the responsive notes and reran lint/build to confirm a clean state.
+
+## 58. [FE] Document approvals workflow polished.
+- Upgraded NGO document drawer with confirmation overlays, coloured action buttons, toast feedback, and status badge updates.
+- Added per-document activity log plus mock history entries; table now reflects Approved/Rejected/Update Requested states instantly.
+- Updated dashboard/progress docs to capture the richer compliance workflow and ran lint to verify.
+
+## 59. [FE] Sidebar menu reordered for clarity.
+- Reorganised `lib/nav-menu.ts` into executive, people, programs, platform, and guides groupings with refreshed labels.
+- Added NGO workspace overview entry and refined resource links; lint run confirms clean state.
+- Documented the navigation change across dashboard/progress docs for future onboarding.
+
+## 60. [FE] Document security preview enhanced.
+- Revamped NGO document drawer with split preview, watermark, metadata panel, tag management UI, and mock version history swapping.
+- Added tag state handling, version selection, and improved activity feed layout; ensured responsive behaviour on desktop/tablet.
+- Updated dashboard/progress docs and verified clean lint run.

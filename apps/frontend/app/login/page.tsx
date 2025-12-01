@@ -88,7 +88,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col overflow-hidden text-slate-50">
+    <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden overflow-y-auto text-slate-50">
       <Image
         src="/images/login_signup_bg.webp"
         alt="ImpactBridge backdrop"

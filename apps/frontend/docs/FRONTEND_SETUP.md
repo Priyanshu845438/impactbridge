@@ -18,7 +18,7 @@
   - `dashboard/`
   - `layout.tsx` protected workspace + nested sidebar
   - role pages: `admin`, `ngo`, `company`, `donor`
-    - admin modules: `app/dashboard/admin/modules/{ngos,programmes,reports,settings}` (NGO screen now includes mock table UI with sorting, pagination, drawer, and multi-filter controls)
+    - admin modules: `app/dashboard/admin/modules/{ngos,programmes,reports,settings}` (NGO screen now includes mock table UI with responsive search/filter rows, sorting, pagination, drawer, and multi-filter controls)
     - super admin utilities: `app/dashboard/users` (global user directory), `notifications`, `profile`
 - `components/`
   - `dashboard/`
@@ -41,7 +41,7 @@
 - `agents.md` running changelog per instruction
 
 ## Styling & Theme Layers
-- Brand palette anchored on navy `#0A2540` with violet accent `#5B2BEA`
+- Brand palette anchored on navy `#0A2540` with highlight blue `#4A6DFB`
 - `globals.css` applies body gradient, glassmorphism helpers, shimmer keyframes
 - Cards use `backdrop-blur`, translucent whites, and responsive padding (`max-[480px]`)
 - Dashboard shell uses `flex w-full h-screen` to avoid gaps between sidebar/content

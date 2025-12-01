@@ -13,7 +13,10 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className={cn("w-full min-h-screen flex flex-col bg-neutral-50 overflow-hidden font-sans antialiased")}
+      <body
+        className={cn(
+          "flex min-h-screen w-full flex-col overflow-x-hidden bg-neutral-50 font-sans antialiased",
+        )}
         suppressHydrationWarning
         data-next-api-runtime="frontend"
         data-layout-version="2024-CSR"

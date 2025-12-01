@@ -1,8 +1,8 @@
 import {
+  BookOpen,
   ClipboardList,
   FileBarChart,
   FolderKanban,
-  GraduationCap,
   HandCoins,
   LayoutDashboard,
   LifeBuoy,
@@ -24,18 +24,18 @@ export interface NavItem {
 
 export const navMenu: NavItem[] = [
   {
-    label: "Executive suite",
+    label: "Executive overview",
     icon: LayoutDashboard,
     roles: ["SUPER_ADMIN"],
-    group: "Administration",
+    group: "Executive suite",
     children: [
       {
-        label: "Overview",
+        label: "Dashboard overview",
         href: "/dashboard/admin",
         roles: ["SUPER_ADMIN"],
       },
       {
-        label: "Performance",
+        label: "Performance insights",
         href: "/dashboard/admin/performance",
         roles: ["SUPER_ADMIN"],
       },
@@ -47,18 +47,23 @@ export const navMenu: NavItem[] = [
     ],
   },
   {
-    label: "Users",
+    label: "User directory",
     icon: Users,
     roles: ["SUPER_ADMIN"],
-    group: "Administration",
+    group: "People",
     href: "/dashboard/users",
   },
   {
-    label: "NGO management",
+    label: "NGO operations",
     icon: Users2,
     roles: ["SUPER_ADMIN"],
-    group: "Administration",
+    group: "People",
     children: [
+      {
+        label: "Workspace overview",
+        href: "/dashboard/admin/modules/ngos",
+        roles: ["SUPER_ADMIN"],
+      },
       {
         label: "Review queue",
         href: "/dashboard/admin/modules/ngos/review-queue",
@@ -74,18 +79,13 @@ export const navMenu: NavItem[] = [
         href: "/dashboard/admin/modules/ngos/impact-portfolio",
         roles: ["SUPER_ADMIN"],
       },
-      {
-        label: "Compliance documents",
-        href: "/dashboard/admin/modules/ngos/compliance-documents",
-        roles: ["SUPER_ADMIN"],
-      },
     ],
   },
   {
     label: "CSR programmes",
     icon: ClipboardList,
     roles: ["SUPER_ADMIN"],
-    group: "Administration",
+    group: "Programs",
     children: [
       {
         label: "Pipeline",
@@ -108,7 +108,7 @@ export const navMenu: NavItem[] = [
     label: "Reports & analytics",
     icon: FileBarChart,
     roles: ["SUPER_ADMIN"],
-    group: "Administration",
+    group: "Programs",
     children: [
       {
         label: "Compliance reports",
@@ -128,10 +128,10 @@ export const navMenu: NavItem[] = [
     ],
   },
   {
-    label: "Platform settings",
+    label: "Platform controls",
     icon: Settings2,
     roles: ["SUPER_ADMIN"],
-    group: "Administration",
+    group: "Platform",
     children: [
       {
         label: "Configuration",
@@ -221,9 +221,9 @@ export const navMenu: NavItem[] = [
   },
   {
     label: "Knowledge centre",
-    icon: GraduationCap,
+    icon: BookOpen,
     roles: ["SUPER_ADMIN", "NGO", "COMPANY", "DONOR"],
-    group: "Resources",
+    group: "Guides & support",
     children: [
       {
         label: "User manual",
@@ -231,13 +231,13 @@ export const navMenu: NavItem[] = [
         roles: ["SUPER_ADMIN", "NGO", "COMPANY", "DONOR"],
       },
       {
-        label: "Platform details",
-        href: "/dashboard/resources/platform-details",
+        label: "Platform documentation",
+        href: "/dashboard/resources/documentation",
         roles: ["SUPER_ADMIN", "NGO", "COMPANY", "DONOR"],
       },
       {
-        label: "Documentation",
-        href: "/dashboard/resources/documentation",
+        label: "Platform details",
+        href: "/dashboard/resources/platform-details",
         roles: ["SUPER_ADMIN", "NGO", "COMPANY", "DONOR"],
       },
     ],
@@ -246,7 +246,7 @@ export const navMenu: NavItem[] = [
     label: "Support",
     icon: LifeBuoy,
     roles: ["SUPER_ADMIN", "NGO", "COMPANY", "DONOR"],
-    group: "Resources",
+    group: "Guides & support",
     children: [
       {
         label: "Help desk",
@@ -255,11 +255,6 @@ export const navMenu: NavItem[] = [
       },
       {
         label: "Release notes",
-        href: "/dashboard/resources/release-notes",
-        roles: ["SUPER_ADMIN", "NGO", "COMPANY", "DONOR"],
-      },
-      {
-        label: "Product updates",
         href: "/dashboard/resources/release-notes",
         roles: ["SUPER_ADMIN", "NGO", "COMPANY", "DONOR"],
       },

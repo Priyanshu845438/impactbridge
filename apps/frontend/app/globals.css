@@ -18,8 +18,8 @@
   --card: #ffffff;
   --card-foreground: #0a2540;
   --border: #dbe4f3;
-  --ring: #5b2bea;
-  --gradient: linear-gradient(135deg, #0a2540 0%, #5b2bea 100%);
+  --ring: #4a6dfb;
+  --gradient: linear-gradient(135deg, #0a2540 0%, #4a6dfb 100%);
 }
 
 body {

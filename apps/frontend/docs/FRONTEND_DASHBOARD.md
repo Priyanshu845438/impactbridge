@@ -5,10 +5,10 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 
 ## Shared Layout (`app/dashboard/layout.tsx`)
 - **Auth guard**: consumes `useAuth()` and redirects to `/login` if token missing
-- **Sidebar**: 260px fixed panel with nav items derived from `lib/nav-menu.ts`; filters links per user role, supports collapsible admin modules, and is fully scrollable for long menus
+- **Sidebar**: 260px fixed panel on desktop with nav items derived from `lib/nav-menu.ts`; filters links per user role, supports collapsible admin modules, and is fully scrollable (mobile drawer uses the same config). Menu groupings follow a professional sequence (Executive suite → People → Programs → Platform → Guides & support) for faster discovery.
 - **Header**: sticky top bar with brand mark (links to `/dashboard/admin`), centered search input, breadcrumb slot, and profile drawer trigger (inline dropdown with quick actions + sign out)
-- **Main content**: `flex-1` scrollable region with gradient background and responsive padding
-- **Mobile**: hamburger toggles a drawer sidebar; desktop view stays fixed; nested sections collapse/expand with Chevron indicators
+- **Main content**: `flex-1` scrollable region with gradient background and responsive padding; global layout now keeps vertical scrolling enabled even on smaller screens.
+- **Mobile**: hamburger toggles a drawer sidebar; desktop view stays fixed; nested sections collapse/expand with Chevron indicators; mobile drawers/tables use overflow wrappers to prevent horizontal clipping.
 - **Utilities**: `SectionHeader` for consistent titling, `QuickActionCard` for highlight blocks, root-level `Toaster` for global feedback, and `Skeleton` components for polished loading states
 
 ## Admin Dashboard (`app/dashboard/admin/page.tsx`)
@@ -17,7 +17,7 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Analytics hero row combines a primary activity area chart with three KPI spark cards (new NGOs, CSR commitments, active users)
 - CSR submissions chart powered by Recharts line chart shows 30-day trend with mock data + tooltip
 - Metric grid now uses reusable `StatCard` components (user count, approvals, last login, platform health) with sparklines and colour-coded deltas
-- Quick action grid (`QuickActionCard`) suggests follow-up tasks (verification queue, CSR programmes, analytics)
+- Quick action grid (`QuickActionCard`) suggests follow-up tasks (verification queue, CSR programmes, analytics) with cards that stack gracefully on mobile
 - **Recent Activity** list with icons, timestamps, statuses (static for now)
 - Skeleton variants mirror chart + card layout so transitions stay intentional
 - Profile drawer (`components/dashboard/profile-drawer.tsx`) opens from header and links to the dedicated profile page
@@ -26,7 +26,7 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Profile drawer trigger now clones the child element to reuse its button instead of nesting buttons, resolving hydration warnings
 - Notifications page (`app/dashboard/notifications/page.tsx`) lists pending alerts with per-item read controls, skeleton fallback, and empty state.
 - Header bell badge reflects unread count stored in AuthProvider; accessing notifications or marking items read syncs local storage.
-- User directory (`app/dashboard/users/page.tsx`) gives super admins a global view with search, filters, pagination, and mock view actions.
+- User directory (`app/dashboard/users/page.tsx`) gives super admins a global view with search, filters, pagination, mock view actions, and horizontal scroll fallback for dense columns.
 - User detail view (`app/dashboard/users/[id]/page.tsx`) adds tabs for overview/activity/permissions with mock toasts for reset/deactivate actions.
 
 ## Skeleton Components
@@ -35,8 +35,8 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Ready to reuse across other dashboards once API wiring begins
 
 ## Admin Modules (`app/dashboard/admin/modules/*`)
-- `ngos/page.tsx`: NGO management workspace with mock dataset, multi-filter controls (search + registration/compliance/region), column sorting, pagination UI, responsive table + card layout, row preview drawer, and detailed tabs for overview/documents/activity + approval toasts
-- `ngos/[id]/documents/page.tsx`: compliance review surface displaying per-NGO document inventory with status filters, search, and a preview drawer that exposes approve/reject/request-update CTA toasts (mock wiring)
+- `ngos/page.tsx`: NGO management workspace with mock dataset, multi-filter controls (search + registration/compliance/region), column sorting, pagination UI, responsive table + card layout, row preview drawer, and detailed tabs for overview/documents/activity + approval toasts; search/filters now stack on small screens and tables gain horizontal scroll wrappers
+- `ngos/[id]/documents/page.tsx`: compliance review surface displaying per-NGO document inventory with status filters, search, a split preview (document pane + metadata/tags panel), confirmation dialogs, status badge updates, sonner toasts, mock version history, and an activity log.
 - `programmes/page.tsx`: CSR programme pipeline placeholder
 - `reports/page.tsx`: analytics/reporting placeholder
 - `settings/page.tsx`: platform-wide settings placeholder

@@ -13,6 +13,7 @@
 - Add backend wiring for user detail view (tabs, status toggles, audit log)
 - Introduce notifications/toasts for key actions
 - Ensure future header/profile tweaks preserve single-button triggers to avoid hydration warnings
+- Audit responsive behaviour whenever new modules land (grids, tables, drawers) so mobile/tablet breakpoints stay polished
 
 ## Low Priority / Nice to Have
 - Dark mode toggle using shadcn theme utilities

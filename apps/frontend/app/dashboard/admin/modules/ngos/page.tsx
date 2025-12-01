@@ -757,14 +757,14 @@ export default function AdminNgosModulePage() {
               </Table>
             </div>
 
-            <div className="grid gap-4 lg:hidden">
-              {paginated.map((ngo) => (
-                <button
-                  type="button"
-                  key={ngo.registrationId}
-                  onClick={() => handleRowClick(ngo)}
-                  className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:border-slate-300"
-                >
+        <div className="grid gap-4 lg:hidden">
+          {paginated.map((ngo) => (
+            <button
+              type="button"
+              key={ngo.registrationId}
+              onClick={() => handleRowClick(ngo)}
+              className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:border-slate-300"
+            >
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <h3 className="text-base font-semibold text-slate-900">{ngo.name}</h3>
@@ -785,9 +785,9 @@ export default function AdminNgosModulePage() {
                     <UserRound className="h-4 w-4 text-slate-400" />
                     <span>{ngo.contactPerson}</span>
                   </div>
-                </button>
-              ))}
-            </div>
+            </button>
+          ))}
+        </div>
 
             <div className="flex flex-col gap-4 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="text-sm text-slate-500">

@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Clock3, ShieldCheck, HandshakeIcon, FileSignature, Star } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -31,7 +32,7 @@ const ACTIVITY = [
   },
 ];
 
-export function ActivityFeed({ className }: { className?: string }) {
+export const ActivityFeed = React.memo(function ActivityFeed({ className }: { className?: string }) {
   return (
     <section className={cn("space-y-4", className)}>
       <div className="flex items-center justify-between">
@@ -65,4 +66,4 @@ export function ActivityFeed({ className }: { className?: string }) {
       </div>
     </section>
   );
-}
+});
