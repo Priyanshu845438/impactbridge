@@ -248,3 +248,22 @@
 - Finalised NGO document drawer with threaded comment sidebar, filters, contextual highlights, mock action menus, and add-comment form.
 - Extended action flow with confirmation modal, status badge updates, tag removal controls, and richer metadata panel while keeping build green.
 - Updated dashboard/component/progress docs to describe the collaboration experience and reran lint/build successfully.
+
+## 62. [FE] Build config + documentation sync.
+- Replaced `next.config.js` with standalone/strict-off/server-actions-off settings per runtime fix, cleared `.next`, and verified a fresh build.
+- Refreshed setup/progress/todo/auth docs to capture the updated build hygiene notes and server-action opt-out; lint re-run to keep repo clean.
+
+## 63. [FE] Document lifecycle UI + approval workflow polish.
+- Added lifecycle status badge/dropdown, timeline log, and read-only behaviour when approved within NGO document drawer.
+- Timeline now records status updates, comment events, and mock comment actions; toasts fire on status changes.
+- Updated docs (dashboard overview, component catalog, progress report) and reran lint/build.
+
+## 64. [FE] Access control modal scaffolded.
+- Added top-right Access & Permissions trigger with modal for managing mock user roles, search, and restrict-download toggle.
+- Save action surfaces toast confirmation; modal stays client-only until backend integration.
+- Updated docs (dashboard, component catalog, TODO, progress) and reran lint/build.
+
+## 65. [FE] Timeline panel & documentation sync.
+- Finalised NGO document drawer with dedicated “Timeline & Status” panel, lifecycle styling, and desktop sticky layout while keeping collaboration sidebar responsive.
+- Cleaned up legacy timeline toggle state, ensured comment panel runs without nested buttons, and refreshed dashboard/component/progress docs.
+- Ran `npm run lint` and `npm run build` to confirm zero regressions.

@@ -60,8 +60,8 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - Handles Escape key + backdrop clicks; auto-resizes for mobile and supports full-width handset view.
 
 ### `app/dashboard/admin/ngos/[id]/documents/page.tsx`
-- Page-level pattern for compliance reviews with searchable table, status badges, and drawer actions (approve/reject/request update) powered by `toast`.
-- Drawer now features a split preview (document pane, metadata/tags board, watermark) plus collaboration sidebar for threaded comments, filters, quick actions, and add-comment form.
+- Page-level pattern for compliance reviews with searchable table, status badges, lifecycle controls (badge + dropdown), and drawer actions (approve/reject/request update) powered by `toast`.
+- Drawer now features a split preview (document pane, metadata/tags board, watermark), collaboration sidebar with filters, threaded comments, mock action menus, status-aware disabling when Approved, plus a dedicated “Timeline & Status” panel (sticky on desktop) and Access & Permissions modal for managing mock roles.
 - Demonstrates reuse of `Drawer`, `Badge`, `SectionHeader`, `Textarea`, and skeleton components for load states.
 
 ### `components/ui/tabs.tsx`

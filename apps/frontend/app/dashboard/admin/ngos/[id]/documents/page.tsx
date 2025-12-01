@@ -455,6 +455,14 @@ const statusTone: Record<DocumentStatus, string> = {
   "Update Requested": "border border-amber-200 bg-amber-50 text-amber-700",
 };
 
+const lifecycleStatuses = ["Draft", "Under review", "Approved", "Rejected"] as const;
+const lifecycleTone: Record<(typeof lifecycleStatuses)[number], string> = {
+  Draft: "bg-slate-200 text-slate-600",
+  "Under review": "bg-blue-100 text-blue-700",
+  Approved: "bg-emerald-100 text-emerald-700",
+  Rejected: "bg-rose-100 text-rose-700",
+};
+
 const commentFilters: Array<"All" | CommentStatus> = ["All", "Open", "Resolved", "Needs revision"];
 
 const commentStatusTone: Record<CommentStatus, string> = {
@@ -499,6 +507,18 @@ export default function NgoDocumentsPage() {
     if (!profile) return {};
     return Object.fromEntries(profile.documents.map((doc) => [doc.id, null]));
   });
+  const [documentStatus, setDocumentStatus] = useState<Record<string, (typeof lifecycleStatuses)[number]>>(
+    () => {
+      if (!profile) return {};
+      return Object.fromEntries(profile.documents.map((doc) => [doc.id, "Under review" as const]));
+    },
+  );
+  const [timelineMap, setTimelineMap] = useState<Record<string, string[]>>(() => {
+    if (!profile) return {};
+    return Object.fromEntries(
+      profile.documents.map((doc) => [doc.id, ["Status set to Under review"]]),
+    );
+  });
   const [commentMap, setCommentMap] = useState<Record<string, CommentEntry[]>>(
     () => profile?.comments ?? {},
   );
@@ -509,6 +529,72 @@ export default function NgoDocumentsPage() {
   const [isCommentPanelOpen, setCommentPanelOpen] = useState(true);
   const [draftComment, setDraftComment] = useState("");
   const [openCommentMenu, setOpenCommentMenu] = useState<string | null>(null);
+  const [accessModalOpen, setAccessModalOpen] = useState(false);
+  const accessList = useMemo(
+    () => [
+      { id: 'u-1', name: 'Ananya Rao', role: 'NGO Owner', initials: 'AR', permission: 'Owner' },
+      { id: 'u-2', name: 'Karan Patel', role: 'Compliance Reviewer', initials: 'KP', permission: 'Approve' },
+      { id: 'u-3', name: 'Finance Review', role: 'Finance', initials: 'FR', permission: 'Comment' },
+      { id: 'u-4', name: 'Compliance Bot', role: 'Automation', initials: 'CB', permission: 'Comment' },
+      { id: 'u-5', name: 'Meera Singh', role: 'NGO Admin', initials: 'MS', permission: 'View' },
+    ],
+    [],
+  );
+  const [accessSearch, setAccessSearch] = useState('');
+  const [accessPermissions, setAccessPermissions] = useState(() =>
+    Object.fromEntries(accessList.map((item) => [item.id, item.permission as 'View' | 'Comment' | 'Approve' | 'Owner'])),
+  );
+  const filteredAccessList = useMemo(() => {
+    const query = accessSearch.trim().toLowerCase();
+    if (!query) return accessList;
+    return accessList.filter((item) => item.name.toLowerCase().includes(query) || item.role.toLowerCase().includes(query));
+  }, [accessSearch, accessList]);
+  const [restrictDownload, setRestrictDownload] = useState(false);
+  type TimelineStageStatus = "completed" | "current" | "upcoming";
+  interface TimelineStage {
+    id: string;
+    label: string;
+    timestamp: string;
+    status: TimelineStageStatus;
+  }
+
+  const timelineStages: TimelineStage[] = [
+    { id: "stage-1", label: "Uploaded", timestamp: "05 Feb 2025 · 09:00 AM", status: "completed" },
+    { id: "stage-2", label: "Assigned", timestamp: "05 Feb 2025 · 10:15 AM", status: "completed" },
+    { id: "stage-3", label: "Under Review", timestamp: "12 Feb 2025 · 08:40 AM", status: "current" },
+    { id: "stage-4", label: "Comments Added", timestamp: "—", status: "upcoming" },
+    { id: "stage-5", label: "Approved", timestamp: "—", status: "upcoming" },
+  ];
+
+  const timelineStageStyles: Record<
+    TimelineStageStatus,
+    { dot: string; connector: string; label: string; description: string }
+  > = {
+    completed: {
+      dot: "bg-emerald-500 text-white",
+      connector: "bg-emerald-200",
+      label: "text-slate-700",
+      description: "text-slate-400",
+    },
+    current: {
+      dot: "border-2 border-emerald-500 bg-white text-emerald-600",
+      connector: "bg-emerald-200",
+      label: "text-emerald-700 font-semibold",
+      description: "text-emerald-600",
+    },
+    upcoming: {
+      dot: "bg-slate-200 text-slate-400",
+      connector: "bg-slate-200",
+      label: "text-slate-400",
+      description: "text-slate-300",
+    },
+  };
+
+  const timelineStageIcons: Record<TimelineStageStatus, React.ComponentType<{ className?: string }>> = {
+    completed: CheckCircle2,
+    current: Clock,
+    upcoming: AlertCircle,
+  };
 
   useEffect(() => {
     if (ngoId && !profile) {
@@ -525,6 +611,10 @@ export default function NgoDocumentsPage() {
       );
       setPreviewVersion(Object.fromEntries(profile.documents.map((doc) => [doc.id, null])));
       setCommentMap(profile.comments);
+      setTimelineMap(Object.fromEntries(profile.documents.map((doc) => [doc.id, ["Status set to Under review"]])));
+      setDocumentStatus(
+        Object.fromEntries(profile.documents.map((doc) => [doc.id, "Under review" as const])),
+      );
     }
   }, [profile]);
 
@@ -641,6 +731,23 @@ export default function NgoDocumentsPage() {
       const updated = [newEntry, ...existing].slice(0, 5);
       return { ...prev, [document.id]: updated };
     });
+
+    setTimelineMap((prev) => {
+      const existingTimeline = prev[document.id] ?? [];
+      const entryLabel =
+        type === "approve"
+          ? `Status set to Approved`
+          : type === "reject"
+          ? `Status set to Rejected`
+          : `Update requested`;
+      return { ...prev, [document.id]: [entryLabel, ...existingTimeline] };
+    });
+
+    setDocumentStatus((prev) => ({
+      ...prev,
+      [document.id]:
+        type === "approve" ? "Approved" : type === "reject" ? "Rejected" : prev[document.id] ?? "Under review",
+    }));
 
     if (type === "approve") {
       toast.success(`${document.name} approved.`);
@@ -818,6 +925,12 @@ export default function NgoDocumentsPage() {
                 return { ...prev, [selectedDocument.id]: updatedThreads };
               });
 
+              setTimelineMap((prev) => {
+                const existingTimeline = prev[selectedDocument.id] ?? [];
+                const entryLabel = action === "delete" ? "Comment removed" : "Comment marked resolved";
+                return { ...prev, [selectedDocument.id]: [entryLabel, ...existingTimeline] };
+              });
+
               if (action === "delete") {
                 if (selectedThread?.commentId === commentId) {
                   setSelectedThread(null);
@@ -832,6 +945,69 @@ export default function NgoDocumentsPage() {
 
             return (
               <div className="space-y-6">
+                <div className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-sm xl:flex-row xl:items-center xl:justify-between">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className={cn(
+                      "inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold",
+                      lifecycleTone[documentStatus[selectedDocument.id] ?? "Under review"],
+                    )}
+                    >
+                      {documentStatus[selectedDocument.id] ?? "Under review"}
+                    </span>
+                    <span className="text-lg font-semibold text-slate-900">{selectedDocument.name}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="hidden rounded-full border-slate-200 px-4 text-xs font-semibold text-slate-600 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 md:flex"
+                      onClick={() => setAccessModalOpen(true)}
+                    >
+                      Access & Permissions
+                    </Button>
+                    <Select
+                      value={documentStatus[selectedDocument.id] ?? "Under review"}
+                      onValueChange={(value) => {
+                        const next = value as (typeof lifecycleStatuses)[number];
+                        setDocumentStatus((prev) => ({ ...prev, [selectedDocument.id]: next }));
+                        toast.info(`Status updated to ${next}`);
+                        setTimelineMap((prev) => {
+                          const existingTimeline = prev[selectedDocument.id] ?? [];
+                          return {
+                            ...prev,
+                            [selectedDocument.id]: [`Status updated to ${next}`, ...existingTimeline],
+                          };
+                        });
+                      }}
+                    >
+                      <SelectTrigger className="h-9 w-40 rounded-full border-slate-200 bg-white text-xs font-medium text-slate-600 shadow-sm transition hover:border-slate-300">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl border border-slate-200 bg-white shadow-lg">
+                        {lifecycleStatuses.map((status) => (
+                          <SelectItem key={status} value={status}>
+                            {status}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="space-y-2 rounded-2xl border border-slate-200 bg-white/95 p-4">
+                  <h4 className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Timeline</h4>
+                  <div className="space-y-2 text-sm text-slate-600">
+                    {(timelineMap[selectedDocument.id] ?? []).map((item, index) => (
+                      <div
+                        key={`${selectedDocument.id}-timeline-${index}`}
+                        className="flex items-center gap-2">
+                        <span className="inline-flex h-2 w-2 items-center justify-center rounded-full bg-emerald-400" />
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="flex flex-col gap-4 xl:flex-row">
                   <div className="flex flex-1 flex-col gap-4">
                     <div
@@ -955,7 +1131,7 @@ export default function NgoDocumentsPage() {
                   <aside
                     className={cn(
                       "flex w-full flex-col rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-sm transition-all",
-                      isCommentPanelOpen ? "xl:w-80" : "xl:w-14",
+                      isCommentPanelOpen ? "xl:w-80" : "xl:w-16",
                     )}
                   >
                     <div className="flex items-center justify-between">
@@ -966,14 +1142,19 @@ export default function NgoDocumentsPage() {
                           {threads.length}
                         </span>
                       </div>
-                      <button
-                        type="button"
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
-                        onClick={() => setCommentPanelOpen((prev) => !prev)}
-                        aria-label="Toggle comments"
-                      >
-                        {isCommentPanelOpen ? <X className="h-4 w-4" /> : <MessageCircle className="h-4 w-4" />}
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <span className="hidden h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-400 xl:flex">
+                          <Clock className="h-4 w-4" />
+                        </span>
+                        <button
+                          type="button"
+                          className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+                          onClick={() => setCommentPanelOpen((prev) => !prev)}
+                          aria-label="Toggle comments"
+                        >
+                          {isCommentPanelOpen ? <X className="h-4 w-4" /> : <MessageCircle className="h-4 w-4" />}
+                        </button>
+                      </div>
                     </div>
 
                     {isCommentPanelOpen ? (
@@ -1084,13 +1265,22 @@ export default function NgoDocumentsPage() {
                                   </div>
                                 </div>
 
-                                <p className="text-sm leading-relaxed text-slate-700">{comment.message}</p>
+                                <p className={cn(
+                                  "text-sm leading-relaxed text-slate-700",
+                                  documentStatus[selectedDocument.id] === "Approved" ? "text-slate-400 line-through" : "",
+                                )}>
+                                  {comment.message}
+                                </p>
 
                                 <div className="flex items-center justify-between text-xs text-slate-400">
                                   <button
                                     type="button"
                                     onClick={() => setSelectedThread({ commentId: comment.id, section: comment.section })}
-                                    className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700"
+                                    className={cn(
+                                      "inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700",
+                                      documentStatus[selectedDocument.id] === "Approved" && "pointer-events-none opacity-50",
+                                    )}
+                                    disabled={documentStatus[selectedDocument.id] === "Approved"}
                                   >
                                     <MessageSquareReply className="h-3.5 w-3.5" />
                                     View context
@@ -1111,7 +1301,12 @@ export default function NgoDocumentsPage() {
                                           </div>
                                           <span className="text-[10px] text-slate-400">{reply.timestamp}</span>
                                         </div>
-                                        <p className="text-xs leading-relaxed text-slate-600">{reply.message}</p>
+                                        <p className={cn(
+                                          "text-xs leading-relaxed text-slate-600",
+                                          documentStatus[selectedDocument.id] === "Approved" && "text-slate-400",
+                                        )}>
+                                          {reply.message}
+                                        </p>
                                       </div>
                                     ))}
                                   </div>
@@ -1158,6 +1353,68 @@ export default function NgoDocumentsPage() {
                         </div>
                       </>
                     ) : null}
+                  </aside>
+                  <aside
+                    className={cn(
+                      "hidden w-full max-w-xs flex-col gap-4 rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-sm xl:flex",
+                    )}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col">
+                        <span className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+                          Timeline & Status
+                        </span>
+                        <span className="text-sm font-semibold text-slate-900">
+                          Stage {timelineStages.findIndex((stage) => stage.status === "current") + 1} of {timelineStages.length}
+                          <span className="ml-2 text-xs font-normal text-slate-500">
+                            {timelineStages.find((stage) => stage.status === "current")?.label ?? "In Review"}
+                          </span>
+                        </span>
+                      </div>
+                      <Button size="sm" variant="outline" disabled>
+                        Next stage
+                      </Button>
+                    </div>
+                    <div className="relative flex-1 overflow-hidden">
+                      <div className="absolute left-3 top-3 bottom-3 w-0.5 bg-slate-200" />
+                      <div className="space-y-6 pl-8">
+                        {timelineStages.map((stage, index) => {
+                          const styles = timelineStageStyles[stage.status];
+                          const StageIcon = timelineStageIcons[stage.status];
+                          const isLast = index === timelineStages.length - 1;
+                          return (
+                            <div key={stage.id} className="relative">
+                              <div className="absolute left-[-2.6rem] top-0">
+                                <span
+                                  className={cn(
+                                    "flex h-8 w-8 items-center justify-center rounded-full shadow-sm transition",
+                                    styles.dot,
+                                  )}
+                                >
+                                  <StageIcon className="h-4 w-4" />
+                                </span>
+                              </div>
+                              {!isLast ? (
+                                <div
+                                  className={cn(
+                                    "absolute left-[-1.9rem] top-8 w-0.5",
+                                    stage.status === "completed" || stage.status === "current"
+                                      ? "h-12 bg-emerald-200"
+                                      : "h-12 bg-slate-200",
+                                  )}
+                                />
+                              ) : null}
+                              <div className="rounded-2xl border border-slate-100 bg-white/90 p-3">
+                                <p className={cn("text-sm font-semibold", styles.label)}>{stage.label}</p>
+                                <p className={cn("text-xs", styles.description)}>
+                                  {stage.timestamp === "—" ? "Awaiting completion" : stage.timestamp}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
                   </aside>
                 </div>
 
@@ -1238,7 +1495,103 @@ export default function NgoDocumentsPage() {
         ) : null}
       </Drawer>
 
-            <Modal
+      
+      <Modal
+        open={accessModalOpen}
+        onClose={() => setAccessModalOpen(false)}
+        title="Manage Access"
+        description="Control who can view, comment, or approve this document."
+        size="lg"
+        footer={null}
+      >
+        <div className="space-y-4">
+          <div className="flex items-center justify-between gap-3">
+            <Input
+              placeholder="Search people or roles..."
+              value={accessSearch}
+              onChange={(event) => setAccessSearch(event.target.value)}
+              className="h-9 w-full rounded-full border-slate-200 text-sm focus-visible:ring-emerald-200"
+            />
+          </div>
+
+          <div className="max-h-72 space-y-3 overflow-y-auto pr-1">
+            {filteredAccessList.map((member) => (
+              <div
+                key={member.id}
+                className="flex items-center justify-between gap-3 rounded-2xl border border-slate-100 bg-slate-50/80 p-3 text-sm text-slate-700"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-sm font-semibold text-emerald-700">
+                    {member.initials}
+                  </span>
+                  <div className="space-y-0.5">
+                    <p className="font-semibold text-slate-900">{member.name}</p>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-slate-200 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-600">
+                      {member.role}
+                    </span>
+                  </div>
+                </div>
+                <Select
+                  value={accessPermissions[member.id]}
+                  onValueChange={(value) =>
+                    setAccessPermissions((prev) => ({
+                      ...prev,
+                      [member.id]: value as 'View' | 'Comment' | 'Approve' | 'Owner',
+                    }))
+                  }
+                >
+                  <SelectTrigger className="h-9 w-32 rounded-full border-slate-200 bg-white text-xs font-semibold text-slate-600 shadow-sm transition hover:border-slate-300">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border border-slate-200 bg-white shadow-lg">
+                    {['View', 'Comment', 'Approve', 'Owner'].map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            ))}
+            {filteredAccessList.length === 0 ? (
+              <div className="flex h-24 flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-slate-200 bg-white/80 text-center text-xs text-slate-400">
+                No matches found.
+              </div>
+            ) : null}
+          </div>
+
+          <div className="flex items-center justify-between rounded-2xl border border-slate-100 bg-slate-50/80 px-3 py-2 text-sm text-slate-600">
+            <div className="flex items-center gap-2">
+              <span className="text-base">🔒</span>
+              <span>Restrict download</span>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className={cn('rounded-full border-slate-200 px-3 text-xs font-semibold text-slate-600', restrictDownload && 'border-emerald-300 bg-emerald-50 text-emerald-700')}
+              onClick={() => setRestrictDownload((prev) => !prev)}
+            >
+              {restrictDownload ? 'Enabled' : 'Disabled'}
+            </Button>
+          </div>
+
+          <div className="flex items-center justify-end gap-2">
+            <Button variant="outline" onClick={() => setAccessModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                setAccessModalOpen(false);
+                toast.success('Access settings updated');
+              }}
+            >
+              Save
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
         open={Boolean(pendingAction)}
         onClose={() => setPendingAction(null)}
         title="Confirm action"

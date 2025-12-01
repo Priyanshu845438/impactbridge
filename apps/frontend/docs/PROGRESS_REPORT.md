@@ -1,6 +1,6 @@
 # ImpactBridge Frontend Progress Report
 
-_Last updated: 2025-11-28 18:32 IST_
+_Last updated: 2025-11-28 19:10 IST_
 
 ## Overview
 The ImpactBridge frontend has matured into a production-ready Next.js 14 application featuring role-based dashboards, polished authentication flows, and a documented UI system. This report summarises the work completed to date as well as the remaining backlog items so stakeholders can track delivery status and plan the next milestones.
@@ -11,8 +11,9 @@ The ImpactBridge frontend has matured into a production-ready Next.js 14 applica
 
 ### 1. Project Foundation
 - Next.js 14 (App Router) scaffolded with TypeScript, TailwindCSS, and shadcn/ui component library.
-- Global layout configured with font loading, theming, and a root-level Sonner `Toaster` for notifications.
+- Global layout configured with font loading, theming, and a root-level Sonner `Toaster` for notifications; `next.config.js` now runs in standalone mode with strict mode disabled and server actions opt-out to keep builds predictable.
 - Tailwind utilities extended with ImpactBridge branding, gradients, and glassmorphism helpers.
+- Added build hygiene note in docs about clearing `.next` and reinstalling before fresh builds when asset 404s appear.
 
 ### 2. Authentication Experience
 - Login, register, forgot-password, and reset-password pages designed with responsive CSR-themed UI.
@@ -36,7 +37,7 @@ The ImpactBridge frontend has matured into a production-ready Next.js 14 applica
 - Session-scoped welcome toast triggered once per visit via `sessionStorage`.
 - Shimmering skeleton loaders for charts/cards/activity smooth the initial load (650 ms delay mimicking data fetch).
 - NGO management module upgraded with multi-filter search, sorting, pagination, responsive cards, and detailed drawer tabs; controls now reflow cleanly on mobile and tables use horizontal scrolling without breaking layout.
-- NGO compliance documents view (`/dashboard/admin/modules/ngos/compliance-documents` → dynamic route) delivers per-organisation file inventory with filtering, search, split preview (live/document pane + metadata/tags/versions), confirmation-driven approve/reject/request-update flows, and a recent activity log.
+- NGO compliance documents view (`/dashboard/admin/modules/ngos/compliance-documents` → dynamic route) delivers per-organisation file inventory with filtering, search, split preview (live/document pane + metadata/tags/versions), lifecycle status controls plus a timeline & status panel, Access & Permissions modal, confirmation-driven approve/reject/request-update flows, collaboration sidebar with filters and lifecycle-aware comment states, and a recent activity log.
 - Super Admin profile view added (`/dashboard/profile`) with editable form, skeleton fallbacks, and toast-driven save confirmation.
 - Notifications hub added with mock feed, mark-as-read controls, and header badge synced to AuthProvider.
 - User directory added for super admins with search, filters, pagination, responsive fallback scroll to preview global users on narrow viewports, and a reorganised sidebar sequence (Executive suite → People → Programs → Platform → Guides & support) for faster discovery.

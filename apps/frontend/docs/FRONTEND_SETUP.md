@@ -73,11 +73,13 @@ Optional: configure backend CORS to allow `http://localhost:3400`
 npm install                   # install deps
 npm run dev -- --port 3400    # start dev server (port 3400, /dashboard redirects → /dashboard/admin)
 npm run lint                  # lint check
-npm run build                 # production build
+npm run build                 # production build (standalone output, strict mode off per next.config.js)
 npm run start                 # serve built app
 # clean rebuild when chunks mismatch
 rm -rf .next node_modules/.cache && npm install && npm run build
 ```
+Note: Server Actions remain disabled in next.config.js (set to false) to avoid experimental behaviour until backend endpoints are ready; the NGO document workflow now relies on client-side lifecycle state only until the backend API ships.
+
 If static assets or config change: `rm -rf .next` before a rebuild
 
 ## Development Notes

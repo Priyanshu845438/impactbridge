@@ -26,7 +26,9 @@
 - Admin module placeholders and collapsible navigation
 - Documentation suite refreshed (`project_overview`, `auth_flow`, `style_guide`)
 - Client-component conversion for admin dashboard with toast greeting
-- Build pipeline cleansed (cache purge + standalone output)
+- Build pipeline cleansed (cache purge + standalone output); ensure `.next` is cleared and Next config stays in sync with backend capabilities (strict mode off, server actions disabled for now).
+- NGO document lifecycle UI (status badge/dropdown + timeline) delivered; next step is wiring lifecycle states/comments to backend approvals API.
+- Access control modal UI in place; wire actual permissions when backend endpoints arrive.
 - Super Admin profile view with skeleton loading + toast save confirmation
 - Notifications route with badge sync and per-item read controls
 
