@@ -38,9 +38,19 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - Re-uses Drawer primitive for responsive full-screen behaviour on mobile.
 - Trigger now clones the supplied button so only one `<button>` renders, avoiding nested-button hydration warnings.
 
-### Notifications UI (page-level pattern)
-- `app/dashboard/notifications/page.tsx` consumes SectionHeader, skeletons, and AuthProvider badge state to surface mock alerts.
-- Demonstrates list rendering with type badges (info/warning/action) and per-item mark-as-read actions.
+### Notifications UI (page + header pattern)
+- Header bell inside `app/dashboard/layout.tsx` shows a badge, desktop popover, and mobile sheet with mock notifications rendered via `NotificationItem` helper.
+- `app/dashboard/notifications/page.tsx` consumes SectionHeader, skeletons, and AuthProvider badge state to surface alert history and mark-as-read actions.
+
+### Command palette
+- `CommandPalette` component lives inside `app/dashboard/layout.tsx` and is toggled via ⌘/Ctrl + K or the inline shortcut button beside global search.
+- Accepts an array of `{ label, actionLabel, icon, keywords }` and filters results client-side.
+- Uses modal layout on desktop (centered) and drops full-width overlay on smaller breakpoints; closes on Escape or item select.
+- Provides keyboard focus trapping, body scroll lock, prefetch-driven navigation cues, and result hover affordances to mimic a productivity-grade quick search; `useTransition` keeps search/filter + close interactions buttery.
+
+### Suggested actions panel
+- `SuggestedActionsPanel` (inline component in `app/dashboard/admin/page.tsx`) renders a scrollable list of mock recommendations with icons and “Take action” buttons.
+- Used to complement Quick Actions on desktop (as a side card) and stack below analytics on smaller breakpoints.
 
 ### User directory (page-level pattern)
 - `app/dashboard/users/page.tsx` showcases table layout with search bar, role/status filters, pagination footer, and responsive row design.
@@ -51,8 +61,8 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - Reuses `Tabs`, `SectionHeader`, skeleton loaders, and toast feedback for mock actions.
 
 ### Dashboard visualisations (inline helpers in `admin/page.tsx`)
-- `AreaChart` & `Sparkline` render lightweight SVG trendlines for analytics hero row and KPI cards.
-- Recharts LineChart drives CSR submissions view; skeletons keep layout stable before data resolves.
+- `OverviewChart` combines muted bars + line for platform activity, `MicroBar` renders mini bar sets inside KPI cards, and `Sparkline` remains available for other trend contexts.
+- Recharts BarChart powers CSR submissions with light fills; skeletons keep layout stable before data resolves.
 
 ### `components/ui/drawer.tsx`
 - Controlled slideover used across admin modules (e.g., NGO detail preview).

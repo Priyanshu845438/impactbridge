@@ -1,15 +1,50 @@
 "use client";
 
-import { PropsWithChildren, useEffect, useMemo, useState } from "react";
+import { PropsWithChildren, Suspense, useEffect, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Bell, ChevronRight, Menu, Search, ShieldCheck, X } from "lucide-react";
+import {
+  BellRing,
+  Building2,
+  ChevronRight,
+  Clock3,
+  Command,
+  FilePlus2,
+  Menu,
+  MessageSquarePlus,
+  Search,
+  ShieldCheck,
+  Users,
+  X,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-context";
 import { navMenu, NavItem } from "@/lib/nav-menu";
 import { Button } from "@/components/ui/button";
 import { ProfileDrawer } from "@/components/dashboard/profile-drawer";
+import { Skeleton } from "@/components/ui/skeleton";
+
+interface NotificationItemProps {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  timestamp: string;
+}
+
+function NotificationItem({ icon: Icon, title, timestamp }: NotificationItemProps) {
+  return (
+    <div className="flex items-start gap-3 rounded-2xl border border-slate-100 bg-slate-50/80 p-3 transition hover:border-emerald-200 hover:bg-emerald-50/80">
+      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+        <Icon className="h-4 w-4" />
+      </span>
+      <div className="space-y-1">
+        <p className="text-sm font-semibold text-slate-900">{title}</p>
+        <p className="text-xs text-slate-400">{timestamp}</p>
+      </div>
+      <span className="ml-auto flex h-2 w-2 items-center justify-center rounded-full bg-emerald-400" />
+    </div>
+  );
+}
 
 function SidebarLink({
   item,
@@ -107,10 +142,14 @@ function SidebarLink({
 }
 
 export default function DashboardLayout({ children }: PropsWithChildren) {
-  const { token, user, logout, unreadNotifications, resetNotifications } = useAuth();
+  const { token, user, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [mobileNotificationsOpen, setMobileNotificationsOpen] = useState(false);
+  const [commandOpen, setCommandOpen] = useState(false);
+  const [isCommandPending, startCommandTransition] = useTransition();
 
   const userRole = user?.role;
   const availableLinks = useMemo(() => {
@@ -152,11 +191,77 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
     return groups;
   }, [availableLinks]);
 
+  const commandItems = useMemo<CommandPaletteItem[]>(
+    () => [
+      {
+        label: "Open dashboard overview",
+        actionLabel: "Go",
+        icon: ShieldCheck,
+        keywords: ["home", "overview", "admin"],
+      },
+      {
+        label: "Search NGOs",
+        actionLabel: "Open",
+        icon: Building2,
+        keywords: ["ngo", "organizations", "compliance"],
+      },
+      {
+        label: "Find companies",
+        actionLabel: "Open",
+        icon: Building2,
+        keywords: ["company", "corporate", "csr"],
+      },
+      {
+        label: "View user directory",
+        actionLabel: "Go",
+        icon: Users,
+        keywords: ["users", "directory", "people"],
+      },
+      {
+        label: "Review pending documents",
+        actionLabel: "Open",
+        icon: FilePlus2,
+        keywords: ["documents", "approval", "review"],
+      },
+      {
+        label: "Open notifications",
+        actionLabel: "View",
+        icon: BellRing,
+        keywords: ["alerts", "notifications"],
+      },
+    ],
+    [],
+  );
+
   useEffect(() => {
     if (!token || !userRole) {
       router.replace("/login");
     }
   }, [router, token, userRole]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key.toLowerCase() !== "k" || (!event.metaKey && !event.ctrlKey)) {
+        return;
+      }
+
+      const target = event.target as HTMLElement | null;
+      if (target) {
+        const tag = target.tagName.toLowerCase();
+        if (tag === "input" || tag === "textarea" || target.isContentEditable) {
+          return;
+        }
+      }
+
+      event.preventDefault();
+      setCommandOpen((prev) => !prev);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   if (!token || !userRole) {
     return null;
@@ -168,20 +273,55 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
     setMobileOpen(false);
   };
 
-  return (
-    <div className="flex min-h-screen w-full bg-gradient-to-br from-slate-50 via-white to-slate-100">
-      <aside className="hidden h-full w-[260px] md:flex">
-        <div className="sticky top-0 flex h-full w-full flex-col overflow-y-auto border-r border-slate-200 bg-white px-6 py-8 text-slate-800">
-          <Link
-            href="/dashboard/admin"
-            className="mb-6 flex items-center gap-3 text-lg font-semibold text-slate-900"
+  const notificationsSheet = mobileNotificationsOpen ? (
+    <div className="fixed inset-0 z-50 flex flex-col bg-slate-950/50 backdrop-blur-sm md:hidden">
+      <div className="mt-auto rounded-t-3xl border border-slate-200 bg-white p-6 shadow-2xl">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-base font-semibold text-slate-900">Activity notifications</p>
+            <p className="text-xs text-slate-500">Review the latest platform updates.</p>
+          </div>
+          <button
+            type="button"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-600"
+            onClick={() => setMobileNotificationsOpen(false)}
+            aria-label="Close notifications"
           >
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-sm">
-              <ShieldCheck className="h-5 w-5 text-slate-600" />
-            </span>
-            ImpactBridge
-          </Link>
-          <nav className="mt-4 flex flex-col gap-6 text-sm">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        <div className="mt-5 space-y-3 text-sm text-slate-600">
+          <NotificationItem icon={FilePlus2} title="New document uploaded by NGO" timestamp="Just now" />
+          <NotificationItem icon={MessageSquarePlus} title="Comment added on CSR Form" timestamp="5 minutes ago" />
+          <NotificationItem icon={Clock3} title="Review request assigned to you" timestamp="12 minutes ago" />
+        </div>
+        <button
+          type="button"
+          className="mt-6 inline-flex w-full items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-slate-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+          onClick={() => setMobileNotificationsOpen(false)}
+        >
+          Mark all as read
+        </button>
+      </div>
+    </div>
+  ) : null;
+
+  return (
+    <div className="relative flex h-screen w-full bg-gradient-to-br from-slate-50 via-white to-slate-100">
+      <aside className="hidden h-full w-[260px] flex-shrink-0 bg-white md:flex">
+        <div className="flex h-full w-full flex-col overflow-hidden border-r border-slate-200">
+          <div className="flex h-full w-full flex-col overflow-y-auto px-6 py-8 text-slate-800">
+            <Link
+              href="/dashboard/admin"
+              prefetch
+              className="mb-6 flex items-center gap-3 text-lg font-semibold text-slate-900"
+            >
+              <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <ShieldCheck className="h-5 w-5 text-slate-600" />
+              </span>
+              ImpactBridge
+            </Link>
+            <nav className="mt-4 flex flex-col gap-6 text-sm">
             {groupedLinks.map((group) => (
               <div key={group.name}>
                 <p className="px-4 pb-2 text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
@@ -206,6 +346,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
             <p className="mt-1 leading-relaxed">Built for compliant collaboration across NGOs, companies, and donors.</p>
           </div>
         </div>
+      </div>
       </aside>
 
       <div className="flex w-full flex-1 flex-col overflow-hidden">
@@ -228,11 +369,11 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
             </div>
 
             <div className="flex flex-1 items-center justify-center gap-4 md:justify-end">
-              <div className="flex w-full max-w-md items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-1.5 shadow-sm transition focus-within:border-slate-300 focus-within:shadow">
-                <Search className="h-4 w-4 text-slate-400" />
-                <input
-                  type="search"
-                  placeholder="Search users…"
+            <div className="flex w-full max-w-md items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-1.5 shadow-sm transition focus-within:border-slate-300 focus-within:shadow">
+              <Search className="h-4 w-4 text-slate-400" />
+              <input
+                type="search"
+                placeholder="Search users…"
                   className="w-full bg-transparent text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
                   onKeyDown={(event) => {
                     if (event.key === "Enter") {
@@ -240,22 +381,85 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                       console.log("Search query:", value);
                     }
                   }}
-                />
-              </div>
-
-              <Link
-                href="/dashboard/notifications"
-                className="relative flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
-                aria-label="View notifications"
-                onClick={() => resetNotifications()}
+              />
+              <button
+                type="button"
+                onClick={() =>
+                  startCommandTransition(() => {
+                    setCommandOpen(true);
+                  })
+                }
+                className="hidden items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-medium text-slate-500 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 sm:flex disabled:opacity-60"
+                aria-label="Open command palette"
+                disabled={isCommandPending}
               >
-                <Bell className="h-5 w-5" />
-                {unreadNotifications > 0 ? (
-                  <span className="absolute -top-1.5 -right-1.5 h-5 min-w-[1.25rem] rounded-full bg-emerald-500 px-1 text-center text-[10px] font-semibold text-white shadow-sm">
-                    {unreadNotifications > 9 ? "9+" : unreadNotifications}
+                <Command className="h-3.5 w-3.5" />
+                <span>⌘K</span>
+              </button>
+            </div>
+
+            <div className="relative">
+                <button
+                  type="button"
+                  aria-label="View activity notifications"
+                  className="relative flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+                  onClick={() => {
+                    if (window.innerWidth < 768) {
+                      setMobileNotificationsOpen(true);
+                    } else {
+                      setNotificationsOpen((prev) => !prev);
+                    }
+                  }}
+                >
+                  <BellRing className="h-5 w-5" />
+                  <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-emerald-500 px-1 text-[10px] font-semibold text-white shadow-sm">
+                    3
                   </span>
+                </button>
+
+                {notificationsOpen ? (
+                  <div className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-80 rounded-2xl border border-slate-200 bg-white p-4 text-sm shadow-2xl">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-semibold text-slate-900">Activity notifications</p>
+                        <p className="text-xs text-slate-400">Stay on top of compliance updates.</p>
+                      </div>
+                      <button
+                        type="button"
+                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+                        onClick={() => setNotificationsOpen(false)}
+                        aria-label="Close notifications"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <div className="mt-4 space-y-3 text-slate-600">
+                      <NotificationItem
+                        icon={FilePlus2}
+                        title="New document uploaded by NGO"
+                        timestamp="Just now"
+                      />
+                      <NotificationItem
+                        icon={MessageSquarePlus}
+                        title="Comment added on CSR Form"
+                        timestamp="5 minutes ago"
+                      />
+                      <NotificationItem
+                        icon={Clock3}
+                        title="Review request assigned to you"
+                        timestamp="12 minutes ago"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      className="mt-4 inline-flex w-full items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-slate-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+                      onClick={() => setNotificationsOpen(false)}
+                    >
+                      Mark all as read
+                    </button>
+                  </div>
                 ) : null}
-              </Link>
+              </div>
 
               <ProfileDrawer onSignOut={handleLogout}>
                 <button
@@ -329,11 +533,161 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
             </div>
           </div>
         ) : null}
-        <main className="flex-1 overflow-y-auto px-4 py-4 sm:px-6 sm:py-6 lg:px-10 lg:py-8">
-          <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 lg:p-8">
-            <div className="space-y-8">{children}</div>
-          </section>
+        <main className="flex-1 overflow-y-auto px-4 py-4 sm:px-6 sm:py-6 lg:px-10 lg:py-8 min-h-0">
+          <Suspense
+            fallback={
+              <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 lg:p-8">
+                <div className="space-y-6">
+                  <Skeleton className="h-9 w-48" />
+                  <Skeleton className="h-64 w-full" />
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Skeleton className="h-40 w-full" />
+                    <Skeleton className="h-40 w-full" />
+                  </div>
+                  <Skeleton className="h-56 w-full" />
+                </div>
+              </section>
+            }
+          >
+            <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 lg:p-8">
+              <div className="space-y-8">{children}</div>
+            </section>
+          </Suspense>
         </main>
+      </div>
+
+      {notificationsSheet}
+      <CommandPalette open={commandOpen} onClose={() => setCommandOpen(false)} items={commandItems} />
+    </div>
+  );
+}
+
+interface CommandPaletteItem {
+  label: string;
+  actionLabel: string;
+  icon: React.ComponentType<{ className?: string }>;
+  keywords?: string[];
+}
+
+function CommandPalette({
+  open,
+  onClose,
+  items,
+}: {
+  open: boolean;
+  onClose: () => void;
+  items: CommandPaletteItem[];
+}) {
+  const [query, setQuery] = useState("");
+  const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open, onClose]);
+
+  const filteredItems = useMemo(() => {
+    if (!query.trim()) {
+      return items;
+    }
+    const term = query.toLowerCase();
+    return items.filter((item) => {
+      if (item.label.toLowerCase().includes(term)) {
+        return true;
+      }
+      return item.keywords?.some((keyword) => keyword.toLowerCase().includes(term));
+    });
+  }, [items, query]);
+
+  if (!open) {
+    return null;
+  }
+
+  return (
+    <div className="fixed inset-0 z-[70] flex items-start justify-center bg-slate-950/40 px-4 py-10 backdrop-blur-md sm:items-center">
+      <div className="relative w-full max-w-2xl rounded-3xl border border-slate-200 bg-white shadow-2xl transition sm:mx-auto">
+        <div className="flex items-center gap-3 border-b border-slate-200 px-4 py-3 sm:px-6">
+          <Search className="h-4 w-4 text-slate-400" />
+          <input
+            autoFocus
+            value={query}
+            onChange={(event) =>
+              startTransition(() => {
+                setQuery(event.target.value);
+              })
+            }
+            placeholder="Search anywhere…"
+            className="flex-1 bg-transparent text-sm text-slate-800 outline-none"
+          />
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close command palette"
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition hover:bg-slate-200"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="max-h-[360px] overflow-y-auto px-2 py-4 sm:px-4">
+          {filteredItems.length ? (
+            <ul className="space-y-2">
+              {filteredItems.map((item) => (
+                <li key={item.label}>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      startTransition(() => {
+                        onClose();
+                        setQuery("");
+                      })
+                    }
+                    className="flex w-full items-center gap-3 rounded-2xl border border-transparent px-3 py-3 text-left transition hover:border-emerald-200 hover:bg-emerald-50 disabled:opacity-70"
+                    disabled={isPending}
+                  >
+                    <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                      <item.icon className="h-5 w-5" />
+                    </span>
+                    <span className="flex-1 text-sm font-medium text-slate-800">{item.label}</span>
+                    <span className="text-xs font-semibold uppercase tracking-wide text-emerald-600">
+                      {item.actionLabel}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-center text-sm text-slate-500">
+              No matching results
+            </div>
+          )}
+        </div>
+
+        <div className="border-t border-slate-200 px-4 py-3 text-xs text-slate-500 sm:px-6">
+          <p className="flex items-center justify-between">
+            <span>Navigate faster with search and shortcuts.</span>
+            <span className="hidden items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2 py-1 font-medium text-slate-500 sm:flex">
+              <Command className="h-3.5 w-3.5" />
+              K
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   );

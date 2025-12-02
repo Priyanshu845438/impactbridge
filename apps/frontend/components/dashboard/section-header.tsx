@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 type SectionHeaderProps = {
   title: string;
   subtitle?: string;
@@ -6,7 +8,7 @@ type SectionHeaderProps = {
   action?: React.ReactNode;
 };
 
-export function SectionHeader({ title, subtitle, actionLabel, onActionClick, action }: SectionHeaderProps) {
+function SectionHeaderComponent({ title, subtitle, actionLabel, onActionClick, action }: SectionHeaderProps) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
       <div className="space-y-1">
@@ -25,3 +27,5 @@ export function SectionHeader({ title, subtitle, actionLabel, onActionClick, act
     </div>
   );
 }
+
+export const SectionHeader = memo(SectionHeaderComponent);

@@ -24,18 +24,18 @@ export interface NavItem {
 
 export const navMenu: NavItem[] = [
   {
-    label: "Executive overview",
+    label: "Executive",
     icon: LayoutDashboard,
     roles: ["SUPER_ADMIN"],
     group: "Executive suite",
     children: [
       {
-        label: "Dashboard overview",
+        label: "Overview",
         href: "/dashboard/admin",
         roles: ["SUPER_ADMIN"],
       },
       {
-        label: "Performance insights",
+        label: "Performance",
         href: "/dashboard/admin/performance",
         roles: ["SUPER_ADMIN"],
       },
@@ -47,20 +47,20 @@ export const navMenu: NavItem[] = [
     ],
   },
   {
-    label: "User directory",
+    label: "Users",
     icon: Users,
     roles: ["SUPER_ADMIN"],
     group: "People",
     href: "/dashboard/users",
   },
   {
-    label: "NGO operations",
+    label: "NGO ops",
     icon: Users2,
     roles: ["SUPER_ADMIN"],
     group: "People",
     children: [
       {
-        label: "Workspace overview",
+        label: "Workspace",
         href: "/dashboard/admin/modules/ngos",
         roles: ["SUPER_ADMIN"],
       },
@@ -82,7 +82,7 @@ export const navMenu: NavItem[] = [
     ],
   },
   {
-    label: "CSR programmes",
+    label: "Programmes",
     icon: ClipboardList,
     roles: ["SUPER_ADMIN"],
     group: "Programs",
@@ -105,18 +105,18 @@ export const navMenu: NavItem[] = [
     ],
   },
   {
-    label: "Reports & analytics",
+    label: "Reports",
     icon: FileBarChart,
     roles: ["SUPER_ADMIN"],
     group: "Programs",
     children: [
       {
-        label: "Compliance reports",
+        label: "Compliance",
         href: "/dashboard/admin/modules/reports/compliance",
         roles: ["SUPER_ADMIN"],
       },
       {
-        label: "Impact insights",
+        label: "Impact",
         href: "/dashboard/admin/modules/reports/impact",
         roles: ["SUPER_ADMIN"],
       },
@@ -128,7 +128,7 @@ export const navMenu: NavItem[] = [
     ],
   },
   {
-    label: "Platform controls",
+    label: "Controls",
     icon: Settings2,
     roles: ["SUPER_ADMIN"],
     group: "Platform",

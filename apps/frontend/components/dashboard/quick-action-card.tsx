@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 
+import { memo } from "react";
+
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +15,7 @@ interface QuickActionCardProps {
   className?: string;
 }
 
-export function QuickActionCard({
+function QuickActionCardComponent({
   title,
   description,
   href = "#",
@@ -48,3 +50,5 @@ export function QuickActionCard({
     </div>
   );
 }
+
+export const QuickActionCard = memo(QuickActionCardComponent);

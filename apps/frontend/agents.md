@@ -267,3 +267,22 @@
 - Finalised NGO document drawer with dedicated “Timeline & Status” panel, lifecycle styling, and desktop sticky layout while keeping collaboration sidebar responsive.
 - Cleaned up legacy timeline toggle state, ensured comment panel runs without nested buttons, and refreshed dashboard/component/progress docs.
 - Ran `npm run lint` and `npm run build` to confirm zero regressions.
+
+## 66. [FE] Activity notifications popover + mobile sheet.
+- Added header bell trigger with badge, desktop popover, and mobile slide-up sheet to surface mock activity notifications inline.
+- Implemented reusable `NotificationItem`, updated dashboard/component/progress docs, and validated responsiveness across breakpoints.
+- Ran `npm run lint` and `npm run build` to ensure the layout remains stable.
+
+## 67. [FE] Smart suggestions card + layout polish.
+- Introduced `SuggestedActionsPanel` on the admin dashboard with mock “Take action” tasks, scrolling container, and responsive pairing beside quick actions.
+- Tweaked dashboard shell to use `h-screen` with a scrollable sidebar/content split so navigation and pages scroll independently.
+- Synced documentation (dashboard overview, component catalog, progress report) and verified with `npm run lint`, `npm run build`, plus dev server restart.
+
+## 68. [FE] Command palette + fast navigation polish.
+- Added ⌘/Ctrl + K handler in `app/dashboard/layout.tsx` that opens a Suspense-backed command palette with mock search results; hooked useTransition into palette open/search/close flows for smooth pending states.
+- Prefetched sidebar links, wrapped dashboard content in `React.Suspense` with skeleton fallback, and updated the command trigger button to disable during transitions.
+- Enabled Next.js React Compiler flag in `next.config.js` and refreshed docs (`FRONTEND_DASHBOARD.md`, `COMPONENT_CATALOG.md`, `FRONTEND_SETUP.md`, `FRONTEND_TODO.md`, `PROGRESS_REPORT.md`) to highlight route prefetch + Suspense navigation; reran `npm run lint` for verification.
+
+## 69. [FE] Admin analytics charts restyled with minimal visuals.
+- Replaced hero area chart with a composed bar+line `OverviewChart`, swapped CSR submissions to a muted bar chart, and added `MicroBar` mini-visuals to StatCard metrics.
+- Updated dashboard/component/progress docs to reflect the lighter chart treatment and reran lint/build for validation.

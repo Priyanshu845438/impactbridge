@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 
 import {
   ArrowDownRight,
@@ -12,6 +12,8 @@ import {
   HandshakeIcon,
   LineChart,
   ShieldCheck,
+  Sparkles,
+  Target,
   TrendingUp,
   Users2,
 } from "lucide-react";
@@ -24,7 +26,7 @@ import { useAuth } from "@/providers/auth-context";
 import { toast } from "sonner";
 import { SkeletonCard, SkeletonStat, SkeletonActivityItem } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { CartesianGrid, Line, LineChart as RechartsLineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -63,8 +65,10 @@ export default function AdminDashboard() {
   const healthSeries = useMemo(() => generateSeries(8, 70, 98), []);
   const lastLoginSeries = useMemo(() => generateSeries(8, 3, 14), []);
   const csrSubmissions = useMemo(() => createCSRSubmissionsData(30), []);
+  const activityTrend = useMemo(() => createActivityData(activitySeries.slice(-12)), [activitySeries]);
 
-  const quickActions = [
+  const quickActions = useMemo(
+    () => [
     {
       title: "NGO verification queue",
       description: "Review newly registered organisations awaiting compliance diligence.",
@@ -93,9 +97,12 @@ export default function AdminDashboard() {
       href: "#",
       icon: LineChart,
     },
-  ] as const;
+  ] as const,
+    [],
+  );
 
-  const oversightSnapshot = [
+  const oversightSnapshot = useMemo(
+    () => [
     {
       title: "Verifications due",
       metric: "12 NGOs",
@@ -114,9 +121,12 @@ export default function AdminDashboard() {
       helper: "Awaiting quarterly validation",
       tone: "slate" as const,
     },
-  ];
+  ],
+    [],
+  );
 
-  const pipelineMilestones = [
+  const pipelineMilestones = useMemo(
+    () => [
     {
       label: "CSR-1 onboarding",
       owner: "Compliance desk",
@@ -141,9 +151,12 @@ export default function AdminDashboard() {
       status: "Drafting",
       eta: "Mar 20",
     },
-  ];
+  ],
+    [],
+  );
 
-  const assuranceNotes = [
+  const assuranceNotes = useMemo(
+    () => [
     {
       title: "Weekly compliance window",
       detail: "Finance and legal teams aligned on dual approvals for high-value CSR uploads.",
@@ -152,7 +165,9 @@ export default function AdminDashboard() {
       title: "Partner sentiment",
       detail: "Average donor NPS 4.6/5 across the past fortnight with positive comments on reporting cadence.",
     },
-  ];
+  ],
+    [],
+  );
 
   if (loading) {
     return (
@@ -228,8 +243,8 @@ export default function AdminDashboard() {
                   +18% vs previous
                 </span>
               </div>
-              <div className="mt-4">
-                <AreaChart data={activitySeries} height={180} />
+              <div className="mt-4 min-h-[250px] w-full">
+                <OverviewChart data={activityTrend} />
               </div>
             </div>
           </div>
@@ -269,15 +284,15 @@ export default function AdminDashboard() {
             {calculateCSRDelta(csrSubmissions).toFixed(1)}% vs prev
           </span>
         </div>
-        <div className="mt-4 h-72 w-full">
+        <div className="mt-4 min-h-[250px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <RechartsLineChart data={csrSubmissions} margin={{ top: 12, right: 18, left: -6, bottom: 8 }}>
-              <CartesianGrid strokeDasharray="4 6" stroke="#e2e8f0" vertical={false} />
+            <BarChart data={csrSubmissions} margin={{ top: 12, right: 12, left: -6, bottom: 4 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
               <XAxis dataKey="label" tickLine={false} axisLine={false} interval={5} tick={{ fill: "#94a3b8", fontSize: 11 }} />
               <YAxis hide domain={[0, "dataMax + 6"]} />
-              <Tooltip cursor={{ stroke: "#6366f1", strokeWidth: 1, strokeDasharray: "3 3" }} content={<CustomTooltip />} />
-              <Line type="monotone" dataKey="value" stroke="#4a6dfb" strokeWidth={2.5} dot={false} activeDot={{ r: 6 }} />
-            </RechartsLineChart>
+              <Tooltip cursor={{ fill: "rgba(15, 23, 42, 0.04)" }} content={<CustomTooltip />} />
+              <Bar dataKey="value" radius={[6, 6, 0, 0]} fill="#d9e2ff" />
+            </BarChart>
           </ResponsiveContainer>
         </div>
       </section>
@@ -291,7 +306,7 @@ export default function AdminDashboard() {
           trend={calculateDelta(userStatSeries)}
           statusColor="emerald"
         >
-          <Sparkline data={userStatSeries} height={64} area tone="emerald" />
+          <MicroBar data={userStatSeries} tone="#0f172a" />
         </StatCard>
         <StatCard
           icon={ClipboardCheck}
@@ -301,7 +316,7 @@ export default function AdminDashboard() {
           trend={calculateDelta(approvalStatSeries)}
           statusColor="amber"
         >
-          <Sparkline data={approvalStatSeries} height={64} area tone="amber" />
+          <MicroBar data={approvalStatSeries} tone="#b45309" />
         </StatCard>
         <StatCard
           icon={Clock4}
@@ -311,7 +326,7 @@ export default function AdminDashboard() {
           trend={calculateDelta(lastLoginSeries)}
           statusColor="indigo"
         >
-          <Sparkline data={lastLoginSeries} height={64} area tone="indigo" />
+          <MicroBar data={lastLoginSeries} tone="#3730a3" />
         </StatCard>
         <StatCard
           icon={ShieldCheck}
@@ -321,7 +336,7 @@ export default function AdminDashboard() {
           trend={calculateDelta(healthSeries)}
           statusColor="emerald"
         >
-          <Sparkline data={healthSeries} height={64} area tone="emerald" />
+          <MicroBar data={healthSeries} tone="#059669" />
         </StatCard>
       </section>
 
@@ -380,19 +395,93 @@ export default function AdminDashboard() {
         </div>
       </section>
 
-      <section className="space-y-4">
-        <SectionHeader title="Quick actions" subtitle="Common control centre tasks for administrators" />
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {quickActions.map((action) => (
-            <QuickActionCard key={action.title} {...action} />
-          ))}
+      <section className="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,1.4fr)]">
+        <div className="space-y-4">
+          <SectionHeader title="Quick actions" subtitle="Common control centre tasks for administrators" />
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {quickActions.map((action) => (
+              <QuickActionCard key={action.title} {...action} />
+            ))}
+          </div>
         </div>
+
+        <SuggestedActionsPanel />
       </section>
 
       <ActivityFeed className="pt-2" />
     </div>
   );
 }
+
+const SuggestedActionsPanel = memo(function SuggestedActionsPanel() {
+  const suggestions = useMemo(
+    () => [
+    {
+      title: "Review pending NGO documents",
+      description: "3 submissions await compliance sign-off before they can go live.",
+      icon: Files,
+    },
+    {
+      title: "Approve CSR programme",
+      description: "Green Earth solar initiative is waiting on your final verification.",
+      icon: ShieldCheck,
+    },
+    {
+      title: "Follow up with Company XYZ",
+      description: "Send a reminder for quarterly reporting and impact evidence uploads.",
+      icon: Target,
+    },
+    {
+      title: "Check donor KYC gaps",
+      description: "5 donors created accounts but still need PAN / address verification.",
+      icon: Users2,
+    },
+    {
+      title: "Schedule compliance sync",
+      description: "Plan a review with NGO partners flagged for audit next month.",
+      icon: Sparkles,
+    },
+  ] as const,
+    [],
+  );
+
+  return (
+    <div className="flex h-full flex-col rounded-3xl border border-slate-200 bg-white/95 p-5 shadow-sm">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Suggested actions</p>
+          <h3 className="text-lg font-semibold text-slate-900">Smart recommendations</h3>
+          <p className="text-xs text-slate-500">Curated nudges based on recent activity and role.</p>
+        </div>
+      </div>
+      <div className="mt-4 flex-1 space-y-3 overflow-y-auto pr-1" style={{ maxHeight: 260 }}>
+        {suggestions.map((item) => (
+          <div
+            key={item.title}
+            className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50/80 p-3 transition hover:border-emerald-200 hover:bg-emerald-50/80"
+          >
+            <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+              <item.icon className="h-4 w-4" />
+            </span>
+            <div className="flex flex-1 flex-col gap-2">
+              <div>
+                <p className="text-sm font-semibold text-slate-900">{item.title}</p>
+                <p className="text-xs text-slate-500">{item.description}</p>
+              </div>
+              <button
+                type="button"
+                className="inline-flex w-fit items-center justify-center rounded-full border border-emerald-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-50"
+                onClick={() => toast.info(`${item.title} (mock action)`)}
+              >
+                Take action
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+});
 
 type SparkData = number[];
 
@@ -436,27 +525,43 @@ function KpiCard({ label, value, delta, data, tone = "slate" }: KpiCardProps) {
   );
 }
 
-type ChartProps = {
-  data: SparkData;
-  height?: number;
-};
+type OverviewPoint = { label: string; active: number; submissions: number };
 
-function AreaChart({ data, height = 160 }: ChartProps) {
-  const width = 520;
-  const padding = 12;
-  const { path, areaPath } = buildPaths(data, width, height, padding);
-
+function OverviewChart({ data }: { data: OverviewPoint[] }) {
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} className="h-full w-full">
-      <defs>
-        <linearGradient id="activityGradient" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#34d399" stopOpacity="0.35" />
-          <stop offset="100%" stopColor="#34d399" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <path d={areaPath} fill="url(#activityGradient)" />
-      <path d={path} fill="none" stroke="#10b981" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <ResponsiveContainer width="100%" height={200}>
+      <ComposedChart data={data} margin={{ top: 8, bottom: 0, left: -16, right: 8 }}>
+        <CartesianGrid stroke="#edf2f7" strokeDasharray="3 3" vertical={false} />
+        <XAxis dataKey="label" tick={{ fill: "#94a3b8", fontSize: 11 }} tickLine={false} axisLine={false} />
+        <YAxis yAxisId="left" hide domain={[0, "dataMax + 8"]} />
+        <YAxis yAxisId="right" hide domain={[0, "dataMax + 6"]} />
+        <Tooltip
+          wrapperStyle={{ outline: "none" }}
+          cursor={{ fill: "rgba(15,23,42,0.04)" }}
+          content={({ active, payload }) => {
+            if (!active || !payload?.length) return null;
+            const [bars, linePoint] = payload;
+            return (
+              <div className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-600 shadow-sm">
+                <p className="font-semibold text-slate-800">{bars?.payload?.label}</p>
+                <p className="mt-1">Active users: {bars?.value}</p>
+                <p className="mt-1">Submissions: {linePoint?.value}</p>
+              </div>
+            );
+          }}
+        />
+        <Bar dataKey="active" yAxisId="left" fill="#cbd5f5" radius={[6, 6, 0, 0]} />
+        <Line
+          type="monotone"
+          dataKey="submissions"
+          yAxisId="right"
+          stroke="#0f172a"
+          strokeWidth={2.4}
+          dot={false}
+          activeDot={{ r: 5, fill: "#0f172a" }}
+        />
+      </ComposedChart>
+    </ResponsiveContainer>
   );
 }
 
@@ -484,6 +589,28 @@ function Sparkline({ data, height = 48, area = false, tone = "slate" }: Sparklin
         <path d={areaPath} fill={`${toneColor}20`} />
       ) : null}
       <path d={path} fill="none" stroke={toneColor} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function MicroBar({ data, tone = "#0f172a" }: { data: SparkData; tone?: string }) {
+  const width = 160;
+  const height = 48;
+  const padding = 6;
+  const max = Math.max(...data);
+  const min = Math.min(...data);
+  const range = max - min || 1;
+  const barWidth = (width - padding * 2) / data.length - 2;
+
+  return (
+    <svg viewBox={`0 0 ${width} ${height}`} className="h-full w-full">
+      {data.map((value, index) => {
+        const normalized = (value - min) / range;
+        const barHeight = (height - padding * 2) * normalized;
+        const x = padding + index * (barWidth + 2);
+        const y = height - padding - barHeight;
+        return <rect key={index} x={x} y={y} width={barWidth} height={barHeight} rx={barWidth / 4} fill={`${tone}22`} stroke={`${tone}55`} />;
+      })}
     </svg>
   );
 }
@@ -547,6 +674,14 @@ function calculateCSRDelta(data: CSRPoint[]) {
   const first = data[0].previous || data[0].value;
   const last = data[data.length - 1].value;
   return ((last - first) / first) * 100;
+}
+
+function createActivityData(series: SparkData): OverviewPoint[] {
+  return series.map((value, index) => ({
+    label: `W${index + 1}`,
+    active: Math.round(value),
+    submissions: Math.round(value * 0.6 + (Math.random() * 8 - 4)),
+  }));
 }
 
 function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<{ value: number; payload: CSRPoint }> }) {

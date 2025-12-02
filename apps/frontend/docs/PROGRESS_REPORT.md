@@ -1,6 +1,6 @@
 # ImpactBridge Frontend Progress Report
 
-_Last updated: 2025-11-28 19:10 IST_
+_Last updated: 2025-11-28 20:05 IST_
 
 ## Overview
 The ImpactBridge frontend has matured into a production-ready Next.js 14 application featuring role-based dashboards, polished authentication flows, and a documented UI system. This report summarises the work completed to date as well as the remaining backlog items so stakeholders can track delivery status and plan the next milestones.
@@ -30,16 +30,18 @@ The ImpactBridge frontend has matured into a production-ready Next.js 14 applica
 - Admin module pages scaffolded for NGOs, Programmes, Reports, and Settings.
 
 ### 4. Admin Dashboard UX
-- Analytics hero row with area chart and KPI spark cards paints platform momentum visually.
-- CSR submissions chart leverages Recharts with mock data + tooltip and skeleton fallbacks to keep layout stable.
-- Metric grid now uses reusable `StatCard` components with trend pills, sparklines, and colour-coded deltas.
+- Analytics hero row now sports a composed bar+line chart with muted tones and compact legend, plus KPI cards housing micro bar visuals.
+- CSR submissions chart moved to a minimal Recharts bar chart with subtle styling and skeleton fallbacks to keep layout stable.
+- Metric grid relies on reusable `StatCard` components with trend pills and embedded micro bars for cleaner trend signals.
 - Quick action cards, profile drawer, and recent activity list implemented with reusable components.
 - Session-scoped welcome toast triggered once per visit via `sessionStorage`.
 - Shimmering skeleton loaders for charts/cards/activity smooth the initial load (650 ms delay mimicking data fetch).
 - NGO management module upgraded with multi-filter search, sorting, pagination, responsive cards, and detailed drawer tabs; controls now reflow cleanly on mobile and tables use horizontal scrolling without breaking layout.
 - NGO compliance documents view (`/dashboard/admin/modules/ngos/compliance-documents` → dynamic route) delivers per-organisation file inventory with filtering, search, split preview (live/document pane + metadata/tags/versions), lifecycle status controls plus a timeline & status panel, Access & Permissions modal, confirmation-driven approve/reject/request-update flows, collaboration sidebar with filters and lifecycle-aware comment states, and a recent activity log.
 - Super Admin profile view added (`/dashboard/profile`) with editable form, skeleton fallbacks, and toast-driven save confirmation.
-- Notifications hub added with mock feed, mark-as-read controls, and header badge synced to AuthProvider.
+- Notifications hub added with mock feed, mark-as-read controls, header badge synced to AuthProvider, and a new header popover/sheet pattern for quick-glance activity updates.
+- Smart Suggestions panel introduced alongside quick actions to provide role-based nudges with “Take action” CTAs.
+- Command palette (⌘/Ctrl + K) added to the dashboard shell, delivering mock quick search navigation with keyboard focus management, responsive modal/sheet behaviour, Suspense-wrapped content, and route prefetch + useTransition polish for near-instant navigation.
 - User directory added for super admins with search, filters, pagination, responsive fallback scroll to preview global users on narrow viewports, and a reorganised sidebar sequence (Executive suite → People → Programs → Platform → Guides & support) for faster discovery.
 - Root layout/body now preserves vertical scrolling so login, register, and dashboard surfaces remain accessible on mobile/tablet devices.
 - User detail view delivers tabs for overview/activity/permissions with mock action buttons for reset/deactivation.

@@ -1,6 +1,6 @@
 "use client";
 
-import { cloneElement, isValidElement, useEffect, useMemo, useRef, useState } from "react";
+import { cloneElement, isValidElement, memo, useEffect, useMemo, useRef, useState } from "react";
 import { LogOut, User2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -12,7 +12,7 @@ interface ProfileDrawerProps {
   onSignOut?: () => void;
 }
 
-export function ProfileDrawer({ children, onSignOut }: ProfileDrawerProps) {
+export const ProfileDrawer = memo(function ProfileDrawer({ children, onSignOut }: ProfileDrawerProps) {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -113,4 +113,4 @@ export function ProfileDrawer({ children, onSignOut }: ProfileDrawerProps) {
       ) : null}
     </div>
   );
-}
+});

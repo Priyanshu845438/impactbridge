@@ -6,18 +6,18 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 ## Shared Layout (`app/dashboard/layout.tsx`)
 - **Auth guard**: consumes `useAuth()` and redirects to `/login` if token missing
 - **Sidebar**: 260px fixed panel on desktop with nav items derived from `lib/nav-menu.ts`; filters links per user role, supports collapsible admin modules, and is fully scrollable (mobile drawer uses the same config). Menu groupings follow a professional sequence (Executive suite → People → Programs → Platform → Guides & support) for faster discovery.
-- **Header**: sticky top bar with brand mark (links to `/dashboard/admin`), centered search input, breadcrumb slot, and profile drawer trigger (inline dropdown with quick actions + sign out)
-- **Main content**: `flex-1` scrollable region with gradient background and responsive padding; global layout now keeps vertical scrolling enabled even on smaller screens.
+- **Header**: sticky top bar with brand mark (links to `/dashboard/admin`), centered search input, inline activity notifications bell (badge + desktop popover + mobile sheet), keyboard-accessible command palette shortcut (⌘/Ctrl + K) with modal results, and profile drawer trigger (inline dropdown with quick actions + sign out)
+- **Main content**: `flex-1` scrollable region with gradient background and responsive padding; global layout now keeps vertical scrolling enabled even on smaller screens and wraps child routes in `React.Suspense` with skeleton fallbacks to avoid white flashes between navigations.
 - **Mobile**: hamburger toggles a drawer sidebar; desktop view stays fixed; nested sections collapse/expand with Chevron indicators; mobile drawers/tables use overflow wrappers to prevent horizontal clipping.
-- **Utilities**: `SectionHeader` for consistent titling, `QuickActionCard` for highlight blocks, root-level `Toaster` for global feedback, and `Skeleton` components for polished loading states
+- **Utilities**: `SectionHeader` for consistent titling, `QuickActionCard` for highlight blocks, root-level `Toaster` for global feedback, `Skeleton` components for polished loading states, a command palette overlay (`CommandPalette`) for mock quick search/navigation, eager route prefetch on sidebar links, and `useTransition` to smooth heavier UI toggles (palette, search filtering).
 
 ## Admin Dashboard (`app/dashboard/admin/page.tsx`)
 - Toast greeting fires once per session (sessionStorage guard + sonner Toaster)
 - 650ms skeleton delay on initial load to prevent abrupt flashes before auth/session data settles
-- Analytics hero row combines a primary activity area chart with three KPI spark cards (new NGOs, CSR commitments, active users)
-- CSR submissions chart powered by Recharts line chart shows 30-day trend with mock data + tooltip
-- Metric grid now uses reusable `StatCard` components (user count, approvals, last login, platform health) with sparklines and colour-coded deltas
-- Quick action grid (`QuickActionCard`) suggests follow-up tasks (verification queue, CSR programmes, analytics) with cards that stack gracefully on mobile
+- Analytics hero row now pairs a composed weekly bar+line chart (`OverviewChart`) using muted blue/slate tones with three KPI mini-bar cards (new NGOs, CSR funds, active users).
+- CSR submissions visual swaps to a minimal bar chart keeping tooltips subtle while trimming vertical space; colours remain soft and professional.
+- Metric grid now uses reusable `StatCard` components (user count, approvals, last login, platform health) each embedding a `MicroBar` visualization for quick trend at-a-glance.
+- Quick action grid (`QuickActionCard`) suggests follow-up tasks (verification queue, CSR programmes, analytics) with cards that stack gracefully on mobile; paired with a Smart Suggestions panel offering mock “Take action” nudges.
 - **Recent Activity** list with icons, timestamps, statuses (static for now)
 - Skeleton variants mirror chart + card layout so transitions stay intentional
 - Profile drawer (`components/dashboard/profile-drawer.tsx`) opens from header and links to the dedicated profile page

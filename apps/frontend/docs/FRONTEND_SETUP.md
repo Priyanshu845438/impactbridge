@@ -16,7 +16,7 @@
   - `page.tsx` root redirect → `/login`
   - `login`, `register`, `forgot-password`, `reset-password`
   - `dashboard/`
-  - `layout.tsx` protected workspace + nested sidebar
+  - `layout.tsx` protected workspace + nested sidebar + header notifications popover/sheet
   - role pages: `admin`, `ngo`, `company`, `donor`
     - admin modules: `app/dashboard/admin/modules/{ngos,programmes,reports,settings}` (NGO screen now includes mock table UI with responsive search/filter rows, sorting, pagination, drawer, and multi-filter controls)
     - super admin utilities: `app/dashboard/users` (global user directory), `notifications`, `profile`
@@ -75,6 +75,7 @@ npm run dev -- --port 3400    # start dev server (port 3400, /dashboard redirect
 npm run lint                  # lint check
 npm run build                 # production build (standalone output, strict mode off per next.config.js)
 npm run start                 # serve built app
+# Productivity shortcut: once authenticated, press ⌘/Ctrl + K to open the mock command palette for quick navigation cues
 # clean rebuild when chunks mismatch
 rm -rf .next node_modules/.cache && npm install && npm run build
 ```
