@@ -290,3 +290,21 @@
 ## 70. [FE] Cleaned Next config warning.
 - Trimmed `next.config.js` to standalone-only export, removing unsupported `reactCompiler` flag per latest Next.js guidance.
 - Ran `npm run build` to confirm the warning disappeared; only the known module-typing notice remains.
+
+## 71. [FE] Route prefetch & navigation polish.
+- Forced sidebar links to prefetch and preloaded common dashboards via router.prefetch for snappier transitions.
+- Added fade transition and early loading splash so layout feels instant while retaining Suspense fallback.
+- Verified with `npm run lint` and `npm run build`; no new warnings beyond known module-typing notice.
+
+## 72. [FE] Chart container sizing hardened.
+- Wrapped dashboard charts in fixed min-height shells and set `ResponsiveContainer` to `width="100%" height="100%" minHeight={280}` to avoid negative-width warnings.
+- Updated dashboard/component docs to explain the sizing pattern and reran lint/build to verify no regressions.
+
+## 73. [FE] Dependency pruning & repo tidy.
+- Removed unused `@radix-ui/react-form`, ran `npm prune`/`npm dedupe`, and verified lint/build stay green.
+- Reconfirmed there’s no legacy mock UI/code left unreferenced; bundle stats unchanged but dependency tree slimmer.
+
+## 74. [FE] UX polish sweep.
+- Introduced global route progress bar, button press feedback, hover lift on cards, and consistent accordion animations for smoother micro-interactions.
+- Rolled out shared `EmptyState` component and updated docs/style guide to lock in loading + empty-state patterns.
+- Verified with `npm run lint` and `npm run build` post-dependency cleanup.

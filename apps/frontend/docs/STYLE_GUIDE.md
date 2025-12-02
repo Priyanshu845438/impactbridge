@@ -47,3 +47,10 @@
 - Use Tailwind config to extend colors if more tokens needed (`tailwind.config.js`)
 - For gradients, prefer `bg-gradient-to-br from-... to-...` patterns seen in `globals.css`
 - Keep new components close to existing styling for consistency; reference `QuickActionCard` for guidance
+
+## Interaction Guidelines
+- Cards: apply `hover:scale-[1.01] hover:shadow-md transition-all` to provide subtle lift feedback.
+- Buttons: base class includes `active:scale-[0.98] active:opacity-90` for consistent press feedback.
+- Drawers & dropdowns: use Tailwind `animate-in`, `slide-in-from-right`, and custom accordion animations (`accordion-down`/`accordion-up`) for smooth open/close states.
+- Empty states: use `EmptyState` component (icon optional) with title, helper text, and single CTA to maintain consistency across modules.
+- Loading: rely on page-level skeletons plus the global top progress bar to signal transitions.

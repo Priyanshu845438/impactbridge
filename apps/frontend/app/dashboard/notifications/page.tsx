@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Bell, CheckCircle, Info, TriangleAlert } from "lucide-react";
 
 import { SectionHeader } from "@/components/dashboard/section-header";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
 import { SkeletonCard, SkeletonText } from "@/components/ui/skeleton";
 import { useAuth } from "@/providers/auth-context";
@@ -145,11 +146,11 @@ export default function NotificationsPage() {
       />
 
       {notifications.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50/60 py-16 text-center text-slate-500">
-          <Bell className="h-10 w-10 text-slate-400" />
-          <p className="mt-4 text-sm font-semibold">Everything is up to date.</p>
-          <p className="mt-1 text-xs">We will let you know when new activity arrives.</p>
-        </div>
+        <EmptyState
+          icon={Bell}
+          title="Everything is up to date."
+          description="We will alert you as soon as new activity arrives."
+        />
       ) : (
         <div className="space-y-4">
           {notifications.map((notification) => (

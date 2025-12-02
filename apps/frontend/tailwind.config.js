@@ -59,6 +59,25 @@ module.exports = {
         18: '4.5rem',
         22: '5.5rem',
       },
+      keyframes: {
+        'card-hover': {
+          '0%': { transform: 'scale(1)', boxShadow: '0 0 0 rgba(15, 23, 42, 0)' },
+          '100%': { transform: 'scale(1.01)', boxShadow: '0 20px 35px -25px rgba(15, 23, 42, 0.35)' },
+        },
+        'accordion-down': {
+          from: { height: '0px', opacity: '0' },
+          to: { height: 'var(--radix-accordion-content-height)', opacity: '1' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)', opacity: '1' },
+          to: { height: '0px', opacity: '0' },
+        },
+      },
+      animation: {
+        'card-hover': 'card-hover 180ms ease-out forwards',
+        'accordion-down': 'accordion-down 200ms ease-out',
+        'accordion-up': 'accordion-up 200ms ease-in',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],

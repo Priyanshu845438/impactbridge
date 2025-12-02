@@ -33,3 +33,5 @@
 - Notifications route with badge sync, per-item read controls, and header popover/sheet for quick access
 
 Update this file as features ship or priorities shift.
+
+- [x] Route-level prefetch optimisation in dashboard shell (sidebar links + router.prefetch).

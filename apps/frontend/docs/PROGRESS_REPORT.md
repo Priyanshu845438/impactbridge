@@ -99,3 +99,7 @@ The ImpactBridge frontend has matured into a production-ready Next.js 14 applica
 7. Introduce automated end-to-end tests covering auth, profile editing, notifications, user directory, and dashboard landing flow.
 
 Keeping this report updated alongside `agents.md` will ensure the team and stakeholders have real-time visibility into progress and outstanding work.
+
+- Implemented route-level prefetch optimisations (sidebar prefetch + router.prefetch for admin/users/reports) and added fade transitions to the Suspense-wrapped content.
+
+- Added global route progress indicator, unified empty states via `EmptyState`, and tuned hover/press micro-interactions across dashboard cards and buttons.

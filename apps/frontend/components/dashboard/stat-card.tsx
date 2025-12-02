@@ -52,7 +52,7 @@ export const StatCard = React.memo(function StatCard({
   const TrendIcon = positive ? ArrowUpRight : ArrowDownRight;
 
   return (
-    <article className="rounded-3xl border border-slate-200 bg-white/95 p-5 shadow-sm transition-all duration-200 hover:scale-[1.01]">
+    <article className="rounded-3xl border border-slate-200 bg-white/95 p-5 shadow-sm transition-all duration-200 hover:scale-[1.01] hover:shadow-md">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className={cn("flex h-11 w-11 items-center justify-center rounded-full", tone.icon)}>

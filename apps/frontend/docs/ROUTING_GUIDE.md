@@ -43,3 +43,5 @@ Protection is enforced client-side in `app/dashboard/layout.tsx` via `useAuth()`
 - Add `middleware.ts` enforcing `/dashboard` prefix requires auth token
 - Introduce dynamic routes for entities (e.g., `/dashboard/admin/ngos/[id]`)
 - Use parallel routes for modals if needed (e.g., editing tasks)
+
+- Dashboard shell prefetches `/dashboard/admin`, `/dashboard/users`, and `/dashboard/admin/modules/reports`; keep the list updated when adding new high-traffic sections.

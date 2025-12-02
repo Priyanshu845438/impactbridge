@@ -243,7 +243,7 @@ export default function AdminDashboard() {
                   +18% vs previous
                 </span>
               </div>
-              <div className="mt-4 min-h-[250px] w-full">
+              <div className="mt-4 w-full min-h-[280px]">
                 <OverviewChart data={activityTrend} />
               </div>
             </div>
@@ -284,8 +284,8 @@ export default function AdminDashboard() {
             {calculateCSRDelta(csrSubmissions).toFixed(1)}% vs prev
           </span>
         </div>
-        <div className="mt-4 min-h-[250px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
+        <div className="mt-4 w-full min-h-[280px]">
+          <ResponsiveContainer width="100%" height="100%" minHeight={280}>
             <BarChart data={csrSubmissions} margin={{ top: 12, right: 12, left: -6, bottom: 4 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
               <XAxis dataKey="label" tickLine={false} axisLine={false} interval={5} tick={{ fill: "#94a3b8", fontSize: 11 }} />
@@ -529,7 +529,7 @@ type OverviewPoint = { label: string; active: number; submissions: number };
 
 function OverviewChart({ data }: { data: OverviewPoint[] }) {
   return (
-    <ResponsiveContainer width="100%" height={200}>
+    <ResponsiveContainer width="100%" height="100%" minHeight={280}>
       <ComposedChart data={data} margin={{ top: 8, bottom: 0, left: -16, right: 8 }}>
         <CartesianGrid stroke="#edf2f7" strokeDasharray="3 3" vertical={false} />
         <XAxis dataKey="label" tick={{ fill: "#94a3b8", fontSize: 11 }} tickLine={false} axisLine={false} />

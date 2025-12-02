@@ -47,6 +47,7 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - Accepts an array of `{ label, actionLabel, icon, keywords }` and filters results client-side.
 - Uses modal layout on desktop (centered) and drops full-width overlay on smaller breakpoints; closes on Escape or item select.
 - Provides keyboard focus trapping, body scroll lock, prefetch-driven navigation cues, and result hover affordances to mimic a productivity-grade quick search; `useTransition` keeps search/filter + close interactions buttery.
+- Dashboard layout also mounts a top progress indicator using `next-nprogress-bar`, giving consistent route feedback alongside per-page skeletons.
 
 ### Suggested actions panel
 - `SuggestedActionsPanel` (inline component in `app/dashboard/admin/page.tsx`) renders a scrollable list of mock recommendations with icons and “Take action” buttons.
@@ -61,7 +62,7 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - Reuses `Tabs`, `SectionHeader`, skeleton loaders, and toast feedback for mock actions.
 
 ### Dashboard visualisations (inline helpers in `admin/page.tsx`)
-- `OverviewChart` combines muted bars + line for platform activity, `MicroBar` renders mini bar sets inside KPI cards, and `Sparkline` remains available for other trend contexts.
+- `OverviewChart` combines muted bars + line for platform activity, `MicroBar` renders mini bar sets inside KPI cards, and `Sparkline` remains available for other trend contexts. Charts live inside `min-h-[280px]` wrappers and set `ResponsiveContainer` height/minHeight so layouts stabilise before render.
 - Recharts BarChart powers CSR submissions with light fills; skeletons keep layout stable before data resolves.
 
 ### `components/ui/drawer.tsx`
@@ -108,3 +109,5 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 2. Prefer composition over ad-hoc Tailwind in pages
 3. Document reusable pieces here to help future contributors
 4. Update `docs/STYLE_GUIDE.md` if new visual tokens introduced
+
+- Prefetch behaviour: sidebar `Link` components use `prefetch={true}` and the layout proactively prefetches `/dashboard/admin`, `/dashboard/users`, and `/dashboard/admin/modules/reports` so navigation stays instant.

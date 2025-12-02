@@ -1,6 +1,15 @@
 "use client";
 
-import { PropsWithChildren, Suspense, useEffect, useMemo, useState, useTransition } from "react";
+import {
+  PropsWithChildren,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -92,7 +101,7 @@ function SidebarLink({
       <div className={containerClasses}>
         {item.href ? (
           <Link
-            prefetch
+            prefetch={true}
             href={item.href}
             className="flex flex-1 items-center gap-3"
             onClick={() => {
@@ -150,8 +159,11 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
   const [mobileNotificationsOpen, setMobileNotificationsOpen] = useState(false);
   const [commandOpen, setCommandOpen] = useState(false);
   const [isCommandPending, startCommandTransition] = useTransition();
+  const [contentOpacityClass, setContentOpacityClass] = useState("opacity-0");
+  const fadeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const userRole = user?.role;
+
   const availableLinks = useMemo(() => {
     if (!userRole) {
       return [];
@@ -240,6 +252,12 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
   }, [router, token, userRole]);
 
   useEffect(() => {
+    router.prefetch("/dashboard/admin");
+    router.prefetch("/dashboard/users");
+    router.prefetch("/dashboard/admin/modules/reports");
+  }, [router]);
+
+  useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key.toLowerCase() !== "k" || (!event.metaKey && !event.ctrlKey)) {
         return;
@@ -263,13 +281,49 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
     };
   }, []);
 
-  if (!token || !userRole) {
-    return null;
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      setContentOpacityClass("opacity-100");
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [pathname]);
+
+  useEffect(() => {
+    return () => {
+      if (fadeTimeoutRef.current) {
+        clearTimeout(fadeTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const triggerContentFade = useCallback(() => {
+    if (fadeTimeoutRef.current) {
+      clearTimeout(fadeTimeoutRef.current);
+    }
+    setContentOpacityClass("opacity-0");
+    fadeTimeoutRef.current = setTimeout(() => {
+      setContentOpacityClass("opacity-100");
+      fadeTimeoutRef.current = null;
+    }, 180);
+  }, []);
+
+  if (!token || !userRole || !user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <span className="text-sm font-medium text-slate-500">Preparing your workspace…</span>
+      </div>
+    );
   }
 
   const handleLogout = () => {
     logout();
     router.replace("/login");
+    setMobileOpen(false);
+  };
+
+  const handleLinkNavigate = () => {
+    triggerContentFade();
     setMobileOpen(false);
   };
 
@@ -313,8 +367,9 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
           <div className="flex h-full w-full flex-col overflow-y-auto px-6 py-8 text-slate-800">
             <Link
               href="/dashboard/admin"
-              prefetch
+              prefetch={true}
               className="mb-6 flex items-center gap-3 text-lg font-semibold text-slate-900"
+              onClick={handleLinkNavigate}
             >
               <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-sm">
                 <ShieldCheck className="h-5 w-5 text-slate-600" />
@@ -333,7 +388,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                       key={link.label}
                       item={link}
                       pathname={pathname}
-                      onNavigate={() => setMobileOpen(false)}
+                      onNavigate={handleLinkNavigate}
                     />
                   ))}
                 </div>
@@ -549,7 +604,12 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
               </section>
             }
           >
-            <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 lg:p-8">
+            <section
+              className={cn(
+                "rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition-opacity duration-200 sm:p-6 lg:p-8",
+                contentOpacityClass,
+              )}
+            >
               <div className="space-y-8">{children}</div>
             </section>
           </Suspense>

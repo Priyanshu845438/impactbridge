@@ -90,3 +90,5 @@ If static assets or config change: `rm -rf .next` before a rebuild
 - Maintain docs/ alongside feature work so stakeholders stay informed
 - Update `agents.md` with a short bullet per major change (timestamp optional)
 - Use the global `Toaster` for user feedback (`import { Toaster } from '@/components/ui/sonner'`)
+
+- Route prefetch: dashboard layout preloads `/dashboard/admin`, `/dashboard/users`, and `/dashboard/admin/modules/reports` automatically; if adding new high-traffic routes, hook them into the same effect for parity.
