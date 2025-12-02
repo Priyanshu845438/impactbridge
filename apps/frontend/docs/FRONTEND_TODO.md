@@ -4,6 +4,7 @@
 - Implement real auth wiring once backend endpoints confirmed
 - Add middleware-based route guard for `/dashboard/*`
 - Connect dashboard stats/activity widgets to backend APIs via React Query
+- Remove console logging from production UI (e.g., global search in `dashboard/layout.tsx`) once telemetry hooks replace it.
 
 ## Medium Priority
 - Build dynamic tables for admin programmes / reports modules (NGO management + document review views already scaffolded with sorting/filtering/drawers)
@@ -15,6 +16,8 @@
 - Ensure future header/profile tweaks preserve single-button triggers to avoid hydration warnings
 - Audit responsive behaviour whenever new modules land (grids, tables, drawers) so mobile/tablet breakpoints stay polished
 - Maintain accessibility parity when building new modules: apply shared focus-ring utilities, label icon-only controls, and ensure tables/cards expose `aria` annotations like the NGO module.
+- Replace placeholder copy across role dashboards and the NGO document preview empty state with production messaging.
+- Ensure keyboard activation works on interactive table rows/cards (e.g., NGO list) so Enter/Space triggers the same action as clicks.
 
 ## Low Priority / Nice to Have
 - Dark mode toggle using shadcn theme utilities

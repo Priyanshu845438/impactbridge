@@ -322,3 +322,7 @@
 - Standardised emerald focus states across buttons, inputs, selects, drawer rows, and command palette for clearer keyboard navigation.
 - Added ARIA labels/roles to dashboard search, quick actions, notifications, profile controls, and NGO table/cards while tightening profile form label associations.
 - Documented the accessibility pass in the style guide + dashboard overview and confirmed `npm run lint` / `npm run build` remain clean.
+
+## 78. [FE] QA sweep notes logged.
+- Documented outstanding UI clean-up tasks: remove dashboard search console logging, replace placeholder copy (role dashboards, document preview, reset-password toast), and add keyboard activation for NGO table rows.
+- Synced findings across progress report and TODO roadmap; no code fixes applied yet.
