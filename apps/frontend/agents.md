@@ -286,3 +286,7 @@
 ## 69. [FE] Admin analytics charts restyled with minimal visuals.
 - Replaced hero area chart with a composed bar+line `OverviewChart`, swapped CSR submissions to a muted bar chart, and added `MicroBar` mini-visuals to StatCard metrics.
 - Updated dashboard/component/progress docs to reflect the lighter chart treatment and reran lint/build for validation.
+
+## 70. [FE] Cleaned Next config warning.
+- Trimmed `next.config.js` to standalone-only export, removing unsupported `reactCompiler` flag per latest Next.js guidance.
+- Ran `npm run build` to confirm the warning disappeared; only the known module-typing notice remains.

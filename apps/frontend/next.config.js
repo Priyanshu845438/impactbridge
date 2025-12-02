@@ -1,7 +1,5 @@
-export default {
+const nextConfig = {
   output: "standalone",
-  reactStrictMode: false,
-  experimental: {
-    reactCompiler: true,
-  },
 };
+
+export default nextConfig;
