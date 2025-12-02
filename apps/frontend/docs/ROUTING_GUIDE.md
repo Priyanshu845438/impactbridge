@@ -37,7 +37,7 @@ Protection is enforced client-side in `app/dashboard/layout.tsx` via `useAuth()`
 
 ## Link Usage
 - Use `next/link` `<Link href="...">` for client-side transitions
-- When navigation triggers side effects (closing mobile sidebar), pass callbacks down to the Sidebar component as seen in `DashboardLayout`
+- When navigation triggers side effects (closing mobile sidebar), pass callbacks down to the Sidebar component as seen in `DashboardLayout`. Sidebar icons are decorative (`aria-hidden`) and toggle buttons expose `aria-expanded` for screen readers.
 
 ## Future Plans
 - Add `middleware.ts` enforcing `/dashboard` prefix requires auth token

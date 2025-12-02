@@ -34,17 +34,23 @@ const ACTIVITY = [
 
 export const ActivityFeed = React.memo(function ActivityFeed({ className }: { className?: string }) {
   return (
-    <section className={cn("space-y-4", className)}>
+    <section className={cn("space-y-4", className)} aria-labelledby="recent-activity-heading">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-slate-900">Recent activity</h2>
+        <h2 id="recent-activity-heading" className="text-heading-3 text-slate-700">
+          Recent activity
+        </h2>
         <span className="text-xs font-medium uppercase tracking-[0.28em] text-slate-400">Live feed</span>
       </div>
 
-      <div className="relative rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-sm">
+      <div className="relative rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-sm" role="list">
         <div className="absolute left-9 top-10 bottom-10 hidden w-px bg-slate-200 md:block" />
         <ul className="space-y-6 md:space-y-0">
           {ACTIVITY.map(({ icon: Icon, title, description, time }) => (
-            <li key={`${title}-${time}`} className="relative flex flex-col gap-3 md:flex-row md:gap-4">
+            <li
+              key={`${title}-${time}`}
+              className="relative flex flex-col gap-3 md:flex-row md:gap-4"
+              aria-label={`${title}. ${description}. ${time}`}
+            >
               <div className="flex items-start gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 shadow-sm">
                   <Icon className="h-5 w-5" />

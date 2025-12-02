@@ -55,12 +55,15 @@ export const StatCard = React.memo(function StatCard({
     <article className="rounded-3xl border border-slate-200 bg-white/95 p-5 shadow-sm transition-all duration-200 hover:scale-[1.01] hover:shadow-md">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <span className={cn("flex h-11 w-11 items-center justify-center rounded-full", tone.icon)}>
+          <span
+            className={cn("flex h-11 w-11 items-center justify-center rounded-full", tone.icon)}
+            aria-hidden="true"
+          >
             <Icon className="h-5 w-5" />
           </span>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">{label}</p>
-            <p className="text-2xl font-semibold text-slate-900">{value}</p>
+            <p className="text-caption font-semibold uppercase tracking-[0.24em] text-slate-400">{label}</p>
+            <p className="text-heading-2 text-slate-700">{value}</p>
           </div>
         </div>
         <span

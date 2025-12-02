@@ -56,8 +56,8 @@
 
 ## Dashboard Shell Highlights
 - `dashboard/layout.tsx` guards access using `useAuth()`
-- Sidebar sources `navMenu`; collapsible groups render nested admin modules when role is SUPER_ADMIN, and the panel now allows vertical scrolling for large menus
-- Sticky header with profile drawer trigger (quick access + sign out) and mirrored mobile menu
+- Sidebar sources `navMenu`; collapsible groups render nested admin modules when role is SUPER_ADMIN, and the panel now allows vertical scrolling for large menus. Icons are decorative (`aria-hidden`) and expand/collapse buttons announce their state via `aria-expanded`.
+- Sticky header with profile drawer trigger (quick access + sign out) and mirrored mobile menu. Global search provides an `aria-label`, notification bell announces unread items, and the command palette toggle is keyboard accessible with ⌘/Ctrl + K.
 - Main pane hosts widgets like quick cards, stats, and activity (documented in `FRONTEND_DASHBOARD.md`)
 - Skeleton placeholders provide a smooth transition before real data appears
 
@@ -86,6 +86,7 @@ If static assets or config change: `rm -rf .next` before a rebuild
 ## Development Notes
 - Keep dashboard additions modular; place shared components in `components/dashboard`
 - Use skeletons for optimistic UX when wiring future data fetches
+- Inherit shared emerald focus rings (`focus-visible:ring-brand/70` + offsets) whenever adding new interactive elements, and provide descriptive `aria-label`s for icon-only buttons.
 - When wiring APIs, prefer React Query hooks for caching; place them in `lib/queries`
 - Maintain docs/ alongside feature work so stakeholders stay informed
 - Update `agents.md` with a short bullet per major change (timestamp optional)

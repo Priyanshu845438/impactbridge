@@ -19,7 +19,7 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 ### `components/dashboard/quick-action-card.tsx`
 - Props: `{ title, description, actionLabel, icon: LucideIcon, onClick?, className? }`
 - Usage: Highlight next best steps (e.g., “Review NGOs”, “Open reports”).
-- Styling: gradient border, subtle hover animation + hover scale.
+- Styling: gradient border, subtle hover animation + hover scale. CTA link now supplies an `aria-label` that combines action + title, and the decorative icon chip is `aria-hidden` to keep screen readers focused on text.
 
 ### `components/dashboard/stat-card.tsx`
 - Props: `{ icon, label, value, trend, statusColor, helper?, children? }`
@@ -30,13 +30,13 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 ### `components/dashboard/activity-feed.tsx`
 - Static list of recent events with icon, title, description, and timestamp.
 - Memoized; layout stacks items vertically on small screens and uses timeline affordance on md+.
-- Planned upgrade: consume real audit/activity API once available.
+- Planned upgrade: consume real audit/activity API once available. Current implementation announces the list via `aria-labelledby` and each entry via an `aria-label` string for screen readers.
 
 ### `components/dashboard/profile-drawer.tsx`
 - Right-side sheet for account quick actions; triggered from dashboard header.
 - Shows avatar initials, name, role badge, contact info, "My Profile" shortcut, and logout button.
 - Re-uses Drawer primitive for responsive full-screen behaviour on mobile.
-- Trigger now clones the supplied button so only one `<button>` renders, avoiding nested-button hydration warnings.
+- Trigger now clones the supplied button so only one `<button>` renders, avoiding nested-button hydration warnings. Quick actions include explicit `aria-label`s (e.g., “Go to my profile”, “Sign out”).
 
 ### Notifications UI (page + header pattern)
 - Header bell inside `app/dashboard/layout.tsx` shows a badge, desktop popover, and mobile sheet with mock notifications rendered via `NotificationItem` helper.
@@ -87,10 +87,12 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 ### Buttons – `components/ui/button.tsx`
 - Variants: `default`, `outline`, `ghost`
 - Accepts `size`, `asChild`
+- Ships with unified emerald focus ring (`focus-visible:ring-brand/70` with light/dark offsets) so keyboard users get consistent feedback.
 
 ### Input – `components/ui/input.tsx`
 - Standard form input with Tailwind styling
 - Works with `FormField` wrappers for validation
+- Emerald focus ring mirrors button styling.
 
 ### Card – `components/ui/card.tsx`
 - Composition of `Card`, `CardHeader`, `CardContent`, etc.
@@ -98,6 +100,7 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 
 ### Select – `components/ui/select.tsx`
 - Wraps Radix UI select; used in register form for role selection
+- Defaults to the same focus styling; pair with `<label htmlFor>` for accessibility.
 
 ## Patterns
 - Forms use `react-hook-form` + `Form` components

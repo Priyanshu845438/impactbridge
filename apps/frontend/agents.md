@@ -308,3 +308,17 @@
 - Introduced global route progress bar, button press feedback, hover lift on cards, and consistent accordion animations for smoother micro-interactions.
 - Rolled out shared `EmptyState` component and updated docs/style guide to lock in loading + empty-state patterns.
 - Verified with `npm run lint` and `npm run build` post-dependency cleanup.
+
+## 75. [FE] Theme + type standardisation.
+- Refined Tailwind theme with CSR-aligned palette (`brand/slate/success/warning/danger`), spacing tokens, and typography scale; updated components to use `text-heading-*`, `text-small`, and shared shell paddings.
+- Normalised empty states, buttons, cards, and metric widgets to use consistent classes, icon sizing, and brand colors.
+- Ran `npm run lint` and `npm run build` to confirm the unified styling still compiles cleanly.
+
+## 76. [FE] NGO module typography alignment.
+- Replaced remaining `text-sm`/`text-xs` classes in the admin NGO management workspace with the shared `text-small` and `text-caption` tokens to lock typography to the global scale.
+- Updated style guide + dashboard docs to note the token sweep and reran lint/build to ensure everything stays green.
+
+## 77. [FE] Accessibility & usability polish.
+- Standardised emerald focus states across buttons, inputs, selects, drawer rows, and command palette for clearer keyboard navigation.
+- Added ARIA labels/roles to dashboard search, quick actions, notifications, profile controls, and NGO table/cards while tightening profile form label associations.
+- Documented the accessibility pass in the style guide + dashboard overview and confirmed `npm run lint` / `npm run build` remain clean.

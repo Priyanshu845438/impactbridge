@@ -43,8 +43,8 @@ export function EmptyState({
       )}
     >
       {Icon ? <Icon className="h-10 w-10 text-slate-400" /> : null}
-      <p className="mt-4 text-sm font-semibold text-slate-700">{title}</p>
-      <p className="mt-1 text-xs text-slate-500">{description}</p>
+      <p className="mt-4 text-small font-semibold text-slate-600">{title}</p>
+      <p className="mt-1 text-caption text-slate-500">{description}</p>
       {actionLabel ? content : null}
     </div>
   );

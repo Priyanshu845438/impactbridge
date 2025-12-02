@@ -47,7 +47,7 @@ function NotificationItem({ icon: Icon, title, timestamp }: NotificationItemProp
         <Icon className="h-4 w-4" />
       </span>
       <div className="space-y-1">
-        <p className="text-sm font-semibold text-slate-900">{title}</p>
+        <p className="text-small font-semibold text-slate-700">{title}</p>
         <p className="text-xs text-slate-400">{timestamp}</p>
       </div>
       <span className="ml-auto flex h-2 w-2 items-center justify-center rounded-full bg-emerald-400" />
@@ -110,12 +110,12 @@ function SidebarLink({
               }
             }}
           >
-            {Icon ? <Icon className="h-4 w-4 text-slate-500" /> : null}
+            {Icon ? <Icon className="h-4 w-4 text-slate-500" aria-hidden="true" /> : null}
             <span>{item.label}</span>
           </Link>
         ) : (
           <span className="flex flex-1 items-center gap-3">
-            {Icon ? <Icon className="h-4 w-4 text-slate-500" /> : null}
+            {Icon ? <Icon className="h-4 w-4 text-slate-500" aria-hidden="true" /> : null}
             <span>{item.label}</span>
           </span>
         )}
@@ -344,14 +344,14 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
             <X className="h-5 w-5" />
           </button>
         </div>
-        <div className="mt-5 space-y-3 text-sm text-slate-600">
+        <div className="mt-5 space-y-3 text-small text-slate-500">
           <NotificationItem icon={FilePlus2} title="New document uploaded by NGO" timestamp="Just now" />
           <NotificationItem icon={MessageSquarePlus} title="Comment added on CSR Form" timestamp="5 minutes ago" />
           <NotificationItem icon={Clock3} title="Review request assigned to you" timestamp="12 minutes ago" />
         </div>
         <button
           type="button"
-          className="mt-6 inline-flex w-full items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-slate-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+          className="mt-6 inline-flex w-full items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-slate-600 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-600"
           onClick={() => setMobileNotificationsOpen(false)}
         >
           Mark all as read
@@ -376,7 +376,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
               </span>
               ImpactBridge
             </Link>
-            <nav className="mt-4 flex flex-col gap-6 text-sm">
+            <nav className="mt-4 flex flex-col gap-6 text-small">
             {groupedLinks.map((group) => (
               <div key={group.name}>
                 <p className="px-4 pb-2 text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
@@ -405,7 +405,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
       </aside>
 
       <div className="flex w-full flex-1 flex-col overflow-hidden">
-        <header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200 bg-white/95 px-4 py-4 shadow-sm backdrop-blur sm:px-6 lg:px-10">
+        <header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200 bg-white/95 px-shell-sm py-4 shadow-sm backdrop-blur sm:px-shell lg:px-shell-lg">
           <button
             type="button"
             onClick={() => setMobileOpen(true)}
@@ -429,13 +429,14 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
               <input
                 type="search"
                 placeholder="Search users…"
-                  className="w-full bg-transparent text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") {
-                      const value = (event.currentTarget as HTMLInputElement).value.trim();
-                      console.log("Search query:", value);
-                    }
-                  }}
+                aria-label="Search the dashboard"
+                className="w-full bg-transparent text-small text-slate-600 placeholder:text-slate-400 focus:outline-none"
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    const value = (event.currentTarget as HTMLInputElement).value.trim();
+                    console.log("Search query:", value);
+                  }
+                }}
               />
               <button
                 type="button"
@@ -444,7 +445,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                     setCommandOpen(true);
                   })
                 }
-                className="hidden items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-medium text-slate-500 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 sm:flex disabled:opacity-60"
+                className="hidden items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-medium text-slate-500 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-600 sm:flex disabled:opacity-60"
                 aria-label="Open command palette"
                 disabled={isCommandPending}
               >
@@ -457,7 +458,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                 <button
                   type="button"
                   aria-label="View activity notifications"
-                  className="relative flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+                  className="relative flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-600"
                   onClick={() => {
                     if (window.innerWidth < 768) {
                       setMobileNotificationsOpen(true);
@@ -473,15 +474,15 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                 </button>
 
                 {notificationsOpen ? (
-                  <div className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-80 rounded-2xl border border-slate-200 bg-white p-4 text-sm shadow-2xl">
+                  <div className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-80 rounded-2xl border border-slate-200 bg-white p-4 text-small shadow-2xl">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm font-semibold text-slate-900">Activity notifications</p>
+                        <p className="text-small font-semibold text-slate-700">Activity notifications</p>
                         <p className="text-xs text-slate-400">Stay on top of compliance updates.</p>
                       </div>
                       <button
                         type="button"
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-600"
                         onClick={() => setNotificationsOpen(false)}
                         aria-label="Close notifications"
                       >
@@ -507,7 +508,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                     </div>
                     <button
                       type="button"
-                      className="mt-4 inline-flex w-full items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-slate-600 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+                      className="mt-4 inline-flex w-full items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-slate-600 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-600"
                       onClick={() => setNotificationsOpen(false)}
                     >
                       Mark all as read
@@ -547,7 +548,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
             <div className="absolute inset-y-0 right-0 flex w-full max-w-xs flex-col gap-6 bg-white p-6 shadow-2xl">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-semibold text-slate-900">{user?.name}</p>
+                  <p className="text-small font-semibold text-slate-700">{user?.name}</p>
                   <p className="text-xs text-slate-500 uppercase">{user?.role}</p>
                 </div>
                 <button
@@ -588,7 +589,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
             </div>
           </div>
         ) : null}
-        <main className="flex-1 overflow-y-auto px-4 py-4 sm:px-6 sm:py-6 lg:px-10 lg:py-8 min-h-0">
+        <main className="flex-1 overflow-y-auto px-shell-sm py-4 sm:px-shell sm:py-6 lg:px-shell-lg lg:py-8 min-h-0">
           <Suspense
             fallback={
               <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 lg:p-8">

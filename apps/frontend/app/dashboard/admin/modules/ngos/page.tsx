@@ -338,15 +338,15 @@ type RegionFilter = (typeof regionFilters)[number];
 function getStatusTone(status: ComplianceStatus) {
   switch (status) {
     case "Verified":
-      return "bg-emerald-100 text-emerald-700 border-emerald-200";
+      return "bg-success-100 text-success-500 border-emerald-200";
     case "Pending":
-      return "bg-amber-100 text-amber-700 border-amber-200";
+      return "bg-warning-100 text-warning-500 border-amber-200";
     case "Rejected":
-      return "bg-rose-100 text-rose-700 border-rose-200";
+      return "bg-danger-100 text-danger-500 border-rose-200";
     case "In Review":
       return "bg-sky-100 text-sky-700 border-sky-200";
     default:
-      return "bg-slate-100 text-slate-600 border-slate-200";
+      return "bg-slate-100 text-small text-slate-500 border-slate-200";
   }
 }
 
@@ -444,7 +444,9 @@ export default function AdminNgosModulePage() {
       return <ArrowUpDown className={`${base} text-slate-400`} />;
     }
     return (
-      <ArrowUpDown className={cn(base, "text-slate-600 transition-transform", sortDirection === "asc" && "rotate-180")} />
+      <ArrowUpDown
+        className={cn(base, "text-small text-slate-500 transition-transform", sortDirection === "asc" && "rotate-180")}
+      />
     );
   };
 
@@ -487,11 +489,16 @@ export default function AdminNgosModulePage() {
                   setPage(1);
                 }}
                 placeholder="Search NGOs by name, email, or registration"
-                className="border-0 bg-transparent p-0 text-sm focus-visible:ring-0"
+                className="border-0 bg-transparent p-0 text-small focus-visible:ring-0"
               />
             </div>
             {hasActiveFilters ? (
-              <Button variant="ghost" size="sm" onClick={clearFilters} className="justify-start text-slate-600">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearFilters}
+                className="justify-start text-small text-slate-500"
+              >
                 Clear filters
               </Button>
             ) : null}
@@ -522,7 +529,7 @@ export default function AdminNgosModulePage() {
                 setPage(1);
               }}
             >
-              <SelectTrigger className="w-full max-w-xs rounded-full border-slate-200 bg-white text-sm shadow-sm">
+              <SelectTrigger className="w-full max-w-xs rounded-full border-slate-200 bg-white text-small shadow-sm">
                 <SelectValue placeholder="Registration type" />
               </SelectTrigger>
               <SelectContent className="rounded-xl border border-slate-200 bg-white shadow-lg">
@@ -541,7 +548,7 @@ export default function AdminNgosModulePage() {
                 setPage(1);
               }}
             >
-              <SelectTrigger className="w-full max-w-xs rounded-full border-slate-200 bg-white text-sm shadow-sm">
+              <SelectTrigger className="w-full max-w-xs rounded-full border-slate-200 bg-white text-small shadow-sm">
                 <SelectValue placeholder="Compliance status" />
               </SelectTrigger>
               <SelectContent className="rounded-xl border border-slate-200 bg-white shadow-lg">
@@ -560,7 +567,7 @@ export default function AdminNgosModulePage() {
                 setPage(1);
               }}
             >
-              <SelectTrigger className="w-full max-w-xs rounded-full border-slate-200 bg-white text-sm shadow-sm">
+              <SelectTrigger className="w-full max-w-xs rounded-full border-slate-200 bg-white text-small shadow-sm">
                 <SelectValue placeholder="Region" />
               </SelectTrigger>
               <SelectContent className="rounded-xl border border-slate-200 bg-white shadow-lg">
@@ -591,7 +598,7 @@ export default function AdminNgosModulePage() {
                 setPage(1);
               }}
             >
-              <SelectTrigger className="rounded-lg border-slate-200 bg-white text-sm shadow-sm">
+              <SelectTrigger className="rounded-lg border-slate-200 bg-white text-small shadow-sm">
                 <SelectValue placeholder="Registration type" />
               </SelectTrigger>
               <SelectContent className="rounded-xl border border-slate-200 bg-white shadow-lg">
@@ -610,7 +617,7 @@ export default function AdminNgosModulePage() {
                 setPage(1);
               }}
             >
-              <SelectTrigger className="rounded-lg border-slate-200 bg-white text-sm shadow-sm">
+              <SelectTrigger className="rounded-lg border-slate-200 bg-white text-small shadow-sm">
                 <SelectValue placeholder="Compliance status" />
               </SelectTrigger>
               <SelectContent className="rounded-xl border border-slate-200 bg-white shadow-lg">
@@ -629,7 +636,7 @@ export default function AdminNgosModulePage() {
                 setPage(1);
               }}
             >
-              <SelectTrigger className="rounded-lg border-slate-200 bg-white text-sm shadow-sm">
+              <SelectTrigger className="rounded-lg border-slate-200 bg-white text-small shadow-sm">
                 <SelectValue placeholder="Region" />
               </SelectTrigger>
               <SelectContent className="rounded-xl border border-slate-200 bg-white shadow-lg">
@@ -646,7 +653,7 @@ export default function AdminNgosModulePage() {
                 value={sortKey}
                 onValueChange={(value) => setSortKey(value as SortKey)}
               >
-                <SelectTrigger className="flex-1 rounded-lg border-slate-200 bg-white text-sm shadow-sm">
+                <SelectTrigger className="flex-1 rounded-lg border-slate-200 bg-white text-small shadow-sm">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl border border-slate-200 bg-white shadow-lg">
@@ -675,7 +682,7 @@ export default function AdminNgosModulePage() {
             <BadgeCheck className="h-8 w-8 text-slate-400" />
             <div className="space-y-1">
               <h4 className="text-lg font-semibold text-slate-800">No NGOs match your filters</h4>
-              <p className="text-sm text-slate-500">Try adjusting filters or clearing the search keyword.</p>
+              <p className="text-small text-slate-500">Try adjusting filters or clearing the search keyword.</p>
             </div>
             <Button variant="outline" size="sm" onClick={clearFilters}>
               Reset filters
@@ -683,7 +690,7 @@ export default function AdminNgosModulePage() {
           </div>
         ) : (
           <>
-            <div className="hidden overflow-hidden rounded-2xl border border-slate-200 bg-white lg:block">
+            <div className="hidden overflow-hidden rounded-2xl border border-slate-200 bg-white lg:block" role="region" aria-label="NGO table view">
               <Table>
                 <TableHeader className="bg-slate-50/70">
                   <TableRow>
@@ -691,19 +698,19 @@ export default function AdminNgosModulePage() {
                       <button
                         type="button"
                         onClick={() => handleSort("name")}
-                        className="flex items-center gap-1 text-left text-sm font-medium text-slate-600"
+                        className="flex items-center gap-1 text-left font-medium text-small text-slate-500"
                       >
                         Name
                         {renderSortIcon("name")}
                       </button>
                     </TableHead>
-                    <TableHead>Registration ID</TableHead>
-                    <TableHead>City / Region</TableHead>
+                    <TableHead scope="col">Registration ID</TableHead>
+                    <TableHead scope="col">City / Region</TableHead>
                     <TableHead>
                       <button
                         type="button"
                         onClick={() => handleSort("complianceStatus")}
-                        className="flex items-center gap-1 text-left text-sm font-medium text-slate-600"
+                        className="flex items-center gap-1 text-left font-medium text-small text-slate-500"
                       >
                         Status
                         {renderSortIcon("complianceStatus")}
@@ -713,7 +720,7 @@ export default function AdminNgosModulePage() {
                       <button
                         type="button"
                         onClick={() => handleSort("updatedAt")}
-                        className="flex items-center gap-1 text-left text-sm font-medium text-slate-600"
+                        className="flex items-center gap-1 text-left font-medium text-small text-slate-500"
                       >
                         Last updated
                         {renderSortIcon("updatedAt")}
@@ -726,7 +733,10 @@ export default function AdminNgosModulePage() {
                     <TableRow
                       key={ngo.registrationId}
                       onClick={() => handleRowClick(ngo)}
-                      className="cursor-pointer transition hover:bg-slate-50"
+                      className="cursor-pointer transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900"
+                      tabIndex={0}
+                      role="button"
+                      aria-label={`View details for ${ngo.name}`}
                     >
                       <TableCell>
                         <div className="flex flex-col">
@@ -735,10 +745,10 @@ export default function AdminNgosModulePage() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <div className="text-sm text-slate-600">{ngo.registrationId}</div>
+                        <div className="text-small text-slate-500">{ngo.registrationId}</div>
                       </TableCell>
                       <TableCell>
-                        <div className="flex flex-col text-sm text-slate-600">
+                        <div className="flex flex-col text-small text-slate-500">
                           <span>{ngo.city}</span>
                           <span className="text-xs text-slate-400">{ngo.region} region</span>
                         </div>
@@ -749,7 +759,7 @@ export default function AdminNgosModulePage() {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <div className="text-sm text-slate-600">{new Date(ngo.updatedAt).toLocaleDateString()}</div>
+                        <div className="text-small text-slate-500">{new Date(ngo.updatedAt).toLocaleDateString()}</div>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -757,13 +767,14 @@ export default function AdminNgosModulePage() {
               </Table>
             </div>
 
-        <div className="grid gap-4 lg:hidden">
+        <div className="grid gap-4 lg:hidden" role="list" aria-label="NGO cards">
           {paginated.map((ngo) => (
             <button
               type="button"
               key={ngo.registrationId}
               onClick={() => handleRowClick(ngo)}
-              className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:border-slate-300"
+              className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:border-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900"
+              aria-label={`Open details for ${ngo.name}`}
             >
                   <div className="flex items-start justify-between gap-3">
                     <div>
@@ -789,8 +800,8 @@ export default function AdminNgosModulePage() {
           ))}
         </div>
 
-            <div className="flex flex-col gap-4 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="text-sm text-slate-500">
+            <div className="flex flex-col gap-4 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between" aria-live="polite">
+              <div className="text-small text-slate-500">
                 Showing <strong>{paginated.length}</strong> of <strong>{filtered.length}</strong> NGOs
               </div>
               <div className="flex items-center gap-2">
@@ -856,7 +867,7 @@ export default function AdminNgosModulePage() {
         {selectedNgo ? (
           <div className="space-y-6">
             <div className="space-y-4">
-              <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
+              <div className="flex flex-wrap items-center gap-2 text-small text-slate-500">
                 <Badge variant="outline" className={cn("border", getStatusTone(selectedNgo.complianceStatus))}>
                   {selectedNgo.complianceStatus}
                 </Badge>
@@ -865,7 +876,7 @@ export default function AdminNgosModulePage() {
               </div>
 
               <div className="space-y-3 rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
-                <div className="flex items-center justify-between text-sm text-slate-600">
+                <div className="flex items-center justify-between text-small text-slate-500">
                   <span>Compliance health</span>
                   <span className="font-semibold text-slate-900">{selectedNgo.complianceProgress}%</span>
                 </div>
@@ -877,7 +888,7 @@ export default function AdminNgosModulePage() {
                 </div>
               </div>
 
-              <div className="grid gap-3 text-sm text-slate-600">
+              <div className="grid gap-3 text-small text-slate-500">
                 <div className="flex items-center gap-2">
                   <UserRound className="h-4 w-4 text-slate-400" />
                   <span>{selectedNgo.contactPerson}</span>
@@ -904,7 +915,7 @@ export default function AdminNgosModulePage() {
                 <TabsTrigger value="activity">Activity</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="overview" className="space-y-4 text-sm text-slate-600">
+              <TabsContent value="overview" className="space-y-4 text-small text-slate-500">
                 <div>
                   <h4 className="text-xs uppercase tracking-wide text-slate-400">Registration type</h4>
                   <p className="mt-1 font-medium text-slate-800">{selectedNgo.registrationType}</p>
@@ -915,7 +926,7 @@ export default function AdminNgosModulePage() {
                 </div>
                 <div>
                   <h4 className="text-xs uppercase tracking-wide text-slate-400">Summary</h4>
-                  <p className="mt-1 text-slate-600">
+                  <p className="mt-1 text-small text-slate-500">
                     This NGO was last updated on {new Date(selectedNgo.updatedAt).toLocaleDateString()} and is currently marked
                     as {selectedNgo.complianceStatus.toLowerCase()}. Use the actions below to transition the compliance state as
                     per your review outcome.
@@ -923,11 +934,11 @@ export default function AdminNgosModulePage() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="documents" className="space-y-3">
+              <TabsContent value="documents" className="space-y-3 text-small text-slate-500">
                 {selectedNgo.documents.map((document) => (
                   <div
                     key={document.name}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm"
+                    className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2"
                   >
                     <div className="flex items-center gap-3">
                       <div className="rounded-full bg-slate-100 p-2 text-slate-500">{documentIcon[document.status]}</div>
@@ -938,7 +949,7 @@ export default function AdminNgosModulePage() {
                 ))}
               </TabsContent>
 
-              <TabsContent value="activity" className="space-y-4">
+              <TabsContent value="activity" className="space-y-4 text-small text-slate-500">
                 <div className="relative space-y-4 before:absolute before:left-2 before:top-0 before:h-full before:w-px before:bg-slate-200">
                   {selectedNgo.activity.map((item) => (
                     <div key={item.timestamp} className="relative ml-6 space-y-1">
@@ -947,7 +958,7 @@ export default function AdminNgosModulePage() {
                       </div>
                       <div className="text-xs uppercase tracking-wide text-slate-400">{item.timestamp}</div>
                       <div className="font-medium text-slate-800">{item.label}</div>
-                      <p className="text-sm text-slate-600">{item.detail}</p>
+                      <p className="text-small text-slate-500">{item.detail}</p>
                     </div>
                   ))}
                 </div>

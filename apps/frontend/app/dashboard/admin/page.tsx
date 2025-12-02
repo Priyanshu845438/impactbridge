@@ -225,17 +225,17 @@ export default function AdminDashboard() {
         <div className="grid gap-6 lg:grid-cols-[minmax(0,2.4fr)_minmax(0,1.6fr)]">
           <div className="flex flex-col justify-between gap-6">
             <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Executive overview</p>
+              <p className="text-caption font-semibold uppercase tracking-[0.28em] text-slate-400">Executive overview</p>
               <h1 className="text-2xl font-semibold text-slate-900">
                 Platform engagement across the last 30 days
               </h1>
-              <p className="text-sm text-slate-600">
+              <p className="text-small text-slate-500">
                 Monitor activity velocity, programme submissions, and user sentiment to keep CSR operations predictable.
               </p>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-white/95 p-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
+                <span className="text-caption font-semibold uppercase tracking-[0.28em] text-slate-400">
                   Platform activity
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
@@ -273,11 +273,11 @@ export default function AdminDashboard() {
         </div>
       </section>
 
-      <section className="rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm">
+      <section className="rounded-3xl border border-slate-200 bg-white/95 p-shell shadow-sm">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">CSR submissions</p>
-            <h3 className="text-xl font-semibold text-slate-900">Performance over the last month</h3>
+            <p className="text-caption font-semibold uppercase tracking-[0.28em] text-slate-400">CSR submissions</p>
+            <h3 className="text-heading-3 text-slate-700">Performance over the last month</h3>
           </div>
           <span className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
             <TrendingUp className="h-3.5 w-3.5" />
@@ -340,7 +340,7 @@ export default function AdminDashboard() {
         </StatCard>
       </section>
 
-      <section className="space-y-6 rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm">
+      <section className="space-y-6 rounded-3xl border border-slate-200 bg-white/95 p-shell shadow-sm">
         <SectionHeader title="Operational oversight" subtitle="Live workload, milestones, and governance notes" />
         <div className="grid gap-4 md:grid-cols-3">
           {oversightSnapshot.map((item) => (
@@ -348,11 +348,11 @@ export default function AdminDashboard() {
               key={item.title}
               className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white px-4 py-4"
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">
+              <p className="text-caption font-semibold uppercase tracking-[0.28em] text-slate-400">
                 {item.title}
               </p>
-              <p className="mt-2 text-xl font-semibold text-slate-900">{item.metric}</p>
-              <p className="mt-1 text-xs text-slate-500">{item.helper}</p>
+              <p className="mt-2 text-heading-3 text-slate-700">{item.metric}</p>
+              <p className="mt-1 text-caption text-slate-500">{item.helper}</p>
             </div>
           ))}
         </div>
@@ -363,18 +363,18 @@ export default function AdminDashboard() {
               <h4 className="text-sm font-semibold text-slate-900">Programme milestones</h4>
               <span className="text-xs uppercase tracking-[0.28em] text-slate-400">2 week view</span>
             </div>
-            <div className="mt-3 divide-y divide-slate-100 text-sm text-slate-600">
+            <div className="mt-3 divide-y divide-slate-100 text-small text-slate-500">
               {pipelineMilestones.map((milestone) => (
                 <div key={milestone.label} className="flex flex-col gap-1 py-3 md:flex-row md:items-center md:justify-between">
                   <div className="space-y-1">
                     <p className="font-medium text-slate-800">{milestone.label}</p>
-                    <p className="text-xs text-slate-500">Owner: {milestone.owner}</p>
+                    <p className="text-caption text-slate-500">Owner: {milestone.owner}</p>
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
                       {milestone.status}
                     </span>
-                    <span className="text-xs text-slate-500">ETA {milestone.eta}</span>
+                    <span className="text-caption text-slate-500">ETA {milestone.eta}</span>
                   </div>
                 </div>
               ))}
@@ -383,7 +383,7 @@ export default function AdminDashboard() {
 
           <div className="space-y-3 rounded-2xl border border-slate-200 bg-white/90 p-4">
             <h4 className="text-sm font-semibold text-slate-900">Risk & assurance notes</h4>
-            <div className="space-y-3 text-sm text-slate-600">
+            <div className="space-y-3 text-small text-slate-500">
               {assuranceNotes.map((note) => (
                 <div key={note.title} className="rounded-xl border border-slate-100 bg-slate-50/70 px-4 py-3">
                   <p className="text-sm font-semibold text-slate-800">{note.title}</p>
@@ -449,9 +449,9 @@ const SuggestedActionsPanel = memo(function SuggestedActionsPanel() {
     <div className="flex h-full flex-col rounded-3xl border border-slate-200 bg-white/95 p-5 shadow-sm">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Suggested actions</p>
+          <p className="text-caption font-semibold uppercase tracking-[0.28em] text-slate-400">Suggested actions</p>
           <h3 className="text-lg font-semibold text-slate-900">Smart recommendations</h3>
-          <p className="text-xs text-slate-500">Curated nudges based on recent activity and role.</p>
+          <p className="text-caption text-slate-500">Curated nudges based on recent activity and role.</p>
         </div>
       </div>
       <div className="mt-4 flex-1 space-y-3 overflow-y-auto pr-1" style={{ maxHeight: 260 }}>
@@ -466,7 +466,7 @@ const SuggestedActionsPanel = memo(function SuggestedActionsPanel() {
             <div className="flex flex-1 flex-col gap-2">
               <div>
                 <p className="text-sm font-semibold text-slate-900">{item.title}</p>
-                <p className="text-xs text-slate-500">{item.description}</p>
+                <p className="text-caption text-slate-500">{item.description}</p>
               </div>
               <button
                 type="button"
@@ -506,7 +506,7 @@ function KpiCard({ label, value, delta, data, tone = "slate" }: KpiCardProps) {
       <div className="flex items-start justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">{label}</p>
-          <p className="mt-2 text-xl font-semibold text-slate-900">{value}</p>
+          <p className="mt-2 text-heading-3 text-slate-700">{value}</p>
         </div>
         <span
           className={cn(

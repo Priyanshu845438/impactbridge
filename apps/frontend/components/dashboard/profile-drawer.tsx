@@ -86,14 +86,15 @@ export const ProfileDrawer = memo(function ProfileDrawer({ children, onSignOut }
           <div className="mt-5 space-y-3">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Quick access</p>
-              <Button
-                variant="outline"
-                className="mt-2 flex w-full items-center justify-between text-sm"
-                onClick={() => {
-                  setOpen(false);
-                  router.push("/dashboard/profile");
-                }}
-              >
+            <Button
+              variant="outline"
+              className="mt-2 flex w-full items-center justify-between text-sm"
+              onClick={() => {
+                setOpen(false);
+                router.push("/dashboard/profile");
+              }}
+              aria-label="Go to my profile"
+            >
                 <span className="flex items-center gap-2">
                   <User2 className="h-4 w-4 text-slate-500" />
                   My profile
@@ -104,6 +105,7 @@ export const ProfileDrawer = memo(function ProfileDrawer({ children, onSignOut }
               variant="ghost"
               className="flex w-full items-center justify-center gap-2 text-sm font-medium text-slate-700 hover:bg-slate-200/70"
               onClick={onSignOut}
+              aria-label="Sign out"
             >
               <LogOut className="h-4 w-4" />
               Sign out

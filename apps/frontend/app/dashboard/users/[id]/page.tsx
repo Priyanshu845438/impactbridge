@@ -249,7 +249,7 @@ export default function UserDetailPage() {
                     .toUpperCase()}
                 </span>
                 <div>
-                  <h1 className="text-xl font-semibold text-slate-900">{user.name}</h1>
+                  <h1 className="text-heading-2 text-slate-700">{user.name}</h1>
                   <div className="mt-1 flex flex-wrap items-center gap-2 text-sm">
                     <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
                       {roleCopy[user.role]}

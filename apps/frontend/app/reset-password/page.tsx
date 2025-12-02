@@ -65,7 +65,7 @@ export default function ResetPasswordPage() {
       <div className="absolute inset-0 bg-gradient-to-br from-slate-950/90 via-slate-950/70 to-slate-900/40" />
 
       <header className="relative z-10 flex w-full items-center justify-between px-6 py-6 lg:px-12">
-        <Link href="/" className="flex items-center gap-3 text-lg font-semibold sm:text-xl">
+        <Link href="/" className="flex items-center gap-3 text-heading-3 font-semibold">
           <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-base font-bold text-white">
             IB
           </span>

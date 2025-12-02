@@ -34,17 +34,27 @@ function QuickActionCardComponent({
       <div className="flex h-full flex-col justify-between gap-6">
         <div className="space-y-3">
           {Icon ? (
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-600">
+            <span
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-600"
+              aria-hidden="true"
+            >
               <Icon className="h-5 w-5" />
             </span>
           ) : null}
           <div className="space-y-1">
-            <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
-            <p className="text-sm text-slate-600">{description}</p>
+            <h3 className="text-heading-3 text-slate-700">{title}</h3>
+            <p className="text-small text-slate-500">{description}</p>
           </div>
         </div>
-        <Button asChild size="sm" variant="ghost" className="w-fit px-0 text-sm font-semibold text-slate-700 hover:text-slate-900">
-          <Link href={href}>{ctaLabel}</Link>
+        <Button
+          asChild
+          size="sm"
+          variant="ghost"
+          className="w-fit px-0 text-sm font-semibold text-slate-700 hover:text-slate-900"
+        >
+          <Link href={href} aria-label={`${ctaLabel} ${title}`}>
+            {ctaLabel}
+          </Link>
         </Button>
       </div>
     </div>

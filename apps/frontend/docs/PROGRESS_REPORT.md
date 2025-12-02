@@ -101,5 +101,6 @@ The ImpactBridge frontend has matured into a production-ready Next.js 14 applica
 Keeping this report updated alongside `agents.md` will ensure the team and stakeholders have real-time visibility into progress and outstanding work.
 
 - Implemented route-level prefetch optimisations (sidebar prefetch + router.prefetch for admin/users/reports) and added fade transitions to the Suspense-wrapped content.
-
 - Added global route progress indicator, unified empty states via `EmptyState`, and tuned hover/press micro-interactions across dashboard cards and buttons.
+- Completed a typography sweep on the admin NGO module, replacing legacy `text-sm`/`text-xs` classes with the shared `text-small` and `text-caption` scale to keep the compliance workspace consistent with the updated style guide.
+- Accessibility polish: emerald focus rings now ship across buttons, inputs, selects, and list/table rows; dashboard search inputs expose `aria-label`s; profile form fields tie labels to controls; NGO tables/cards announce focus and status updates for keyboard and assistive tech users. Lint/build remain clean.

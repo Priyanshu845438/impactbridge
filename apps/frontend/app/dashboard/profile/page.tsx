@@ -123,14 +123,15 @@ export default function ProfilePage() {
         title="My profile"
         subtitle="Manage your ImpactBridge identity, preferences, and contact details."
         action={
-          <Button
-            size="sm"
-            className="gap-2"
-            disabled={!isDirty || saving}
-            onClick={handleSave}
-          >
-            {saving ? "Saving…" : "Save changes"}
-          </Button>
+      <Button
+        size="sm"
+        className="gap-2"
+        disabled={!isDirty || saving}
+        onClick={handleSave}
+        aria-disabled={!isDirty || saving}
+      >
+        {saving ? "Saving…" : "Save changes"}
+      </Button>
         }
       />
 
@@ -146,13 +147,14 @@ export default function ProfilePage() {
                 size="sm"
                 variant="outline"
                 className="absolute -bottom-2 right-0 gap-2 rounded-full border-emerald-200 bg-white px-3 text-xs font-medium text-emerald-700 shadow-sm hover:bg-emerald-50"
+                aria-label="Upload profile photo"
               >
                 <Camera className="h-3.5 w-3.5" />
                 Upload
               </Button>
             </div>
             <div className="mt-4 space-y-1">
-              <h2 className="text-xl font-semibold text-slate-900">{user.name}</h2>
+              <h2 className="text-heading-2 text-slate-700">{user.name}</h2>
               <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
                 <ShieldCheck className="h-3.5 w-3.5" />
                 {user.role.replace("_", " ")}
@@ -243,17 +245,22 @@ type FieldProps = {
 };
 
 function Field({ label, value, onChange, type = "text", placeholder }: FieldProps) {
+  const inputId = `${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-field`;
   return (
-    <label className="space-y-2 text-sm font-medium text-slate-700">
-      <span>{label}</span>
+    <div className="space-y-2 text-sm font-medium text-slate-700">
+      <label htmlFor={inputId} className="block">
+        {label}
+      </label>
       <Input
+        id={inputId}
         type={type}
         value={value}
         placeholder={placeholder}
         onChange={(event) => onChange(event.target.value)}
-        className="h-11 rounded-xl border-slate-200 bg-white focus-visible:ring-emerald-500"
+        className="h-11 rounded-xl border-slate-200 bg-white"
+        aria-describedby={`${inputId}-hint`}
       />
-    </label>
+    </div>
   );
 }
 
@@ -265,11 +272,14 @@ type SelectFieldProps = {
 };
 
 function SelectField({ label, value, onChange, options }: SelectFieldProps) {
+  const selectId = `${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-select`;
   return (
     <div className="space-y-2 text-sm font-medium text-slate-700">
-      <span>{label}</span>
+      <label htmlFor={selectId} className="block">
+        {label}
+      </label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="h-11 rounded-xl border-slate-200 bg-white text-left">
+        <SelectTrigger id={selectId} className="h-11 rounded-xl border-slate-200 bg-white text-left">
           <SelectValue placeholder="Select" />
         </SelectTrigger>
         <SelectContent className="rounded-xl border border-slate-200 bg-white shadow-lg">

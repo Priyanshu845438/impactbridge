@@ -8,11 +8,13 @@
 
 ## Typography
 - Font: Inter (Next.js default; loaded via global layout)
-- Heading Scale:
-  - H1: `text-3xl lg:text-4xl font-bold`
-  - H2: `text-2xl font-semibold`
-  - Section Header: `text-xl font-semibold`
-- Body text: `text-slate-600` for secondary content; `text-slate-800` for primary
+- Heading Scale via Tailwind tokens:
+  - H1: `text-heading-1`
+  - H2: `text-heading-2`
+  - Section Header / card titles: `text-heading-3`
+- Body text: `text-body text-slate-700`
+- Supporting text: `text-small` for descriptions, `text-caption` for meta/labels
+- When refactoring legacy screens, replace raw `text-sm`/`text-xs` classes with the tokens above to preserve the unified rhythm.
 
 ## Layout Rules
 - Shell: `flex w-full h-screen` with gradient background
@@ -54,3 +56,4 @@
 - Drawers & dropdowns: use Tailwind `animate-in`, `slide-in-from-right`, and custom accordion animations (`accordion-down`/`accordion-up`) for smooth open/close states.
 - Empty states: use `EmptyState` component (icon optional) with title, helper text, and single CTA to maintain consistency across modules.
 - Loading: rely on page-level skeletons plus the global top progress bar to signal transitions.
+- Focus states: all interactive components should use the shared emerald ring (`focus-visible:ring-brand/70 focus-visible:ring-offset-2`) with dark-mode offset adjustments for consistent keyboard accessibility.

@@ -177,6 +177,7 @@ export default function UserDirectoryPage() {
           <input
             type="search"
             placeholder="Search by name or email"
+            aria-label="Search users"
             className="w-full bg-transparent text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
@@ -278,7 +279,7 @@ export default function UserDirectoryPage() {
         </div>
       )}
 
-      <div className="flex flex-col items-center justify-between gap-4 rounded-3xl border border-transparent bg-transparent py-2 text-sm text-slate-600 sm:flex-row">
+      <div className="flex flex-col items-center justify-between gap-4 rounded-3xl border border-transparent bg-transparent py-2 text-small text-slate-500 sm:flex-row">
         <span>
           Showing {(currentPage - 1) * pageSize + 1}–
           {Math.min(currentPage * pageSize, filteredUsers.length)} of {filteredUsers.length} users

@@ -14,6 +14,7 @@
 - Introduce notifications/toasts for key actions (command palette items already leverage toasts when needed; consider extending useTransition to future heavy interactions)
 - Ensure future header/profile tweaks preserve single-button triggers to avoid hydration warnings
 - Audit responsive behaviour whenever new modules land (grids, tables, drawers) so mobile/tablet breakpoints stay polished
+- Maintain accessibility parity when building new modules: apply shared focus-ring utilities, label icon-only controls, and ensure tables/cards expose `aria` annotations like the NGO module.
 
 ## Low Priority / Nice to Have
 - Dark mode toggle using shadcn theme utilities
