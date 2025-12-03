@@ -46,8 +46,8 @@ Each module uses `SectionHeader`, divider, frosted card, and can adopt skeletons
 
 ## Other Role Pages
 - `dashboard/ngo`, `dashboard/company`, `dashboard/donor`
-  - Minimal placeholder card per role; adopt same layout once their widgets are defined
-  - Ready to host campaign progress, donation summaries, or compliance status once APIs exist
+  - Updated headings remove placeholder copy and reflect production messaging ("NGO operations overview", "Company CSR workspace", "Donor engagement hub")
+  - Minimal hero card per role remains, ready to host campaign progress, donation summaries, or compliance status once APIs exist
 
 ## Reusable Components
 - `components/dashboard/section-header.tsx`

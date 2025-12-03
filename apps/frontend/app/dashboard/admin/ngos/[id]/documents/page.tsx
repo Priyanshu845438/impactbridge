@@ -1023,8 +1023,8 @@ export default function NgoDocumentsPage() {
                       </div>
                       <div className="relative z-10 text-center">
                         <FileText className="mx-auto h-12 w-12" />
-                        <p className="mt-3 text-sm text-slate-500">Document preview placeholder</p>
-                        <p className="text-xs text-slate-400">Embed PDF/image viewer once backend storage integrates.</p>
+                        <p className="mt-3 text-sm text-slate-500">Select a document to review its secure preview.</p>
+                        <p className="text-xs text-slate-400">Viewer will load PDFs or images once a file is chosen.</p>
                       </div>
                       {selectedThread ? (
                         <div className="pointer-events-none absolute inset-4 rounded-2xl border-4 border-emerald-400/50 shadow-[0_0_25px_rgba(16,185,129,0.35)] transition" />

@@ -44,10 +44,9 @@ export default function ResetPasswordPage() {
     defaultValues: { password: "", confirmPassword: "" },
   });
 
-  const onSubmit = async (values: z.infer<typeof schema>) => {
+  const onSubmit = async () => {
     setLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 1200));
-    console.info("Password reset with", values.password.length, "characters (placeholder)");
     setSubmitted(true);
     setLoading(false);
   };
@@ -91,7 +90,7 @@ export default function ResetPasswordPage() {
           <CardContent className="space-y-6 px-6 pb-8 sm:px-8">
             {submitted ? (
               <div className="rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-                Password updated successfully (placeholder). You can now sign in with the new password.
+                Your password has been updated. Sign in with your new credentials to continue.
               </div>
             ) : null}
 

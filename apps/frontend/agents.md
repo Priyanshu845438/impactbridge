@@ -326,3 +326,12 @@
 ## 78. [FE] QA sweep notes logged.
 - Documented outstanding UI clean-up tasks: remove dashboard search console logging, replace placeholder copy (role dashboards, document preview, reset-password toast), and add keyboard activation for NGO table rows.
 - Synced findings across progress report and TODO roadmap; no code fixes applied yet.
+
+## 79. [FE] Must-fix QA item addressed.
+- Enabled Enter/Space keyboard activation on admin NGO table rows to match click behaviour.
+- Updated progress report and TODO roadmap to reflect the fix.
+
+## 80. [FE] QA copy cleanup & reset-password polish.
+- Swapped placeholder headings on NGO/Company/Donor dashboards for production-ready titles and refreshed NGO document preview empty state copy.
+- Removed reset-password console logging, tightened confirmation messaging, and verified clean build (`npm run build`).
+- Updated dashboard/component/progress docs to capture the copy changes.

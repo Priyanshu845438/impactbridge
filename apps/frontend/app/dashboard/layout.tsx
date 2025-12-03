@@ -27,6 +27,8 @@ import {
   X,
 } from "lucide-react";
 
+import { toast } from "sonner";
+
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-context";
 import { navMenu, NavItem } from "@/lib/nav-menu";
@@ -434,7 +436,9 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
                 onKeyDown={(event) => {
                   if (event.key === "Enter") {
                     const value = (event.currentTarget as HTMLInputElement).value.trim();
-                    console.log("Search query:", value);
+                    if (value.length) {
+                      toast.info(`Search coming soon: ${value}`);
+                    }
                   }
                 }}
               />

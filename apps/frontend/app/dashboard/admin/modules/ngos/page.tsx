@@ -733,6 +733,12 @@ export default function AdminNgosModulePage() {
                     <TableRow
                       key={ngo.registrationId}
                       onClick={() => handleRowClick(ngo)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          handleRowClick(ngo);
+                        }
+                      }}
                       className="cursor-pointer transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900"
                       tabIndex={0}
                       role="button"

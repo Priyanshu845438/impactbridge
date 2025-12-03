@@ -106,6 +106,7 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - Forms use `react-hook-form` + `Form` components
 - Dashboard uses grid utilities for responsive layout (`grid gap-6 sm:grid-cols-2 xl:grid-cols-4` etc.)
 - For new modules, follow `admin/modules` pages: SectionHeader + divider + content box
+- Document preview pane empty state copy now reads “Select a document to review its secure preview” to align with tone guidelines.
 
 ## Adding New Components
 1. Build new shared components under `components/`
