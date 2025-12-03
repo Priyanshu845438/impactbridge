@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 
 import {
   NGO_STATUS_TONE,
@@ -75,6 +76,24 @@ const MILESTONE_STATUS_TONE: Record<MilestoneStatus, string> = {
   Completed: "bg-emerald-50 text-emerald-700 border-emerald-200",
 };
 
+const MILESTONE_STATUS_ACCENT: Record<MilestoneStatus, { dot: string; progress: string; bar: string }> = {
+  "Not started": {
+    dot: "border-slate-300 bg-white text-slate-400",
+    progress: "bg-slate-400",
+    bar: "#cbd5f5",
+  },
+  "In progress": {
+    dot: "border-sky-200 bg-sky-50 text-sky-600",
+    progress: "bg-sky-500",
+    bar: "#38bdf8",
+  },
+  Completed: {
+    dot: "border-emerald-200 bg-emerald-50 text-emerald-600",
+    progress: "bg-emerald-500",
+    bar: "#34d399",
+  },
+};
+
 const tabItems = [
   { value: "overview", label: "Overview" },
   { value: "timeline", label: "Timeline" },
@@ -108,6 +127,8 @@ export default function CompanyProgrammeDetailPage() {
     status: "Not started" as MilestoneStatus,
     progress: 0,
   });
+  const [milestonesView, setMilestonesView] = useState<"list" | "timeline">("list");
+  const [timelineAnimated, setTimelineAnimated] = useState(false);
 
   const initialMilestones = useMemo<ProgrammeMilestoneDetail[]>(() => {
     if (!programme) {
@@ -159,6 +180,14 @@ export default function CompanyProgrammeDetailPage() {
   useEffect(() => {
     setMilestones(initialMilestones);
   }, [initialMilestones]);
+
+  useEffect(() => {
+    if (milestonesView === "timeline") {
+      const frame = requestAnimationFrame(() => setTimelineAnimated(true));
+      return () => cancelAnimationFrame(frame);
+    }
+    setTimelineAnimated(false);
+  }, [milestonesView]);
 
   const filteredAssignableNgos = useMemo(() => {
     const term = assignSearch.trim().toLowerCase();
@@ -472,84 +501,72 @@ export default function CompanyProgrammeDetailPage() {
             </TabsContent>
 
             <TabsContent value="milestones" className="space-y-4 text-sm text-slate-600">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <p className="text-xs text-slate-400">
                   Track milestone health to keep CSR stakeholders aligned on progress.
                 </p>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="gap-2 text-sm font-medium text-brand-600 hover:bg-brand-50 hover:text-brand-700"
-                  onClick={() => {
-                    setEditingMilestone(null);
-                    setMilestoneForm({ title: "", deadline: "", description: "", status: "Not started", progress: 0 });
-                    setMilestoneModalOpen(true);
-                  }}
-                >
-                  + Add Milestone
-                </Button>
+                <div className="flex items-center gap-3">
+                  <div className="inline-flex rounded-full border border-slate-200 bg-white p-1 text-xs font-medium text-slate-500">
+                    <button
+                      type="button"
+                      className={cn(
+                        "rounded-full px-3 py-1 transition",
+                        milestonesView === "list"
+                          ? "bg-brand-50 text-brand-700 shadow-sm"
+                          : "hover:bg-slate-100 hover:text-slate-700",
+                      )}
+                      onClick={() => setMilestonesView("list")}
+                    >
+                      List View
+                    </button>
+                    <button
+                      type="button"
+                      className={cn(
+                        "rounded-full px-3 py-1 transition",
+                        milestonesView === "timeline"
+                          ? "bg-brand-50 text-brand-700 shadow-sm"
+                          : "hover:bg-slate-100 hover:text-slate-700",
+                      )}
+                      onClick={() => setMilestonesView("timeline")}
+                    >
+                      Timeline View
+                    </button>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="gap-2 text-sm font-medium text-brand-600 hover:bg-brand-50 hover:text-brand-700"
+                    onClick={() => {
+                      setEditingMilestone(null);
+                      setMilestoneForm({ title: "", deadline: "", description: "", status: "Not started", progress: 0 });
+                      setMilestoneModalOpen(true);
+                    }}
+                  >
+                    + Add Milestone
+                  </Button>
+                </div>
               </div>
 
               {milestones.length ? (
-                <div className="space-y-3">
-                  {milestones.map((milestone) => (
-                    <div
-                      key={milestone.id}
-                      className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
-                    >
-                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                          <h3 className="text-sm font-semibold text-slate-900">{milestone.title}</h3>
-                          {milestone.description ? (
-                            <p className="mt-1 text-xs text-slate-500">{milestone.description}</p>
-                          ) : null}
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <Badge variant="outline" className={`border ${MILESTONE_STATUS_TONE[milestone.status]}`}>
-                            {milestone.status}
-                          </Badge>
-                          <span className="text-xs text-slate-400">Deadline: {milestone.deadline}</span>
-                        </div>
-                      </div>
-
-                      <div className="mt-4">
-                        <div className="flex items-center justify-between text-xs text-slate-500">
-                          <span>Progress</span>
-                          <span className="font-medium text-slate-700">{milestone.progress}%</span>
-                        </div>
-                        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-100">
-                          <div
-                            className="h-full rounded-full bg-brand-500 transition-all"
-                            style={{ width: `${Math.min(100, Math.max(0, milestone.progress))}%` }}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="mt-4 flex items-center gap-3">
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="gap-1 text-brand-600 hover:bg-brand-50 hover:text-brand-700"
-                          onClick={() => handleEditMilestone(milestone)}
-                        >
-                          <Edit className="h-3.5 w-3.5" />
-                          Edit
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="gap-1 text-rose-500 hover:bg-rose-50 hover:text-rose-600"
-                          onClick={() => handleDeleteMilestone(milestone.id)}
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                          Delete
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                milestonesView === "list" ? (
+                  <div className="space-y-3">
+                    {milestones.map((milestone) => (
+                      <MilestoneCard
+                        key={milestone.id}
+                        milestone={milestone}
+                        onEdit={() => handleEditMilestone(milestone)}
+                        onDelete={() => handleDeleteMilestone(milestone.id)}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <MilestoneTimeline
+                    milestones={milestones}
+                    onEdit={handleEditMilestone}
+                    onDelete={handleDeleteMilestone}
+                    animated={timelineAnimated}
+                  />
+                )
               ) : (
                 <div className="rounded-2xl border border-dashed border-slate-300 py-12 text-center text-sm text-slate-500">
                   No milestones yet — track project progress by adding one.
@@ -765,6 +782,176 @@ export default function CompanyProgrammeDetailPage() {
           </div>
         </div>
       </Modal>
+    </div>
+  );
+}
+
+interface MilestoneCardProps {
+  milestone: ProgrammeMilestoneDetail;
+  onEdit: () => void;
+  onDelete: () => void;
+  variant?: "default" | "compact";
+}
+
+function MilestoneCard({ milestone, onEdit, onDelete, variant = "default" }: MilestoneCardProps) {
+  const accent = MILESTONE_STATUS_ACCENT[milestone.status];
+  const progressWidth = `${Math.min(100, Math.max(0, milestone.progress))}%`;
+
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition",
+        variant === "compact" ? "text-center" : undefined,
+      )}
+    >
+      <div
+        className={cn(
+          "flex gap-3",
+          variant === "compact" ? "flex-col items-center" : "flex-col sm:flex-row sm:items-center sm:justify-between",
+        )}
+      >
+        <div className={cn("text-left", variant === "compact" ? "text-center" : undefined)}>
+          <h3 className="text-sm font-semibold text-slate-900">{milestone.title}</h3>
+          {milestone.description ? (
+            <p className="mt-1 text-xs text-slate-500">{milestone.description}</p>
+          ) : null}
+        </div>
+        <div className={cn("flex items-center gap-3", variant === "compact" ? "justify-center" : undefined)}>
+          <Badge variant="outline" className={`border ${MILESTONE_STATUS_TONE[milestone.status]}`}>
+            {milestone.status}
+          </Badge>
+          <span className="text-xs text-slate-400">Deadline: {milestone.deadline}</span>
+        </div>
+      </div>
+
+      <div className={cn("mt-4", variant === "compact" ? "text-center" : undefined)}>
+        <div
+          className={cn(
+            "text-xs text-slate-500",
+            variant === "compact" ? "flex flex-col items-center gap-1" : "flex items-center justify-between",
+          )}
+        >
+          <span>Progress</span>
+          <span className="font-medium text-slate-700">{milestone.progress}%</span>
+        </div>
+        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-100">
+          <div
+            className={cn("h-full rounded-full transition-all", accent.progress)}
+            style={{ width: progressWidth }}
+          />
+        </div>
+      </div>
+
+      <div className={cn("mt-4 flex items-center gap-3", variant === "compact" ? "justify-center" : undefined)}>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="gap-1 text-brand-600 hover:bg-brand-50 hover:text-brand-700"
+          onClick={onEdit}
+        >
+          <Edit className="h-3.5 w-3.5" />
+          Edit
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="gap-1 text-rose-500 hover:bg-rose-50 hover:text-rose-600"
+          onClick={onDelete}
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+          Delete
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+interface MilestoneTimelineProps {
+  milestones: ProgrammeMilestoneDetail[];
+  onEdit: (milestone: ProgrammeMilestoneDetail) => void;
+  onDelete: (id: string) => void;
+  animated: boolean;
+}
+
+function MilestoneTimeline({ milestones, onEdit, onDelete, animated }: MilestoneTimelineProps) {
+  return (
+    <div className="space-y-6">
+      <div
+        className={cn(
+          "hidden gap-10 overflow-x-auto pb-6 md:flex",
+          "transition-all duration-300 ease-out",
+          animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
+        )}
+      >
+        {milestones.map((milestone, index) => {
+          const accent = MILESTONE_STATUS_ACCENT[milestone.status];
+
+          return (
+            <div key={milestone.id} className="relative flex min-w-[240px] flex-col items-center pb-2">
+              {index < milestones.length - 1 ? (
+                <span
+                  aria-hidden
+                  className="absolute right-[-3.5rem] top-6 hidden h-[2px] w-[3.5rem] md:block"
+                  style={{ backgroundColor: accent.bar }}
+                />
+              ) : null}
+              <div
+                className={cn(
+                  "flex h-12 w-12 items-center justify-center rounded-full border-2 text-sm font-semibold",
+                  accent.dot,
+                )}
+              >
+                {index + 1}
+              </div>
+              <span className="mt-2 text-xs text-slate-500">{milestone.deadline}</span>
+              <div className="mt-6 w-full max-w-xs">
+                <MilestoneCard
+                  milestone={milestone}
+                  onEdit={() => onEdit(milestone)}
+                  onDelete={() => onDelete(milestone.id)}
+                  variant="compact"
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div
+        className={cn(
+          "space-y-6 border-l border-slate-200 pl-6 md:hidden",
+          "transition-all duration-300 ease-out",
+          animated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
+        )}
+      >
+        {milestones.map((milestone, index) => {
+          const accent = MILESTONE_STATUS_ACCENT[milestone.status];
+
+          return (
+            <div key={`${milestone.id}-mobile`} className="relative">
+              <span
+                aria-hidden
+                className={cn(
+                  "absolute -left-[1.35rem] top-2 flex h-6 w-6 items-center justify-center rounded-full border-2 text-xs font-semibold",
+                  accent.dot,
+                )}
+              >
+                {index + 1}
+              </span>
+              <div className="pl-2">
+                <MilestoneCard
+                  milestone={milestone}
+                  onEdit={() => onEdit(milestone)}
+                  onDelete={() => onDelete(milestone.id)}
+                  variant="compact"
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

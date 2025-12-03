@@ -352,6 +352,6 @@
 - Refreshed dashboard/component/TODO docs and revalidated with `npm run build`.
 
 ## 84. [FE] Company programme detail view.
-- Added `/dashboard/admin/company/[companyId]/programmes/[programmeId]` delivering summary metrics, compliance note, milestone timeline, documents, assigned NGOs (cards + Assign NGO modal workflow), dedicated milestones tab (card list + add/edit modal), and comments tabs with accurate badge tone mapping.
+- Added `/dashboard/admin/company/[companyId]/programmes/[programmeId]` delivering summary metrics, compliance note, milestone timeline, documents, assigned NGOs (cards + Assign NGO modal workflow), dedicated milestones tab (list/timeline toggle with cards + add/edit modal), and comments tabs with accurate badge tone mapping.
 - Updated company routes to use consistent `[companyId]` slug, synced documentation (dashboard overview, component catalog, TODO roadmap, progress report), and removed legacy `[id]` route remnants.
 - Ran `npm run build` to validate the new detail page and ensure lint/type checks pass.

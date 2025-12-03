@@ -11,7 +11,7 @@
 - Stand up company management module with table, filters, modal, and pagination mirroring NGO workspace. ✅ Implemented (`/dashboard/admin/companies`).
 - Deliver company profile view with CSR snapshot, partner listing, and timeline. ✅ Implemented (`/dashboard/admin/company/[companyId]`).
 - Add CSR programmes listing for company detail view. ✅ Implemented (`/dashboard/admin/company/[companyId]/programmes`).
-- Add CSR programme detail view with tabs for overview, timeline, documents, NGOs, milestones, comments, and assign modal workflow. ✅ Implemented (`/dashboard/admin/company/[companyId]/programmes/[programmeId]`).
+- Add CSR programme detail view with tabs for overview, timeline, documents, NGOs, milestones (list/timeline toggle), comments, and assign modal workflow. ✅ Implemented (`/dashboard/admin/company/[companyId]/programmes/[programmeId]`).
 - Add charts/visualisations (donation totals, impact metrics)
 - Wire profile editor to backend update endpoint with optimistic feedback
 - Hook notifications and user directory to backend services (REST/GraphQL) with pagination + actions

@@ -42,7 +42,7 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - `admin/companies/page.tsx`: company compliance workspace mirroring the NGO module with search, status/industry filters, responsive table + card layout, add-company modal (UI only), and pagination.
 - `admin/company/[companyId]/page.tsx`: detailed company profile view with CSR snapshot, partner NGO list, and activity timeline.
 - `admin/company/[companyId]/programmes/page.tsx`: CSR programme listing with filters, progress indicators, view/edit/archive controls, and creation modal.
-- `admin/company/[companyId]/programmes/[programmeId]/page.tsx`: CSR programme detail view with summary metrics, compliance note, milestone progress, timeline, documents, assigned NGOs (cards + Assign NGO modal workflow), dedicated Milestones tab (cards + modal), and comments tabs.
+- `admin/company/[companyId]/programmes/[programmeId]/page.tsx`: CSR programme detail view with summary metrics, compliance note, milestone progress, timeline, documents, assigned NGOs (cards + Assign NGO modal workflow), dedicated Milestones tab (list/timeline toggle + modal), and comments tabs.
 - `programmes/page.tsx`: CSR programme pipeline placeholder
 - `reports/page.tsx`: analytics/reporting placeholder
 - `settings/page.tsx`: platform-wide settings placeholder
