@@ -82,6 +82,19 @@ export const navMenu: NavItem[] = [
     ],
   },
   {
+    label: "Company ops",
+    icon: HandCoins,
+    roles: ["SUPER_ADMIN"],
+    group: "People",
+    children: [
+      {
+        label: "Workspace",
+        href: "/dashboard/admin/companies",
+        roles: ["SUPER_ADMIN"],
+      },
+    ],
+  },
+  {
     label: "Programmes",
     icon: ClipboardList,
     roles: ["SUPER_ADMIN"],

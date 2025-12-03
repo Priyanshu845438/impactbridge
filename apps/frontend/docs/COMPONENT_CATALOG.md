@@ -107,6 +107,10 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - Dashboard uses grid utilities for responsive layout (`grid gap-6 sm:grid-cols-2 xl:grid-cols-4` etc.)
 - For new modules, follow `admin/modules` pages: SectionHeader + divider + content box
 - Document preview pane empty state copy now reads “Select a document to review its secure preview” to align with tone guidelines.
+- `admin/companies/page.tsx` demonstrates the shared table/card pattern, filter row, and modal scaffolding for entity management pages.
+- `admin/company/[companyId]/page.tsx` shows the detail layout pattern (overview + snapshot + related entities + timeline) for company records.
+- `admin/company/[companyId]/programmes/page.tsx` demonstrates the programme grid with progress bars, filter bar, and modal scaffold.
+- `admin/company/[companyId]/programmes/[programmeId]/page.tsx` highlights the full programme detail experience with summary metrics, milestone timeline, documents, assigned NGOs, and comments tabs.
 
 ## Adding New Components
 1. Build new shared components under `components/`

@@ -335,3 +335,23 @@
 - Swapped placeholder headings on NGO/Company/Donor dashboards for production-ready titles and refreshed NGO document preview empty state copy.
 - Removed reset-password console logging, tightened confirmation messaging, and verified clean build (`npm run build`).
 - Updated dashboard/component/progress docs to capture the copy changes.
+
+## 81. [FE] Company management workspace.
+- Added `/dashboard/admin/companies` with search, status/industry filters, responsive table + mobile cards, add-company modal, and pagination mirroring the NGO UX.
+- Wired new Company ops nav group for super admins and refreshed docs (dashboard overview, component catalog, TODO roadmap).
+- Confirmed clean build via `npm run build`.
+
+## 82. [FE] Company profile detail view.
+- Introduced `/dashboard/admin/company/[id]` with overview card, CSR snapshot metrics, linked NGO list, and timeline mirroring NGO detail styling.
+- Hooked “View” buttons to the new route, centralised company mock data (`admin/companies/data.ts`), and updated documentation/TODO entries.
+- Build remains green (`npm run build`).
+
+## 83. [FE] Company programmes listing.
+- Added `/dashboard/admin/company/[id]/programmes` with status/search filters, programme cards (badges, budget, progress bar, actions), modal scaffold, and empty state.
+- Extended company dataset with programme mocks, shared status tone tokens, and helper selectors for profile/programmes pages.
+- Refreshed dashboard/component/TODO docs and revalidated with `npm run build`.
+
+## 84. [FE] Company programme detail view.
+- Added `/dashboard/admin/company/[companyId]/programmes/[programmeId]` delivering summary metrics, compliance note, milestone timeline, documents, assigned NGOs, and comments tabs with accurate badge tone mapping.
+- Updated company routes to use consistent `[companyId]` slug, synced documentation (dashboard overview, component catalog, TODO roadmap, progress report), and removed legacy `[id]` route remnants.
+- Ran `npm run build` to validate the new detail page and ensure lint/type checks pass.
