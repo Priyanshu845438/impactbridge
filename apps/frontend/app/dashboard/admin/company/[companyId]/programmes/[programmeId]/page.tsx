@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { notFound, useParams } from "next/navigation";
+import type { LucideIcon } from "lucide-react";
 import {
   Archive,
   CalendarDays,
@@ -11,7 +12,10 @@ import {
   FileText,
   Layers,
   NotebookPen,
+  Plus,
+  RadioTower,
   Trash2,
+  UploadCloud,
 } from "lucide-react";
 
 import { SectionHeader } from "@/components/dashboard/section-header";
@@ -30,6 +34,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 import {
   NGO_STATUS_TONE,
@@ -79,7 +84,7 @@ const MILESTONE_STATUS_TONE: Record<MilestoneStatus, string> = {
 const MILESTONE_STATUS_ACCENT: Record<MilestoneStatus, { dot: string; progress: string; bar: string }> = {
   "Not started": {
     dot: "border-slate-300 bg-white text-slate-400",
-    progress: "bg-slate-400",
+    progress: "bg-rose-400",
     bar: "#cbd5f5",
   },
   "In progress": {
@@ -129,6 +134,8 @@ export default function CompanyProgrammeDetailPage() {
   });
   const [milestonesView, setMilestonesView] = useState<"list" | "timeline">("list");
   const [timelineAnimated, setTimelineAnimated] = useState(false);
+  const [progressAnimated, setProgressAnimated] = useState(false);
+  const [actionCenterOpen, setActionCenterOpen] = useState(false);
 
   const initialMilestones = useMemo<ProgrammeMilestoneDetail[]>(() => {
     if (!programme) {
@@ -188,6 +195,56 @@ export default function CompanyProgrammeDetailPage() {
     }
     setTimelineAnimated(false);
   }, [milestonesView]);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setProgressAnimated(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  const completedMilestones = useMemo(
+    () => milestones.filter((milestone) => milestone.status === "Completed").length,
+    [milestones],
+  );
+  const progressPercent = milestones.length ? Math.round((completedMilestones / milestones.length) * 100) : 0;
+
+  const progressTone = useMemo(() => {
+    if (progressPercent < 30) {
+      return {
+        title: "text-rose-600",
+        bar: "bg-rose-500",
+        highlight: "text-rose-500",
+      };
+    }
+    if (progressPercent < 70) {
+      return {
+        title: "text-sky-600",
+        bar: "bg-sky-500",
+        highlight: "text-sky-500",
+      };
+    }
+    return {
+      title: "text-emerald-600",
+      bar: "bg-emerald-500",
+      highlight: "text-emerald-600",
+    };
+  }, [progressPercent]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const handleViewportToggle = () => {
+      setActionCenterOpen(window.innerWidth >= 1024);
+    };
+
+    handleViewportToggle();
+    window.addEventListener("resize", handleViewportToggle);
+
+    return () => {
+      window.removeEventListener("resize", handleViewportToggle);
+    };
+  }, []);
 
   const filteredAssignableNgos = useMemo(() => {
     const term = assignSearch.trim().toLowerCase();
@@ -294,8 +351,57 @@ export default function CompanyProgrammeDetailPage() {
         }
       />
 
-      <div className="grid gap-6 xl:grid-cols-3">
-        <Card className="xl:col-span-2">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <Card className="xl:col-span-1">
+          <CardContent className="space-y-2 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Overall progress</p>
+            <p className={cn("text-2xl font-semibold", progressTone.title)}>{progressPercent}%</p>
+            <p className="text-xs text-slate-500">Based on completed milestones</p>
+          </CardContent>
+        </Card>
+        <Card className="xl:col-span-1">
+          <CardContent className="space-y-2 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Total milestones</p>
+            <p className="text-2xl font-semibold text-slate-900">{milestones.length}</p>
+            <p className="text-xs text-slate-500">Across planning and execution stages</p>
+          </CardContent>
+        </Card>
+        <Card className="xl:col-span-1">
+          <CardContent className="space-y-2 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Completed</p>
+            <p className="text-2xl font-semibold text-emerald-600">{completedMilestones}</p>
+            <p className="text-xs text-slate-500">Milestones validated and closed</p>
+          </CardContent>
+        </Card>
+        <Card className="xl:col-span-1">
+          <CardContent className="space-y-2 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Pending</p>
+            <p className="text-2xl font-semibold text-slate-900">{milestones.length - completedMilestones}</p>
+            <p className="text-xs text-slate-500">Milestones awaiting action</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-sm font-medium text-slate-600">Milestone completion rate</p>
+            <p className={cn("text-xs", progressTone.highlight)}>
+              {completedMilestones} of {milestones.length || 1} milestones complete
+            </p>
+          </div>
+          <span className="text-xs text-slate-400">Automatically recalculates as milestones update</span>
+        </div>
+        <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100">
+          <div
+            className={cn("h-full rounded-full transition-all duration-700 ease-out", progressTone.bar)}
+            style={{ width: progressAnimated ? `${progressPercent}%` : "0%" }}
+          />
+        </div>
+      </div>
+
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+        <Card className="xl:col-span-1">
           <CardHeader className="flex flex-wrap items-center justify-between gap-4">
             <CardTitle className="text-base font-semibold text-slate-900">Programme summary</CardTitle>
             <Badge variant="outline" className={`border ${PROGRAMME_STATUS_TONE[programme.status]}`}>
@@ -375,6 +481,82 @@ export default function CompanyProgrammeDetailPage() {
             </div>
           </CardContent>
         </Card>
+
+        <aside
+        className={cn(
+          "rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-500 ease-out",
+          "flex h-full flex-col overflow-hidden",
+          actionCenterOpen ? "translate-x-0 opacity-100" : "translate-x-2 opacity-0 xl:translate-x-0 xl:opacity-100",
+          !actionCenterOpen ? "max-h-0 xl:max-h-full" : "max-h-[32rem] xl:max-h-full",
+        )}
+      >
+          <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
+            <div className="flex items-center gap-2 text-sm font-semibold text-slate-800">
+              <RadioTower className="h-4 w-4 text-brand-500" />
+              Action Center
+              <span className="ml-1 h-2 w-2 rounded-full bg-rose-500" aria-hidden>
+                <span className="sr-only">Two pending actions</span>
+              </span>
+            </div>
+            <button
+              type="button"
+              className="text-xs font-medium text-brand-600 transition hover:text-brand-700 xl:hidden"
+              onClick={() => setActionCenterOpen((prev) => !prev)}
+            >
+              {actionCenterOpen ? "Hide" : "Show"}
+            </button>
+          </div>
+
+          <div
+            className={cn(
+              "grid gap-3 px-5 py-4 text-sm text-slate-600",
+              actionCenterOpen
+                ? "max-h-[480px] opacity-100"
+                : "max-h-0 overflow-hidden opacity-0 xl:max-h-full xl:opacity-100",
+              "transition-all duration-500 ease-out",
+            )}
+          >
+            <ActionItem
+              icon={Plus}
+              label="Add milestone"
+              description="Create a new checkpoint to track programme delivery."
+              onClick={() => {
+                setEditingMilestone(null);
+                setMilestoneForm({
+                  title: "",
+                  deadline: "",
+                  description: "",
+                  status: "Not started",
+                  progress: 0,
+                });
+                setMilestoneModalOpen(true);
+                toast.success("Ready to add a milestone", {
+                  description: "Fill in the milestone details in the drawer.",
+                });
+              }}
+            />
+            <ActionItem
+              icon={RadioTower}
+              label="Request update from NGO"
+              description="Ping partner stakeholders for the latest field status."
+              onClick={() => {
+                toast("Update request sent", {
+                  description: "NGO will receive a notification to share progress.",
+                });
+              }}
+            />
+            <ActionItem
+              icon={UploadCloud}
+              label="Upload compliance document"
+              description="Attach reports, approvals, or committee notes."
+              onClick={() => {
+                toast("Upload placeholder", {
+                  description: "Compliance document workflow coming soon.",
+                });
+              }}
+            />
+          </div>
+        </aside>
       </div>
 
       <Card>
@@ -953,5 +1135,31 @@ function MilestoneTimeline({ milestones, onEdit, onDelete, animated }: Milestone
         })}
       </div>
     </div>
+  );
+}
+
+interface ActionItemProps {
+  icon: LucideIcon;
+  label: string;
+  description: string;
+  onClick: () => void;
+}
+
+function ActionItem({ icon: Icon, label, description, onClick }: ActionItemProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="group flex w-full items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left shadow-sm transition hover:border-brand-200 hover:bg-brand-50/60"
+    >
+      <span className="mt-0.5 rounded-full bg-brand-50 p-1.5 text-brand-600 group-hover:bg-white">
+        <Icon className="h-4 w-4" aria-hidden />
+        <span className="sr-only">{label}</span>
+      </span>
+      <span className="flex-1">
+        <span className="block text-sm font-medium text-slate-800">{label}</span>
+        <span className="mt-1 block text-xs text-slate-500">{description}</span>
+      </span>
+    </button>
   );
 }

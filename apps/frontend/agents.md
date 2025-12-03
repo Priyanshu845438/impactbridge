@@ -352,6 +352,16 @@
 - Refreshed dashboard/component/TODO docs and revalidated with `npm run build`.
 
 ## 84. [FE] Company programme detail view.
-- Added `/dashboard/admin/company/[companyId]/programmes/[programmeId]` delivering summary metrics, compliance note, milestone timeline, documents, assigned NGOs (cards + Assign NGO modal workflow), dedicated milestones tab (list/timeline toggle with cards + add/edit modal), and comments tabs with accurate badge tone mapping.
+- Added `/dashboard/admin/company/[companyId]/programmes/[programmeId]` delivering summary metrics, compliance note, milestone timeline, documents, assigned NGOs (cards + Assign NGO modal workflow), dedicated milestones tab (list/timeline toggle, responsive timeline visualization, add/edit modal), and comments tabs with accurate badge tone mapping; new insight cards + animated progress bar make it feel like a control panel.
 - Updated company routes to use consistent `[companyId]` slug, synced documentation (dashboard overview, component catalog, TODO roadmap, progress report), and removed legacy `[id]` route remnants.
 - Ran `npm run build` to validate the new detail page and ensure lint/type checks pass.
+
+## 85. [FE] Programme insight cards & animated progress.
+- Added KPI strip (overall %, total milestones, completed vs pending) atop the company programme detail page with tone-aware colours and mock data calculations.
+- Implemented animated milestone completion bar plus colour thresholds (<30% red, 30–70% sky, >70% green) to reinforce status at a glance.
+- Updated dashboard/component/TODO/progress docs and reran `npm run build` to confirm the control panel enhancements compile cleanly.
+
+## 86. [FE] Programme Action Center.
+- Added responsive Action Center sidebar on the programme detail page with quick actions (add milestone, request NGO update, upload compliance document) and mobile-friendly collapse.
+- Introduced reusable `ActionItem` helper, toast messaging, and viewport-aware toggle logic without disrupting existing milestones/NGO workflows.
+- Updated dashboard/component/TODO/overview docs and revalidated with `npm run lint` + `npm run build`.

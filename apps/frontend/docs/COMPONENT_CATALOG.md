@@ -110,7 +110,11 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - `admin/companies/page.tsx` demonstrates the shared table/card pattern, filter row, and modal scaffolding for entity management pages.
 - `admin/company/[companyId]/page.tsx` shows the detail layout pattern (overview + snapshot + related entities + timeline) for company records.
 - `admin/company/[companyId]/programmes/page.tsx` demonstrates the programme grid with progress bars, filter bar, and modal scaffold.
-- `admin/company/[companyId]/programmes/[programmeId]/page.tsx` highlights the full programme detail experience with summary metrics, milestone timeline, documents, assigned NGOs (assign modal workflow), dedicated milestones tab with list/timeline toggle, and comments tabs.
+- `admin/company/[companyId]/programmes/[programmeId]/page.tsx` highlights the full programme detail experience with summary insights (progress cards + bar), milestone timeline, documents, assigned NGOs (assign modal workflow), dedicated milestones tab with list/timeline toggle, responsive timeline visualization, comments tabs, and the Action Center sidebar with reusable `ActionItem` buttons for key programme actions.
+
+### Action Center Helpers
+- **ActionItem** (`admin/company/[companyId]/programmes/[programmeId]/page.tsx`): small CTA row component combining icon, title, description, and hover feedback; used inside the Action Center sidebar.
+- **Action Center Panel** (`admin/company/[companyId]/programmes/[programmeId]/page.tsx`): responsive quick-action sidebar that collapses on mobile and surfaces toast-driven workflows (add milestone, request NGO update, upload compliance document).
 
 ## Adding New Components
 1. Build new shared components under `components/`
