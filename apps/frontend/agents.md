@@ -365,3 +365,18 @@
 - Added responsive Action Center sidebar on the programme detail page with quick actions (add milestone, request NGO update, upload compliance document) and mobile-friendly collapse.
 - Introduced reusable `ActionItem` helper, toast messaging, and viewport-aware toggle logic without disrupting existing milestones/NGO workflows.
 - Updated dashboard/component/TODO/overview docs and revalidated with `npm run lint` + `npm run build`.
+
+## 87. [FE] i18n scaffold with locale switcher.
+- Installed `next-intl`, introduced locale + intl providers in the root layout, and created sample `en`/`hi` dictionaries to seed future translations.
+- Wired the login title and profile dropdown to use translation hooks, added an inline EN/HI toggle in the user menu, and ensured UI state syncs with the locale context.
+- Ran `npm run lint` and `npm run build` to confirm the internationalisation layer is stable.
+
+## 88. [FE] Impact trend chart placeholder.
+- Added `components/charts/impact-trend-chart.tsx` using Recharts with metric toggle, smooth curves, hover glow, and first-load animation.
+- Embedded the chart in the admin dashboard analytics stack alongside a responsive “Metric signals” card grid to keep mobile/desktop layouts tight.
+- Updated component catalog documentation and revalidated with `npm run lint` / `npm run build` (standard Next config warning only).
+
+## 89. [FE] Testing docs update.
+- Documented the command palette / Action Center testing attempt, emphasising need for a proper Jest + RTL harness (mocking Auth, Next router, notFound, and ESM deps) before unit tests land.
+- Refreshed `docs/FRONTEND_TODO.md`, `docs/PROGRESS_REPORT.md`, `docs/FRONTEND_DASHBOARD.md`, and `docs/COMPONENT_CATALOG.md` to reflect the new testing action item while noting no UI changes were required.
+- Lint/build remain clean; tests will follow once the harness is in place.

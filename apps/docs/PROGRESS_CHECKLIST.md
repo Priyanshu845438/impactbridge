@@ -1,203 +1,206 @@
 # ImpactBridge Frontend & Backend Progress Checklist
 
-_Last updated: 2025-11-28_
+_Last updated: 2025-02-14_
 
-This checklist consolidates everything that has been delivered so far across the **frontend (Next.js)** and **backend (NestJS + Prisma)** along with outstanding gaps, open suggestions, and upcoming milestones. Use it as the single reference when planning sprints or handing over workstreams.
+This master checklist captures everything that currently exists in the ImpactBridge platform and everything that still needs attention. It is organised so new engineers (or auditors) can immediately understand:
+- ✅ what has been delivered
+- ⏳ what remains open (by priority)
+- 💡 suggestions and follow-ups
+
+Use it alongside `PROJECT_FULL_STATUS.md`, `agents.md`, and the module-specific documentation when planning new work.
 
 ---
 
-## 1. Frontend Delivery Snapshot
+## 0. Snapshot Table
+
+| Area | Delivered Highlights | In Progress / Outstanding |
+| --- | --- | --- |
+| Frontend (Next.js) | Dashboard shells, CSR programme workspace, theming + dark mode, Action Center | Real data wiring, automated a11y testing, design system docs expansion |
+| Backend (NestJS + Prisma) | Auth, user lifecycle, RBAC, compliance profiles, NGO/company listings | CSR programme APIs, audit surfacing, pagination/search, soft delete |
+| Tooling & Docs | Postman automation, business/tech guides, progress logs | Keep docs synced with future releases, testing playbooks |
+
+---
+
+## 1. Frontend Delivery Checklist
 
 ### 1.1 Core Platform & Navigation
-- [x] App Router baseline with shared layout wrappers (`app/layout.tsx`, `app/dashboard/layout.tsx`).
-- [x] Role-aware sidebar with grouped navigation, mobile drawer, and route prefetch (`next/link` + `router.prefetch`).
-- [x] Header shell featuring search, activity notifications popover/sheet, command palette (⌘/Ctrl + K), top progress bar, and profile drawer.
-- [x] Authentication flow (login, register, forgot/reset password) with form validation, toasts, and responsive treatments.
-- [x] Global Suspense + skeleton loading system to smooth route transitions.
-- [x] Accessibility polish (focus rings, aria-labels, keyboard activation for table rows/cards).
+- [x] App Router baseline with shared layout wrappers (`app/layout.tsx`, `app/dashboard/layout.tsx`) and Suspense fallbacks.
+- [x] Role-aware sidebar: grouped navigation, independent scroll regions, mobile drawer, and `<Link prefetch>` + `router.prefetch` for instant transitions.
+- [x] Header shell: search + toast fallback, notifications popover/sheet, command palette (⌘/Ctrl + K), top progress bar, profile drawer, theme toggle.
+- [x] Authentication flow: login/register/forgot/reset with validation, toasts, and responsive behaviour.
+- [x] Keyboard accessibility: focus rings, `aria-*` labels, tabbable data rows, command palette shortcuts.
+- [x] Dark/light/system theming via `next-themes`, stored preference, colour tokens in Tailwind, and toast acknowledgement.
 
-### 1.2 Dashboard Experiences (per role)
-- [x] **Super Admin** dashboard with analytics hero chart, KPI cards, CSR submissions chart, quick actions, Smart Suggestions side panel, and recent activity feed.
-- [x] **NGO/Company/Donor** dashboard stubs updated with production copy and consistent section headers.
-- [x] Notifications center (page + header) with mark-as-read controls and unread badge sync.
-- [x] Profile page with editable form, skeleton loader, and toasts.
-- [x] User directory (list + detail tabs) including filters, pagination UI, and responsive table/card layout.
+### 1.2 Dashboard Experiences
+- [x] Super Admin dashboard: analytics hero chart, KPI cards, CSR submissions bar chart, smart suggestions panel, activity feed, empty states.
+- [x] NGO/Company/Donor dashboards: production copy, consistent section headers, graph placeholders aligned with theme tokens.
+- [x] Notifications center (page + header) with unread badge sync and mark-as-read affordances.
+- [x] Profile page: editable form shell, skeleton, toasts, validation feedback.
+- [x] User directory: filters, pagination UI, responsive table/cards, keyboard navigation.
 
-### 1.3 Admin Modules – NGOs
-- [x] NGO management list with search + multi filter bar (registration/compliance/region), responsive tables/cards, pagination, keyboard support.
-- [x] NGO detail drawer with overview/documents/activity tabs and action toasts.
-- [x] NGO document review room: split preview, metadata/tags board, lifecycle status dropdown, timeline activity feed, Access & Permissions modal, collaboration sidebar (comments, filters, status-aware disables), Timeline & Status panel, status badge & dropdown, header status controls.
+### 1.3 NGO Admin Workbench
+- [x] NGO management list: search, multi-filter bar, responsive layout, accessible rows, pagination.
+- [x] NGO detail drawer: overview, documents, activity timeline, contextual actions.
+- [x] Document review workspace: split preview, metadata board, tag filters, access & permission modal, collaboration sidebar (comments, timeline, filters), status controls, timeline panel, smart hints, command palette integration.
 
-### 1.4 Admin Modules – Companies & CSR Programmes
-- [x] Companies index page with search, filter dropdowns (status, industry), add-company modal, responsive table/cards, pagination.
-- [x] Company profile detail page with overview card, CSR snapshot metrics, linked NGOs section, timeline.
-- [x] CSR programmes list for a company with filters, cards (status badge, budget, progress, actions), modal scaffold, empty state.
-- [x] CSR programme detail view with:
-  - [x] Section header actions (edit, archive, download).
-  - [x] Insight cards (overall progress, total milestones, completed/pending counts).
-  - [x] Animated milestone completion bar with colour thresholds.
-  - [x] Programme summary card (budget, timeline, compliance note).
-  - [x] Progress & milestones list, documents tab, comments tab.
-  - [x] Assigned NGOs tab with card layout, Assign NGO modal workflow (search, select, confirm).
-  - [x] Milestones tab with list + timeline toggle, add/edit/delete modal, responsive timeline visualization.
-  - [x] Milestone timeline view (horizontal desktop, vertical mobile) with animations.
-  - [x] **New** Action Center sidebar with quick action buttons (add milestone, request update, upload compliance doc) & mobile collapse logic.
-  - [x] Programme progress insights (KPI strip + animated bar) and dynamic tones.
+### 1.4 Company & CSR Programme Suite
+- [x] Company index page: search, status/industry filters, add-company modal scaffold, responsive table/cards, pagination.
+- [x] Company profile detail page: overview card (logo placeholder, status badge), CSR snapshot metrics, linked NGOs table, notes & activity timeline, edit CTA.
+- [x] CSR programme list: header actions, filters, cards with status badges + progress bars, empty state, modal scaffold.
+- [x] CSR programme detail view:
+  - [x] Header actions (Edit, Archive, Download summary) + breadcrumb.
+  - [x] KPI strip (overall progress %, total milestones, completed vs pending) with animated bar and tone thresholds (<30% danger, 30–70% warning, >70% success).
+  - [x] Programme summary card (budget, timeline, compliance note) and progress block with milestones.
+  - [x] Tabs: Overview, Timeline, Documents, Assigned NGOs, Comments, Milestones.
+  - [x] Assigned NGOs tab: cards with status badges, remove chip, Assign NGO modal workflow (search, select, confirm).
+  - [x] Milestones tab: list view with inline edit/delete UI, "Add milestone" modal, timeline toggle (horizontal desktop, vertical mobile) with animations and status-based colour palettes.
+  - [x] Documents tab: empty state messaging, document metadata placeholders.
+  - [x] Action Center sidebar: collapsible, mobile-friendly, toast-driven actions (Add milestone, Request update, Upload compliance doc) with notification badge.
 
-### 1.5 Command Palette & Search Enhancements
-- [x] Command palette overlay with filtering, keyboard navigation, and responsive modal/sheet behavior.
-- [x] Route prefetch + useTransition to speed navigation.
-- [x] Toast fallback when search submitted without backend integration.
+### 1.5 Platform Utilities & Enhancements
+- [x] Command palette overlay with live filtering, keyboard navigation, and responsive modal/sheet.
+- [x] Smart Suggestions card with scrollable actions and CTA buttons.
+- [x] Activity notifications UI with badge, dropdown, mobile sheet, mark-all-as-read button.
+- [x] Global loading micro-interactions: skeletons, top progress bar, smooth transitions.
+- [x] Consistent typography + spacing tokens defined in Tailwind and applied across layouts/components.
+- [x] Unified empty state component reused for notifications, lists, and document preview gaps.
+- [x] Accessibility polish: focus outlines, ARIA tags, keyboard traps avoided in modals.
 
-### 1.6 Theming, Typography, and Micro-interactions
-- [x] Tailwind tokens for heading/body scales, spacing, and brand palette.
-- [x] Components updated to use shared tokens (stat cards, quick actions, section headers, forms).
-- [x] Unified empty state component applied to notifications and other pages.
-- [x] Hover/press animations on cards, dropdowns, and buttons.
-- [x] Responsive adjustments (scrollable sidebar/content separation, timeline panel breakpoints, suggestion panel placement).
-
-### 1.7 Frontend Documentation Coverage
-- [x] `docs/FRONTEND_DASHBOARD.md` – architecture overview kept current.
-- [x] `docs/COMPONENT_CATALOG.md` – component reference updated with latest helpers (ActionItem, Milestone timeline, etc.).
-- [x] `docs/FRONTEND_TODO.md` – roadmap with completion markers.
-- [x] `docs/PROGRESS_REPORT.md` – narrative status log.
-- [x] `agents.md` – change log entries (#1–#86) for traceability.
+### 1.6 Documentation (Frontend)
+- [x] `docs/FRONTEND_DASHBOARD.md` – architecture + latest UI sections.
+- [x] `docs/COMPONENT_CATALOG.md` – includes command palette, timeline, action center, empty states.
+- [x] `docs/FRONTEND_TODO.md` – backlog annotated with completion states.
+- [x] `docs/PROGRESS_REPORT.md` – chronological summary through entry #86.
+- [x] `docs/STYLE_GUIDE.md` – typography, spacing, colour hierarchy.
+- [x] `agents.md` (frontend) – log entries kept current up to dark mode implementation (#87 pending).
 
 ---
 
-## 2. Frontend Backlog & Missing Pieces
+## 2. Frontend Backlog & Suggestions
 
-### 2.1 Awaiting Backend Wiring (High Priority once APIs arrive)
-- [ ] Replace mock analytics, cards, and tables with real data (React Query + API hooks).
-- [ ] Connect command palette search results to live navigation/actions.
-- [ ] Wire notifications, Smart Suggestions, and Action Center actions to real backend events.
-- [ ] Persist milestone/NGO assignments via API once endpoints exist.
-- [ ] Implement real auth guard middleware for `/dashboard/*` routes using Next middleware.
+### 2.1 High Priority (awaiting backend or next sprint)
+- [ ] Replace mock dashboards, tables, and programme data with live API integrations (React Query/SWR caching). 
+- [ ] Wire command palette results to navigate to actual entities.
+- [ ] Connect notifications, smart suggestions, and Action Center buttons to backend endpoints once available.
+- [ ] Implement CSR programme milestone CRUD once API exists (optimistic updates + error handling).
+- [ ] Add automated accessibility checks (Playwright axe / Jest axe) for critical pages.
 
-### 2.2 UX Enhancements / Medium Priority
-- [ ] Dark mode toggle leveraging shared tokens.
-- [ ] Global localization/i18n scaffold.
-- [ ] Additional charts for impact/donation metrics (co-ordinate with backend schema).
-- [ ] Component-level tests (React Testing Library) for command palette, Action Center, milestone timeline interactions.
-- [ ] Visual regression strategy (Storybook/Percy) post data wiring.
+### 2.2 Medium Priority
+- [ ] Expand design system docs to include Action Center patterns, modal standards, and timeline styling rules.
+- [ ] Add component stories/Storybook for visual regression coverage.
+- [ ] Build reusable analytics widgets (mini charts, sparklines) for future dashboards.
+- [ ] Introduce reviewer/auditor dashboard variants using existing layout shell.
 
-### 2.3 Tech Debt / Low Priority Clean-up
-- [ ] Investigate Node warning about `MODULE_TYPELESS_PACKAGE_JSON` (consider adding `"type": "module"` or convert config). 
-- [ ] Remove legacy commented code & unused assets once backend integration begins.
-- [ ] Expand icon sizing utilities to enforce 16/20/24 standard everywhere.
-
-### 2.4 Suggested Improvements
-- [ ] Provide offline/optimistic UI states for Mutation-heavy flows (e.g., assign NGO, milestones) to keep UX snappy with backend latency.
-- [ ] Introduce breadcrumb trail for deep routes (`/dashboard/admin/company/...`) to aid navigation.
-- [ ] Build programmatic QA checklist in docs with viewport screenshots when the UI stabilises.
+### 2.3 Nice to Have / Future Ideas
+- [ ] Feature flag support for gradually rolling out Action Center automation.
+- [ ] Offline-ready caching for dashboard insights (PWA direction).
+- [ ] Inline commenting for CSR programme timeline items.
+- [ ] Notification preference management UI.
 
 ---
 
-## 3. Backend Delivery Snapshot
+## 3. Backend Delivery Checklist
 
-_Reference: `/apps/docs/PROJECT_FULL_STATUS.md`, `README.md`, and team change logs._
+### 3.1 Core Architecture
+- [x] NestJS modules scaffolded: `auth`, `user`, `prisma`, `address`, `bank`, `documents` plus utilities.
+- [x] PrismaService configured and exported via dedicated module; Prisma Client sourced from `prisma/generated`.
+- [x] DTO layer with `class-validator` decorators for auth/user/address/bank/document flows.
+- [x] Global validation pipe (`ValidationPipe` with whitelist + forbidNonWhitelisted) applied in `main.ts`.
+- [x] JWT utilities (`hashPassword`, `comparePassword`, `signToken`, guards, decorators).
 
-### 3.1 Authentication & Security
-- [x] User registration & login with bcrypt hashing & JWT issuance.
-- [x] Register DTOs (`RegisterDto`, `LoginDto`) with validation.
-- [x] AuthService.register/login with duplicate email guard, password hashing, token generation.
-- [x] AuthController endpoints `/auth/register`, `/auth/login`.
-- [x] JWT utility (`signToken`) with env-driven secret.
-- [x] Password utility (`hashPassword`, `comparePassword`).
-- [x] Global ValidationPipe in `main.ts` (whitelist + forbid non-whitelisted).
-- [x] PrismaService module exported for dependency injection.
-- [x] JWT guard & current user decorator.
-- [x] Roles decorator + RolesGuard for RBAC.
-- [x] Fix for AuthModule importing UsersModule & exporting UsersService.
+### 3.2 Authentication & User Lifecycle
+- [x] Register endpoint: validation, duplicate check, password hashing, role-based profile auto-creation (NGO, Company, Donor), sanitized response.
+- [x] Login endpoint: credential validation, JWT issuance, sanitized payload.
+- [x] Auth module imports `UsersModule` + `PrismaModule`, exports `AuthService`.
+- [x] Password change service/controller for authenticated users.
+- [x] AuthController providing `/auth/register` and `/auth/login` endpoints.
 
-### 3.2 User & Profile Modules
-- [x] User module (controller/service/module) with find/list/update/delete endpoints.
-- [x] User role enum + DTOs (`CreateUserDto`, `UpdateUserDto`).
-- [x] `/users/me`, `/users/:id`, `/users` (admin list) endpoints.
-- [x] Role-protected update/delete endpoints for SUPER_ADMIN.
-- [x] Auto creation of NGO, Company, Donor profiles upon registration (role check in AuthService).
-- [x] Donor/Company/NGO profile service helpers (`createNGOProfile`, etc.).
+### 3.3 Profiles & Compliance Automation
+- [x] NGOProfile/CompanyProfile/DonorProfile auto-creation on registration.
+- [x] Address service/controller for NGOs (create or update official address).
+- [x] Bank service/controller for NGOs (create/update bank details with validation and sanitisation).
+- [x] Document upload DTO/service scaffold for PAN, 80G, 12A, CSR policy, FCRA certificates.
 
-### 3.3 NGO Compliance
-- [x] Address module (service/controller/DTO) for NGO address create/update under JWT + roles guard.
-- [x] Bank module for NGO bank details with create/update semantics and sanitization.
-- [x] Documents module for NGO document uploads (PAN, 80G, 12A, CSR Policy, FCRA).
-- [x] Admin endpoints for listing NGO profiles with documents/bank/address (sanitize password).
-- [x] Admin listing for company profiles (documents/bank/address) & donor profiles.
+### 3.4 Listings & Admin Tools
+- [x] Admin endpoints:
+  - [x] List NGOs (with campaigns).
+  - [x] List companies (with donation reports & campaign includes).
+  - [x] List donors (with address/PAN info).
+  - [x] Fetch NGO profiles with documents/bank/address (admin only).
+  - [x] Fetch company profiles with documents/bank/address (admin only).
+  - [x] Fetch donor profiles with address (admin only).
+- [x] User service: findById, findAll (sanitised), update, delete with RBAC enforcement.
 
-### 3.4 CSR / Company Features
-- [x] Company listing with donation reports for admins (NGO campaign relation + donations include).
-- [x] CSR programmes dataset (mock; actual endpoints to align with schema later).
-- [x] Company/NGO/donor profile auto-creation ensures compliance data ready.
+### 3.5 Schema & Data Layer
+- [x] Government-compliant Prisma schema models: User, NGOProfile, CompanyProfile, DonorProfile, Campaign, Donation, BankDetail, Document, Address, AuditLog.
+- [x] Enums for Role, NGORegistrationType, DocumentType, CampaignCategory.
+- [x] Migration executed (`add_government_compliant_models`).
+- [x] Relationships enforced for profile auto-creation and admin listings.
 
-### 3.5 Donations & Campaigns (Schema level)
-- [x] Prisma schema expanded to government-compliant models (User, NGOProfile, CompanyProfile, DonorProfile, Campaign, Donation, BankDetail, Document, Address, AuditLog, plus enums).
-- [x] Migration executed: `add_government_compliant_models`.
-- [x] Campaign/Donation/Document relations wired via Prisma (pending service & controller wiring for new operations beyond existing ones).
+### 3.6 Security & RBAC
+- [x] JWTAuthGuard + RolesGuard with `@Roles` decorator applied to protected routes.
+- [x] CurrentUser decorator for request payload injection.
+- [x] RBAC on update/delete endpoints (SUPER_ADMIN).
+- [x] Guards integrated with NGO/company listing endpoints to enforce access policies.
 
-### 3.6 RBAC & Guards
-- [x] JWTAuthGuard + RolesGuard integrated into controllers (users, address, bank, admin listings).
-- [x] Roles decorator utilities stored in auth module.
-
-### 3.7 Admin Utilities
-- [x] Admin endpoints for retrieving NGOs with campaigns, companies with donation reports, donors list.
-- [x] Audit log model created; logging strategy documented (implementation partially pending where not yet triggered).
-
-### 3.8 Documentation & Tooling
-- [x] `/apps/docs/PROJECT_FULL_STATUS.md` – non-technical guide explaining modules.
-- [x] API testing guides, Postman automation scripts, Postman collection with auto-token injection.
-- [x] Business context docs (BUSINESS_STATUS.md, FRONTEND_BUSINESS_GUIDE.md).
-- [x] Scripts for running Postman automation.
+### 3.7 Documentation (Backend & Shared)
+- [x] `/apps/backend/AGENTS.md` – activity log maintained through entry #31 (UsersService injection fix) and beyond.
+- [x] `/apps/docs/` – includes `TECHNICAL_OVERVIEW.md`, `BUSINESS_STATUS.md`, `PROJECT_FULL_STATUS.md`, Postman guides, Postman collection with auto-token script.
+- [x] API testing scripts with base URL and auto Bearer injection documented in `POSTMAN_AUTOMATION.md` & `POSTMAN_TESTING.md`.
 
 ---
 
-## 4. Backend Backlog & Missing Pieces
+## 4. Backend Backlog & Suggestions
 
-### 4.1 Features in Progress / Planned
-- [ ] Company ↔ NGO project approval workflow (schema prepared, services pending).
-- [ ] NGO financial reporting endpoints (quarterly/annual uploads & audit trail).
-- [ ] Automated pagination/search across list endpoints.
-- [ ] Soft delete (replace hard deletes with `deletedAt`).
-- [ ] Email/SMS notifications (invitations, password updates, receipts).
-- [ ] Reviewer/Auditor read-only dashboards.
-- [ ] Automated tests (unit/integration/E2E) + CI pipeline.
-- [ ] ActivityLog service exposure (endpoints to fetch audit logs).
-- [ ] CSR programme endpoints (APIs to pair with frontend programme detail & milestones UI).
-- [ ] Milestone/impact/utilization API wiring (many endpoints described in docs are specified but may need final implementation verification).
+### 4.1 High Priority Features
+- [ ] CSR programme endpoints: create, update, assign NGOs, manage milestones, upload documents (align with frontend UI).
+- [ ] NGO financial reporting APIs (quarterly/annual filings, audit log integration).
+- [ ] Company ↔ NGO approval workflow (requests, approvals, comments, audit trail).
+- [ ] Replace hard deletes with soft delete (`deletedAt`) across user/profile entities.
+- [ ] Pagination + search utilities for list endpoints (NGOs, companies, donors).
 
 ### 4.2 Technical Improvements
-- [ ] Refine Prisma service error handling & transaction usage (especially for multi-step onboarding flows).
-- [ ] Evaluate background jobs for heavy tasks (report generation, notifications).
-- [ ] Security hardening: consider HTTP-only cookies for JWT, rate limiting, audit log export controls.
-- [ ] Observability: structured logging + request tracing (pino, OpenTelemetry).
+- [ ] Shared sanitisation helper to remove password and sensitive fields consistently.
+- [ ] Enhanced error handling (Prisma `try/catch`, domain-specific exceptions, logging).
+- [ ] Background job infrastructure for heavy workflows (notifications, report generation).
+- [ ] Observability stack (structured logging, tracing, monitoring dashboards).
+- [ ] Security hardening: rate limiting, JWT refresh strategy, HTTP-only cookie option.
 
-### 4.3 Documentation Enhancements
-- [ ] Keep `PROJECT_FULL_STATUS.md` timestamps in sync with latest agents entry.
-- [ ] Add API migration playbook (for future schema changes & rollbacks).
-- [ ] Document test coverage expectations once automated tests land.
+### 4.3 Testing & Tooling
+- [ ] Unit tests for services, guards, DTO validation.
+- [ ] Integration tests for auth and user flows (Jest + Supertest).
+- [ ] E2E/API smoke tests aligned with Postman suites.
+- [ ] CI pipeline to run lint/test/build for backend.
 
-### 4.4 Suggestions / Future Considerations
-- [ ] Create service-level metrics dashboard (success/failure counts) to mirror UI analytics.
-- [ ] Introduce feature flags to toggle new workflows (approvals, financial reporting) during rollout.
-- [ ] Align DTOs with potential GraphQL schema if future real-time dashboards require subscriptions.
-
----
-
-## 5. Shared Cross-Cutting Items
-- [ ] Align frontend Action Center, timeline, and programme UI with backend milestone/utilization endpoints (once completed) to ensure end-to-end flow.
-- [ ] Consolidate auth/session handling across apps (consider shared package for DTOs & enums).
-- [ ] Maintain consistent release notes linking frontend `agents.md` and backend status updates.
-- [ ] Prepare onboarding playbook referencing this checklist for new engineers.
+### 4.4 Documentation & Process
+- [ ] Migration playbook (how to apply/revert Prisma migrations per environment).
+- [ ] API versioning policy once endpoints expand.
+- [ ] Shared DTO/types package for frontend-backend sync.
 
 ---
 
-## 6. Next Steps (Suggested Sequencing)
-1. **Backend**: Finalise company↔NGO approval + milestone/impact/utilization endpoints, including tests.
-2. **Frontend**: Wire programme detail UI to real APIs (Action Center -> service calls) and implement optimistic updates.
-3. **QA**: Draft component/integration tests and align Postman suites with new endpoints.
-4. **Operations**: Address Node module-type warning (frontend) and improve logging/observability (backend).
-5. **Documentation**: Keep this checklist updated alongside `PROJECT_FULL_STATUS.md` and `agents.md` when new work lands.
+## 5. Cross-Cutting Items
+- [ ] Align frontend Action Center timelines with backend milestones once APIs land (define payload shapes early).
+- [ ] Consolidate release notes linking frontend `agents.md` entries and backend `AGENTS.md` activity log (keep numbering in sync).
+- [ ] Create onboarding runbook referencing this checklist for new engineers and product stakeholders.
+- [ ] Establish performance budgets (bundle size, API latency) and review at sprint close.
+- [ ] Plan for future feature flag framework to roll out compliance features safely.
 
 ---
 
-> **Reminder:** Do **not** modify backend/frontend source files when updating this document. Track future progress by checking the corresponding docs (`/apps/frontend/docs`, `/apps/docs`) and the agents logs before editing.
+## 6. Suggestions & Opportunities
+- [ ] Consider shared analytics instrumentation (frontend events ↔ backend audit log) for compliance reporting.
+- [ ] Introduce automated accessibility audits as part of CI once frontend wiring is complete.
+- [ ] Evaluate using shared monorepo tooling (Nx/Turbo) to coordinate builds/tests between frontend & backend.
+- [ ] Add visual design tokens documentation (Figma or Storybook) to mirror Tailwind tokens.
+
+---
+
+## 7. How to Update This Checklist
+1. Review recent commits and `agents.md` entries (frontend and backend).
+2. Update relevant sections (tick checkboxes, adjust descriptions, add new backlog items).
+3. Amend the "Last updated" date.
+4. Cross-update `PROJECT_FULL_STATUS.md`, Postman docs, and sprint planning boards if applicable.
+5. Leave a brief note in the applicable `agents.md` entry referencing the update.
+
+> **Reminder:** Do **not** modify application source files when editing this document unless your task explicitly requires it.

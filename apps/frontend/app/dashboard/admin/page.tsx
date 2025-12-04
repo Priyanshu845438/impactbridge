@@ -27,6 +27,7 @@ import { toast } from "sonner";
 import { SkeletonCard, SkeletonStat, SkeletonActivityItem } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Bar, BarChart, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { ImpactTrendChart } from "@/components/charts/impact-trend-chart";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -269,6 +270,67 @@ export default function AdminDashboard() {
               data={activeUserSeries}
               tone="indigo"
             />
+          </div>
+        </div>
+      </section>
+
+      <section className="grid gap-6 rounded-3xl border border-slate-200/80 bg-white/95 p-6 shadow-sm lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1.8fr)]">
+        <ImpactTrendChart className="min-h-[320px]" />
+        <div className="flex flex-col justify-between gap-4">
+          <SectionHeader title="Metric signals" subtitle="Snapshot of correlated donation and impact metrics" />
+          <div className="grid flex-1 gap-4 sm:grid-cols-2">
+            {[
+              {
+                title: "Average donation",
+                metric: "₹62.4L",
+                helper: "Past 90-day moving average",
+                icon: TrendingUp,
+                tone: "emerald",
+              },
+              {
+                title: "Impact coverage",
+                metric: "78%",
+                helper: "Programmes reporting verified outcomes",
+                icon: Target,
+                tone: "indigo",
+              },
+              {
+                title: "Repeat donors",
+                metric: "64%",
+                helper: "Returning contributors this quarter",
+                icon: Users2,
+                tone: "amber",
+              },
+              {
+                title: "Programs scaling",
+                metric: "21",
+                helper: "Initiatives expanding reach YoY",
+                icon: Sparkles,
+                tone: "slate",
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-4 shadow-sm"
+              >
+                <div className="flex items-center justify-between">
+                  <p className="text-caption font-semibold uppercase tracking-[0.28em] text-slate-400">{item.title}</p>
+                  <span
+                    className={cn(
+                      "flex h-9 w-9 items-center justify-center rounded-full",
+                      item.tone === "emerald" && "bg-emerald-100 text-emerald-600",
+                      item.tone === "indigo" && "bg-indigo-100 text-indigo-600",
+                      item.tone === "amber" && "bg-amber-100 text-amber-600",
+                      item.tone === "slate" && "bg-slate-200 text-slate-600",
+                    )}
+                  >
+                    <item.icon className="h-4 w-4" />
+                  </span>
+                </div>
+                <p className="mt-4 text-heading-2 text-slate-800">{item.metric}</p>
+                <p className="mt-1 text-small text-slate-500">{item.helper}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

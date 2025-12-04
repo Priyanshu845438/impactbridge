@@ -1,0 +1,12 @@
+{
+  "login": "Login",
+  "logout": "Logout",
+  "dashboard": "Dashboard",
+  "search": "Search",
+  "profile": "Profile",
+  "settings": "Settings",
+  "language": "Language",
+  "notifications": "Notifications",
+  "help": "Help Center",
+  "welcome": "Welcome back"
+}

@@ -34,92 +34,62 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 
 ### `components/dashboard/profile-drawer.tsx`
 - Right-side sheet for account quick actions; triggered from dashboard header.
-- Shows avatar initials, name, role badge, contact info, "My Profile" shortcut, and logout button.
+- Shows avatar initials, name, role badge, contact info, locale switch (EN/HI), "My Profile" shortcut, and logout button.
 - Re-uses Drawer primitive for responsive full-screen behaviour on mobile.
-- Trigger now clones the supplied button so only one `<button>` renders, avoiding nested-button hydration warnings. Quick actions include explicit `aria-label`s (e.g., “Go to my profile”, “Sign out”).
+- Trigger clones the supplied button so only one `<button>` renders, avoiding nested-button hydration warnings. Quick actions include explicit `aria-label`s (e.g., “Go to my profile”, “Sign out”).
 
-### Notifications UI (page + header pattern)
-- Header bell inside `app/dashboard/layout.tsx` shows a badge, desktop popover, and mobile sheet with mock notifications rendered via `NotificationItem` helper.
-- `app/dashboard/notifications/page.tsx` consumes SectionHeader, skeletons, and AuthProvider badge state to surface alert history and mark-as-read actions.
+### `components/charts/impact-trend-chart.tsx`
+- Lightweight Recharts line chart component with smooth curves, first-load animation, tooltip, and hover glow.
+- Metric toggle (`Donations` / `Impact`) swaps the series colour and keeps data local while backend wiring is pending.
+- Responsive wrapper ensures full-width desktop layout and stacked mobile presentation when embedded in dashboards.
+- Reused in the admin dashboard metrics section; can be dropped into other role dashboards for a quick trend view.
 
 ### Command palette
-- `CommandPalette` component lives inside `app/dashboard/layout.tsx` and is toggled via ⌘/Ctrl + K or the inline shortcut button beside global search.
-- Accepts an array of `{ label, actionLabel, icon, keywords }` and filters results client-side.
-- Uses modal layout on desktop (centered) and drops full-width overlay on smaller breakpoints; closes on Escape or item select.
-- Provides keyboard focus trapping, body scroll lock, prefetch-driven navigation cues, and result hover affordances to mimic a productivity-grade quick search; `useTransition` keeps search/filter + close interactions buttery.
-- Dashboard layout also mounts a top progress indicator using `next-nprogress-bar`, giving consistent route feedback alongside per-page skeletons.
+- `CommandPalette` lives in `app/dashboard/layout.tsx`; toggled with ⌘/Ctrl + K or the inline shortcut button beside global search.
+- Accepts `{ label, actionLabel, icon, keywords }` array and filters results client-side.
+- Uses modal layout on desktop and full-width overlay on smaller breakpoints; closes on Escape or item select.
+- Provides keyboard focus trapping, body scroll lock, prefetch-driven navigation cues, and `useTransition` for smooth filtering.
+- **Testing note**: unit tests remain pending until Jest harness mocks `useAuth`/router/notFound` and handles ESM modules (see `docs/FRONTEND_TODO.md`).
 
 ### Suggested actions panel
 - `SuggestedActionsPanel` (inline component in `app/dashboard/admin/page.tsx`) renders a scrollable list of mock recommendations with icons and “Take action” buttons.
-- Used to complement Quick Actions on desktop (as a side card) and stack below analytics on smaller breakpoints.
+- Complements Quick Actions on desktop (side card) and stacks below analytics on smaller breakpoints.
+
+### Action Center helpers
+- **ActionItem** (`admin/company/[companyId]/programmes/[programmeId]/page.tsx`): small CTA row combining icon, title, description, and hover feedback; used inside the Action Center sidebar.
+- **Action Center Panel**: responsive quick-action sidebar that collapses on mobile and surfaces toast-driven workflows (add milestone, request NGO update, upload compliance document).
+- **Testing note**: Action Center tests also pending the Jest harness (mock toast + layout dependencies).
 
 ### User directory (page-level pattern)
-- `app/dashboard/users/page.tsx` showcases table layout with search bar, role/status filters, pagination footer, and responsive row design.
+- `/dashboard/users` showcases table layout with search bar, role/status filters, pagination footer, and responsive row design.
 - Uses existing Button/Select/Skeleton components to keep interactions consistent until API wiring.
 
 ### User detail view (page-level pattern)
-- `app/dashboard/users/[id]/page.tsx` demonstrates dynamic routing with tabs (overview/activity/permissions), action toasts, and responsive two-column layout.
+- `/dashboard/users/[id]` demonstrates dynamic routing with tabs (overview/activity/permissions), action toasts, and responsive two-column layout.
 - Reuses `Tabs`, `SectionHeader`, skeleton loaders, and toast feedback for mock actions.
 
 ### Dashboard visualisations (inline helpers in `admin/page.tsx`)
-- `OverviewChart` combines muted bars + line for platform activity, `MicroBar` renders mini bar sets inside KPI cards, and `Sparkline` remains available for other trend contexts. Charts live inside `min-h-[280px]` wrappers and set `ResponsiveContainer` height/minHeight so layouts stabilise before render.
-- Recharts BarChart powers CSR submissions with light fills; skeletons keep layout stable before data resolves.
+- `OverviewChart` combines muted bars + line for platform activity, `MicroBar` renders mini bar sets inside KPI cards, and `Sparkline` remains available for other trend contexts. Charts sit inside `min-h-[280px]` wrappers with `ResponsiveContainer` width/height enforced.
 
-### `components/ui/drawer.tsx`
-- Controlled slideover used across admin modules (e.g., NGO detail preview).
-- Props: `{ open, onClose, title?, description?, children, footer }`
-- Handles Escape key + backdrop clicks; auto-resizes for mobile and supports full-width handset view.
+### Notifications UI (page + header pattern)
+- Header bell inside `app/dashboard/layout.tsx` shows badge, desktop popover, and mobile sheet with `NotificationItem` helper rows.
+- `/dashboard/notifications` consumes SectionHeader, skeletons, and AuthProvider badge state to surface alert history and mark-as-read actions.
 
-### `app/dashboard/admin/ngos/[id]/documents/page.tsx`
-- Page-level pattern for compliance reviews with searchable table, status badges, lifecycle controls (badge + dropdown), and drawer actions (approve/reject/request update) powered by `toast`.
-- Drawer now features a split preview (document pane, metadata/tags board, watermark), collaboration sidebar with filters, threaded comments, mock action menus, status-aware disabling when Approved, plus a dedicated “Timeline & Status” panel (sticky on desktop) and Access & Permissions modal for managing mock roles.
-- Demonstrates reuse of `Drawer`, `Badge`, `SectionHeader`, `Textarea`, and skeleton components for load states.
-
-### `components/ui/tabs.tsx`
-- Lightweight tabs primitive (list/trigger/content) for app router client components.
-- NGO drawer uses it to switch between overview, documents, and activity views.
-
-### `components/ui/skeleton.tsx`
-- Suite of shimmer placeholders (`Skeleton`, `SkeletonText`, `SkeletonCard`, `SkeletonStat`, etc.).
-- Keeps dashboards polished during async loads and mirrors final layout dimensions.
+### Theme utilities
+- **ThemeToggle** (`components/ui/theme-toggle.tsx`): header button wired to `next-themes`, cycles light/dark with toast on first activation and stores preference via localStorage.
 
 ## UI Primitives (shadcn wrappers)
-### Buttons – `components/ui/button.tsx`
-- Variants: `default`, `outline`, `ghost`
-- Accepts `size`, `asChild`
-- Ships with unified emerald focus ring (`focus-visible:ring-brand/70` with light/dark offsets) so keyboard users get consistent feedback.
-
-### Input – `components/ui/input.tsx`
-- Standard form input with Tailwind styling
-- Works with `FormField` wrappers for validation
-- Emerald focus ring mirrors button styling.
-
-### Card – `components/ui/card.tsx`
-- Composition of `Card`, `CardHeader`, `CardContent`, etc.
-- Handy for grouping forms or dashboard content
-
-### Select – `components/ui/select.tsx`
-- Wraps Radix UI select; used in register form for role selection
-- Defaults to the same focus styling; pair with `<label htmlFor>` for accessibility.
+- Buttons, Inputs, Cards, Selects, Tabs, Drawer, Skeletons – all updated with brand focus rings, dark-mode tokens, and responsive spacing.
 
 ## Patterns
-- Forms use `react-hook-form` + `Form` components
-- Dashboard uses grid utilities for responsive layout (`grid gap-6 sm:grid-cols-2 xl:grid-cols-4` etc.)
-- For new modules, follow `admin/modules` pages: SectionHeader + divider + content box
-- Document preview pane empty state copy now reads “Select a document to review its secure preview” to align with tone guidelines.
-- `admin/companies/page.tsx` demonstrates the shared table/card pattern, filter row, and modal scaffolding for entity management pages.
-- `admin/company/[companyId]/page.tsx` shows the detail layout pattern (overview + snapshot + related entities + timeline) for company records.
-- `admin/company/[companyId]/programmes/page.tsx` demonstrates the programme grid with progress bars, filter bar, and modal scaffold.
-- `admin/company/[companyId]/programmes/[programmeId]/page.tsx` highlights the full programme detail experience with summary insights (progress cards + bar), milestone timeline, documents, assigned NGOs (assign modal workflow), dedicated milestones tab with list/timeline toggle, responsive timeline visualization, comments tabs, and the Action Center sidebar with reusable `ActionItem` buttons for key programme actions.
-
-### Action Center Helpers
-- **ActionItem** (`admin/company/[companyId]/programmes/[programmeId]/page.tsx`): small CTA row component combining icon, title, description, and hover feedback; used inside the Action Center sidebar.
-- **Action Center Panel** (`admin/company/[companyId]/programmes/[programmeId]/page.tsx`): responsive quick-action sidebar that collapses on mobile and surfaces toast-driven workflows (add milestone, request NGO update, upload compliance document).
+- Forms use React Hook Form + Zod.
+- Dashboard uses grid utilities for responsive layout.
+- NGO document drawer demonstrates status workflow (timeline, comments, access modal).
+- Company programme detail page shows control-panel layout with summary cards, assign NGO modal, milestone timeline/list toggle, comments, documents, and Action Center.
 
 ## Adding New Components
-1. Build new shared components under `components/`
-2. Prefer composition over ad-hoc Tailwind in pages
-3. Document reusable pieces here to help future contributors
-4. Update `docs/STYLE_GUIDE.md` if new visual tokens introduced
-
-- Prefetch behaviour: sidebar `Link` components use `prefetch={true}` and the layout proactively prefetches `/dashboard/admin`, `/dashboard/users`, and `/dashboard/admin/modules/reports` so navigation stays instant.
+1. Build shared components under `components/`.
+2. Prefer composition over ad-hoc Tailwind in pages.
+3. Document reusable pieces here to help future contributors.
+4. Update `docs/STYLE_GUIDE.md` if new visual tokens introduced.
+5. Consider testing implications—update Jest harness mocks when adding components that depend on App Router or Auth context.

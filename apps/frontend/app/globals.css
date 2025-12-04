@@ -22,6 +22,17 @@
   --gradient: linear-gradient(135deg, #0a2540 0%, #4a6dfb 100%);
 }
 
+:root.dark {
+  --background: #0b1724;
+  --foreground: #f4f7fb;
+  --muted: #94a3b8;
+  --card: #0f1f2e;
+  --card-foreground: #f4f7fb;
+  --border: #1e2935;
+  --ring: #33a07f;
+  --gradient: linear-gradient(135deg, #0b1724 0%, #1f6fff 100%);
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

@@ -28,6 +28,7 @@ import { Button } from "@/components/ui/button";
 import { apiClient } from "@/lib/api-client";
 import { useAuth } from "@/providers/auth-context";
 import { Eye, EyeOff, ShieldAlert } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const schema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -46,6 +47,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const t = useTranslations();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -143,7 +145,7 @@ export default function LoginPage() {
           <Card className="w-full rounded-3xl border border-white/10 bg-white/70 shadow-2xl backdrop-blur-xl lg:w-4/5">
             <CardHeader className="space-y-3 text-center text-slate-900">
               <CardTitle className="text-2xl font-semibold sm:text-3xl">
-                Sign in to ImpactBridge
+                {t("login")}
               </CardTitle>
               <CardDescription className="text-sm text-slate-600 sm:text-base">
                 Manage programmes, donors, and partners seamlessly.

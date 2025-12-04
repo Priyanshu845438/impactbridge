@@ -1,11 +1,14 @@
 "use client";
 
 import { cloneElement, isValidElement, memo, useEffect, useMemo, useRef, useState } from "react";
-import { LogOut, User2 } from "lucide-react";
+import { LogOut, User2, Globe2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { useAuth } from "@/providers/auth-context";
 import { Button } from "@/components/ui/button";
+import { useLocale } from "@/providers/locale-context";
+import { locales } from "@/i18n";
 
 interface ProfileDrawerProps {
   children: React.ReactElement;
@@ -17,6 +20,8 @@ export const ProfileDrawer = memo(function ProfileDrawer({ children, onSignOut }
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
+  const { locale, setLocale } = useLocale();
+  const t = useTranslations();
 
   useEffect(() => {
     if (!open) return;
@@ -85,19 +90,44 @@ export const ProfileDrawer = memo(function ProfileDrawer({ children, onSignOut }
 
           <div className="mt-5 space-y-3">
             <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+                {t("language")}
+              </p>
+              <div className="mt-2 flex items-center gap-2">
+                <Globe2 className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                <div className="flex gap-2">
+                  {locales.map((option) => (
+                    <button
+                      key={option}
+                      type="button"
+                      className={
+                        option === locale
+                          ? "rounded-full border border-emerald-500 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600"
+                          : "rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-500 hover:border-emerald-200 hover:text-emerald-600"
+                      }
+                      onClick={() => setLocale(option)}
+                    >
+                      {option.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Quick access</p>
-            <Button
-              variant="outline"
-              className="mt-2 flex w-full items-center justify-between text-sm"
-              onClick={() => {
-                setOpen(false);
-                router.push("/dashboard/profile");
-              }}
-              aria-label="Go to my profile"
-            >
+              <Button
+                variant="outline"
+                className="mt-2 flex w-full items-center justify-between text-sm"
+                onClick={() => {
+                  setOpen(false);
+                  router.push("/dashboard/profile");
+                }}
+                aria-label="Go to my profile"
+              >
                 <span className="flex items-center gap-2">
                   <User2 className="h-4 w-4 text-slate-500" />
-                  My profile
+                  {t("profile")}
                 </span>
               </Button>
             </div>
@@ -108,7 +138,7 @@ export const ProfileDrawer = memo(function ProfileDrawer({ children, onSignOut }
               aria-label="Sign out"
             >
               <LogOut className="h-4 w-4" />
-              Sign out
+              {t("logout")}
             </Button>
           </div>
         </div>
