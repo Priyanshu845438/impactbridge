@@ -9,12 +9,14 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - **Header**: sticky top bar with brand mark, centered search input (toasts until backend search lands), notification bell (badge + desktop popover + mobile sheet), command palette trigger (⌘/Ctrl + K), theme toggle (light/dark/system), locale switcher in profile drawer, and profile quick-actions.
 - **Main content**: `flex-1` scrollable region with gradient background, consistent padding, Suspense wrapper + skeleton fallback, and route progress bar integration (via `next-nprogress-bar`) to prevent white flashes.
 - **Command palette**: modal overlay providing quick navigation suggestions with keyboard support. Unit tests pending until Jest harness exists (see docs/TODO).
+- **Smart suggestions + action center**: contextual cards and quick-action sidebar exposed on large screens, collapsing gracefully on mobile.
+- **Storybook + Percy**: Buttons, Inputs, and QuickActionCards have live stories; Percy snapshots guard against style regressions (currently blocked by missing system libraries—see TODO).
 - **Mobile**: hamburger toggles drawer sidebar; notifications open via sheet; Action Center collapses by default.
 
 ## Admin Dashboard (`app/dashboard/admin/page.tsx`)
 - Session-scoped welcome toast via `sessionStorage` guard.
 - 650 ms skeleton delay masking initial data load (swap with real async when APIs arrive).
-- Analytics hero row: composed `OverviewChart` (bar + line), KPI stat cards with `MicroBar` sparklines, and impact trend chart component.
+- Analytics hero row: composed `OverviewChart` (bar + line), KPI stat cards with `MicroBar` sparklines, impact trend chart component, and the new Storybook stories cover these card/button primitives for reference.
 - CSR submissions visual: compact bar chart with min-height wrapper to avoid Recharts warnings.
 - Quick action grid plus **Smart Suggestions** panel offering mock “Take action” buttons.
 - Recent activity timeline and profile drawer integration.
@@ -29,13 +31,19 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 ## Other Role Pages
 - NGO, Company, Donor dashboards updated with final copy and minimal hero cards. Ready to host future dynamic content (campaigns, budgets, donations).
 
+## Storybook Coverage & Percy Snapshots
+- Isolated stories currently exist for Button, Input, QuickActionCard (light/dark, default/hover/disabled states).
+- `npm run snapshot:ui` kicks off Percy visual tests once Storybook is running; expect errors until system libraries for headless Chromium are installed.
+
 ## Accessibility & Usability
 - Emerald focus rings across interactive elements, labelled icons, keyboard activation on table rows/cards, ARIA-live announcements for filter results.
 - Command palette and modals trap focus; body scroll locked when overlays open.
 
 ## Known Gaps / Next Steps
 - Tests for command palette and Action Center require Jest harness (mocking Auth + Next router/notFound and handling ESM modules). This remains on the High Priority TODO list.
+- Install system packages (`libgtk-3-0`, `libgdk-pixbuf2.0-0`, `libgobject-2.0-0`, etc.) so Percy snapshots can run; track via TODO.
+- Expand Storybook coverage to NGO tables, timeline widgets, and Action Center once harness ready.
 - Replace mock metrics/toasts with real backend data using React Query.
 - Add middleware-based route protection once backend session strategy finalises.
 
-Maintain this document as modules evolve or new dashboards launch.
+Maintain this document as modules evolve, Storybook coverage expands, or new dashboards launch.

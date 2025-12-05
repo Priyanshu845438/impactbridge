@@ -6,6 +6,8 @@
 - **shadcn/ui** components layered with custom tokens
 - **React Hook Form + Zod** for validated forms
 - **React Query** & custom `AuthProvider` for session state
+- **Storybook 10 (Vite builder)** for isolated UI development/documentation
+- **Percy visual snapshots** (storybook integration) for change detection
 - **sonner** toaster (`components/ui/sonner`) for global notifications
 - **Skeleton system** (`components/ui/skeleton.tsx`) for shimmer loading states
 - **ky** based API client (`lib/api-client.ts`) with JWT header support
@@ -16,8 +18,8 @@
   - `page.tsx` root redirect → `/login`
   - `login`, `register`, `forgot-password`, `reset-password`
   - `dashboard/`
-  - `layout.tsx` protected workspace + nested sidebar + header notifications popover/sheet
-  - role pages: `admin`, `ngo`, `company`, `donor`
+    - `layout.tsx` protected workspace + nested sidebar + header notifications popover/sheet
+    - role pages: `admin`, `ngo`, `company`, `donor`
     - admin modules: `app/dashboard/admin/modules/{ngos,programmes,reports,settings}` (NGO screen now includes mock table UI with responsive search/filter rows, sorting, pagination, drawer, and multi-filter controls)
     - super admin utilities: `app/dashboard/users` (global user directory), `notifications`, `profile`
 - `components/`
@@ -32,6 +34,10 @@
 - `providers/`
   - `auth-context.tsx` persistent JWT + auto-redirect handling + notification badge state
   - `query-provider.tsx` React Query wrapper
+  - `theme-provider.tsx`, `locale-context.tsx`, `intl-provider.tsx`
+- `stories/` Storybook stories (Button, Input, QuickActionCard)
+- `tests/percy.config.json` Percy snapshot configuration
+- `storybook-static/` build output generated via `npm run build-storybook`
 - `lib/`
   - `api-client.ts` fetch wrapper
   - `fetcher.ts` typed fetch helper
@@ -61,6 +67,20 @@
 - Main pane hosts widgets like quick cards, stats, and activity (documented in `FRONTEND_DASHBOARD.md`)
 - Skeleton placeholders provide a smooth transition before real data appears
 
+## Storybook & Percy Usage
+- Storybook lives alongside the Next app using the Vite builder and Next integration (`@storybook/nextjs-vite`).
+- `npm run storybook` launches the playground (note: CLI attempts to open a browser using `xdg-open`, which is unavailable in the portal container; ignore the ENOENT error and navigate manually if needed).
+- `npm run build-storybook` generates static output.
+- Percy CLI is installed (`@percy/cli`, `@percy/storybook`). Snapshot config lives at `tests/percy.config.json` (per instructions, includes `include` glob for stories).
+- Snapshot command:
+  ```bash
+  npm run snapshot:ui  # equivalent to: npx percy storybook http://localhost:6006 --config tests/percy.config.json
+  ```
+  Requirements:
+  - Storybook dev server must be running (port 6006).
+  - Headless Chromium system deps are needed (`libgobject-2.0.so.0`, etc.). The current container lacks these libraries, so Percy exits with `Failed to launch browser`. Install the relevant apt packages (e.g., `libgtk-3-0`, `libgdk-pixbuf2.0-0`) before re-running snapshots.
+  - Percy also warns that `include` is an unknown property; left as-is to honour the requested config.
+
 ## Environment Variables
 Create `.env.local`:
 ```
@@ -75,21 +95,19 @@ npm run dev -- --port 3400    # start dev server (port 3400, /dashboard redirect
 npm run lint                  # lint check
 npm run build                 # production build (standalone output, strict mode off per next.config.js)
 npm run start                 # serve built app
-# Productivity shortcut: once authenticated, press ⌘/Ctrl + K to open the mock command palette for quick navigation cues
+npm run storybook             # Storybook playground (port 6006)
+npm run build-storybook       # Storybook static export
+npm run snapshot:ui           # Percy visual snapshots (requires Storybook + system libs)
 # clean rebuild when chunks mismatch
 rm -rf .next node_modules/.cache && npm install && npm run build
 ```
-Note: Server Actions remain disabled in next.config.js (set to false) to avoid experimental behaviour until backend endpoints are ready; the NGO document workflow now relies on client-side lifecycle state only until the backend API ships.
-
-If static assets or config change: `rm -rf .next` before a rebuild
 
 ## Development Notes
 - Keep dashboard additions modular; place shared components in `components/dashboard`
 - Use skeletons for optimistic UX when wiring future data fetches
-- Inherit shared emerald focus rings (`focus-visible:ring-brand/70` + offsets) whenever adding new interactive elements, and provide descriptive `aria-label`s for icon-only buttons.
+- Inherit shared emerald focus rings (`focus-visible:ring-brand/70` + offsets) whenever adding new interactive elements
 - When wiring APIs, prefer React Query hooks for caching; place them in `lib/queries`
-- Maintain docs/ alongside feature work so stakeholders stay informed
-- Update `agents.md` with a short bullet per major change (timestamp optional)
-- Use the global `Toaster` for user feedback (`import { Toaster } from '@/components/ui/sonner'`)
-
-- Route prefetch: dashboard layout preloads `/dashboard/admin`, `/dashboard/users`, and `/dashboard/admin/modules/reports` automatically; if adding new high-traffic routes, hook them into the same effect for parity.
+- Maintain docs alongside feature work so stakeholders stay informed
+- Update `agents.md` with a short bullet per major change
+- Route prefetch: dashboard layout preloads `/dashboard/admin`, `/dashboard/users`, and `/dashboard/admin/modules/reports` automatically; hook additional hot routes as needed
+- Percy snapshots currently blocked by missing system libraries; track in TODO

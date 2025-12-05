@@ -1,63 +1,36 @@
 # ImpactBridge Frontend Progress Report
 
-_Last updated: 2025-12-04 05:29 UTC_
+_Last updated: 2025-12-04 11:27 UTC_
 
 ## Overview
-The ImpactBridge frontend remains a polished Next.js 14 App Router experience with role-aware dashboards, rich documentation, and production-ready styling. Recent work attempted to introduce Jest/React Testing Library coverage for the command palette and programme Action Center; that effort surfaced gaps in our test harness (App Router + Auth context + Next routing mocks). This report captures the current state, highlights recent activities, and documents the new testing action items.
+The ImpactBridge frontend remains a polished Next.js 14 App Router experience with role-aware dashboards, rich documentation, and production-ready styling. The latest milestone extends the tooling stack with Storybook + Percy snapshot scaffolding to guard against UI regressions.
 
 ---
 
-## Completed Work (since previous update)
+## Completed Work (new)
+- Installed Storybook 10 (Vite builder) and authored stories for Button, Input, and QuickActionCard.
+- Added Percy CLI (`@percy/cli`, `@percy/storybook`) with config at `tests/percy.config.json` and script `npm run snapshot:ui`.
+- Documented Percy workflow and requirements in setup/dashboard/component/TODO docs.
 
-### Testing exploration
-- Installed Jest 30, RTL, `user-event`, `jest-dom`, `ts-jest`, and configured `jest.config.ts` / `jest.setup.ts` with Next integration helpers.
-- Added `test` npm script and `ts-node` dev dependency to support TypeScript config loading.
-- Prototyped command palette and Action Center tests; removed them after encountering runtime blockers (ESM-only deps like `ky`, reliance on `notFound()` guard, auth/router dependencies). No existing functionality was altered.
-
-### Documentation refresh
-- `docs/FRONTEND_TODO.md`: added high-priority item to establish a dedicated Jest/RTL harness (mocking `useAuth`, Next router, and `notFound`) before re-adding command palette/Action Center tests.
-- `docs/PROGRESS_REPORT.md`: updated overview + completed work sections to document the testing attempt and articulate the follow-up actions.
-- All prior documentation about dashboards, components, theming, accessibility, and feature modules remains intact.
-
-### Codebase status
-- No frontend logic or UI files were changed during the testing attempt; the app continues to build and lint cleanly (`npm run lint`, `npm run build`).
-- `__tests__/` directory currently empty—ready to host tests once the harness is completed.
-
----
+## Current Status / Issues
+- Storybook snapshots (`npm run snapshot:ui`) currently fail because the container lacks headless Chromium system libraries (`libgobject-2.0.so.0`, etc.). Percy also flags the spec-mandated `include` property as unknown; kept intact per instructions.
+- Storybook dev server warns about `actions.argTypesRegex` when used with Percy; leaving as-is since stories rely on default actions and no breakage observed.
+- Once system libraries are installed, Percy snapshots should run end-to-end.
 
 ## Pending / Upcoming Work
-
-### Testing harness (new)
-1. Create a Jest setup that avoids hitting real Next runtime features:
-   - Mock `next/navigation` (`useRouter`, `usePathname`, `useParams`) and `next/link`.
-   - Provide a lightweight fake `useAuth` context to satisfy dashboard layout requirements.
-   - Stub `notFound()` to prevent tests from throwing (replace with mock redirect or sentinel value).
-   - Configure `transformIgnorePatterns` so ESM modules like `ky` are transpiled or mocked.
-2. Once the harness exists, resurrect unit tests for:
-   - Command palette (open via shortcut, filter, close on selection).
-   - Action Center (badge indicator, open/close toggle, toast triggers).
-
-### Ongoing roadmap (unchanged)
-- Wire dashboards to real backend APIs via React Query.
-- Implement middleware-based route guard for `/dashboard/*`.
-- Replace mock suggestions, notifications, and profile updates with real endpoints when backend is ready.
-- Expand automated testing (component + e2e) once foundational harness is in place.
-- Continue accessibility and responsiveness audits as new modules land.
-
----
-
-## Risks & Considerations
-- **Testing infrastructure**: Without mocks for Auth/Next APIs, App Router components cannot be unit-tested. Prioritise harness work to unblock future test coverage.
-- **Security**: JWT still stored in `localStorage`; migration to HTTP-only cookies should be evaluated with backend support.
-- **Documentation upkeep**: Maintain parity between feature work and docs/`agents.md` to ease onboarding.
-
----
+- Install required OS packages for Chromium to unblock Percy snapshots.
+- Build Jest/RTL harness for App Router components (command palette, Action Center) and reintroduce unit tests.
+- Expand Storybook coverage to additional components (NGO tables, timeline widgets, Action Center).
+- Connect dashboard widgets to live backend data via React Query.
+- Implement middleware-based route protection.
+- Introduce automated E2E and visual regression runs post-harness.
 
 ## Next Steps
-1. Design the Jest test harness (mocks + helpers) and validate with a minimal smoke test.
-2. Reintroduce command palette and Action Center tests using the new harness.
-3. Plan end-to-end tests (Playwright/Cypress) once authentication endpoints are wired.
-4. Coordinate with backend to expose real metrics, activity feeds, and notification APIs.
-5. Integrate React Query hooks with skeleton fallbacks, replacing the artificial 650 ms delay on admin dashboard.
+1. Coordinate with ops to install necessary Chromium libs in the CI/container environment, then rerun `npm run snapshot:ui`.
+2. Finalise Jest harness mocks and re-add component tests.
+3. Add more Storybook stories + Percy coverage as modules mature.
+4. Wire backend APIs to replace mock data.
 
-Keeping `agents.md` and documentation aligned with these updates ensures the team has clear visibility into progress and outstanding work.
+---
+
+All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATALOG.md`, `FRONTEND_TODO.md`) have been updated accordingly.

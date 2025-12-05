@@ -380,3 +380,13 @@
 - Documented the command palette / Action Center testing attempt, emphasising need for a proper Jest + RTL harness (mocking Auth, Next router, notFound, and ESM deps) before unit tests land.
 - Refreshed `docs/FRONTEND_TODO.md`, `docs/PROGRESS_REPORT.md`, `docs/FRONTEND_DASHBOARD.md`, and `docs/COMPONENT_CATALOG.md` to reflect the new testing action item while noting no UI changes were required.
 - Lint/build remain clean; tests will follow once the harness is in place.
+
+## 90. [FE] Storybook scaffold + core stories.
+- Installed Storybook 10 (Vite builder) with Next integration, adding config under `.storybook/` and `stories/`.
+- Authored light/dark stories for Button, Input, and QuickActionCard components showcasing default, hover/focus, and disabled states; generated static build via `npm run build-storybook`.
+- Updated frontend docs (setup, dashboard, component catalog, TODO, progress report) to document the Storybook workflow and next coverage targets; lint/build remain green aside from the known Next module-type warning.
+
+## 91. [FE] Percy snapshot setup.
+- Installed `@percy/cli` + `@percy/storybook`, added `tests/percy.config.json`, and wired `npm run snapshot:ui` to snapshot the running Storybook instance.
+- Documented workflow + current blocker (missing Chromium system libs causing `libgobject-2.0.so.0` runtime error) across setup/dashboard/component/TODO/progress docs.
+- Storybook dev server (`npm run storybook`) now warns about `argTypesRegex` auto-actions when Percy addon is used; kept for now while evaluating impact.
