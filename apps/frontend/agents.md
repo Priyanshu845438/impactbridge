@@ -400,3 +400,9 @@
 - Programme detail Assigned NGOs tab now updates instantly when confirming a selection, with rollback + offline error toast if the mock API rejects.
 - Added loading affordance (button spinner), duplicate protection, and remove action hooked into local state.
 - Refreshed docs (`FRONTEND_DASHBOARD.md`, `COMPONENT_CATALOG.md`, `FRONTEND_TODO.md`, `PROGRESS_REPORT.md`) and reran lint/build to confirm stability.
+
+
+## 94. [FE] Offline-aware UX scaffold.
+- Added `useOnlineStatus` hook, offline status provider, and tooltip helper to surface connectivity state, queue unsafe actions, and guard buttons while offline.
+- Programme detail now queues NGO assignments in localStorage, disables remove/confirm buttons with tooltips when offline, and replays queued work on reconnect with success toasts.
+- Updated docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATALOG.md`, `FRONTEND_TODO.md`, `PROGRESS_REPORT.md`) and reran lint/build.

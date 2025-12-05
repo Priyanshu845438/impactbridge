@@ -9,6 +9,7 @@
 - **Storybook 10 (Vite builder)** for isolated UI development/documentation
 - **Percy visual snapshots** (storybook integration) for change detection
 - **sonner** toaster (`components/ui/sonner`) for global notifications
+- **Offline status provider** (`providers/offline-status-provider.tsx`) surfaces connectivity toasts, disables risky actions, and queues mutations for replay.
 - **Skeleton system** (`components/ui/skeleton.tsx`) for shimmer loading states
 - **ky** based API client (`lib/api-client.ts`) with JWT header support
 

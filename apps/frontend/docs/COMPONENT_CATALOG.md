@@ -45,6 +45,11 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 ### `QuickActionCard`
 - Dashboard CTA card with icon + link (see Storybook).
 
+### Offline UX helpers
+- `hooks/use-online-status.ts`: centralised online/offline signal with event listeners.
+- `providers/offline-status-provider.tsx`: surfaces status context, queues offline actions, and emits toasts on reconnect.
+- `components/ui/tooltip.tsx`: Radix-backed tooltip provider used to explain disabled actions when offline.
+
 ## Storybook & Percy
 - Stories reside in `/stories/`.
 - Percy config: `tests/percy.config.json` (includes `include` glob per spec). Percy CLI currently fails because headless Chromium system libraries (`libgobject-2.0.so.0` etc.) are missing; install via apt before expecting green runs.

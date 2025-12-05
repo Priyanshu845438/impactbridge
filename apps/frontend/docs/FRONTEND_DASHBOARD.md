@@ -27,6 +27,8 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - **NGO documents (`[id]/documents`)**: full compliance review workspace with split preview, status workflow, tags, comments, timeline, access modal, and activity log.
 - **Companies**: list page with filters + modal, profile detail view, programme listing, and programme detail page featuring summary cards, milestones tab (list/timeline toggle + timeline view), assign NGO workflow, documents tab, comments, progress insights, and Action Center sidebar.
 - Assigned NGO tab uses optimistic linking (instant UI update, graceful rollback on failure, offline-aware toast messaging).
+
+- Offline toasts warn when connectivity drops; queued assignments replay when the connection returns, and mutation buttons surface tooltips when offline.
 - **Reports/Settings modules**: placeholders ready for future wiring.
 
 ## Other Role Pages

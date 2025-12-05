@@ -13,6 +13,8 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Documented Percy workflow and requirements in setup/dashboard/component/TODO docs.
 - Enabled optimistic NGO assignment on programme detail view for instant feedback with offline-aware rollback messaging.
 
+- Introduced offline-aware UX hooks: a shared status provider surfaces toasts when connectivity changes, disables mutation buttons with tooltips, queues assignments in localStorage, and replays them on reconnect.
+
 ## Current Status / Issues
 - Storybook snapshots (`npm run snapshot:ui`) currently fail because the container lacks headless Chromium system libraries (`libgobject-2.0.so.0`, etc.). Percy also flags the spec-mandated `include` property as unknown; kept intact per instructions.
 - Storybook dev server warns about `actions.argTypesRegex` when used with Percy; leaving as-is since stories rely on default actions and no breakage observed.

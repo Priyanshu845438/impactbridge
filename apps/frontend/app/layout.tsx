@@ -9,6 +9,8 @@ import { AuthProvider } from "@/providers/auth-context";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { LocaleProvider } from "@/providers/locale-context";
 import { IntlProvider } from "@/providers/intl-provider";
+import { OfflineStatusProvider } from "@/providers/offline-status-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
@@ -27,9 +29,13 @@ export default function RootLayout({ children }: PropsWithChildren) {
           <LocaleProvider>
             <IntlProvider>
               <AuthProvider>
-                <QueryProvider>
-                  <main className="flex-1 w-full">{children}</main>
-                </QueryProvider>
+                <TooltipProvider>
+                  <OfflineStatusProvider>
+                    <QueryProvider>
+                      <main className="flex-1 w-full">{children}</main>
+                    </QueryProvider>
+                  </OfflineStatusProvider>
+                </TooltipProvider>
               </AuthProvider>
             </IntlProvider>
           </LocaleProvider>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { notFound, useParams } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -36,6 +36,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { Tooltip } from "@/components/ui/tooltip";
 
 import type { NgoRelationshipStatus } from "../../../../companies/data";
 import {
@@ -44,6 +45,8 @@ import {
   findCompanyById,
   findCompanyProgramme,
 } from "../../../../companies/data";
+import { useOfflineContext } from "@/providers/offline-status-provider";
+import { getQueueSnapshot } from "@/lib/queue-manager";
 
 type AssignableStatus = "Verified" | "Pending";
 
@@ -127,6 +130,7 @@ export default function CompanyProgrammeDetailPage() {
     () => (companyId && programmeId ? findCompanyProgramme(companyId, programmeId) : undefined),
     [companyId, programmeId],
   );
+  const { online, enqueue, markSynced } = useOfflineContext();
   const [assignedNgos, setAssignedNgos] = useState<AssignedNgo[]>(() => programme?.ngos ?? []);
   const [assigning, setAssigning] = useState(false);
 
@@ -295,6 +299,53 @@ export default function CompanyProgrammeDetailPage() {
     }
   };
 
+  const wasOfflineRef = useRef(!online);
+
+  useEffect(() => {
+    if (!online) {
+      wasOfflineRef.current = true;
+      return;
+    }
+
+    if (!wasOfflineRef.current) {
+      return;
+    }
+    wasOfflineRef.current = false;
+
+    const pendingAssignments = getQueueSnapshot().filter((action) => action.type === "assign-ngo");
+    if (!pendingAssignments.length) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const syncQueuedAssignments = async () => {
+      try {
+        for (const action of pendingAssignments) {
+          await simulateAssignRequest();
+          if (cancelled) {
+            return;
+          }
+          markSynced(action.id);
+        }
+        if (!cancelled) {
+          toast.success("Changes synced.");
+        }
+      } catch (error) {
+        if (!cancelled) {
+          console.error("Failed to replay offline queue", error);
+          toast.error("Failed to sync queued changes.");
+        }
+      }
+    };
+
+    void syncQueuedAssignments();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [online, markSynced]);
+
   const handleConfirmAssignment = async () => {
     if (!pendingSelection || assigning) {
       return;
@@ -317,8 +368,23 @@ export default function CompanyProgrammeDetailPage() {
       registrationType: pendingSelection.registrationType,
     };
 
-    setAssigning(true);
     setAssignedNgos((prev) => [...prev, optimisticNgo]);
+
+    if (!online) {
+      enqueue({
+        type: "assign-ngo",
+        payload: {
+          programmeId,
+          companyId,
+          ngoName: optimisticNgo.name,
+        },
+      });
+      toast.info("Action queued. We'll sync when you're back online.");
+      closeAssignModal();
+      return;
+    }
+
+    setAssigning(true);
 
     try {
       await simulateAssignRequest();
@@ -329,8 +395,21 @@ export default function CompanyProgrammeDetailPage() {
       setAssigning(false);
       const message =
         cause instanceof Error && cause.message === "offline"
-          ? "You appear to be offline. Please reconnect and try again."
+          ? "You appear to be offline. We'll sync this assignment when you're back online."
           : "Sync failed. Restored previous state.";
+      if (cause instanceof Error && cause.message === "offline") {
+        enqueue({
+          type: "assign-ngo",
+          payload: {
+            programmeId,
+            companyId,
+            ngoName: optimisticNgo.name,
+          },
+        });
+        toast.info("Action queued. We'll sync when you're back online.");
+        closeAssignModal();
+        return;
+      }
       toast.error(message);
     }
   };
@@ -735,15 +814,31 @@ export default function CompanyProgrammeDetailPage() {
                         >
                           {ngo.status}
                         </Badge>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="text-rose-500 hover:bg-rose-50 hover:text-rose-600"
-                          onClick={() => handleRemoveAssignedNgo(ngo.name)}
-                        >
-                          Remove
-                        </Button>
+                        {!online ? (
+                          <Tooltip label="Unavailable while offline." side="top">
+                            <span>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="text-rose-500 hover:bg-rose-50 hover:text-rose-600"
+                                disabled
+                              >
+                                Remove
+                              </Button>
+                            </span>
+                          </Tooltip>
+                        ) : (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="text-rose-500 hover:bg-rose-50 hover:text-rose-600"
+                            onClick={() => handleRemoveAssignedNgo(ngo.name)}
+                          >
+                            Remove
+                          </Button>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -863,25 +958,48 @@ export default function CompanyProgrammeDetailPage() {
         footer={
           pendingSelection ? (
             <>
-              <Button type="button" variant="ghost" onClick={closeAssignModal} disabled={assigning}>
-                Cancel
-              </Button>
-              <Button
-                type="button"
-                onClick={handleConfirmAssignment}
-                disabled={assigning}
-                className="bg-brand-600 text-white hover:bg-brand-700"
-              >
-                {assigning ? (
-                  <span className="inline-flex items-center gap-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Saving…
-                  </span>
-                ) : (
-                  "Confirm"
-                )}
-              </Button>
-            </>
+                  <Button type="button" variant="ghost" onClick={closeAssignModal} disabled={assigning}>
+                    Cancel
+                  </Button>
+                  {!online ? (
+                    <Tooltip label="Unavailable while offline." side="top">
+                      <span>
+                        <Button
+                          type="button"
+                          onClick={handleConfirmAssignment}
+                          disabled={assigning}
+                          aria-disabled={!online}
+                          className="bg-brand-600 text-white hover:bg-brand-700"
+                        >
+                          {assigning ? (
+                            <span className="inline-flex items-center gap-2">
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                              Saving…
+                            </span>
+                          ) : (
+                            "Queue for sync"
+                          )}
+                        </Button>
+                      </span>
+                    </Tooltip>
+                  ) : (
+                    <Button
+                      type="button"
+                      onClick={handleConfirmAssignment}
+                      disabled={assigning}
+                      className="bg-brand-600 text-white hover:bg-brand-700"
+                    >
+                      {assigning ? (
+                        <span className="inline-flex items-center gap-2">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Saving…
+                        </span>
+                      ) : (
+                        "Confirm"
+                      )}
+                    </Button>
+                  )}
+                </>
           ) : (
             <Button type="button" variant="ghost" onClick={closeAssignModal}>
               Close
