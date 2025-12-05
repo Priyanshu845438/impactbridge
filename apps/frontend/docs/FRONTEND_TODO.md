@@ -8,6 +8,7 @@
 - Establish Jest/RTL harness for App Router (mock `useAuth`, router, `notFound`, ESM deps) to unblock command palette + Action Center tests
 - Install system packages needed for Percy/Chromium (`libgobject-2.0.so.0`, `libgtk-3-0`, `libgdk-pixbuf2.0-0`, etc.) so `npm run snapshot:ui` succeeds
 - Expand Storybook/Percy coverage: add stories/snapshots for NGO table, Action Center panel, impact charts, empty states
+- Replace optimistic NGO assignment mock with actual API call once backend endpoint ships (keep rollback + toast messaging but hook into real mutation helper).
 
 ## Medium Priority
 - Build dynamic tables for admin programmes / reports modules (NGO management + document review views already scaffolded)
@@ -47,6 +48,7 @@
 - Dark mode scaffold (next-themes provider + header toggle)
 - Impact trend chart placeholder with metric toggle and responsive wrapper
 - CSR programme detail Action Center + milestone timeline toggle + assign NGO workflow
+- Optimistic NGO assignment (UI hooks live; swap to real API when ready)
 - Storybook setup with Button/Input/QuickActionCard stories covering light/dark + hover/disabled states
 - Percy CLI added with Storybook command; first run blocked by missing Chromium libraries and config warning
 

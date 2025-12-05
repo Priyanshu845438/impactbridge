@@ -395,3 +395,8 @@
 - Created shared `components/ui/breadcrumb.tsx` with truncation, keyboard focus styling, and dark-mode tones; registered it in `components.json`.
 - Integrated breadcrumbs into NGO management and NGO document review pages to mirror admin hierarchy (Dashboard → NGOs → …), tightening spacing wrappers for clean layout.
 - Updated documentation (component catalog, dashboard notes, TODO checklist, progress report) to reflect the new navigation pattern and confirmed lint for touched files via `npm run lint -- --file app/dashboard/admin/modules/ngos/page.tsx app/dashboard/admin/ngos/[id]/documents/page.tsx`.
+
+## 93. [FE] Optimistic NGO assignment.
+- Programme detail Assigned NGOs tab now updates instantly when confirming a selection, with rollback + offline error toast if the mock API rejects.
+- Added loading affordance (button spinner), duplicate protection, and remove action hooked into local state.
+- Refreshed docs (`FRONTEND_DASHBOARD.md`, `COMPONENT_CATALOG.md`, `FRONTEND_TODO.md`, `PROGRESS_REPORT.md`) and reran lint/build to confirm stability.

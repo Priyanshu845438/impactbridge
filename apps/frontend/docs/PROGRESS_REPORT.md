@@ -11,6 +11,7 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Installed Storybook 10 (Vite builder) and authored stories for Button, Input, and QuickActionCard.
 - Added Percy CLI (`@percy/cli`, `@percy/storybook`) with config at `tests/percy.config.json` and script `npm run snapshot:ui`.
 - Documented Percy workflow and requirements in setup/dashboard/component/TODO docs.
+- Enabled optimistic NGO assignment on programme detail view for instant feedback with offline-aware rollback messaging.
 
 ## Current Status / Issues
 - Storybook snapshots (`npm run snapshot:ui`) currently fail because the container lacks headless Chromium system libraries (`libgobject-2.0.so.0`, etc.). Percy also flags the spec-mandated `include` property as unknown; kept intact per instructions.

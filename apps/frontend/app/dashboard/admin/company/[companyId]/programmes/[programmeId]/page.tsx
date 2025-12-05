@@ -7,6 +7,7 @@ import {
   Archive,
   CalendarDays,
   CheckCircle2,
+  Loader2,
   Download,
   Edit,
   FileText,
@@ -36,6 +37,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
+import type { NgoRelationshipStatus } from "../../../../companies/data";
 import {
   NGO_STATUS_TONE,
   PROGRAMME_STATUS_TONE,
@@ -49,6 +51,13 @@ interface AssignableNgo {
   name: string;
   registrationType: string;
   status: AssignableStatus;
+}
+
+interface AssignedNgo {
+  name: string;
+  status: NgoRelationshipStatus;
+  focusArea?: string;
+  registrationType?: string;
 }
 
 const ASSIGNABLE_STATUS_TONE: Record<AssignableStatus, string> = {
@@ -118,6 +127,8 @@ export default function CompanyProgrammeDetailPage() {
     () => (companyId && programmeId ? findCompanyProgramme(companyId, programmeId) : undefined),
     [companyId, programmeId],
   );
+  const [assignedNgos, setAssignedNgos] = useState<AssignedNgo[]>(() => programme?.ngos ?? []);
+  const [assigning, setAssigning] = useState(false);
 
   const [activeTab, setActiveTab] = useState("overview");
   const [assignModalOpen, setAssignModalOpen] = useState(false);
@@ -183,6 +194,10 @@ export default function CompanyProgrammeDetailPage() {
   }, [programme]);
 
   const [milestones, setMilestones] = useState<ProgrammeMilestoneDetail[]>(initialMilestones);
+
+  useEffect(() => {
+    setAssignedNgos(programme?.ngos ?? []);
+  }, [programme]);
 
   useEffect(() => {
     setMilestones(initialMilestones);
@@ -263,6 +278,61 @@ export default function CompanyProgrammeDetailPage() {
     setAssignModalOpen(false);
     setAssignSearch("");
     setPendingSelection(null);
+    setAssigning(false);
+  };
+
+  const handleRemoveAssignedNgo = (name: string) => {
+    setAssignedNgos((prev) => prev.filter((ngo) => ngo.name !== name));
+    toast.message("NGO unlinked", {
+      description: `${name} removed from this programme.`,
+    });
+  };
+
+  const simulateAssignRequest = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    if (typeof navigator !== "undefined" && "onLine" in navigator && navigator.onLine === false) {
+      throw new Error("offline");
+    }
+  };
+
+  const handleConfirmAssignment = async () => {
+    if (!pendingSelection || assigning) {
+      return;
+    }
+
+    const alreadyLinked = assignedNgos.some((ngo) => ngo.name === pendingSelection.name);
+    if (alreadyLinked) {
+      toast.info(`${pendingSelection.name} is already linked to this programme.`);
+      setPendingSelection(null);
+      return;
+    }
+
+    const rollback = assignedNgos.map((ngo) => ({ ...ngo }));
+    const convertedStatus: NgoRelationshipStatus =
+      pendingSelection.status === "Verified" ? "Active" : "Pending Approval";
+    const optimisticNgo: AssignedNgo = {
+      name: pendingSelection.name,
+      status: convertedStatus,
+      focusArea: undefined,
+      registrationType: pendingSelection.registrationType,
+    };
+
+    setAssigning(true);
+    setAssignedNgos((prev) => [...prev, optimisticNgo]);
+
+    try {
+      await simulateAssignRequest();
+      toast.success(`${pendingSelection.name} assigned instantly.`);
+      closeAssignModal();
+    } catch (cause) {
+      setAssignedNgos(rollback);
+      setAssigning(false);
+      const message =
+        cause instanceof Error && cause.message === "offline"
+          ? "You appear to be offline. Please reconnect and try again."
+          : "Sync failed. Restored previous state.";
+      toast.error(message);
+    }
   };
 
   const closeMilestoneModal = () => {
@@ -645,16 +715,18 @@ export default function CompanyProgrammeDetailPage() {
                 </Button>
               </div>
 
-              {programme.ngos.length ? (
+              {assignedNgos.length ? (
                 <div className="grid gap-3 md:grid-cols-2">
-                  {programme.ngos.map((ngo) => (
+                  {assignedNgos.map((ngo) => (
                     <div
                       key={`${programme.id}-ngo-${ngo.name}`}
                       className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center"
                     >
                       <div>
                         <p className="text-sm font-semibold text-slate-900">{ngo.name}</p>
-                        <p className="text-xs text-slate-400">Focus: {ngo.focusArea}</p>
+                        <p className="text-xs text-slate-400">
+                          {ngo.focusArea ? `Focus: ${ngo.focusArea}` : `Registration: ${ngo.registrationType ?? "Pending intake"}`}
+                        </p>
                       </div>
                       <div className="flex items-center gap-3">
                         <Badge
@@ -668,6 +740,7 @@ export default function CompanyProgrammeDetailPage() {
                           variant="ghost"
                           size="sm"
                           className="text-rose-500 hover:bg-rose-50 hover:text-rose-600"
+                          onClick={() => handleRemoveAssignedNgo(ngo.name)}
                         >
                           Remove
                         </Button>
@@ -790,15 +863,23 @@ export default function CompanyProgrammeDetailPage() {
         footer={
           pendingSelection ? (
             <>
-              <Button type="button" variant="ghost" onClick={closeAssignModal}>
+              <Button type="button" variant="ghost" onClick={closeAssignModal} disabled={assigning}>
                 Cancel
               </Button>
               <Button
                 type="button"
-                onClick={closeAssignModal}
+                onClick={handleConfirmAssignment}
+                disabled={assigning}
                 className="bg-brand-600 text-white hover:bg-brand-700"
               >
-                Confirm
+                {assigning ? (
+                  <span className="inline-flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Saving…
+                  </span>
+                ) : (
+                  "Confirm"
+                )}
               </Button>
             </>
           ) : (
@@ -837,25 +918,35 @@ export default function CompanyProgrammeDetailPage() {
             </div>
             <div className="space-y-3 overflow-y-auto pr-1" style={{ maxHeight: "18rem" }}>
               {filteredAssignableNgos.length ? (
-                filteredAssignableNgos.map((ngo) => (
-                  <div
-                    key={`assign-${ngo.name}`}
-                    className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
-                  >
-                    <div>
-                      <p className="text-sm font-semibold text-slate-900">{ngo.name}</p>
-                      <p className="text-xs text-slate-400">{ngo.registrationType}</p>
+                filteredAssignableNgos.map((ngo) => {
+                  const isAssigned = assignedNgos.some((existingNgo) => existingNgo.name === ngo.name);
+
+                  return (
+                    <div
+                      key={`assign-${ngo.name}`}
+                      className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm"
+                    >
+                      <div>
+                        <p className="text-sm font-semibold text-slate-900">{ngo.name}</p>
+                        <p className="text-xs text-slate-400">{ngo.registrationType}</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Badge variant="outline" className={`border ${ASSIGNABLE_STATUS_TONE[ngo.status]}`}>
+                          {ngo.status}
+                        </Badge>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setPendingSelection(ngo)}
+                          disabled={isAssigned}
+                        >
+                          {isAssigned ? "Assigned" : "Select"}
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Badge variant="outline" className={`border ${ASSIGNABLE_STATUS_TONE[ngo.status]}`}>
-                        {ngo.status}
-                      </Badge>
-                      <Button type="button" variant="outline" size="sm" onClick={() => setPendingSelection(ngo)}>
-                        Select
-                      </Button>
-                    </div>
-                  </div>
-                ))
+                  );
+                })
               ) : (
                 <div className="rounded-2xl border border-dashed border-slate-300 py-12 text-center text-sm text-slate-500">
                   No NGOs matched your search.
