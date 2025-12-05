@@ -20,6 +20,7 @@ import {
 import { toast } from "sonner";
 
 import { SectionHeader } from "@/components/dashboard/section-header";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -763,6 +764,15 @@ export default function NgoDocumentsPage() {
 
   return (
     <div className="space-y-6">
+      <Breadcrumb
+        items={[
+          { label: "Dashboard", href: "/dashboard/admin" },
+          { label: "NGOs", href: "/dashboard/admin/modules/ngos" },
+          { label: profile.ngoName, href: `/dashboard/admin/modules/ngos?selected=${profile.id}` },
+          { label: "Documents" },
+        ]}
+      />
+
       <SectionHeader
         title={`${profile.ngoName} · Documents`}
         subtitle="Review submitted compliance evidence and keep NGO records audit-ready."

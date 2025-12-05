@@ -24,6 +24,11 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - Sidebar quick actions (`ActionItem` helper within programme detail page).
 - Toast-driven placeholders; ready for wiring to backend.
 
+### `Breadcrumb`
+- Path: `components/ui/breadcrumb.tsx`
+- Props: `items: { label: string; href?: string }[]`, optional `className`.
+- Handles truncation for long labels, highlights current page, supports keyboard focus and dark mode.
+
 ## UI Primitives (shadcn wrappers)
 - Buttons, Inputs, Cards, Selects, Tabs, Drawer, Skeletons.
 - Storybook stories cover Button and Input in light/dark modes.

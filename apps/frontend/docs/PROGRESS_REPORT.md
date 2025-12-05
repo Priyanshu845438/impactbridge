@@ -34,3 +34,6 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 ---
 
 All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATALOG.md`, `FRONTEND_TODO.md`) have been updated accordingly.
+
+### Breadcrumb Integration
+- Added reusable breadcrumb component and surfaced navigation paths on key admin views.

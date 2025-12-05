@@ -47,3 +47,5 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Add middleware-based route protection once backend session strategy finalises.
 
 Maintain this document as modules evolve, Storybook coverage expands, or new dashboards launch.
+
+- Breadcrumbs now highlight page hierarchy on company, programme, and NGO document views.

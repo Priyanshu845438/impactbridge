@@ -51,3 +51,4 @@
 - Percy CLI added with Storybook command; first run blocked by missing Chromium libraries and config warning
 
 Update this file as features ship or priorities shift.
+- [x] Add shared breadcrumb UI and wire across detail views (company, NGO documents, programmes).

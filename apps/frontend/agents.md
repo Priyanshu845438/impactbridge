@@ -390,3 +390,8 @@
 - Installed `@percy/cli` + `@percy/storybook`, added `tests/percy.config.json`, and wired `npm run snapshot:ui` to snapshot the running Storybook instance.
 - Documented workflow + current blocker (missing Chromium system libs causing `libgobject-2.0.so.0` runtime error) across setup/dashboard/component/TODO/progress docs.
 - Storybook dev server (`npm run storybook`) now warns about `argTypesRegex` auto-actions when Percy addon is used; kept for now while evaluating impact.
+
+## 92. [FE] Breadcrumb navigation standardised.
+- Created shared `components/ui/breadcrumb.tsx` with truncation, keyboard focus styling, and dark-mode tones; registered it in `components.json`.
+- Integrated breadcrumbs into NGO management and NGO document review pages to mirror admin hierarchy (Dashboard → NGOs → …), tightening spacing wrappers for clean layout.
+- Updated documentation (component catalog, dashboard notes, TODO checklist, progress report) to reflect the new navigation pattern and confirmed lint for touched files via `npm run lint -- --file app/dashboard/admin/modules/ngos/page.tsx app/dashboard/admin/ngos/[id]/documents/page.tsx`.

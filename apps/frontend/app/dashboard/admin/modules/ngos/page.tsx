@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 
 import { SectionHeader } from "@/components/dashboard/section-header";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Drawer } from "@/components/ui/drawer";
@@ -465,7 +466,10 @@ export default function AdminNgosModulePage() {
 
   return (
     <section className="space-y-6">
-      <SectionHeader
+      <Breadcrumb items={[{ label: "Dashboard", href: "/dashboard/admin" }, { label: "NGOs" }]} />
+
+      <div className="space-y-6">
+        <SectionHeader
         title="NGO management"
         subtitle="Review verified partners, track pending registrations, and monitor compliance flags."
         action={
@@ -973,6 +977,7 @@ export default function AdminNgosModulePage() {
           </div>
         ) : null}
       </Drawer>
+      </div>
     </section>
   );
 }
