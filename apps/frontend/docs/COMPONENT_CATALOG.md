@@ -24,6 +24,7 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - Sidebar quick actions (`ActionItem` helper within programme detail page).
 - Toast-driven placeholders; ready for wiring to backend.
 - Assigned NGO tab now leverages an optimistic assignment flow with graceful rollback and offline messaging.
+- Dashboard onboarding overlay cleaned: ensures stable JSX and memoised handlers.
 
 ### `Breadcrumb`
 - Path: `components/ui/breadcrumb.tsx`

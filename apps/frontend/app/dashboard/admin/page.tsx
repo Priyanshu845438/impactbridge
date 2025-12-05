@@ -58,6 +58,122 @@ export default function AdminDashboard() {
     return () => window.clearTimeout(timer);
   }, [user]);
 
+  const activitySeries = useMemo(() => generateSeries(30, 40, 120), []);
+  const ngoSeries = useMemo(() => generateSeries(10, 4, 18), []);
+  const fundsSeries = useMemo(() => generateSeries(12, 20, 85), []);
+  const activeUserSeries = useMemo(() => generateSeries(14, 60, 140), []);
+  const userStatSeries = useMemo(() => generateSeries(8, 900, 1300), []);
+  const approvalStatSeries = useMemo(() => generateSeries(8, 12, 28), []);
+  const healthSeries = useMemo(() => generateSeries(8, 70, 98), []);
+  const lastLoginSeries = useMemo(() => generateSeries(8, 3, 14), []);
+  const csrSubmissions = useMemo(() => createCSRSubmissionsData(30), []);
+  const activityTrend = useMemo(() => createActivityData(activitySeries.slice(-12)), [activitySeries]);
+
+  const quickActions = useMemo(
+    () =>
+      [
+        {
+          title: "NGO verification queue",
+          description: "Review newly registered organisations awaiting compliance diligence.",
+          ctaLabel: "Review",
+          href: "#",
+          icon: ClipboardCheck,
+        },
+        {
+          title: "Pending CSR programmes",
+          description: "Approve incoming CSR initiatives and match them with vetted NGOs.",
+          ctaLabel: "Manage",
+          href: "#",
+          icon: HandshakeIcon,
+        },
+        {
+          title: "Registered NGOs",
+          description: "Browse and update partner profiles, documents, and compliance states.",
+          ctaLabel: "Open",
+          href: "#",
+          icon: Files,
+        },
+        {
+          title: "Reports & insights",
+          description: "Launch consolidated CSR-2 reports and impact analytics dashboards.",
+          ctaLabel: "View",
+          href: "#",
+          icon: LineChart,
+        },
+      ] as const,
+    [],
+  );
+
+  const oversightSnapshot = useMemo(
+    () =>
+      [
+        {
+          title: "Verifications due",
+          metric: "12 NGOs",
+          helper: "Across legal, financial, compliance tracks",
+          tone: "amber" as const,
+        },
+        {
+          title: "Funds disbursing",
+          metric: "₹2.4 Cr",
+          helper: "In settlement over next 7 days",
+          tone: "indigo" as const,
+        },
+        {
+          title: "Impact reports",
+          metric: "9 due",
+          helper: "Awaiting quarterly validation",
+          tone: "slate" as const,
+        },
+      ],
+    [],
+  );
+
+  const pipelineMilestones = useMemo(
+    () =>
+      [
+        {
+          label: "CSR-1 onboarding",
+          owner: "Compliance desk",
+          status: "On track",
+          eta: "Mar 04",
+        },
+        {
+          label: "Green Earth audit",
+          owner: "Finance ops",
+          status: "Attention",
+          eta: "Feb 28",
+        },
+        {
+          label: "North region due diligence",
+          owner: "Field review",
+          status: "Scheduled",
+          eta: "Mar 12",
+        },
+        {
+          label: "Platform policy refresh",
+          owner: "Governance",
+          status: "Drafting",
+          eta: "Mar 20",
+        },
+      ],
+    [],
+  );
+
+  const assuranceNotes = useMemo(
+    () => [
+      {
+        title: "Weekly compliance window",
+        detail: "Finance and legal teams aligned on dual approvals for high-value CSR uploads.",
+      },
+      {
+        title: "Partner sentiment",
+        detail: "Average donor NPS 4.6/5 across the past fortnight with positive comments on reporting cadence.",
+      },
+    ],
+    [],
+  );
+
   if (loading) {
     return (
       <div className="space-y-8">
@@ -110,118 +226,6 @@ export default function AdminDashboard() {
       </div>
     );
   }
-
-  const ngoSeries = useMemo(() => generateSeries(10, 4, 18), []);
-  const fundsSeries = useMemo(() => generateSeries(12, 20, 85), []);
-  const activeUserSeries = useMemo(() => generateSeries(14, 60, 140), []);
-  const userStatSeries = useMemo(() => generateSeries(8, 900, 1300), []);
-  const approvalStatSeries = useMemo(() => generateSeries(8, 12, 28), []);
-  const healthSeries = useMemo(() => generateSeries(8, 70, 98), []);
-  const lastLoginSeries = useMemo(() => generateSeries(8, 3, 14), []);
-  const csrSubmissions = useMemo(() => createCSRSubmissionsData(30), []);
-  const activityTrend = useMemo(() => createActivityData(activitySeries.slice(-12)), [activitySeries]);
-
-  const quickActions = useMemo(
-    () => [
-    {
-      title: "NGO verification queue",
-      description: "Review newly registered organisations awaiting compliance diligence.",
-      ctaLabel: "Review",
-      href: "#",
-      icon: ClipboardCheck,
-    },
-    {
-      title: "Pending CSR programmes",
-      description: "Approve incoming CSR initiatives and match them with vetted NGOs.",
-      ctaLabel: "Manage",
-      href: "#",
-      icon: HandshakeIcon,
-    },
-    {
-      title: "Registered NGOs",
-      description: "Browse and update partner profiles, documents, and compliance states.",
-      ctaLabel: "Open",
-      href: "#",
-      icon: Files,
-    },
-    {
-      title: "Reports & insights",
-      description: "Launch consolidated CSR-2 reports and impact analytics dashboards.",
-      ctaLabel: "View",
-      href: "#",
-      icon: LineChart,
-    },
-  ] as const,
-    [],
-  );
-
-  const oversightSnapshot = useMemo(
-    () => [
-    {
-      title: "Verifications due",
-      metric: "12 NGOs",
-      helper: "Across legal, financial, compliance tracks",
-      tone: "amber" as const,
-    },
-    {
-      title: "Funds disbursing",
-      metric: "₹2.4 Cr",
-      helper: "In settlement over next 7 days",
-      tone: "indigo" as const,
-    },
-    {
-      title: "Impact reports",
-      metric: "9 due",
-      helper: "Awaiting quarterly validation",
-      tone: "slate" as const,
-    },
-  ],
-    [],
-  );
-
-  const pipelineMilestones = useMemo(
-    () => [
-    {
-      label: "CSR-1 onboarding",
-      owner: "Compliance desk",
-      status: "On track",
-      eta: "Mar 04",
-    },
-    {
-      label: "Green Earth audit",
-      owner: "Finance ops",
-      status: "Attention",
-      eta: "Feb 28",
-    },
-    {
-      label: "North region due diligence",
-      owner: "Field review",
-      status: "Scheduled",
-      eta: "Mar 12",
-    },
-    {
-      label: "Platform policy refresh",
-      owner: "Governance",
-      status: "Drafting",
-      eta: "Mar 20",
-    },
-  ],
-    [],
-  );
-
-  const assuranceNotes = useMemo(
-    () => [
-      {
-        title: "Weekly compliance window",
-        detail: "Finance and legal teams aligned on dual approvals for high-value CSR uploads.",
-      },
-      {
-        title: "Partner sentiment",
-        detail: "Average donor NPS 4.6/5 across the past fortnight with positive comments on reporting cadence.",
-      },
-    ],
-    [],
-  );
 
   if (loading) {
     return (
@@ -278,257 +282,263 @@ export default function AdminDashboard() {
             mounted ? "animate-in fade-in duration-500 opacity-100" : "",
           )}
         >
-
           <section className="rounded-3xl border border-slate-200/80 bg-white/95 p-6 shadow-sm">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,2.4fr)_minmax(0,1.6fr)]">
-          <div className="flex flex-col justify-between gap-6">
-            <div className="space-y-2">
-              <p className="text-caption font-semibold uppercase tracking-[0.28em] text-slate-400">Executive overview</p>
-              <h1 className="text-2xl font-semibold text-slate-900">
-                Platform engagement across the last 30 days
-              </h1>
-              <p className="text-small text-slate-500">
-                Monitor activity velocity, programme submissions, and user sentiment to keep CSR operations predictable.
-              </p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-white/95 p-4">
-              <div className="flex items-center justify-between">
-                <span className="text-caption font-semibold uppercase tracking-[0.28em] text-slate-400">
-                  Platform activity
-                </span>
-                <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
-                  <TrendingUp className="h-3.5 w-3.5" />
-                  +18% vs previous
-                </span>
-              </div>
-              <div className="mt-4 w-full min-h-[280px]">
-                <OverviewChart data={activityTrend} />
-              </div>
-            </div>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
-            <KpiCard
-              label="New NGOs this month"
-              value="42"
-              delta={calculateDelta(ngoSeries)}
-              data={ngoSeries}
-            />
-            <KpiCard
-              label="CSR funds committed"
-              value="₹4.8 Cr"
-              delta={calculateDelta(fundsSeries)}
-              data={fundsSeries}
-              tone="emerald"
-            />
-            <KpiCard
-              label="Active users trend"
-              value="1.8k"
-              delta={calculateDelta(activeUserSeries)}
-              data={activeUserSeries}
-              tone="indigo"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="grid gap-6 rounded-3xl border border-slate-200/80 bg-white/95 p-6 shadow-sm lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1.8fr)]">
-        <ImpactTrendChart className="min-h-[320px]" />
-        <div className="flex flex-col justify-between gap-4">
-          <SectionHeader title="Metric signals" subtitle="Snapshot of correlated donation and impact metrics" />
-          <div className="grid flex-1 gap-4 sm:grid-cols-2">
-            {[
-              {
-                title: "Average donation",
-                metric: "₹62.4L",
-                helper: "Past 90-day moving average",
-                icon: TrendingUp,
-                tone: "emerald",
-              },
-              {
-                title: "Impact coverage",
-                metric: "78%",
-                helper: "Programmes reporting verified outcomes",
-                icon: Target,
-                tone: "indigo",
-              },
-              {
-                title: "Repeat donors",
-                metric: "64%",
-                helper: "Returning contributors this quarter",
-                icon: Users2,
-                tone: "amber",
-              },
-              {
-                title: "Programs scaling",
-                metric: "21",
-                helper: "Initiatives expanding reach YoY",
-                icon: Sparkles,
-                tone: "slate",
-              },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-4 shadow-sm"
-              >
-                <div className="flex items-center justify-between">
-                  <p className="text-caption font-semibold uppercase tracking-[0.28em] text-slate-400">{item.title}</p>
-                  <span
-                    className={cn(
-                      "flex h-9 w-9 items-center justify-center rounded-full",
-                      item.tone === "emerald" && "bg-emerald-100 text-emerald-600",
-                      item.tone === "indigo" && "bg-indigo-100 text-indigo-600",
-                      item.tone === "amber" && "bg-amber-100 text-amber-600",
-                      item.tone === "slate" && "bg-slate-200 text-slate-600",
-                    )}
-                  >
-                    <item.icon className="h-4 w-4" />
-                  </span>
+            <div className="grid gap-6 lg:grid-cols-[minmax(0,2.4fr)_minmax(0,1.6fr)]">
+              <div className="flex flex-col justify-between gap-6">
+                <div className="space-y-2">
+                  <p className="text-caption font-semibold uppercase tracking-[0.28em] text-slate-400">Executive overview</p>
+                  <h1 className="text-2xl font-semibold text-slate-900">
+                    Platform engagement across the last 30 days
+                  </h1>
+                  <p className="text-small text-slate-500">
+                    Monitor activity velocity, programme submissions, and user sentiment to keep CSR operations predictable.
+                  </p>
                 </div>
-                <p className="mt-4 text-heading-2 text-slate-800">{item.metric}</p>
-                <p className="mt-1 text-small text-slate-500">{item.helper}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="rounded-3xl border border-slate-200 bg-white/95 p-shell shadow-sm">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-caption font-semibold uppercase tracking-[0.28em] text-slate-400">CSR submissions</p>
-            <h3 className="text-heading-3 text-slate-700">Performance over the last month</h3>
-          </div>
-          <span className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
-            <TrendingUp className="h-3.5 w-3.5" />
-            {calculateCSRDelta(csrSubmissions).toFixed(1)}% vs prev
-          </span>
-        </div>
-        <div className="mt-4 w-full min-h-[280px]">
-          <ResponsiveContainer width="100%" height="100%" minHeight={280}>
-            <BarChart data={csrSubmissions} margin={{ top: 12, right: 12, left: -6, bottom: 4 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-              <XAxis dataKey="label" tickLine={false} axisLine={false} interval={5} tick={{ fill: "#94a3b8", fontSize: 11 }} />
-              <YAxis hide domain={[0, "dataMax + 6"]} />
-              <Tooltip cursor={{ fill: "rgba(15, 23, 42, 0.04)" }} content={<CustomTooltip />} />
-              <Bar dataKey="value" radius={[6, 6, 0, 0]} fill="#d9e2ff" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </section>
-
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard
-          icon={Users2}
-          label="User count"
-          value="1,248"
-          helper="Across NGOs, corporates, and donors"
-          trend={calculateDelta(userStatSeries)}
-          statusColor="emerald"
-        >
-          <MicroBar data={userStatSeries} tone="#0f172a" />
-        </StatCard>
-        <StatCard
-          icon={ClipboardCheck}
-          label="Pending approvals"
-          value="18"
-          helper="Awaiting verification review"
-          trend={calculateDelta(approvalStatSeries)}
-          statusColor="amber"
-        >
-          <MicroBar data={approvalStatSeries} tone="#b45309" />
-        </StatCard>
-        <StatCard
-          icon={Clock4}
-          label="Last login"
-          value="04:21 PM"
-          helper="Most recent platform access"
-          trend={calculateDelta(lastLoginSeries)}
-          statusColor="indigo"
-        >
-          <MicroBar data={lastLoginSeries} tone="#3730a3" />
-        </StatCard>
-        <StatCard
-          icon={ShieldCheck}
-          label="Platform health"
-          value="94%"
-          helper="SLA coverage across services"
-          trend={calculateDelta(healthSeries)}
-          statusColor="emerald"
-        >
-          <MicroBar data={healthSeries} tone="#059669" />
-        </StatCard>
-      </section>
-
-      <section className="space-y-6 rounded-3xl border border-slate-200 bg-white/95 p-shell shadow-sm">
-        <SectionHeader title="Operational oversight" subtitle="Live workload, milestones, and governance notes" />
-        <div className="grid gap-4 md:grid-cols-3">
-          {oversightSnapshot.map((item) => (
-            <div
-              key={item.title}
-              className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white px-4 py-4"
-            >
-              <p className="text-caption font-semibold uppercase tracking-[0.28em] text-slate-400">
-                {item.title}
-              </p>
-              <p className="mt-2 text-heading-3 text-slate-700">{item.metric}</p>
-              <p className="mt-1 text-caption text-slate-500">{item.helper}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-          <div className="rounded-2xl border border-slate-200 bg-white/90 p-4">
-            <div className="flex items-center justify-between">
-              <h4 className="text-sm font-semibold text-slate-900">Programme milestones</h4>
-              <span className="text-xs uppercase tracking-[0.28em] text-slate-400">2 week view</span>
-            </div>
-            <div className="mt-3 divide-y divide-slate-100 text-small text-slate-500">
-              {pipelineMilestones.map((milestone) => (
-                <div key={milestone.label} className="flex flex-col gap-1 py-3 md:flex-row md:items-center md:justify-between">
-                  <div className="space-y-1">
-                    <p className="font-medium text-slate-800">{milestone.label}</p>
-                    <p className="text-caption text-slate-500">Owner: {milestone.owner}</p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                      {milestone.status}
+                <div className="rounded-2xl border border-slate-200 bg-white/95 p-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-caption font-semibold uppercase tracking-[0.28em] text-slate-400">
+                      Platform activity
                     </span>
-                    <span className="text-caption text-slate-500">ETA {milestone.eta}</span>
+                    <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
+                      <TrendingUp className="h-3.5 w-3.5" />
+                      +18% vs previous
+                    </span>
+                  </div>
+                  <div className="mt-4 w-full min-h-[280px]">
+                    <OverviewChart data={activityTrend} />
                   </div>
                 </div>
-              ))}
+              </div>
+              <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+                <KpiCard
+                  label="New NGOs this month"
+                  value="42"
+                  delta={calculateDelta(ngoSeries)}
+                  data={ngoSeries}
+                />
+                <KpiCard
+                  label="CSR funds committed"
+                  value="₹4.8 Cr"
+                  delta={calculateDelta(fundsSeries)}
+                  data={fundsSeries}
+                  tone="emerald"
+                />
+                <KpiCard
+                  label="Active users trend"
+                  value="1.8k"
+                  delta={calculateDelta(activeUserSeries)}
+                  data={activeUserSeries}
+                  tone="indigo"
+                />
+              </div>
             </div>
-          </div>
+          </section>
 
-          <div className="space-y-3 rounded-2xl border border-slate-200 bg-white/90 p-4">
-            <h4 className="text-sm font-semibold text-slate-900">Risk & assurance notes</h4>
-            <div className="space-y-3 text-small text-slate-500">
-              {assuranceNotes.map((note) => (
-                <div key={note.title} className="rounded-xl border border-slate-100 bg-slate-50/70 px-4 py-3">
-                  <p className="text-sm font-semibold text-slate-800">{note.title}</p>
-                  <p className="mt-1 text-xs leading-relaxed text-slate-600">{note.detail}</p>
+          <section className="grid gap-6 rounded-3xl border border-slate-200/80 bg-white/95 p-6 shadow-sm lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1.8fr)]">
+            <ImpactTrendChart className="min-h-[320px]" />
+            <div className="flex flex-col justify-between gap-4">
+              <SectionHeader title="Metric signals" subtitle="Snapshot of correlated donation and impact metrics" />
+              <div className="grid flex-1 gap-4 sm:grid-cols-2">
+                {[
+                  {
+                    title: "Average donation",
+                    metric: "₹62.4L",
+                    helper: "Past 90-day moving average",
+                    icon: TrendingUp,
+                    tone: "emerald",
+                  },
+                  {
+                    title: "Impact coverage",
+                    metric: "78%",
+                    helper: "Programmes reporting verified outcomes",
+                    icon: Target,
+                    tone: "indigo",
+                  },
+                  {
+                    title: "Repeat donors",
+                    metric: "64%",
+                    helper: "Returning contributors this quarter",
+                    icon: Users2,
+                    tone: "amber",
+                  },
+                  {
+                    title: "Programs scaling",
+                    metric: "21",
+                    helper: "Initiatives expanding reach YoY",
+                    icon: Sparkles,
+                    tone: "slate",
+                  },
+                ].map((item) => (
+                  <div
+                    key={item.title}
+                    className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-4 shadow-sm"
+                  >
+                    <div className="flex items-center justify-between">
+                      <p className="text-caption font-semibold uppercase tracking-[0.28em] text-slate-400">{item.title}</p>
+                      <span
+                        className={cn(
+                          "flex h-9 w-9 items-center justify-center rounded-full",
+                          item.tone === "emerald" && "bg-emerald-100 text-emerald-600",
+                          item.tone === "indigo" && "bg-indigo-100 text-indigo-600",
+                          item.tone === "amber" && "bg-amber-100 text-amber-600",
+                          item.tone === "slate" && "bg-slate-200 text-slate-600",
+                        )}
+                      >
+                        <item.icon className="h-4 w-4" />
+                      </span>
+                    </div>
+                    <p className="mt-4 text-heading-2 text-slate-800">{item.metric}</p>
+                    <p className="mt-1 text-small text-slate-500">{item.helper}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-3xl border border-slate-200 bg-white/95 p-shell shadow-sm">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-caption font-semibold uppercase tracking-[0.28em] text-slate-400">CSR submissions</p>
+                <h3 className="text-heading-3 text-slate-700">Performance over the last month</h3>
+              </div>
+              <span className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
+                <TrendingUp className="h-3.5 w-3.5" />
+                {calculateCSRDelta(csrSubmissions).toFixed(1)}% vs prev
+              </span>
+            </div>
+            <div className="mt-4 w-full min-h-[280px]">
+              <ResponsiveContainer width="100%" height="100%" minHeight={280}>
+                <BarChart data={csrSubmissions} margin={{ top: 12, right: 12, left: -6, bottom: 4 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+                  <XAxis dataKey="label" tickLine={false} axisLine={false} interval={5} tick={{ fill: "#94a3b8", fontSize: 11 }} />
+                  <YAxis hide domain={[0, "dataMax + 6"]} />
+                  <Tooltip cursor={{ fill: "rgba(15, 23, 42, 0.04)" }} content={<CustomTooltip />} />
+                  <Bar dataKey="value" radius={[6, 6, 0, 0]} fill="#d9e2ff" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </section>
+
+          <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <StatCard
+              icon={Users2}
+              label="User count"
+              value="1,248"
+              helper="Across NGOs, corporates, and donors"
+              trend={calculateDelta(userStatSeries)}
+              statusColor="emerald"
+            >
+              <MicroBar data={userStatSeries} tone="#0f172a" />
+            </StatCard>
+            <StatCard
+              icon={ClipboardCheck}
+              label="Pending approvals"
+              value="18"
+              helper="Awaiting verification review"
+              trend={calculateDelta(approvalStatSeries)}
+              statusColor="amber"
+            >
+              <MicroBar data={approvalStatSeries} tone="#b45309" />
+            </StatCard>
+            <StatCard
+              icon={Clock4}
+              label="Last login"
+              value="04:21 PM"
+              helper="Most recent platform access"
+              trend={calculateDelta(lastLoginSeries)}
+              statusColor="indigo"
+            >
+              <MicroBar data={lastLoginSeries} tone="#3730a3" />
+            </StatCard>
+            <StatCard
+              icon={ShieldCheck}
+              label="Platform health"
+              value="94%"
+              helper="SLA coverage across services"
+              trend={calculateDelta(healthSeries)}
+              statusColor="emerald"
+            >
+              <MicroBar data={healthSeries} tone="#059669" />
+            </StatCard>
+          </section>
+
+          <section className="space-y-6 rounded-3xl border border-slate-200 bg-white/95 p-shell shadow-sm">
+            <SectionHeader title="Operational oversight" subtitle="Live workload, milestones, and governance notes" />
+            <div className="grid gap-4 md:grid-cols-3">
+              {oversightSnapshot.map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white px-4 py-4"
+                >
+                  <p className="text-caption font-semibold uppercase tracking-[0.28em] text-slate-400">
+                    {item.title}
+                  </p>
+                  <p className="mt-2 text-heading-3 text-slate-700">{item.metric}</p>
+                  <p className="mt-1 text-caption text-slate-500">{item.helper}</p>
                 </div>
               ))}
             </div>
-          </div>
+
+            <div className="grid gap-4 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+              <div className="rounded-2xl border border-slate-200 bg-white/90 p-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-sm font-semibold text-slate-900">Programme milestones</h4>
+                  <span className="text-xs uppercase tracking-[0.28em] text-slate-400">2 week view</span>
+                </div>
+                <div className="mt-3 divide-y divide-slate-100 text-small text-slate-500">
+                  {pipelineMilestones.map((milestone) => (
+                    <div key={milestone.label} className="flex flex-col gap-1 py-3 md:flex-row md:items-center md:justify-between">
+                      <div className="space-y-1">
+                        <p className="font-medium text-slate-800">{milestone.label}</p>
+                        <p className="text-caption text-slate-500">Owner: {milestone.owner}</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                          {milestone.status}
+                        </span>
+                        <span className="text-caption text-slate-500">ETA {milestone.eta}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-3 rounded-2xl border border-slate-200 bg-white/90 p-4">
+                <h4 className="text-sm font-semibold text-slate-900">Risk & assurance notes</h4>
+                <div className="space-y-3 text-small text-slate-500">
+                  {assuranceNotes.map((note) => (
+                    <div key={note.title} className="rounded-xl border border-slate-100 bg-slate-50/70 px-4 py-3">
+                      <p className="text-sm font-semibold text-slate-800">{note.title}</p>
+                      <p className="mt-1 text-xs leading-relaxed text-slate-600">{note.detail}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,1.4fr)]">
+            <div className="space-y-4">
+              <SectionHeader
+                title="Quick actions"
+                subtitle="Common control centre tasks for administrators"
+                data-onboarding="quick-actions"
+              />
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {quickActions.map((action) => (
+                  <QuickActionCard key={action.title} {...action} />
+                ))}
+              </div>
+            </div>
+
+            <SuggestedActionsPanel />
+          </section>
+
+          
+          <ActivityFeed className="pt-2" data-onboarding="activity-feed" />
         </div>
-      </section>
-
-      <section className="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,1.4fr)]">
-        <div className="space-y-4">
-          <SectionHeader title="Quick actions" subtitle="Common control centre tasks for administrators" />
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {quickActions.map((action) => (
-              <QuickActionCard key={action.title} {...action} />
-            ))}
-          </div>
-        </div>
-
-        <SuggestedActionsPanel />
-      </section>
-
-      <ActivityFeed className="pt-2" />
-    </div>
+      </div>
+    </>
   );
 }
 
@@ -640,7 +650,7 @@ function KpiCard({ label, value, delta, data, tone = "slate" }: KpiCardProps) {
       <div className="mt-4">
         <Sparkline data={data} height={56} />
       </div>
-    </>
+    </div>
   );
 }
 

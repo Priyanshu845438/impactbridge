@@ -411,3 +411,8 @@
 - Introduced `DashboardOnboarding` overlay with guided steps highlighting sidebar navigation, global search, activity feed, and quick actions for first-time admins.
 - Added data attributes to layout targets and wired localStorage flag so the tour only appears until dismissed.
 - Integration still needs JSX wrapper tidy-up and hook dependency fixes (`dashboard-onboarding.tsx`) before lint/build can pass; queued as immediate follow-up.
+
+## 96. [FE] Admin onboarding cleanup.
+- Repaired admin dashboard JSX after overlay integration and inserted missing wrappers so the page renders/compiles correctly.
+- Memoised onboarding callbacks and overlay positioning helpers to satisfy react-hooks lint rules while keeping behaviour intact.
+- Validated via `npm run lint` and `npm run build`; updated frontend docs (dashboard, TODO, component catalog, progress report) to reflect the clean tour experience.

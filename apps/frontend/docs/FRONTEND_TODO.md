@@ -6,7 +6,6 @@
 - Connect dashboard stats/activity widgets to backend APIs via React Query
 - Instrument global search with real telemetry once backend analytics endpoint is available (temporary toast stays until then)
 - Establish Jest/RTL harness for App Router (mock `useAuth`, router, `notFound`, ESM deps) to unblock command palette + Action Center tests
-- Install system packages needed for Percy/Chromium (`libgobject-2.0.so.0`, `libgtk-3-0`, `libgdk-pixbuf2.0-0`, etc.) so `npm run snapshot:ui` succeeds
 - Expand Storybook/Percy coverage: add stories/snapshots for NGO table, Action Center panel, impact charts, empty states
 - Replace optimistic NGO assignment mock with actual API call once backend endpoint ships (keep rollback + toast messaging but hook into real mutation helper).
 - Wire offline queue replay to real mutation handlers (currently placeholder clears queue on reconnect).

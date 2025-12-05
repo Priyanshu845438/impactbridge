@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowLeft, ArrowRight, Check, X } from "lucide-react";
 
@@ -71,65 +71,25 @@ export function DashboardOnboarding() {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (!open) {
-      if (dontShowAgain) {
+  const goNext = useCallback(() => {
+    setCurrentIndex((index) => Math.min(steps.length - 1, index + 1));
+  }, [steps.length]);
+
+  const goPrev = useCallback(() => {
+    setCurrentIndex((index) => Math.max(0, index - 1));
+  }, []);
+
+  const dismiss = useCallback(
+    (persist: boolean) => {
+      setOpen(false);
+      if (persist || dontShowAgain) {
         window.localStorage.setItem(STORAGE_KEY, "true");
       }
-      return;
-    }
+    },
+    [dontShowAgain],
+  );
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        dismiss(true);
-        return;
-      }
-      if (event.key === "ArrowRight") {
-        event.preventDefault();
-        goNext();
-      }
-      if (event.key === "ArrowLeft") {
-        event.preventDefault();
-        goPrev();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [open, dontShowAgain, currentIndex, steps]);
-
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
-    positionOverlay();
-    const handleResize = () => positionOverlay();
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("scroll", handleResize, true);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("scroll", handleResize, true);
-    };
-  }, [open, currentIndex, steps]);
-
-  const goNext = () => {
-    setCurrentIndex((index) => Math.min(steps.length - 1, index + 1));
-  };
-
-  const goPrev = () => {
-    setCurrentIndex((index) => Math.max(0, index - 1));
-  };
-
-  const dismiss = (persist: boolean) => {
-    setOpen(false);
-    if (persist || dontShowAgain) {
-      window.localStorage.setItem(STORAGE_KEY, "true");
-    }
-  };
-
-  const positionOverlay = () => {
+  const positionOverlay = useCallback(() => {
     const highlight = highlightRef.current;
     const tooltip = tooltipRef.current;
     if (!highlight || !tooltip) {
@@ -179,7 +139,50 @@ export function DashboardOnboarding() {
     tooltip.style.top = `${Math.max(window.scrollY + 16, top)}px`;
     tooltip.style.left = `${Math.max(window.scrollX + 16, left)}px`;
     tooltip.style.opacity = "1";
-  };
+  }, [currentIndex, steps]);
+
+  useEffect(() => {
+    if (!open) {
+      if (dontShowAgain) {
+        window.localStorage.setItem(STORAGE_KEY, "true");
+      }
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        dismiss(true);
+        return;
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        goNext();
+      }
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        goPrev();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open, dontShowAgain, goNext, goPrev, dismiss]);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    positionOverlay();
+    const handleResize = () => positionOverlay();
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("scroll", handleResize, true);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", handleResize, true);
+    };
+  }, [open, positionOverlay]);
 
   useEffect(() => {
     if (!open) {

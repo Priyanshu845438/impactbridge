@@ -1,6 +1,6 @@
 # ImpactBridge Frontend Progress Report
 
-_Last updated: 2025-12-04 11:27 UTC_
+_Last updated: 2025-12-05 07:26 UTC_
 
 ## Overview
 The ImpactBridge frontend remains a polished Next.js 14 App Router experience with role-aware dashboards, rich documentation, and production-ready styling. The latest milestone extends the tooling stack with Storybook + Percy snapshot scaffolding to guard against UI regressions.
@@ -12,7 +12,6 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Added Percy CLI (`@percy/cli`, `@percy/storybook`) with config at `tests/percy.config.json` and script `npm run snapshot:ui`.
 - Documented Percy workflow and requirements in setup/dashboard/component/TODO docs.
 - Enabled optimistic NGO assignment on programme detail view for instant feedback with offline-aware rollback messaging.
-
 - Introduced offline-aware UX hooks: a shared status provider surfaces toasts when connectivity changes, disables mutation buttons with tooltips, queues assignments in localStorage, and replays them on reconnect.
 
 ## Current Status / Issues

@@ -30,6 +30,7 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 
 - Offline toasts warn when connectivity drops; queued assignments replay when the connection returns, and mutation buttons surface tooltips when offline.
 - **Reports/Settings modules**: placeholders ready for future wiring.
+- Admin onboarding tour cleaned post-integration, ensuring layout structure remains intact and lint/build succeed.
 
 ## Other Role Pages
 - NGO, Company, Donor dashboards updated with final copy and minimal hero cards. Ready to host future dynamic content (campaigns, budgets, donations).
@@ -52,3 +53,5 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 Maintain this document as modules evolve, Storybook coverage expands, or new dashboards launch.
 
 - Breadcrumbs now highlight page hierarchy on company, programme, and NGO document views.
+- Admin dashboard onboarding tour cleaned up (JSX fixed, hooks memoised).
+
