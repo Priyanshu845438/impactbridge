@@ -6,7 +6,7 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 ## Shared Layout (`app/dashboard/layout.tsx`)
 - **Auth guard**: consumes `useAuth()` and redirects to `/login` if token missing.
 - **Sidebar**: 260px fixed panel on desktop with nav items derived from `lib/nav-menu.ts`; filters links per user role, supports collapsible admin modules, and is fully scrollable. Menu groups follow a professional sequence for quicker discovery. Links prefetch routes and trigger a fade animation on navigation.
-- **Header**: sticky top bar with brand mark, centered search input (toasts until backend search lands), notification bell (badge + desktop popover + mobile sheet), command palette trigger (⌘/Ctrl + K), theme toggle (light/dark/system), locale switcher in profile drawer, and profile quick-actions.
+- **Header**: sticky top bar with brand mark, centered spotlight trigger that opens the full-screen global search (⌘/Ctrl + K) covering users/NGOs/companies/programmes/documents, notification bell (badge + desktop popover + mobile sheet), command palette quick actions, theme toggle (light/dark/system), locale switcher in profile drawer, and profile quick-actions.
 - **Main content**: `flex-1` scrollable region with gradient background, consistent padding, Suspense wrapper + skeleton fallback, and route progress bar integration (via `next-nprogress-bar`) to prevent white flashes.
 - **Command palette**: modal overlay providing quick navigation suggestions with keyboard support. Unit tests pending until Jest harness exists (see docs/TODO).
 - **Smart suggestions + action center**: contextual cards and quick-action sidebar exposed on large screens, collapsing gracefully on mobile.
@@ -55,3 +55,4 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 - Breadcrumbs now highlight page hierarchy on company, programme, and NGO document views.
 - Admin dashboard onboarding tour cleaned up (JSX fixed, hooks memoised).
 
+- Added global search spotlight (⌘K / Ctrl+K) for cross-entity discovery with fuzzy matching.

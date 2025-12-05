@@ -27,8 +27,6 @@ import {
   X,
 } from "lucide-react";
 
-import { toast } from "sonner";
-
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-context";
 import { navMenu, NavItem } from "@/lib/nav-menu";
@@ -36,6 +34,7 @@ import { Button } from "@/components/ui/button";
 import { ProfileDrawer } from "@/components/dashboard/profile-drawer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { GlobalSearchSpotlight } from "@/components/overlays/global-search";
 
 interface NotificationItemProps {
   icon: React.ComponentType<{ className?: string }>;
@@ -162,6 +161,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
   const [mobileNotificationsOpen, setMobileNotificationsOpen] = useState(false);
   const [commandOpen, setCommandOpen] = useState(false);
   const [isCommandPending, startCommandTransition] = useTransition();
+  const [searchOpen, setSearchOpen] = useState(false);
   const [contentOpacityClass, setContentOpacityClass] = useState("opacity-0");
   const fadeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -262,20 +262,24 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key.toLowerCase() !== "k" || (!event.metaKey && !event.ctrlKey)) {
+      if (event.key.toLowerCase() === "k" && (event.metaKey || event.ctrlKey)) {
+        const target = event.target as HTMLElement | null;
+        if (target) {
+          const tag = target.tagName.toLowerCase();
+          if (tag === "input" || tag === "textarea" || target.isContentEditable) {
+            return;
+          }
+        }
+
+        event.preventDefault();
+        setSearchOpen(true);
+        setCommandOpen(false);
         return;
       }
 
-      const target = event.target as HTMLElement | null;
-      if (target) {
-        const tag = target.tagName.toLowerCase();
-        if (tag === "input" || tag === "textarea" || target.isContentEditable) {
-          return;
-        }
+      if (event.key === "Escape") {
+        setSearchOpen(false);
       }
-
-      event.preventDefault();
-      setCommandOpen((prev) => !prev);
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -433,27 +437,29 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
               <Search className="h-4 w-4 text-slate-400 dark:text-slate-500" />
               <input
                 type="search"
-                placeholder="Search users…"
+                placeholder="Search anything…"
                 aria-label="Search the dashboard"
-                className="w-full bg-transparent text-small text-slate-600 placeholder:text-slate-400 focus:outline-none dark:text-slate-200 dark:placeholder:text-slate-500"
+                className="w-full cursor-pointer bg-transparent text-small text-slate-600 placeholder:text-slate-400 focus:outline-none dark:text-slate-200 dark:placeholder:text-slate-500"
+                onFocus={() => setSearchOpen(true)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter") {
-                    const value = (event.currentTarget as HTMLInputElement).value.trim();
-                    if (value.length) {
-                      toast.info(`Search coming soon: ${value}`);
-                    }
+                    event.preventDefault();
+                    setSearchOpen(true);
+                    setCommandOpen(false);
                   }
                 }}
+                readOnly
               />
               <button
                 type="button"
                 onClick={() =>
                   startCommandTransition(() => {
-                    setCommandOpen(true);
+                    setSearchOpen(true);
+                    setCommandOpen(false);
                   })
                 }
                 className="hidden items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-medium text-slate-500 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-600 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-400 dark:hover:border-emerald-400/60 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-300 sm:flex disabled:opacity-60"
-                aria-label="Open command palette"
+                aria-label="Open global search"
                 disabled={isCommandPending}
               >
                 <Command className="h-3.5 w-3.5" />
@@ -629,6 +635,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
 
       {notificationsSheet}
       <CommandPalette open={commandOpen} onClose={() => setCommandOpen(false)} items={commandItems} />
+      <GlobalSearchSpotlight open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );
 }

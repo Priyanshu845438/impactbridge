@@ -416,3 +416,9 @@
 - Repaired admin dashboard JSX after overlay integration and inserted missing wrappers so the page renders/compiles correctly.
 - Memoised onboarding callbacks and overlay positioning helpers to satisfy react-hooks lint rules while keeping behaviour intact.
 - Validated via `npm run lint` and `npm run build`; updated frontend docs (dashboard, TODO, component catalog, progress report) to reflect the clean tour experience.
+
+## 97. [FE] Global search spotlight rollout.
+- Added full-screen spotlight modal with fuzzy search, keyboard nav (arrows/enter/Esc), and recents history sourced from mock datasets.
+- Integrated ⌘/Ctrl+K trigger replacing the header input, wired to the new overlay, and ensured lint/build remain clean.
+- Updated dashboard, component catalog, TODO, and progress docs to reflect the spotlight capability and testing status.
+

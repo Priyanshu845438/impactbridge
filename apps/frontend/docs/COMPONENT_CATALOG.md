@@ -62,3 +62,6 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 4. Add Percy snapshots once Storybook story exists and system libraries are ready.
 
 Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
+
+### GlobalSearchSpotlight
+- Full-screen spotlight search overlay supporting keyboard navigation, fuzzy matching, and recents.

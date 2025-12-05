@@ -55,3 +55,6 @@
 
 Update this file as features ship or priorities shift.
 - [x] Add shared breadcrumb UI and wire across detail views (company, NGO documents, programmes).
+
+## Recently Completed
+- Global search spotlight with mock fuzzy results
