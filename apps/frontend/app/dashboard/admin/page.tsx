@@ -28,6 +28,7 @@ import { SkeletonCard, SkeletonStat, SkeletonActivityItem } from "@/components/u
 import { cn } from "@/lib/utils";
 import { Bar, BarChart, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { ImpactTrendChart } from "@/components/charts/impact-trend-chart";
+import { DashboardOnboarding } from "@/components/onboarding/dashboard-onboarding";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -57,7 +58,59 @@ export default function AdminDashboard() {
     return () => window.clearTimeout(timer);
   }, [user]);
 
-  const activitySeries = useMemo(() => generateSeries(30, 40, 120), []);
+  if (loading) {
+    return (
+      <div className="space-y-8">
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+          <SkeletonCard />
+          <div className="grid gap-4">
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <SkeletonStat />
+          <SkeletonStat />
+          <SkeletonStat />
+          <SkeletonStat />
+        </div>
+
+        <SkeletonCard className="h-80" />
+
+        <div className="space-y-4">
+          <SectionHeader
+            title="Quick actions"
+            subtitle="Common control centre tasks for administrators"
+            data-onboarding="quick-actions"
+          />
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <SectionHeader
+            title="Recent activity"
+            subtitle="Live audit feed across compliance, programmes, and access"
+            data-onboarding="activity-feed"
+          />
+          <div className="rounded-2xl border border-slate-200 bg-white/90 shadow-sm">
+            <ul className="max-h-72 divide-y divide-slate-100">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <SkeletonActivityItem key={index} />
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const ngoSeries = useMemo(() => generateSeries(10, 4, 18), []);
   const fundsSeries = useMemo(() => generateSeries(12, 20, 85), []);
   const activeUserSeries = useMemo(() => generateSeries(14, 60, 140), []);
@@ -158,15 +211,15 @@ export default function AdminDashboard() {
 
   const assuranceNotes = useMemo(
     () => [
-    {
-      title: "Weekly compliance window",
-      detail: "Finance and legal teams aligned on dual approvals for high-value CSR uploads.",
-    },
-    {
-      title: "Partner sentiment",
-      detail: "Average donor NPS 4.6/5 across the past fortnight with positive comments on reporting cadence.",
-    },
-  ],
+      {
+        title: "Weekly compliance window",
+        detail: "Finance and legal teams aligned on dual approvals for high-value CSR uploads.",
+      },
+      {
+        title: "Partner sentiment",
+        detail: "Average donor NPS 4.6/5 across the past fortnight with positive comments on reporting cadence.",
+      },
+    ],
     [],
   );
 
@@ -192,7 +245,7 @@ export default function AdminDashboard() {
         <SkeletonCard className="h-80" />
 
         <div className="space-y-4">
-          <SectionHeader title="Quick actions" subtitle="Common control centre tasks for administrators" />
+          <SectionHeader title="Quick actions" subtitle="Common control centre tasks for administrators" data-onboarding="quick-actions" />
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <SkeletonCard />
             <SkeletonCard />
@@ -202,7 +255,7 @@ export default function AdminDashboard() {
         </div>
 
         <div className="space-y-4">
-          <SectionHeader title="Recent activity" subtitle="Live audit feed across compliance, programmes, and access" />
+          <SectionHeader title="Recent activity" subtitle="Live audit feed across compliance, programmes, and access" data-onboarding="activity-feed" />
           <div className="rounded-2xl border border-slate-200 bg-white/90 shadow-sm">
             <ul className="max-h-72 divide-y divide-slate-100">
               {Array.from({ length: 4 }).map((_, index) => (
@@ -216,13 +269,17 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div
-      className={cn(
-        "space-y-10 opacity-0",
-        mounted ? "animate-in fade-in duration-500 opacity-100" : "",
-      )}
-    >
-      <section className="rounded-3xl border border-slate-200/80 bg-white/95 p-6 shadow-sm">
+    <>
+      <DashboardOnboarding />
+      <div className="space-y-10">
+        <div
+          className={cn(
+            "space-y-10 opacity-0",
+            mounted ? "animate-in fade-in duration-500 opacity-100" : "",
+          )}
+        >
+
+          <section className="rounded-3xl border border-slate-200/80 bg-white/95 p-6 shadow-sm">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,2.4fr)_minmax(0,1.6fr)]">
           <div className="flex flex-col justify-between gap-6">
             <div className="space-y-2">
@@ -583,7 +640,7 @@ function KpiCard({ label, value, delta, data, tone = "slate" }: KpiCardProps) {
       <div className="mt-4">
         <Sparkline data={data} height={56} />
       </div>
-    </div>
+    </>
   );
 }
 

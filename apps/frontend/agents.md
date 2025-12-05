@@ -406,3 +406,8 @@
 - Added `useOnlineStatus` hook, offline status provider, and tooltip helper to surface connectivity state, queue unsafe actions, and guard buttons while offline.
 - Programme detail now queues NGO assignments in localStorage, disables remove/confirm buttons with tooltips when offline, and replays queued work on reconnect with success toasts.
 - Updated docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATALOG.md`, `FRONTEND_TODO.md`, `PROGRESS_REPORT.md`) and reran lint/build.
+
+## 95. [FE] Admin onboarding walkthrough scaffolded (pending cleanup).
+- Introduced `DashboardOnboarding` overlay with guided steps highlighting sidebar navigation, global search, activity feed, and quick actions for first-time admins.
+- Added data attributes to layout targets and wired localStorage flag so the tour only appears until dismissed.
+- Integration still needs JSX wrapper tidy-up and hook dependency fixes (`dashboard-onboarding.tsx`) before lint/build can pass; queued as immediate follow-up.

@@ -365,7 +365,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
 
   return (
     <div className="relative flex h-screen w-full bg-gradient-to-br from-background via-background to-background/90 transition-colors">
-      <aside className="hidden h-full w-[260px] flex-shrink-0 bg-white transition-colors dark:bg-slate-950 md:flex">
+      <aside className="hidden h-full w-[260px] flex-shrink-0 bg-white transition-colors dark:bg-slate-950 md:flex" data-onboarding="sidebar-nav">
         <div className="flex h-full w-full flex-col overflow-hidden border-r border-slate-200 dark:border-slate-800">
           <div className="flex h-full w-full flex-col overflow-y-auto px-6 py-8 text-slate-800 dark:text-slate-200">
             <Link
@@ -429,7 +429,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
             </div>
 
             <div className="flex flex-1 items-center justify-center gap-4 md:justify-end">
-            <div className="flex w-full max-w-md items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-1.5 shadow-sm transition focus-within:border-slate-300 focus-within:shadow dark:border-slate-700 dark:bg-slate-900">
+            <div className="flex w-full max-w-md items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-1.5 shadow-sm transition focus-within:border-slate-300 focus-within:shadow dark:border-slate-700 dark:bg-slate-900" data-onboarding="global-search">
               <Search className="h-4 w-4 text-slate-400 dark:text-slate-500" />
               <input
                 type="search"
