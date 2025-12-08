@@ -446,3 +446,7 @@
 ### **103. Campaign Detail View Introduced**
 - Added /dashboard/admin/campaigns/[id] with header actions, summary cards, tabs, media placeholders, and settings UI.
 - Synced documentation across dashboard guides and component catalog.
+
+### **104. Reports Dashboard Added**
+- Introduced /dashboard/admin/reports with time filters, summary tiles, chart placeholders, and export actions.
+- Updated dashboard docs and component catalog to reflect the analytics module.

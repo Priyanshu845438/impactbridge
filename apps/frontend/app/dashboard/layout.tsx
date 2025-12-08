@@ -190,6 +190,13 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
         group: "Registry",
       },
       {
+        label: "Reports & Analytics",
+        href: "/dashboard/admin/reports",
+        roles: [userRole],
+        icon: FileBarChart,
+        group: "Insights",
+      },
+      {
         label: "Campaign management",
         href: "/dashboard/admin/campaigns",
         roles: [userRole],

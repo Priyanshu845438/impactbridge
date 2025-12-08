@@ -52,3 +52,7 @@ All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATA
 - Built Campaign Management admin page with filters, pagination, skeleton loading, and create modal placeholder.
 
 - Delivered campaign detail page with mock dataset, tabs, settings UI, and modal actions.
+
+- Campaign detail page delivered with summary cards, tabs, settings UI, and modal actions.
+
+- Reports dashboard scaffolded with mock analytics and export actions.

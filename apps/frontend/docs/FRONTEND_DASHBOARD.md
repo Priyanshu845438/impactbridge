@@ -24,14 +24,40 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Dark mode-friendly backgrounds, icons, and text colours using shared tokens.
 
 ## Admin Modules (`app/dashboard/admin/modules/*`)
-- **NGO management**: search, multi-filter controls, sorting, pagination, responsive table + card layout, detail drawer with tabs (overview, documents, activity), collaboration sidebar, timeline panel, access control modal, action toasts, and accessibility polish.
-- **NGO documents (`[id]/documents`)**: full compliance review workspace with split preview, status workflow, tags, comments, timeline, access modal, and activity log.
-- **Companies**: list page with filters + modal, profile detail view, programme listing, and programme detail page featuring summary cards, milestones tab (list/timeline toggle + timeline view), assign NGO workflow, documents tab, comments, progress insights, and Action Center sidebar.
-- Assigned NGO tab uses optimistic linking (instant UI update, graceful rollback on failure, offline-aware toast messaging).
 
-- Offline toasts warn when connectivity drops; queued assignments replay when the connection returns, and mutation buttons surface tooltips when offline.
-- **Reports/Settings modules**: placeholders ready for future wiring.
-- Admin onboarding tour cleaned post-integration, ensuring layout structure remains intact and lint/build succeed.
+### NGO workspace
+- Search, multi-filter controls, sorting, pagination, and responsive layouts for both table and card views.
+- Detail drawer with overview/documents/activity tabs, collaboration sidebar, due-diligence timeline, and access control modal hooks.
+- Command palette shortcuts and action toasts help reviewers move faster.
+
+### NGO document review (`app/dashboard/admin/ngos/[id]/documents`)
+- Split document preview with status workflow, comment stream, tags, activity log, and access modal.
+- Drag-and-drop hint surfaced via smart command hints; breadcrumb clarifies navigation depth.
+
+### Company workspace (`app/dashboard/admin/companies`)
+- Filterable company roster, modal stub for onboarding, and profile pages with CSR contribution snapshot, linked NGOs, and breadcrumbs.
+
+### Company programme detail (`app/dashboard/admin/company/[companyId]/programmes/[programmeId]`)
+- Summary cards, milestones tab with list/timeline toggle, assign NGO workflow (optimistic + offline aware), documents/comments tabs, progress insights, and Action Center sidebar.
+
+### Donor management (`/dashboard/admin/donors`)
+- Admin list with search, filters (status/location), pagination, skeleton loaders, and responsive mobile cards.
+
+### Donor profile (`/dashboard/admin/donors/[id]`)
+- Header with status badge, contribution summary cards, tabs for profile info, donation history, and relationship notes with draft-saving affordances.
+
+### Donations ledger (`/dashboard/admin/donations`)
+- Platform-wide donation tracker with search, multi-filters (status/mode/donor/NGO/company), pagination, skeleton state, and receipt modal placeholder.
+
+### Campaign management (`/dashboard/admin/campaigns`)
+- Campaign roster mirroring donor/NGO list UX with quick filters, search, pagination, skeleton rows, and create-campaign modal stub.
+
+### Campaign detail (`/dashboard/admin/campaigns/[id]`)
+- Header actions (pause/close/duplicate), summary cards, overview/donations/media/settings tabs, attachments placeholder, and confirmation modals.
+
+### Offline-aware UX
+- Global offline detector surfaces warnings, disables risky actions with tooltips, queues mutations, and replays them on reconnect.
+
 
 ## Other Role Pages
 - NGO, Company, Donor dashboards updated with final copy and minimal hero cards. Ready to host future dynamic content (campaigns, budgets, donations).
@@ -76,3 +102,7 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 
 ### Campaign detail view
 - Added full campaign overview page with summary cards, tabs, settings UI, and modal actions.
+
+
+### Reports dashboard
+- New /dashboard/admin/reports screen with filters, summary tiles, charts placeholders, and export actions.

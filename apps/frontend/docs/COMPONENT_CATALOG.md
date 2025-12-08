@@ -4,6 +4,7 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 
 ## Dashboard Components
 ### `components/dashboard/section-header.tsx`
+- Consistently handles spacing + CTA placement across pages.
 - Props: `{ title: string; subtitle?: string; action?: ReactNode }`
 - Usage: Place at the top of sections to keep consistent typography & optional CTA.
 
@@ -17,7 +18,7 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - Ensure parent sets `min-h-[280px]` wrapper.
 
 ### Command palette
-- Inline component inside `app/dashboard/layout.tsx` showing quick navigation suggestions (⌘/Ctrl + K).
+- Inline component inside `app/dashboard/layout.tsx`; provides global quick actions (⌘/Ctrl+K) with fuzzy search.
 - Unit tests pending harness work.
 
 ### Action Center
@@ -89,3 +90,7 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### Campaign detail components
 - Summary cards, donations table, media placeholders, and settings controls tailored for campaign workflows.
+
+
+### Reports dashboard components
+- Summary tiles, chart skeleton wrapper, and analytics card helper for the reporting module.

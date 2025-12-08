@@ -69,3 +69,5 @@ Update this file as features ship or priorities shift.
 - ✅ Campaign management module scaffolded with mock data, filters, and create modal placeholder.
 
 - ✅ Campaign detail view scaffolded with mock data, tabs, and modals.
+
+- ✅ Reports dashboard scaffolded with summary tiles and chart placeholders.
