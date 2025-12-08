@@ -81,3 +81,7 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### Donation history table
 - Uses shared filters, table, modal, and skeleton components for platform-wide donation tracking.
+
+
+### Campaign management table
+- Mirrors donor/campaign tables with status badges, modal triggers, and skeleton fallsbacks.

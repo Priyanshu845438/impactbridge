@@ -65,3 +65,5 @@ Update this file as features ship or priorities shift.
 - ✅ Donor detail page scaffolded with mock data and tabs.
 
 - ✅ All Donations ledger scaffolded with mock data and receipt modal.
+
+- ✅ Campaign management module scaffolded with mock data, filters, and create modal placeholder.

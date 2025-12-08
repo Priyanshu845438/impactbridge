@@ -68,3 +68,7 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 
 ### Donations ledger
 - Added All Donations admin page with filters, table, pagination, and receipt modal.
+
+
+### Campaign Management
+- Added admin campaign workspace with filters, table actions, skeletons, and create modal placeholder.

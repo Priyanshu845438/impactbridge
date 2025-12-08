@@ -438,3 +438,7 @@
 ### **101. Donation History Dashboard Added**
 - Created /dashboard/admin/donations with filters, pagination, skeletons, and receipt modal.
 - Updated dashboard documentation to cover the new donations ledger.
+
+### **102. Campaign Management Module Added**
+- Created /dashboard/admin/campaigns with search, filters, pagination, skeletons, and create modal placeholder.
+- Updated dashboard docs to reflect the new campaign workspace.

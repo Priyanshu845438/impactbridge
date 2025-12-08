@@ -48,3 +48,5 @@ All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATA
 - Delivered donor profile page with summary, history, notes, and skeleton fallback.
 
 - Implemented All Donations page with filters, pagination, modal receipt, and responsive skeletons.
+
+- Built Campaign Management admin page with filters, pagination, skeleton loading, and create modal placeholder.
