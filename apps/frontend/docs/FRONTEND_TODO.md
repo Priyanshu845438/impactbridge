@@ -33,6 +33,7 @@
 - Localization/i18n ✅ Scaffolded with `next-intl`
 - Unit tests for command palette + Action Center once Jest harness is ready
 - Storybook visual regression workflow via Percy/Chromatic once system libraries installed
+- Add behavioural tests for CommandHints once Jest harness is ready (verify inactivity timer & persistence).
 
 ## Completed Milestones
 - Auth UI with responsive gradients

@@ -35,6 +35,7 @@ import { ProfileDrawer } from "@/components/dashboard/profile-drawer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { GlobalSearchSpotlight } from "@/components/overlays/global-search";
+import { CommandHints } from "@/components/ui/command-hints";
 
 interface NotificationItemProps {
   icon: React.ComponentType<{ className?: string }>;
@@ -247,6 +248,41 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
     ],
     [],
   );
+
+  const contextHint = useMemo(() => {
+    const rules: Array<{
+      match: (path: string) => boolean;
+      message: string;
+      key: string;
+    }> = [
+      {
+        match: (path) => path === "/dashboard" || path === "/dashboard/admin",
+        message: "Press ⌘K to search anything across ImpactBridge.",
+        key: "dashboard-command",
+      },
+      {
+        match: (path) => path.startsWith("/dashboard/admin/companies"),
+        message: "Tip: Filter by CSR category for quicker matches.",
+        key: "companies-filter",
+      },
+      {
+        match: (path) =>
+          path.startsWith("/dashboard/admin/ngos/") && path.endsWith("/documents"),
+        message: "Drag & drop files here to upload supporting documents faster.",
+        key: "ngo-documents-upload",
+      },
+    ];
+
+    const matched = rules.find((rule) => rule.match(pathname));
+    if (!matched) {
+      return { hint: null, routeKey: undefined };
+    }
+
+    return {
+      hint: { message: matched.message },
+      routeKey: matched.key,
+    };
+  }, [pathname]);
 
   useEffect(() => {
     if (!token || !userRole) {
@@ -636,6 +672,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
       {notificationsSheet}
       <CommandPalette open={commandOpen} onClose={() => setCommandOpen(false)} items={commandItems} />
       <GlobalSearchSpotlight open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <CommandHints hint={contextHint.hint} routeKey={contextHint.routeKey} />
     </div>
   );
 }

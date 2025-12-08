@@ -422,3 +422,8 @@
 - Integrated ⌘/Ctrl+K trigger replacing the header input, wired to the new overlay, and ensured lint/build remain clean.
 - Updated dashboard, component catalog, TODO, and progress docs to reflect the spotlight capability and testing status.
 
+## 98. [FE] Smart command hints.
+- Added `CommandHints` helper to surface contextual suggestions after inactivity with per-route dismissal stored in localStorage.
+- Wired hints into dashboard layout with targeted copy for admin home, company list, and NGO documents, ensuring mobile-friendly positioning.
+- Updated docs (dashboard overview, component catalog, TODO, progress report) and revalidated lint for touched files.
+

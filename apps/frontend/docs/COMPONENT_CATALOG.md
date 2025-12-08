@@ -31,6 +31,11 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - Props: `items: { label: string; href?: string }[]`, optional `className`.
 - Handles truncation for long labels, highlights current page, supports keyboard focus and dark mode.
 
+### `CommandHints`
+- Path: `components/ui/command-hints.tsx`
+- Props: `{ hint?: { message: string }; routeKey?: string; delay?: number }`
+- Shows subtle, timed hints after inactivity with per-route dismissal persisted in `localStorage`.
+
 ## UI Primitives (shadcn wrappers)
 - Buttons, Inputs, Cards, Selects, Tabs, Drawer, Skeletons.
 - Storybook stories cover Button and Input in light/dark modes.
