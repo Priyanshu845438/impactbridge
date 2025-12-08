@@ -42,3 +42,5 @@ All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATA
 - Added reusable breadcrumb component and surfaced navigation paths on key admin views.
 
 - Smart command hints now surface contextual tips after inactivity with per-route dismissal.
+
+- Added Donor Management admin module with filters, responsive table, skeletons, and pagination.

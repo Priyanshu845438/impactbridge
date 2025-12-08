@@ -182,6 +182,13 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
         group: "Workspace",
       },
       ...enhanced,
+      {
+        label: "Donor management",
+        href: "/dashboard/admin/donors",
+        roles: [userRole],
+        icon: Users,
+        group: "Registry",
+      },
     ];
   }, [userRole]);
 

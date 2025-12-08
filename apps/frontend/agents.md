@@ -427,3 +427,6 @@
 - Wired hints into dashboard layout with targeted copy for admin home, company list, and NGO documents, ensuring mobile-friendly positioning.
 - Updated docs (dashboard overview, component catalog, TODO, progress report) and revalidated lint for touched files.
 
+### **99. Donor Management UI Added**
+- Created /dashboard/admin/donors with filters, table, skeletons, and pagination.
+- Wired navigation entry and documented changes across dashboard guides.

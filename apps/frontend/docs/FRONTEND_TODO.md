@@ -59,3 +59,5 @@ Update this file as features ship or priorities shift.
 
 ## Recently Completed
 - Global search spotlight with mock fuzzy results
+
+- ✅ Donor management module UI scaffolded with filters and pagination.

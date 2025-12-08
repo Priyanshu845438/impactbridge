@@ -57,3 +57,7 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 - Admin dashboard onboarding tour cleaned up (JSX fixed, hooks memoised).
 
 - Added global search spotlight (⌘K / Ctrl+K) for cross-entity discovery with fuzzy matching.
+
+
+### Donor Management
+- Added admin donors module with filters, table view, pagination, and skeletons.

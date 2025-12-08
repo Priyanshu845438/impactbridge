@@ -70,3 +70,7 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### GlobalSearchSpotlight
 - Full-screen spotlight search overlay supporting keyboard navigation, fuzzy matching, and recents.
+
+
+### Donor management table
+- Reuses SectionHeader, filters, table, and skeleton components for donor listings.
