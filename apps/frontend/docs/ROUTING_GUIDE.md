@@ -16,6 +16,7 @@
 - `/dashboard/admin`
 - `/dashboard/admin/modules/ngos` + nested tabs for approvals, profiles (UI-only)
 - `/dashboard/admin/modules/programmes`
+- `/dashboard/admin/reports` (top-level analytics view)
 - `/dashboard/admin/modules/reports`
 - `/dashboard/admin/modules/settings`
 - `/dashboard/notifications`
