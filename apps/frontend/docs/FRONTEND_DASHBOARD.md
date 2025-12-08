@@ -72,3 +72,7 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 
 ### Campaign Management
 - Added admin campaign workspace with filters, table actions, skeletons, and create modal placeholder.
+
+
+### Campaign detail view
+- Added full campaign overview page with summary cards, tabs, settings UI, and modal actions.

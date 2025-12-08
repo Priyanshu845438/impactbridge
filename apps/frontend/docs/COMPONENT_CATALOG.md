@@ -85,3 +85,7 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### Campaign management table
 - Mirrors donor/campaign tables with status badges, modal triggers, and skeleton fallsbacks.
+
+
+### Campaign detail components
+- Summary cards, donations table, media placeholders, and settings controls tailored for campaign workflows.
