@@ -189,6 +189,13 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
         icon: Users,
         group: "Registry",
       },
+      {
+        label: "Donation history",
+        href: "/dashboard/admin/donations",
+        roles: [userRole],
+        icon: HandCoins,
+        group: "Registry",
+      },
     ];
   }, [userRole]);
 

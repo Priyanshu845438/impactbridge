@@ -44,3 +44,7 @@ All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATA
 - Smart command hints now surface contextual tips after inactivity with per-route dismissal.
 
 - Added Donor Management admin module with filters, responsive table, skeletons, and pagination.
+
+- Delivered donor profile page with summary, history, notes, and skeleton fallback.
+
+- Implemented All Donations page with filters, pagination, modal receipt, and responsive skeletons.

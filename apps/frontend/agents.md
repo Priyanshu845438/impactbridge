@@ -430,3 +430,11 @@
 ### **99. Donor Management UI Added**
 - Created /dashboard/admin/donors with filters, table, skeletons, and pagination.
 - Wired navigation entry and documented changes across dashboard guides.
+
+### **100. Donor Detail View Created**
+- Added /dashboard/admin/donors/[id] with header, summary cards, tabs, and skeleton states.
+- Documented donor profile structure across dashboard guides.
+
+### **101. Donation History Dashboard Added**
+- Created /dashboard/admin/donations with filters, pagination, skeletons, and receipt modal.
+- Updated dashboard documentation to cover the new donations ledger.

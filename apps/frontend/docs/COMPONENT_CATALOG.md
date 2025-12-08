@@ -74,3 +74,10 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### Donor management table
 - Reuses SectionHeader, filters, table, and skeleton components for donor listings.
+
+
+### Donor Detail Components
+- Reused summary cards, tab panels, and tables for donor profiles with skeleton states.
+
+### Donation history table
+- Uses shared filters, table, modal, and skeleton components for platform-wide donation tracking.

@@ -61,3 +61,7 @@ Update this file as features ship or priorities shift.
 - Global search spotlight with mock fuzzy results
 
 - ✅ Donor management module UI scaffolded with filters and pagination.
+
+- ✅ Donor detail page scaffolded with mock data and tabs.
+
+- ✅ All Donations ledger scaffolded with mock data and receipt modal.

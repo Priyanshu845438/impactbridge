@@ -61,3 +61,10 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 
 ### Donor Management
 - Added admin donors module with filters, table view, pagination, and skeletons.
+
+
+### Donor detail profile
+- Added donor profile view with summary cards, tabs, and mock donation history.
+
+### Donations ledger
+- Added All Donations admin page with filters, table, pagination, and receipt modal.
