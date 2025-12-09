@@ -77,3 +77,5 @@ Update this file as features ship or priorities shift.
 - ✅ Audit logs module scaffolded with filters, drawer, and skeleton states.
 
 - ✅ System settings UI scaffolded with general, security, notifications, branding, and save workflow.
+- ✅ NGO dashboard refreshed with stat cards, charts, quick actions, and skeleton/empty states ready for real data.
+- ✅ NGO dashboard refreshed with stat cards, charts, quick actions, and skeleton/empty states ready for real data.

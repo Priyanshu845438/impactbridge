@@ -60,7 +60,8 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 
 
 ## Other Role Pages
-- NGO, Company, Donor dashboards updated with final copy and minimal hero cards. Ready to host future dynamic content (campaigns, budgets, donations).
+- **NGO dashboard (`/dashboard/ngo`)** now delivers a warm, campaign-first experience with welcome hero, KPI stat cards, donation trend + supporter-mix charts, quick actions, and skeleton/empty states for loading resilience.
+- Company and Donor dashboards retain concise hero cards and will inherit similar enhancements as backend data matures.
 
 ## Storybook Coverage & Percy Snapshots
 - Isolated stories currently exist for Button, Input, QuickActionCard (light/dark, default/hover/disabled states).

@@ -462,3 +462,7 @@
 ### **107. System Settings UI Added**
 - Added /dashboard/admin/settings with segmented cards for General, Security, Notifications, and Branding, plus mock save toast and skeleton loading state.
 - Introduced a reusable Switch control, updated sidebar navigation, and refreshed routing + dashboard documentation.
+
+### **108. NGO Dashboard Experience Refined**
+- Rebuilt /dashboard/ngo with a friendly hero, KPI stat tiles, donation trend & supporter mix charts, and NGO-focused quick actions.
+- Added skeleton loaders and reusable empty state helper, updated documentation suite, and verified lint/build remain clean.

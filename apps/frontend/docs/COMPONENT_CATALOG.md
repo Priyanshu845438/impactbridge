@@ -107,3 +107,9 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - Route: `/dashboard/admin/settings`.
 - Combines SectionHeader, Card, Select, custom Switch, summary sidebar, and toast-driven Save action.
 - Includes skeleton loader and upload placeholders for branding assets.
+
+### NGO dashboard widgets
+- Route: `/dashboard/ngo`.
+- Warm gradient hero with `SectionHeader`, `Skeleton`, and CTA buttons.
+- `StatCard` helper for four KPI tiles, LineChart + PieChart for donation insights, and QuickActionCard grid for NGO-specific shortcuts.
+- Includes empty state helper to handle upcoming data wiring.
