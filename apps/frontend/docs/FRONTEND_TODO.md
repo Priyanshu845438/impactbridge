@@ -1,6 +1,10 @@
 # Frontend TODO & Roadmap
 
 ## High Priority
+
+- [ ] Wire NGO finance overview page (`/dashboard/ngo/finance`) to backend once finance APIs are ready.
+  - Replace mock transaction data with real GraphQL/REST payloads.
+  - Swap faux bar/pie chart datasets with API-driven metrics and ensure loading states cover partial fetches.
 - Implement real auth wiring once backend endpoints confirmed
 - Add middleware-based route guard for `/dashboard/*`
 - Connect dashboard stats/activity widgets to backend APIs via React Query
@@ -15,6 +19,7 @@
 - Wire NGO team workspace (`/dashboard/ngo/team`) to user management APIs, include invite/edit flows + permission toggles with tests.
 
 ## Medium Priority
+
 - Build dynamic tables for admin programmes / reports modules (NGO management + document review views already scaffolded)
 - Stand up company management module with table, filters, modal, and pagination mirroring NGO workspace. ✅ Implemented (`/dashboard/admin/companies`).
 - Deliver company profile view with CSR snapshot, partner listing, and timeline. ✅ Implemented (`/dashboard/admin/company/[companyId]`).
@@ -31,6 +36,7 @@
 - Ensure keyboard activation works on interactive rows/cards (admin NGO rows already updated)
 
 ## Low Priority / Nice to Have
+
 - Dark mode toggle using shadcn theme utilities ✅ Implemented
 - Animation polish using Framer Motion (e.g., card entry)
 - Localization/i18n ✅ Scaffolded with `next-intl`
@@ -39,6 +45,7 @@
 - Add behavioural tests for CommandHints once Jest harness is ready (verify inactivity timer & persistence).
 
 ## Completed Milestones
+
 - Auth UI with responsive gradients
 - Role-aware dashboard layout + quick cards
 - Admin module placeholders and collapsible navigation
@@ -58,9 +65,11 @@
 - Percy CLI added with Storybook command; first run blocked by missing Chromium libraries and config warning
 
 Update this file as features ship or priorities shift.
+
 - [x] Add shared breadcrumb UI and wire across detail views (company, NGO documents, programmes).
 
 ## Recently Completed
+
 - Global search spotlight with mock fuzzy results
 
 - ✅ Donor management module UI scaffolded with filters and pagination.
@@ -85,4 +94,3 @@ Update this file as features ship or priorities shift.
 - ✅ NGO campaign detail view scaffolded with status header, KPIs, donations table, media placeholder, and settings tab.
 - ✅ NGO document center scaffolded with checklist, upload area, notes sidebar, skeletons, and status badges.
 - ✅ NGO donations overview built with filters, KPI cards, responsive table, and placeholder states.
-

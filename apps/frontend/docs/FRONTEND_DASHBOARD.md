@@ -1,9 +1,11 @@
 # ImpactBridge Dashboard Overview
 
 ## Purpose
+
 The admin/NGO/company/donor workspaces provide a central home for compliance tasks, campaign oversight, and engagement metrics. The current implementation is a polished skeleton ready to be wired into backend APIs while already conveying the brand look & feel.
 
 ## Shared Layout (`app/dashboard/layout.tsx`)
+
 - **Auth guard**: consumes `useAuth()` and redirects to `/login` if token missing.
 - **Sidebar**: 260px fixed panel on desktop with nav items derived from `lib/nav-menu.ts`; filters links per user role, supports collapsible admin modules, and is fully scrollable. Menu groups follow a professional sequence for quicker discovery. Links prefetch routes and trigger a fade animation on navigation.
 - **Header**: sticky top bar with brand mark, centered spotlight trigger that opens the full-screen global search (⌘/Ctrl + K) covering users/NGOs/companies/programmes/documents, notification bell (badge + desktop popover + mobile sheet), command palette quick actions, theme toggle (light/dark/system), locale switcher in profile drawer, and profile quick-actions.
@@ -15,6 +17,7 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - **Mobile**: hamburger toggles drawer sidebar; notifications open via sheet; Action Center collapses by default.
 
 ## Admin Dashboard (`app/dashboard/admin/page.tsx`)
+
 - Session-scoped welcome toast via `sessionStorage` guard.
 - 650 ms skeleton delay masking initial data load (swap with real async when APIs arrive).
 - Analytics hero row: composed `OverviewChart` (bar + line), KPI stat cards with `MicroBar` sparklines, impact trend chart component, and the new Storybook stories cover these card/button primitives for reference.
@@ -26,40 +29,50 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 ## Admin Modules (`app/dashboard/admin/modules/*`)
 
 ### NGO workspace
+
 - Search, multi-filter controls, sorting, pagination, and responsive layouts for both table and card views.
 - Detail drawer with overview/documents/activity tabs, collaboration sidebar, due-diligence timeline, and access control modal hooks.
 - Command palette shortcuts and action toasts help reviewers move faster.
 
 ### NGO document review (`app/dashboard/admin/ngos/[id]/documents`)
+
 - Split document preview with status workflow, comment stream, tags, activity log, and access modal.
 - Drag-and-drop hint surfaced via smart command hints; breadcrumb clarifies navigation depth.
 
 ### Company workspace (`app/dashboard/admin/companies`)
+
 - Filterable company roster, modal stub for onboarding, and profile pages with CSR contribution snapshot, linked NGOs, and breadcrumbs.
 
 ### Company programme detail (`app/dashboard/admin/company/[companyId]/programmes/[programmeId]`)
+
 - Summary cards, milestones tab with list/timeline toggle, assign NGO workflow (optimistic + offline aware), documents/comments tabs, progress insights, and Action Center sidebar.
 
 ### Donor management (`/dashboard/admin/donors`)
+
 - Admin list with search, filters (status/location), pagination, skeleton loaders, and responsive mobile cards.
 
 ### Donor profile (`/dashboard/admin/donors/[id]`)
+
 - Header with status badge, contribution summary cards, tabs for profile info, donation history, and relationship notes with draft-saving affordances.
 
 ### Donations ledger (`/dashboard/admin/donations`)
+
 - Platform-wide donation tracker with search, multi-filters (status/mode/donor/NGO/company), pagination, skeleton state, and receipt modal placeholder.
 
 ### Campaign management (`/dashboard/admin/campaigns`)
+
 - Campaign roster mirroring donor/NGO list UX with quick filters, search, pagination, skeleton rows, and create-campaign modal stub.
 
 ### Campaign detail (`/dashboard/admin/campaigns/[id]`)
+
 - Header actions (pause/close/duplicate), summary cards, overview/donations/media/settings tabs, attachments placeholder, and confirmation modals.
 
 ### Offline-aware UX
+
 - Global offline detector surfaces warnings, disables risky actions with tooltips, queues mutations, and replays them on reconnect.
 
-
 ## Other Role Pages
+
 - **NGO dashboard (`/dashboard/ngo`)** now delivers a warm, campaign-first experience with welcome hero, KPI stat cards, donation trend + supporter-mix charts, quick actions, and skeleton/empty states for loading resilience.
 - **My Campaigns (`/dashboard/ngo/campaigns`)** lets NGOs manage only the campaigns they created with search, quick filters, responsive table/list, skeleton loaders, empty state, and pagination.
 - **Campaign Detail (`/dashboard/ngo/campaigns/[id]`)** gives NGOs a dedicated management view with status-aware header controls, KPI tiles, tabbed overview/donations/media/settings panels, breadcrumb, and skeleton fallbacks.
@@ -67,14 +80,17 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Company and Donor dashboards retain concise hero cards and will inherit similar enhancements as backend data matures.
 
 ## Storybook Coverage & Percy Snapshots
+
 - Isolated stories currently exist for Button, Input, QuickActionCard (light/dark, default/hover/disabled states).
 - `npm run snapshot:ui` kicks off Percy visual tests once Storybook is running; expect errors until system libraries for headless Chromium are installed.
 
 ## Accessibility & Usability
+
 - Emerald focus rings across interactive elements, labelled icons, keyboard activation on table rows/cards, ARIA-live announcements for filter results.
 - Command palette and modals trap focus; body scroll locked when overlays open.
 
 ## Known Gaps / Next Steps
+
 - Tests for command palette and Action Center require Jest harness (mocking Auth + Next router/notFound and handling ESM modules). This remains on the High Priority TODO list.
 - Install system packages (`libgtk-3-0`, `libgdk-pixbuf2.0-0`, `libgobject-2.0-0`, etc.) so Percy snapshots can run; track via TODO.
 - Expand Storybook coverage to NGO tables, timeline widgets, and Action Center once harness ready.
@@ -88,39 +104,51 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 
 - Added global search spotlight (⌘K / Ctrl+K) for cross-entity discovery with fuzzy matching.
 
-
 ### Donor Management
+
 - Added admin donors module with filters, table view, pagination, and skeletons.
 
-
 ### Donor detail profile
+
 - Added donor profile view with summary cards, tabs, and mock donation history.
 
 ### Donations ledger
+
 - Added All Donations admin page with filters, table, pagination, and receipt modal.
 
-
 ### Campaign Management
+
 - Added admin campaign workspace with filters, table actions, skeletons, and create modal placeholder.
 
-
 ### Campaign detail view
+
 - Added full campaign overview page with summary cards, tabs, settings UI, and modal actions.
 
-
 ### Reports dashboard
+
 - New /dashboard/admin/reports screen with filters, summary tiles, charts placeholders, and export actions.
 
 ### Donation receipt view
+
 - Added /dashboard/admin/donations/[id] UI with detailed metadata and receipt preview.
 
 ### Audit logs module
+
 - Introduced /dashboard/admin/audit-logs page capturing cross-platform activity with filters, CSV export stub, drawer details, and skeleton loaders.
 
 ### System settings
+
 - Added /dashboard/admin/settings screen covering general info, security toggles, notification preferences, and branding placeholders with summary sidebar.
 
+### NGO finance overview
+
+- Route: `/dashboard/ngo/finance`.
+- Provides KPI cards for donations, utilisation, balance, and upcoming allocations with tone-mapped icons.
+- Includes Recharts bar + pie visuals for donation trends and fund allocation, filter toolbar, and responsive transactions table with mobile cards.
+- Detail modal surfaces transaction metadata; skeleton and empty placeholders keep UX steady before data loads.
+
 ### NGO donations overview
+
 - Route: `/dashboard/ngo/donations`.
 - Includes breadcrumb, KPI cards for total/verified/pending/average donation metrics, and export CTA.
 - Top filter bar provides campaign select, status filter, free-text search, and mock date-range controls.
@@ -128,12 +156,14 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 - Supports skeleton loading, empty state messaging, and error placeholder with retry action.
 
 ### NGO donor profiles
+
 - Route: `/dashboard/ngo/donors`.
 - Grid-based donor explorer with search, frequency/status filters, preset amount ranges, and CSV export stub.
 - Cards surface avatar initials, totals, donation counts, top campaign, and status badge with modal for detailed timeline + notes.
 - Includes skeleton loaders, empty messaging, and responsive layout (1–3 columns).
 
 ### NGO team members
+
 - Route: `/dashboard/ngo/team`.
 - Manage staff with invite modal, table + mobile cards, role/status badges, edit modal with role toggle placeholder, and sonner toasts.
 - Skeleton rows and empty state cover loading/new NGOs; responsive layout shifts between grid/table.

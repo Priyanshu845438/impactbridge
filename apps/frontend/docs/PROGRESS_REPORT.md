@@ -3,11 +3,14 @@
 _Last updated: 2025-12-05 08:02 UTC_
 
 ## Overview
+
 The ImpactBridge frontend remains a polished Next.js 14 App Router experience with role-aware dashboards, rich documentation, and production-ready styling. The latest milestone extends the tooling stack with Storybook + Percy snapshot scaffolding to guard against UI regressions.
 
 ---
 
 ## Completed Work (new)
+
+- Added NGO finance overview page with KPI tiles, donation trend bar chart, allocation pie chart, filter toolbar, responsive transactions table, and detail modal (route: `/dashboard/ngo/finance`).
 - Launched NGO team management UI with invite/edit modals, responsive listing, and sonner toasts (route: `/dashboard/ngo/team`).
 - Added NGO donor profiles grid with filters, modal timeline, and responsive cards to surface supporter insights (route: `/dashboard/ngo/donors`).
 - Built NGO donations overview page with KPI metrics, filters, responsive table-to-card layout, and mock error/empty states to prep for API wiring.
@@ -23,12 +26,14 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Delivered global search spotlight modal with categories, keyboard shortcuts, and recent history.
 
 ## Current Status / Issues
+
 - Storybook snapshots (`npm run snapshot:ui`) currently fail because the container lacks headless Chromium system libraries (`libgobject-2.0.so.0`, etc.). Percy also flags the spec-mandated `include` property as unknown; kept intact per instructions.
 - Storybook dev server warns about `actions.argTypesRegex` when used with Percy; leaving as-is since stories rely on default actions and no breakage observed.
 - Once system libraries are installed, Percy snapshots should run end-to-end.
 - NGO document center currently uses mock data and faked progress; real storage + preview APIs still need wiring.
 
 ## Pending / Upcoming Work
+
 - Install required OS packages for Chromium to unblock Percy snapshots.
 - Build Jest/RTL harness for App Router components (command palette, Action Center) and reintroduce unit tests.
 - Expand Storybook coverage to additional components (NGO tables, timeline widgets, Action Center).
@@ -38,6 +43,7 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Introduce automated E2E and visual regression runs post-harness.
 
 ## Next Steps
+
 1. Coordinate with ops to install necessary Chromium libs in the CI/container environment, then rerun `npm run snapshot:ui`.
 2. Finalise Jest harness mocks and re-add component tests.
 3. Add more Storybook stories + Percy coverage as modules mature.
@@ -48,6 +54,7 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATALOG.md`, `FRONTEND_TODO.md`) have been updated accordingly.
 
 ### Breadcrumb Integration
+
 - Added reusable breadcrumb component and surfaced navigation paths on key admin views.
 
 - Smart command hints now surface contextual tips after inactivity with per-route dismissal.
