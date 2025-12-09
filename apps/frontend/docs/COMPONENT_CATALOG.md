@@ -128,3 +128,10 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - Route: `/dashboard/ngo/documents`.
 - Checklist card summarises required uploads with status badges, upload/replace/preview actions, and mock progress indicator.
 - Drag-and-drop upload surface and compliance notes sidebar help NGOs stay audit-ready; skeleton and empty/success states included.
+
+### NGO donations workspace
+- Route: `/dashboard/ngo/donations`.
+- KPI cards surface total/verified/pending donation metrics using reusable Card helpers.
+- Filters include campaign select, status select, full-text search, and mock date range actions.
+- Responsive table collapses to stacked cards on mobile with status badges and receipt CTA.
+- Includes loading skeleton, empty state CTA, and simulated error state for offline/sync scenarios.

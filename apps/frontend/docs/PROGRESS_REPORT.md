@@ -8,6 +8,7 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 ---
 
 ## Completed Work (new)
+- Built NGO donations overview page with KPI metrics, filters, responsive table-to-card layout, and mock error/empty states to prep for API wiring.
 - Built NGO document center with status checklist, drag-&-drop upload surface, mock progress indicator, and compliance notes sidebar.
 - Built NGO campaign detail view with breadcrumb navigation, status-aware header actions, KPI tiles, tabbed overview/donations/media/settings, and skeleton placeholders.
 - Delivered NGO My Campaigns workspace with filters, responsive table/list, status badges, skeletal loading, empty state, and pagination.
@@ -68,3 +69,5 @@ All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATA
 - Introduced Audit Logs admin page with filters, export stub, drawer details, and skeleton states.
 
 - Added System Settings UI with general/security/notifications/branding sections, summary sidebar, and toast-based save confirmation.
+
+- Route reference: /dashboard/ngo/donations now live.

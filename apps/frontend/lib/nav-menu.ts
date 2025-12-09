@@ -180,6 +180,11 @@ export const navMenu: NavItem[] = [
         roles: ["NGO"],
       },
       {
+        label: "Donations",
+        href: "/dashboard/ngo/donations",
+        roles: ["NGO"],
+      },
+      {
         label: "Compliance",
         href: "/dashboard/ngo/compliance",
         roles: ["NGO"],

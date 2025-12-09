@@ -478,3 +478,8 @@
 ### **111. NGO Document Center Created**
 - Delivered /dashboard/ngo/documents with compliance checklist, drag-and-drop upload surface, mock progress indicator, and notes sidebar.
 - Added skeleton/empty/success states, refreshed documentation (dashboard, component catalog, TODO, progress, routing), and validated lint/build.
+
+### **112. NGO Donations Overview Added**
+- Created /dashboard/ngo/donations with breadcrumb, KPI metrics, filter toolbar, responsive table/cards, and mock states.
+- Updated navigation, documentation suite, and verified lint/build for the new NGO donations view.
+

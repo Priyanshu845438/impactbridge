@@ -25,6 +25,7 @@
 - `/dashboard/ngo/campaigns`
 - `/dashboard/ngo/campaigns/[id]`
 - `/dashboard/ngo/documents`
+- `/dashboard/ngo/donations`
 - `/dashboard/company`
 - `/dashboard/donor`
 

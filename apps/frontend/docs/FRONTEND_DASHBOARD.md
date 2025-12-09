@@ -119,3 +119,10 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 
 ### System settings
 - Added /dashboard/admin/settings screen covering general info, security toggles, notification preferences, and branding placeholders with summary sidebar.
+
+### NGO donations overview
+- Route: `/dashboard/ngo/donations`.
+- Includes breadcrumb, KPI cards for total/verified/pending/average donation metrics, and export CTA.
+- Top filter bar provides campaign select, status filter, free-text search, and mock date-range controls.
+- Responsive donation table with status badges, receipt CTA, and mobile-friendly stacking.
+- Supports skeleton loading, empty state messaging, and error placeholder with retry action.
