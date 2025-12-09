@@ -1,6 +1,6 @@
 # ImpactBridge Frontend Progress Report
 
-_Last updated: 2025-12-05 07:48 UTC_
+_Last updated: 2025-12-05 08:02 UTC_
 
 ## Overview
 The ImpactBridge frontend remains a polished Next.js 14 App Router experience with role-aware dashboards, rich documentation, and production-ready styling. The latest milestone extends the tooling stack with Storybook + Percy snapshot scaffolding to guard against UI regressions.
@@ -8,6 +8,7 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 ---
 
 ## Completed Work (new)
+- Built NGO document center with status checklist, drag-&-drop upload surface, mock progress indicator, and compliance notes sidebar.
 - Built NGO campaign detail view with breadcrumb navigation, status-aware header actions, KPI tiles, tabbed overview/donations/media/settings, and skeleton placeholders.
 - Delivered NGO My Campaigns workspace with filters, responsive table/list, status badges, skeletal loading, empty state, and pagination.
 - Delivered NGO user dashboard experience with warm hero, stat cards, donation trend + supporter mix charts, NGO-focused quick actions, and robust skeleton/empty states.
@@ -22,12 +23,14 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Storybook snapshots (`npm run snapshot:ui`) currently fail because the container lacks headless Chromium system libraries (`libgobject-2.0.so.0`, etc.). Percy also flags the spec-mandated `include` property as unknown; kept intact per instructions.
 - Storybook dev server warns about `actions.argTypesRegex` when used with Percy; leaving as-is since stories rely on default actions and no breakage observed.
 - Once system libraries are installed, Percy snapshots should run end-to-end.
+- NGO document center currently uses mock data and faked progress; real storage + preview APIs still need wiring.
 
 ## Pending / Upcoming Work
 - Install required OS packages for Chromium to unblock Percy snapshots.
 - Build Jest/RTL harness for App Router components (command palette, Action Center) and reintroduce unit tests.
 - Expand Storybook coverage to additional components (NGO tables, timeline widgets, Action Center).
 - Connect dashboard widgets to live backend data via React Query.
+- Wire NGO document center uploads to backend services (real storage, signed URLs, preview modal).
 - Implement middleware-based route protection.
 - Introduce automated E2E and visual regression runs post-harness.
 

@@ -474,3 +474,7 @@
 ### **110. NGO Campaign Detail View Added**
 - Added /dashboard/ngo/campaigns/[id] with breadcrumb, status-aware header actions, KPI tiles, tabbed overview/donations/media/settings content, and skeleton placeholders.
 - Updated documentation suite (dashboard, component catalog, TODO, progress, routing) and confirmed lint/build remain clean.
+
+### **111. NGO Document Center Created**
+- Delivered /dashboard/ngo/documents with compliance checklist, drag-and-drop upload surface, mock progress indicator, and notes sidebar.
+- Added skeleton/empty/success states, refreshed documentation (dashboard, component catalog, TODO, progress, routing), and validated lint/build.

@@ -80,3 +80,4 @@ Update this file as features ship or priorities shift.
 - ✅ NGO dashboard refreshed with stat cards, charts, quick actions, and skeleton/empty states ready for real data.
 - ✅ NGO My Campaigns workspace built with filters, responsive list/table, skeleton loaders, and empty state messaging.
 - ✅ NGO campaign detail view scaffolded with status header, KPIs, donations table, media placeholder, and settings tab.
+- ✅ NGO document center scaffolded with checklist, upload area, notes sidebar, skeletons, and status badges.

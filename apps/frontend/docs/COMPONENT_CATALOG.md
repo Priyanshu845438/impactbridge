@@ -123,3 +123,8 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - Route: `/dashboard/ngo/campaigns/[id]`.
 - Breadcrumb-led layout with action buttons (edit/pause/close/share), stat tiles, and tabs for overview, donations table, media placeholder, and settings form (UI only).
 - Skeleton placeholders cover header, KPIs, and tab content while fetching real data.
+
+### NGO document center
+- Route: `/dashboard/ngo/documents`.
+- Checklist card summarises required uploads with status badges, upload/replace/preview actions, and mock progress indicator.
+- Drag-and-drop upload surface and compliance notes sidebar help NGOs stay audit-ready; skeleton and empty/success states included.
