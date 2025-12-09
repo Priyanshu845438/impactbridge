@@ -62,6 +62,7 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 ## Other Role Pages
 - **NGO dashboard (`/dashboard/ngo`)** now delivers a warm, campaign-first experience with welcome hero, KPI stat cards, donation trend + supporter-mix charts, quick actions, and skeleton/empty states for loading resilience.
 - **My Campaigns (`/dashboard/ngo/campaigns`)** lets NGOs manage only the campaigns they created with search, quick filters, responsive table/list, skeleton loaders, empty state, and pagination.
+- **Campaign Detail (`/dashboard/ngo/campaigns/[id]`)** gives NGOs a dedicated management view with status-aware header controls, KPI tiles, tabbed overview/donations/media/settings panels, breadcrumb, and skeleton fallbacks.
 - Company and Donor dashboards retain concise hero cards and will inherit similar enhancements as backend data matures.
 
 ## Storybook Coverage & Percy Snapshots

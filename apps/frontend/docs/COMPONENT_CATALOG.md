@@ -118,3 +118,8 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - Route: `/dashboard/ngo/campaigns`.
 - Reuses SectionHeader CTA, filter toolbar with search + selects, responsive list/table hybrid, status badges, and pagination controls.
 - Skeleton loaders and empty state helper maintain a friendly experience while data loads or when no campaigns exist.
+
+### NGO campaign detail surface
+- Route: `/dashboard/ngo/campaigns/[id]`.
+- Breadcrumb-led layout with action buttons (edit/pause/close/share), stat tiles, and tabs for overview, donations table, media placeholder, and settings form (UI only).
+- Skeleton placeholders cover header, KPIs, and tab content while fetching real data.

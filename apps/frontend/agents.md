@@ -470,3 +470,7 @@
 ### **109. NGO My Campaigns Workspace Added**
 - Implemented /dashboard/ngo/campaigns with search, status/category filters, responsive list/table, skeleton loaders, empty state, and pagination.
 - CTA to create new campaigns, action buttons, and updated dashboard/component/TODO/progress docs to reflect the NGO-focused management view.
+
+### **110. NGO Campaign Detail View Added**
+- Added /dashboard/ngo/campaigns/[id] with breadcrumb, status-aware header actions, KPI tiles, tabbed overview/donations/media/settings content, and skeleton placeholders.
+- Updated documentation suite (dashboard, component catalog, TODO, progress, routing) and confirmed lint/build remain clean.

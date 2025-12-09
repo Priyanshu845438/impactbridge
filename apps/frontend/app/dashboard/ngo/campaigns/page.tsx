@@ -302,7 +302,7 @@ function CampaignList({ campaigns, total, isLoading }: CampaignListProps) {
           >
             <div className="space-y-2">
               <Link
-                href={`/dashboard/admin/campaigns/${campaign.id}`}
+                href={`/dashboard/ngo/campaigns/${campaign.id}`}
                 className="text-base font-semibold text-slate-800 transition hover:text-emerald-600 dark:text-slate-100"
               >
                 {campaign.name}
@@ -338,7 +338,7 @@ function CampaignList({ campaigns, total, isLoading }: CampaignListProps) {
 
             <div className="flex items-center justify-end gap-2 md:flex-col md:items-end md:gap-1">
               <Button asChild variant="ghost" size="sm" className="gap-1">
-                <Link href={`/dashboard/admin/campaigns/${campaign.id}`}>
+                <Link href={`/dashboard/ngo/campaigns/${campaign.id}`}>
                   <BadgeCheck className="h-4 w-4" />
                   View
                 </Link>
