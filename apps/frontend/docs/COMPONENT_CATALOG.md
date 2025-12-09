@@ -113,3 +113,8 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - Warm gradient hero with `SectionHeader`, `Skeleton`, and CTA buttons.
 - `StatCard` helper for four KPI tiles, LineChart + PieChart for donation insights, and QuickActionCard grid for NGO-specific shortcuts.
 - Includes empty state helper to handle upcoming data wiring.
+
+### NGO campaigns workspace
+- Route: `/dashboard/ngo/campaigns`.
+- Reuses SectionHeader CTA, filter toolbar with search + selects, responsive list/table hybrid, status badges, and pagination controls.
+- Skeleton loaders and empty state helper maintain a friendly experience while data loads or when no campaigns exist.

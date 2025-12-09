@@ -22,6 +22,7 @@
 - `/dashboard/admin/settings`
 - `/dashboard/notifications`
 - `/dashboard/ngo`
+- `/dashboard/ngo/campaigns`
 - `/dashboard/company`
 - `/dashboard/donor`
 
