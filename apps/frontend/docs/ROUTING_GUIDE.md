@@ -18,6 +18,7 @@
 - `/dashboard/admin/modules/programmes`
 - `/dashboard/admin/reports` (top-level analytics view)
 - `/dashboard/admin/modules/reports`
+- `/dashboard/admin/audit-logs`
 - `/dashboard/admin/modules/settings`
 - `/dashboard/notifications`
 - `/dashboard/ngo`
@@ -45,4 +46,4 @@ Protection is enforced client-side in `app/dashboard/layout.tsx` via `useAuth()`
 - Introduce dynamic routes for entities (e.g., `/dashboard/admin/ngos/[id]`)
 - Use parallel routes for modals if needed (e.g., editing tasks)
 
-- Dashboard shell prefetches `/dashboard/admin`, `/dashboard/users`, and `/dashboard/admin/modules/reports`; keep the list updated when adding new high-traffic sections.
+- Dashboard shell prefetches `/dashboard/admin`, `/dashboard/users`, `/dashboard/admin/modules/reports`, and `/dashboard/admin/audit-logs`; keep the list updated when adding new high-traffic sections.

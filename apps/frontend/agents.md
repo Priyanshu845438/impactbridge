@@ -454,3 +454,7 @@
 ### **105. Donation Receipt Viewer Added**
 - Created /dashboard/admin/donations/[id] with header actions, detailed metadata, and receipt preview card.
 - Updated dashboard docs, component catalog, and progress log for the new viewer.
+
+### **106. Audit Logs UI Scaffolded**
+- Implemented /dashboard/admin/audit-logs with role/action filters, search, pagination, skeletons, and detail drawer.
+- Ran `npm run lint` to confirm stability and refreshed dashboard, routing, component, TODO, and progress docs.

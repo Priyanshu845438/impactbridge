@@ -73,3 +73,5 @@ Update this file as features ship or priorities shift.
 - ✅ Reports dashboard scaffolded with summary tiles and chart placeholders.
 
 - ✅ Donation receipt view scaffolded with mock metadata and preview.
+
+- ✅ Audit logs module scaffolded with filters, drawer, and skeleton states.

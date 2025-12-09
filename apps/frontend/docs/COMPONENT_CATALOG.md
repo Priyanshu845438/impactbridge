@@ -97,3 +97,8 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### Donation receipt components
 - Detail rows, preview card, and action controls for the donation receipt screen.
+
+### Audit log surface
+- Route: `/dashboard/admin/audit-logs`.
+- Shares SectionHeader, filters, table, skeleton, and Sheet drawer.
+- Includes contextual badges, device/IP metadata, and export CTA placeholder.

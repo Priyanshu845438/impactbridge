@@ -109,3 +109,6 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 
 ### Donation receipt view
 - Added /dashboard/admin/donations/[id] UI with detailed metadata and receipt preview.
+
+### Audit logs module
+- Introduced /dashboard/admin/audit-logs page capturing cross-platform activity with filters, CSV export stub, drawer details, and skeleton loaders.
