@@ -608,3 +608,9 @@
 - Added /dashboard/ngo/finance with KPI tiles, donation trend bar chart, allocation pie chart, transactions table + mobile cards, and detail modal.
 - Updated NGO navigation along with dashboard/component/routing/TODO/progress docs to capture the new finance workspace.
 - Prior lint/build already green; no code changes pending backend wiring.
+
+### **116. NGO Billing Workspace Added**
+
+- Built /dashboard/ngo/billing with tabbed invoices/payouts/downloadables, status/date filters, search, and Create Invoice CTA.
+- Added invoice table with skeleton/empty states plus modal preview containing metadata, line items, and PDF placeholder.
+- Updated NGO navigation, dashboard/component/routing/TODO/progress docs, ran Prettier, lint, build, and restarted dev server.

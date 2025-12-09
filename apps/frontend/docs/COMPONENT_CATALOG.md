@@ -155,6 +155,13 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### NGO finance components
 
+### NGO billing components
+
+- Route: `/dashboard/ngo/billing`.
+- Billing tabs use shadcn Tabs with glassmorphism styling shared across NGO modules.
+- `InvoiceTable` leverages Table + status pills and invokes the shared Modal for invoice preview.
+- Skeleton + Empty state helpers mirror other NGO financial surfaces for consistent UX.
+
 - Route: `/dashboard/ngo/finance` (NGO finance overview).
 - `SummaryCard` helper renders tone-based KPI tiles with Lucide icons across the finance page.
 - Finance charts reuse Recharts `BarChart` + `PieChart` with shared tooltip styling and responsive containers.

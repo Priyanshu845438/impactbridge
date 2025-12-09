@@ -142,6 +142,13 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 
 ### NGO finance overview
 
+### NGO billing workspace
+
+- Route: `/dashboard/ngo/billing`.
+- Tabs for invoices, payout requests, and downloadables keep financial records organised.
+- Invoice tab includes search, status/date filters, table with action menu, skeleton placeholder, and empty state messaging.
+- Preview modal surfaces invoice metadata, line items, and PDF placeholder while CTA buttons mirror final workflow.
+
 - Route: `/dashboard/ngo/finance`.
 - Provides KPI cards for donations, utilisation, balance, and upcoming allocations with tone-mapped icons.
 - Includes Recharts bar + pie visuals for donation trends and fund allocation, filter toolbar, and responsive transactions table with mobile cards.

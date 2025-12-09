@@ -204,6 +204,11 @@ export const navMenu: NavItem[] = [
         href: "/dashboard/ngo/finance",
         roles: ["NGO"],
       },
+      {
+        label: "Billing",
+        href: "/dashboard/ngo/billing",
+        roles: ["NGO"],
+      },
     ],
   },
   {

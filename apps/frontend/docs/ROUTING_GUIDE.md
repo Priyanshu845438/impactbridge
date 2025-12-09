@@ -31,6 +31,7 @@
 - `/dashboard/ngo/donors`
 - `/dashboard/ngo/team`
 - `/dashboard/ngo/finance`
+- `/dashboard/ngo/billing`
 - `/dashboard/ngo/donations`
 - `/dashboard/company`
 - `/dashboard/donor`

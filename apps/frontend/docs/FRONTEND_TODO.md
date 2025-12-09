@@ -2,9 +2,15 @@
 
 ## High Priority
 
-- [ ] Wire NGO finance overview page (`/dashboard/ngo/finance`) to backend once finance APIs are ready.
-  - Replace mock transaction data with real GraphQL/REST payloads.
-  - Swap faux bar/pie chart datasets with API-driven metrics and ensure loading states cover partial fetches.
+- [ ] Wire NGO finance overview page
+- [ ] Wire NGO billing workspace (`/dashboard/ngo/billing`) to invoices/payments APIs once ready.
+  - Replace mock invoice data, status filters, and preview drawer with live responses.
+  - Hook action buttons to mutation endpoints and introduce optimistic state handling.
+
+(`/dashboard/ngo/finance`) to backend once finance APIs are ready.
+
+- Replace mock transaction data with real GraphQL/REST payloads.
+- Swap faux bar/pie chart datasets with API-driven metrics and ensure loading states cover partial fetches.
 - Implement real auth wiring once backend endpoints confirmed
 - Add middleware-based route guard for `/dashboard/*`
 - Connect dashboard stats/activity widgets to backend APIs via React Query
