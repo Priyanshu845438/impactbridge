@@ -204,6 +204,13 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
         group: "Registry",
       },
       {
+        label: "Donation detail",
+        href: "/dashboard/admin/donations/cmp-101",
+        roles: [userRole],
+        icon: TicketCheck,
+        group: "Registry",
+      },
+      {
         label: "Donation history",
         href: "/dashboard/admin/donations",
         roles: [userRole],

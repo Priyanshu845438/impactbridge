@@ -56,3 +56,5 @@ All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATA
 - Campaign detail page delivered with summary cards, tabs, settings UI, and modal actions.
 
 - Reports dashboard scaffolded with mock analytics and export actions.
+
+- Donation receipt detail view implemented with mock download/resend actions.

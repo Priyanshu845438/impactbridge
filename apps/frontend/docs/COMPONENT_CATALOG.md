@@ -94,3 +94,6 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### Reports dashboard components
 - Summary tiles, chart skeleton wrapper, and analytics card helper for the reporting module.
+
+### Donation receipt components
+- Detail rows, preview card, and action controls for the donation receipt screen.

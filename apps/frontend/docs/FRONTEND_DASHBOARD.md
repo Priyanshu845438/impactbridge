@@ -106,3 +106,6 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 
 ### Reports dashboard
 - New /dashboard/admin/reports screen with filters, summary tiles, charts placeholders, and export actions.
+
+### Donation receipt view
+- Added /dashboard/admin/donations/[id] UI with detailed metadata and receipt preview.

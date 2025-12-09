@@ -450,3 +450,7 @@
 ### **104. Reports Dashboard Added**
 - Introduced /dashboard/admin/reports with time filters, summary tiles, chart placeholders, and export actions.
 - Updated dashboard docs and component catalog to reflect the analytics module.
+
+### **105. Donation Receipt Viewer Added**
+- Created /dashboard/admin/donations/[id] with header actions, detailed metadata, and receipt preview card.
+- Updated dashboard docs, component catalog, and progress log for the new viewer.

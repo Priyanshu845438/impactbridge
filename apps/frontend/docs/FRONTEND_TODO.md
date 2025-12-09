@@ -71,3 +71,5 @@ Update this file as features ship or priorities shift.
 - ✅ Campaign detail view scaffolded with mock data, tabs, and modals.
 
 - ✅ Reports dashboard scaffolded with summary tiles and chart placeholders.
+
+- ✅ Donation receipt view scaffolded with mock metadata and preview.
