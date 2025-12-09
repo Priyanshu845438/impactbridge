@@ -112,3 +112,6 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 
 ### Audit logs module
 - Introduced /dashboard/admin/audit-logs page capturing cross-platform activity with filters, CSV export stub, drawer details, and skeleton loaders.
+
+### System settings
+- Added /dashboard/admin/settings screen covering general info, security toggles, notification preferences, and branding placeholders with summary sidebar.

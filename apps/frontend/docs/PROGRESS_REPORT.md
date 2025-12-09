@@ -60,3 +60,5 @@ All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATA
 - Donation receipt detail view implemented with mock download/resend actions.
 
 - Introduced Audit Logs admin page with filters, export stub, drawer details, and skeleton states.
+
+- Added System Settings UI with general/security/notifications/branding sections, summary sidebar, and toast-based save confirmation.

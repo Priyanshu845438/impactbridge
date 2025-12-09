@@ -75,3 +75,5 @@ Update this file as features ship or priorities shift.
 - ✅ Donation receipt view scaffolded with mock metadata and preview.
 
 - ✅ Audit logs module scaffolded with filters, drawer, and skeleton states.
+
+- ✅ System settings UI scaffolded with general, security, notifications, branding, and save workflow.

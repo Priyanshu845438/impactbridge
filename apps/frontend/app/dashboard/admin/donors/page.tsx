@@ -353,63 +353,69 @@ export default function AdminDonorManagementPage() {
           </div>
 
           <div className="flex flex-col gap-4 p-4 lg:hidden">
-            {(loading ? Array.from({ length: perPage }) : paginatedDonors).map((donor, index) => (
-              <div
-                key={loading ? `mobile-loading-${index}` : donor.id}
-                className="rounded-2xl border border-slate-200 p-4 shadow-sm dark:border-slate-800"
-              >
-                {loading ? (
-                  <div className="space-y-3">
-                    <Skeleton className="h-5 w-32 rounded-full" />
-                    <Skeleton className="h-3 w-48 rounded-full" />
-                    <Skeleton className="h-3 w-32 rounded-full" />
-                    <div className="flex items-center gap-3">
-                      <Skeleton className="h-8 w-20 rounded-full" />
-                      <Skeleton className="h-8 w-20 rounded-full" />
+            {loading
+              ? Array.from({ length: perPage }).map((_, index) => (
+                  <div
+                    key={`mobile-loading-${index}`}
+                    className="rounded-2xl border border-slate-200 p-4 shadow-sm dark-border-slate-800"
+                  >
+                    <div className="space-y-3">
+                      <Skeleton className="h-5 w-32 rounded-full" />
+                      <Skeleton className="h-3 w-48 rounded-full" />
+                      <Skeleton className="h-3 w-32 rounded-full" />
+                      <div className="flex items-center gap-3">
+                        <Skeleton className="h-8 w-20 rounded-full" />
+                        <Skeleton className="h-8 w-20 rounded-full" />
+                      </div>
                     </div>
                   </div>
-                ) : (
-                  <div className="space-y-3 text-sm">
-                    <div>
-                      <p className="font-semibold text-slate-900 dark:text-slate-100">{donor.name}</p>
-                      <p className="text-xs text-slate-400">Last donation: {donor.lastDonation}</p>
-                    </div>
-                    <p className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300">
-                      <Mail className="h-3.5 w-3.5 text-slate-400" />
-                      {donor.email}
-                    </p>
-                    <p className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300">
-                      <Phone className="h-3.5 w-3.5 text-slate-400" />
-                      {donor.phone}
-                    </p>
-                    <p className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300">
-                      <MapPin className="h-3.5 w-3.5 text-slate-400" />
-                      {donor.city}, {donor.state}
-                    </p>
-                    <Badge
-                      variant="outline"
-                      className="border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-300"
-                    >
-                      {donor.status}
-                    </Badge>
-                    <div className="flex gap-3 pt-2">
-                      <Link
-                        className="flex-1 rounded-full border border-brand-200 bg-brand-50 py-2 text-center text-brand-600 transition hover:bg-brand-100"
-                        href={`/dashboard/admin/donors/${donor.id}`}
+                ))
+              : paginatedDonors.map((donor) => (
+                  <div
+                    key={donor.id}
+                    className="rounded-2xl border border-slate-200 p-4 shadow-sm dark-border-slate-800"
+                  >
+                    <div className="space-y-3 text-sm">
+                      <div>
+                        <p className="font-semibold text-slate-900 dark:text-slate-100">{donor.name}</p>
+                        <p className="text-xs text-slate-400">Last donation: {donor.lastDonation}</p>
+                      </div>
+                      <p className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                        <Mail className="h-3.5 w-3.5 text-slate-400" />
+                        {donor.email}
+                      </p>
+                      <p className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                        <Phone className="h-3.5 w-3.5 text-slate-400" />
+                        {donor.phone}
+                      </p>
+                      <p className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                        <MapPin className="h-3.5 w-3.5 text-slate-400" />
+                        {donor.city}, {donor.state}
+                      </p>
+                      <Badge
+                        variant="outline"
+                        className="border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-300"
                       >
-                        View profile
-                      </Link>
-                      <button
-                        type="button"
-                        className="flex-1 rounded-full border border-slate-200 bg-white py-2 text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
-                      >
-                        Disable
-                      </button>
+                        {donor.status}
+                      </Badge>
+                      <div className="flex gap-3 pt-2">
+                        <Link
+                          className="flex-1 rounded-full border border-brand-200 bg-brand-50 py-2 text-center text-brand-600 transition hover-bg-brand-100"
+                          href={`/dashboard/admin/donors/${donor.id}`}
+                        >
+                          View profile
+                        </Link>
+                        <button
+                          type="button"
+                          className="flex-1 rounded-full border border-slate-200 bg-white py-2 text-slate-600 transition hover-bg-slate-50 dark-border-slate-700 dark-bg-slate-900 dark-text-slate-300"
+                        >
+                          Disable
+                        </button>
+                      </div>
                     </div>
                   </div>
-                )}
-              </div>
-            ))}
+                ))
+}
             {!loading && !paginatedDonors.length ? (
               <div className="rounded-2xl border border-dashed border-slate-200 p-6 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
                 No donors found. Adjust your filters and try again.

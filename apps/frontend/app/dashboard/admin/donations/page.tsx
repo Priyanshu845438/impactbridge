@@ -419,50 +419,55 @@ export default function DonationHistoryPage() {
           </div>
 
           <div className="flex flex-col gap-4 p-4 xl:hidden">
-            {(loading ? Array.from({ length: perPage }) : paginatedDonations).map((donation, index) => (
-              <div
-                key={loading ? `mobile-loading-${index}` : donation.id}
-                className="rounded-2xl border border-slate-200 p-4 shadow-sm dark:border-slate-800"
-              >
-                {loading ? (
-                  <div className="space-y-3">
-                    <Skeleton className="h-5 w-24 rounded-full" />
-                    <Skeleton className="h-3 w-36 rounded-full" />
-                    <Skeleton className="h-3 w-24 rounded-full" />
-                    <Skeleton className="h-3 w-20 rounded-full" />
-                    <div className="flex items-center gap-3">
-                      <Skeleton className="h-8 w-24 rounded-full" />
-                      <Skeleton className="h-8 w-24 rounded-full" />
+            {loading
+              ? Array.from({ length: perPage }).map((_, index) => (
+                  <div
+                    key={`mobile-loading-${index}`}
+                    className="rounded-2xl border border-slate-200 p-4 shadow-sm dark:border-slate-800"
+                  >
+                    <div className="space-y-3">
+                      <Skeleton className="h-5 w-24 rounded-full" />
+                      <Skeleton className="h-3 w-36 rounded-full" />
+                      <Skeleton className="h-3 w-24 rounded-full" />
+                      <Skeleton className="h-3 w-20 rounded-full" />
+                      <div className="flex items-center gap-3">
+                        <Skeleton className="h-8 w-24 rounded-full" />
+                        <Skeleton className="h-8 w-24 rounded-full" />
+                      </div>
                     </div>
                   </div>
-                ) : (
-                  <div className="space-y-2 text-sm">
-                    <div>
-                      <p className="font-semibold text-slate-900 dark:text-slate-100">{donation.donor}</p>
-                      <p className="text-xs text-slate-400">{donation.company}</p>
-                    </div>
-                    <p className="text-slate-600 dark:text-slate-300">{donation.entity}</p>
-                    <p className="text-slate-600 dark:text-slate-300">{donation.amount}</p>
-                    <p className="text-xs uppercase tracking-[0.24em] text-slate-400">{donation.status}</p>
-                    <p className="inline-flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-                      <Calendar className="h-4 w-4" />
-                      {donation.date}
-                    </p>
-                    <div className="pt-2">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        className="w-full gap-2 border-slate-200 dark:border-slate-700"
-                        onClick={() => openReceipt(donation.id)}
-                      >
-                        <TicketCheck className="h-4 w-4" />
-                        View receipt
-                      </Button>
+                ))
+              : paginatedDonations.map((donation) => (
+                  <div
+                    key={donation.id}
+                    className="rounded-2xl border border-slate-200 p-4 shadow-sm dark:border-slate-800"
+                  >
+                    <div className="space-y-2 text-sm">
+                      <div>
+                        <p className="font-semibold text-slate-900 dark:text-slate-100">{donation.donor}</p>
+                        <p className="text-xs text-slate-400">{donation.company}</p>
+                      </div>
+                      <p className="text-slate-600 dark:text-slate-300">{donation.entity}</p>
+                      <p className="text-slate-600 dark:text-slate-300">{donation.amount}</p>
+                      <p className="text-xs uppercase tracking-[0.24em] text-slate-400">{donation.status}</p>
+                      <p className="inline-flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                        <Calendar className="h-4 w-4" />
+                        {donation.date}
+                      </p>
+                      <div className="pt-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="w-full gap-2 border-slate-200 dark:border-slate-700"
+                          onClick={() => openReceipt(donation.id)}
+                        >
+                          <TicketCheck className="h-4 w-4" />
+                          View receipt
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                )}
-              </div>
-            ))}
+                ))}
             {!loading && !paginatedDonations.length ? (
               <div className="rounded-2xl border border-dashed border-slate-200 p-6 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
                 No donations found. Adjust your filters and try again.
@@ -506,7 +511,7 @@ export default function DonationHistoryPage() {
         </div>
       </div>
 
-      <Modal open={receiptModalOpen} onOpenChange={setReceiptModalOpen} title="Donation receipt">
+      <Modal open={receiptModalOpen} onClose={() => setReceiptModalOpen(false)} title="Donation receipt">
         {activeDonation ? (
           <div className="space-y-4 text-sm text-slate-600 dark:text-slate-300">
             <div className="flex items-center justify-between">

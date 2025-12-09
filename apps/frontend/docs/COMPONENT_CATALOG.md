@@ -102,3 +102,8 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - Route: `/dashboard/admin/audit-logs`.
 - Shares SectionHeader, filters, table, skeleton, and Sheet drawer.
 - Includes contextual badges, device/IP metadata, and export CTA placeholder.
+
+### System settings surface
+- Route: `/dashboard/admin/settings`.
+- Combines SectionHeader, Card, Select, custom Switch, summary sidebar, and toast-driven Save action.
+- Includes skeleton loader and upload placeholders for branding assets.

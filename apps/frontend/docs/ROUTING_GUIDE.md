@@ -19,7 +19,7 @@
 - `/dashboard/admin/reports` (top-level analytics view)
 - `/dashboard/admin/modules/reports`
 - `/dashboard/admin/audit-logs`
-- `/dashboard/admin/modules/settings`
+- `/dashboard/admin/settings`
 - `/dashboard/notifications`
 - `/dashboard/ngo`
 - `/dashboard/company`

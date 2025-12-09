@@ -318,60 +318,65 @@ export default function CampaignManagementPage() {
           </div>
 
           <div className="flex flex-col gap-4 p-4 xl:hidden">
-            {(loading ? Array.from({ length: perPage }) : paginatedCampaigns).map((campaign, index) => (
-              <div
-                key={loading ? `mobile-loading-${index}` : campaign.id}
-                className="rounded-2xl border border-slate-200 p-4 shadow-sm dark:border-slate-800"
-              >
-                {loading ? (
-                  <div className="space-y-3">
-                    <Skeleton className="h-5 w-40 rounded-full" />
-                    <Skeleton className="h-3 w-32 rounded-full" />
-                    <Skeleton className="h-3 w-28 rounded-full" />
-                    <Skeleton className="h-3 w-24 rounded-full" />
-                    <div className="flex items-center gap-3">
-                      <Skeleton className="h-8 w-24 rounded-full" />
-                      <Skeleton className="h-8 w-24 rounded-full" />
+            {loading
+              ? Array.from({ length: perPage }).map((_, index) => (
+                  <div
+                    key={`mobile-loading-${index}`}
+                    className="rounded-2xl border border-slate-200 p-4 shadow-sm dark:border-slate-800"
+                  >
+                    <div className="space-y-3">
+                      <Skeleton className="h-5 w-40 rounded-full" />
+                      <Skeleton className="h-3 w-32 rounded-full" />
+                      <Skeleton className="h-3 w-28 rounded-full" />
+                      <Skeleton className="h-3 w-24 rounded-full" />
+                      <div className="flex items-center gap-3">
+                        <Skeleton className="h-8 w-24 rounded-full" />
+                        <Skeleton className="h-8 w-24 rounded-full" />
+                      </div>
                     </div>
                   </div>
-                ) : (
-                  <div className="space-y-3 text-sm">
-                    <div>
-                      <p className="font-semibold text-slate-900 dark:text-slate-100">{campaign.name}</p>
-                      <p className="text-xs text-slate-400">{campaign.ngo}</p>
-                    </div>
-                    <p className="text-slate-600 dark:text-slate-300">Target: {campaign.targetAmount}</p>
-                    <p className="text-slate-600 dark:text-slate-300">Raised: {campaign.raisedAmount}</p>
-                    <Badge
-                      variant="outline"
-                      className="border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-300"
-                    >
-                      {campaign.status}
-                    </Badge>
-                    <div className="flex flex-wrap gap-3 pt-2">
-                      <Link
-                        className="flex-1 rounded-full border border-brand-200 bg-brand-50 py-2 text-center text-brand-600 transition hover:bg-brand-100"
-                        href={`/dashboard/admin/campaigns/${campaign.id}`}
+                ))
+              : paginatedCampaigns.map((campaign) => (
+                  <div
+                    key={campaign.id}
+                    className="rounded-2xl border border-slate-200 p-4 shadow-sm dark:border-slate-800"
+                  >
+                    <div className="space-y-3 text-sm">
+                      <div>
+                        <p className="font-semibold text-slate-900 dark:text-slate-100">{campaign.name}</p>
+                        <p className="text-xs text-slate-400">{campaign.ngo}</p>
+                      </div>
+                      <p className="text-slate-600 dark:text-slate-300">Target: {campaign.targetAmount}</p>
+                      <p className="text-slate-600 dark:text-slate-300">Raised: {campaign.raisedAmount}</p>
+                      <Badge
+                        variant="outline"
+                        className="border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-300"
                       >
-                        View
-                      </Link>
-                      <button
-                        type="button"
-                        className="flex-1 rounded-full border border-amber-200 bg-amber-50 py-2 text-amber-600 transition hover:bg-amber-100"
-                      >
-                        Pause
-                      </button>
-                      <button
-                        type="button"
-                        className="flex-1 rounded-full border border-rose-200 bg-rose-50 py-2 text-rose-600 transition hover:bg-rose-100"
-                      >
-                        Archive
-                      </button>
+                        {campaign.status}
+                      </Badge>
+                      <div className="flex flex-wrap gap-3 pt-2">
+                        <Link
+                          className="flex-1 rounded-full border border-brand-200 bg-brand-50 py-2 text-center text-brand-600 transition hover:bg-brand-100"
+                          href={`/dashboard/admin/campaigns/${campaign.id}`}
+                        >
+                          View
+                        </Link>
+                        <button
+                          type="button"
+                          className="flex-1 rounded-full border border-amber-200 bg-amber-50 py-2 text-amber-600 transition hover:bg-amber-100"
+                        >
+                          Pause
+                        </button>
+                        <button
+                          type="button"
+                          className="flex-1 rounded-full border border-rose-200 bg-rose-50 py-2 text-rose-600 transition hover:bg-rose-100"
+                        >
+                          Archive
+                        </button>
+                      </div>
                     </div>
                   </div>
-                )}
-              </div>
-            ))}
+                ))}
             {!loading && !paginatedCampaigns.length ? (
               <div className="rounded-2xl border border-dashed border-slate-200 p-6 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
                 No campaigns found. Adjust your filters and try again.
@@ -415,7 +420,7 @@ export default function CampaignManagementPage() {
         </div>
       </div>
 
-      <Modal open={createModalOpen} onOpenChange={setCreateModalOpen} title="Create campaign">
+      <Modal open={createModalOpen} onClose={() => setCreateModalOpen(false)} title="Create campaign">
         <div className="space-y-4">
           <p className="text-sm text-slate-500">
             Campaign creation workflow will connect to NGO proposals and CSR approvals. For now this is a placeholder.

@@ -458,3 +458,7 @@
 ### **106. Audit Logs UI Scaffolded**
 - Implemented /dashboard/admin/audit-logs with role/action filters, search, pagination, skeletons, and detail drawer.
 - Ran `npm run lint` to confirm stability and refreshed dashboard, routing, component, TODO, and progress docs.
+
+### **107. System Settings UI Added**
+- Added /dashboard/admin/settings with segmented cards for General, Security, Notifications, and Branding, plus mock save toast and skeleton loading state.
+- Introduced a reusable Switch control, updated sidebar navigation, and refreshed routing + dashboard documentation.

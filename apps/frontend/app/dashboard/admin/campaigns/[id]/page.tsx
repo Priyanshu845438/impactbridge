@@ -124,9 +124,7 @@ const CAMPAIGNS = [
   },
 ] as const;
 
-type Campaign = (typeof CAMPAIGNS)[number];
-
-const STATUS_TONE: Record<Campaign["status"], string> = {
+const STATUS_TONE: Record<string, string> = {
   Active: "border-emerald-200 bg-emerald-50 text-emerald-600 dark:border-emerald-600/50 dark:bg-emerald-500/10 dark:text-emerald-200",
   Draft: "border-amber-200 bg-amber-50 text-amber-600 dark:border-amber-600/40 dark:bg-amber-500/10 dark:text-amber-200",
   Closed: "border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-600/40 dark:bg-slate-500/10 dark:text-slate-200",
@@ -452,7 +450,7 @@ export default function CampaignDetailPage() {
         </TabsContent>
       </Tabs>
 
-      <Modal open={pauseModalOpen} onOpenChange={setPauseModalOpen} title="Pause campaign?">
+      <Modal open={pauseModalOpen} onClose={() => setPauseModalOpen(false)} title="Pause campaign?">
         <div className="space-y-4 text-sm text-slate-600 dark:text-slate-300">
           <p>Pausing will temporarily hide donation entry points. Resume anytime to continue fundraising.</p>
           <div className="flex gap-3">
@@ -466,7 +464,7 @@ export default function CampaignDetailPage() {
         </div>
       </Modal>
 
-      <Modal open={closeModalOpen} onOpenChange={setCloseModalOpen} title="Close campaign?">
+      <Modal open={closeModalOpen} onClose={() => setCloseModalOpen(false)} title="Close campaign?">
         <div className="space-y-4 text-sm text-slate-600 dark:text-slate-300">
           <p>Closing will lock donations and mark the campaign complete. This action can be reversed with admin approval.</p>
           <div className="flex gap-3">
@@ -480,7 +478,7 @@ export default function CampaignDetailPage() {
         </div>
       </Modal>
 
-      <Modal open={duplicateModalOpen} onOpenChange={setDuplicateModalOpen} title="Duplicate campaign">
+      <Modal open={duplicateModalOpen} onClose={() => setDuplicateModalOpen(false)} title="Duplicate campaign">
         <div className="space-y-4 text-sm text-slate-600 dark:text-slate-300">
           <p>Create a copy of this campaign for a new cycle. Draft will open in the campaign workspace.</p>
           <div className="flex gap-3">

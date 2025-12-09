@@ -5,7 +5,7 @@ import {
   CalendarDays,
   Clock3,
   FileText,
-  Funnel,
+  Filter,
   Link2,
   RefreshCcw,
   Search,
@@ -35,8 +35,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { cn } from "@/lib/cn";
+import { Drawer } from "@/components/ui/drawer";
+import { cn } from "@/lib/utils";
 
 const mockAuditLogs = [
   {
@@ -271,7 +271,7 @@ export default function AuditLogsPage() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
-            <Funnel className="h-4 w-4" aria-hidden="true" />
+            <Filter className="h-4 w-4" aria-hidden="true" />
             Showing {paginatedLogs.length} of {filteredLogs.length} events
           </div>
           <Button
@@ -430,68 +430,66 @@ export default function AuditLogsPage() {
         </div>
       </div>
 
-      <Sheet open={Boolean(selectedLogId)} onOpenChange={(open) => !open && setSelectedLogId(null)}>
-        <SheetContent className="w-full gap-6 overflow-y-auto border-l border-slate-200 bg-white/95 p-8 dark:border-slate-800 dark:bg-slate-950/95 sm:max-w-xl">
-          {currentLog ? (
-            <div className="space-y-6">
-              <SheetHeader>
-                <SheetTitle>Audit log details</SheetTitle>
-              </SheetHeader>
-
-              <div className="space-y-3">
-                <div className="text-sm font-semibold text-slate-900 dark:text-white">{currentLog.action}</div>
-                <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-                  <Badge variant="outline" className="rounded-full border-slate-200 px-2 py-1 dark:border-slate-700">
-                    {currentLog.role}
-                  </Badge>
-                  <span>•</span>
-                  <span>{new Date(currentLog.timestamp).toLocaleString("en-IN", { dateStyle: "full", timeStyle: "short" })}</span>
-                </div>
-                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">{currentLog.summary}</p>
+      <Drawer
+        open={Boolean(selectedLogId)}
+        onClose={() => setSelectedLogId(null)}
+        title="Audit log details"
+        className="gap-6 border-slate-200 bg-white/95 p-8 dark:border-slate-800 dark:bg-slate-950/95 sm:max-w-xl"
+      >
+        {currentLog ? (
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <div className="text-sm font-semibold text-slate-900 dark:text-white">{currentLog.action}</div>
+              <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                <Badge variant="outline" className="rounded-full border-slate-200 px-2 py-1 dark:border-slate-700">
+                  {currentLog.role}
+                </Badge>
+                <span>•</span>
+                <span>{new Date(currentLog.timestamp).toLocaleString("en-IN", { dateStyle: "full", timeStyle: "short" })}</span>
               </div>
+              <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">{currentLog.summary}</p>
+            </div>
 
-              <div className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50/70 p-4 text-sm dark:border-slate-800 dark:bg-slate-900/70">
-                <div className="flex flex-col gap-1">
-                  <span className="font-semibold text-slate-700 dark:text-slate-200">User</span>
-                  <span className="text-slate-600 dark:text-slate-300">{currentLog.user}</span>
+            <div className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50/70 p-4 text-sm dark:border-slate-800 dark:bg-slate-900/70">
+              <div className="flex flex-col gap-1">
+                <span className="font-semibold text-slate-700 dark:text-slate-200">User</span>
+                <span className="text-slate-600 dark:text-slate-300">{currentLog.user}</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="font-semibold text-slate-700 dark:text-slate-200">Entity</span>
+                {currentLog.entityHref ? (
+                  <Link
+                    href={currentLog.entityHref}
+                    className="inline-flex items-center gap-2 text-indigo-600 transition hover:text-indigo-400 dark:text-indigo-400 dark:hover:text-indigo-300"
+                  >
+                    {currentLog.entity}
+                    <Link2 className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                ) : (
+                  <span className="text-slate-600 dark:text-slate-300">{currentLog.entity}</span>
+                )}
+              </div>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div>
+                  <span className="block text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Device</span>
+                  <span className="text-sm text-slate-700 dark:text-slate-200">{currentLog.device}</span>
                 </div>
-                <div className="flex flex-col gap-1">
-                  <span className="font-semibold text-slate-700 dark:text-slate-200">Entity</span>
-                  {currentLog.entityHref ? (
-                    <Link
-                      href={currentLog.entityHref}
-                      className="inline-flex items-center gap-2 text-indigo-600 transition hover:text-indigo-400 dark:text-indigo-400 dark:hover:text-indigo-300"
-                    >
-                      {currentLog.entity}
-                      <Link2 className="h-4 w-4" aria-hidden="true" />
-                    </Link>
-                  ) : (
-                    <span className="text-slate-600 dark:text-slate-300">{currentLog.entity}</span>
-                  )}
-                </div>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <div>
-                    <span className="block text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Device</span>
-                    <span className="text-sm text-slate-700 dark:text-slate-200">{currentLog.device}</span>
-                  </div>
-                  <div>
-                    <span className="block text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">IP Address</span>
-                    <span className="font-mono text-sm text-slate-600 dark:text-slate-300">{currentLog.ip}</span>
-                  </div>
+                <div>
+                  <span className="block text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">IP Address</span>
+                  <span className="font-mono text-sm text-slate-600 dark:text-slate-300">{currentLog.ip}</span>
                 </div>
               </div>
             </div>
-          ) : (
-            <div className="space-y-4">
-              <Skeleton className="h-6 w-48 rounded" />
-              <Skeleton className="h-4 w-full rounded" />
-              <Skeleton className="h-4 w-3/4 rounded" />
-              <Skeleton className="h-24 w-full rounded-xl" />
-            </div>
-          )}
-        </SheetContent>
-      </Sheet>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <Skeleton className="h-6 w-48 rounded" />
+            <Skeleton className="h-4 w-full rounded" />
+            <Skeleton className="h-4 w-3/4 rounded" />
+            <Skeleton className="h-24 w-full rounded-xl" />
+          </div>
+        )}
+      </Drawer>
     </div>
   );
 }
-
