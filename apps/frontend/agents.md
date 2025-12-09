@@ -483,3 +483,13 @@
 - Created /dashboard/ngo/donations with breadcrumb, KPI metrics, filter toolbar, responsive table/cards, and mock states.
 - Updated navigation, documentation suite, and verified lint/build for the new NGO donations view.
 
+
+### **113. NGO Donor Profiles Added**
+- Built /dashboard/ngo/donors with search/filters, preset amount chips, responsive donor cards, and detail modal.
+- Updated navigation, documentation suite, ran lint/build, and launched dev server on port 3402.
+
+
+### **114. NGO Team Workspace Added**
+- Delivered /dashboard/ngo/team with invite/edit modals, responsive table/cards, role/status badges, and mock toasts.
+- Updated navigation, documentation, ran lint/build, and verified dev server on port 3403.
+

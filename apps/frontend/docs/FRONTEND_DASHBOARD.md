@@ -126,3 +126,14 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 - Top filter bar provides campaign select, status filter, free-text search, and mock date-range controls.
 - Responsive donation table with status badges, receipt CTA, and mobile-friendly stacking.
 - Supports skeleton loading, empty state messaging, and error placeholder with retry action.
+
+### NGO donor profiles
+- Route: `/dashboard/ngo/donors`.
+- Grid-based donor explorer with search, frequency/status filters, preset amount ranges, and CSV export stub.
+- Cards surface avatar initials, totals, donation counts, top campaign, and status badge with modal for detailed timeline + notes.
+- Includes skeleton loaders, empty messaging, and responsive layout (1–3 columns).
+
+### NGO team members
+- Route: `/dashboard/ngo/team`.
+- Manage staff with invite modal, table + mobile cards, role/status badges, edit modal with role toggle placeholder, and sonner toasts.
+- Skeleton rows and empty state cover loading/new NGOs; responsive layout shifts between grid/table.

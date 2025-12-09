@@ -10,6 +10,9 @@
 - Replace optimistic NGO assignment mock with actual API call once backend endpoint ships (keep rollback + toast messaging but hook into real mutation helper).
 - Wire offline queue replay to real mutation handlers (currently placeholder clears queue on reconnect).
 - Implement offline banner variant that can sit persistently without only using toast (currently toast-only).
+- Wire NGO donations overview (`/dashboard/ngo/donations`) to live donation APIs and hook receipt actions/tests once backend lands.
+- Wire NGO donor profiles (`/dashboard/ngo/donors`) to CRM analytics APIs; add tests around filters, modal, and amount presets.
+- Wire NGO team workspace (`/dashboard/ngo/team`) to user management APIs, include invite/edit flows + permission toggles with tests.
 
 ## Medium Priority
 - Build dynamic tables for admin programmes / reports modules (NGO management + document review views already scaffolded)
@@ -83,4 +86,3 @@ Update this file as features ship or priorities shift.
 - ✅ NGO document center scaffolded with checklist, upload area, notes sidebar, skeletons, and status badges.
 - ✅ NGO donations overview built with filters, KPI cards, responsive table, and placeholder states.
 
-- Route reference: /dashboard/ngo/donations now live.

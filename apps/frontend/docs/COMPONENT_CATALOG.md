@@ -135,3 +135,16 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - Filters include campaign select, status select, full-text search, and mock date range actions.
 - Responsive table collapses to stacked cards on mobile with status badges and receipt CTA.
 - Includes loading skeleton, empty state CTA, and simulated error state for offline/sync scenarios.
+
+### NGO donor profiles grid
+- Route: `/dashboard/ngo/donors`.
+- `DonorGrid` cards use Card, Button, Table-like stats to highlight donations, campaign, frequency, and status.
+- `AmountRangeControl` offers preset quick filters until slider wiring lands.
+- Modal leverages shared `Modal` component with timeline mock, preferred method, average donation, and notes textarea.
+- Skeleton + empty state components maintain UX parity during loading.
+
+### NGO team workspace
+- Route: `/dashboard/ngo/team`.
+- `TeamTable` renders desktop table + mobile cards using Button, Card, and Table primitives.
+- `InviteMemberModal` and `EditMemberModal` reuse shared Modal, Select, Switch, Textarea components with tone maps for badges.
+- Skeleton + empty state maintain onboarding UX while real data loads.

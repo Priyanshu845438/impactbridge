@@ -189,6 +189,16 @@ export const navMenu: NavItem[] = [
         href: "/dashboard/ngo/compliance",
         roles: ["NGO"],
       },
+      {
+        label: "Donors",
+        href: "/dashboard/ngo/donors",
+        roles: ["NGO"],
+      },
+      {
+        label: "Team",
+        href: "/dashboard/ngo/team",
+        roles: ["NGO"],
+      },
     ],
   },
   {
