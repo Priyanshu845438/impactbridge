@@ -4,9 +4,15 @@
 
 - [ ] Wire NGO finance overview page
 - [ ] Wire NGO billing workspace
-- [ ] Integrate NGO payout requests (`/dashboard/ngo/payouts`) with finance service once available.
-  - Persist new requests, timeline updates, and cancellation via API.
-  - Replace mock pagination and status filters with server-driven metadata.
+- [ ] Integrate NGO payout requests
+- [ ] Hook NGO compliance center (`/dashboard/ngo/compliance`) to compliance service APIs.
+  - Replace mock checklist data with live statuses and due dates.
+  - Wire upload flows, alerts, and timeline to server events.
+
+(`/dashboard/ngo/payouts`) with finance service once available.
+
+- Persist new requests, timeline updates, and cancellation via API.
+- Replace mock pagination and status filters with server-driven metadata.
 
 (`/dashboard/ngo/billing`) to invoices/payments APIs once ready.
 

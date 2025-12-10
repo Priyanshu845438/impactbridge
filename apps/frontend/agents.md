@@ -620,3 +620,9 @@
 - Built /dashboard/ngo/payouts with search, status filters, pagination, skeleton/empty states, and detail drawer for timeline + receipts.
 - Added payout request modal capturing amount, purpose, optional attachment placeholder, and mock submit loading.
 - Updated NGO navigation and documentation suite (dashboard, component catalog, routing, TODO, progress), ran Prettier, lint, build to confirm.
+
+### **118. NGO Compliance Center Built**
+
+- Replaced placeholder with grouped compliance checklist, status filters, alerts, timeline, and action modal at /dashboard/ngo/compliance.
+- Added skeleton + empty states, responsive layout, and upload placeholder with mock processing.
+- Updated documentation suite (dashboard, component catalog, routing, TODO, progress) and reran Prettier, lint, build.

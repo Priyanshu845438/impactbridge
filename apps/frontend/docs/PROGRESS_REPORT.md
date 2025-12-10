@@ -12,7 +12,9 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 
 - Added NGO finance overview page
 - Added NGO invoices & billing page
-- Added NGO payout request workspace with request modal, filterable table, timeline drawer, and pagination (route: `/dashboard/ngo/payouts`).
+- Added NGO payout request workspace
+- Added NGO compliance center UI with grouped checklist, alerts, timeline, status filters, and action modal (route: `/dashboard/ngo/compliance`).
+  with request modal, filterable table, timeline drawer, and pagination (route: `/dashboard/ngo/payouts`).
   with tabbed workspace, filterable invoice table, payout/download placeholders, skeletons, and preview modal (route: `/dashboard/ngo/billing`).
   with KPI tiles, donation trend bar chart, allocation pie chart, filter toolbar, responsive transactions table, and detail modal (route: `/dashboard/ngo/finance`).
 - Launched NGO team management UI with invite/edit modals, responsive listing, and sonner toasts (route: `/dashboard/ngo/team`).

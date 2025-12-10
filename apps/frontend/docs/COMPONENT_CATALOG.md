@@ -159,6 +159,13 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### NGO payout components
 
+### NGO compliance components
+
+- Route: `/dashboard/ngo/compliance`.
+- Checklist groups reuse Card + badge styling with modal upload flow and status filter select.
+- Alerts card highlights expiring/missing documents; timeline uses icon-tagged list with refresh CTA.
+- Modal leverages shared Button + upload placeholder with mock processing state.
+
 - Route: `/dashboard/ngo/payouts`.
 - `PayoutTable` reuses Table primitive with status badges, skeletons, and pagination footer.
 - Request modal leverages shared Modal + Input/Textarea components with loader state on submit.

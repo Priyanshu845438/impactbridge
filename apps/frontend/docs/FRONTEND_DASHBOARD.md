@@ -146,6 +146,13 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 
 ### NGO payout workspace
 
+### NGO compliance center
+
+- Route: `/dashboard/ngo/compliance`.
+- Groups compliance tasks into CSR, audit, and identity categories with status badges, last-updated metadata, and action buttons.
+- Alert sidebar surfaces expiring documents and missing forms; timeline lists recent compliance activity.
+- Includes status filter, skeleton placeholders, empty states, and responsive layout.
+
 - Route: `/dashboard/ngo/payouts`.
 - Provides table view with search, status filters, pagination, and action menu to inspect or cancel requests.
 - New payout modal captures amount, purpose, and optional supporting document with inline loading feedback.
