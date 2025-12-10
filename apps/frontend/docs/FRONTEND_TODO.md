@@ -5,9 +5,15 @@
 - [ ] Wire NGO finance overview page
 - [ ] Wire NGO billing workspace
 - [ ] Integrate NGO payout requests
-- [ ] Hook NGO compliance center (`/dashboard/ngo/compliance`) to compliance service APIs.
-  - Replace mock checklist data with live statuses and due dates.
-  - Wire upload flows, alerts, and timeline to server events.
+- [ ] Hook NGO compliance center
+- [ ] Connect NGO impact reports (`/dashboard/ngo/impact`) to analytics data sources.
+  - Replace mock KPI/chart data with live API responses.
+  - Wire impact stories to CMS feed and enable export actions.
+
+(`/dashboard/ngo/compliance`) to compliance service APIs.
+
+- Replace mock checklist data with live statuses and due dates.
+- Wire upload flows, alerts, and timeline to server events.
 
 (`/dashboard/ngo/payouts`) with finance service once available.
 

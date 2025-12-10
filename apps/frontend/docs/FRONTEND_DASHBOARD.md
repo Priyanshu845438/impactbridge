@@ -148,6 +148,13 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 
 ### NGO compliance center
 
+### NGO impact & reports
+
+- Route: `/dashboard/ngo/impact`.
+- KPI tiles summarise beneficiaries, active projects, fund utilisation, and volunteer hours.
+- Recharts-powered line/pie/bar visuals highlight monthly reach, category split, and campaign impact with skeleton fallbacks.
+- Impact story cards showcase narrative highlights with preview modal and export controls (PDF/CSV/Print).
+
 - Route: `/dashboard/ngo/compliance`.
 - Groups compliance tasks into CSR, audit, and identity categories with status badges, last-updated metadata, and action buttons.
 - Alert sidebar surfaces expiring documents and missing forms; timeline lists recent compliance activity.

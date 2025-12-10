@@ -214,6 +214,11 @@ export const navMenu: NavItem[] = [
         href: "/dashboard/ngo/payouts",
         roles: ["NGO"],
       },
+      {
+        label: "Impact & reports",
+        href: "/dashboard/ngo/impact",
+        roles: ["NGO"],
+      },
     ],
   },
   {

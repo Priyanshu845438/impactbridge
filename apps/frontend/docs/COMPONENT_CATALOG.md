@@ -161,6 +161,13 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### NGO compliance components
 
+### NGO impact components
+
+- Route: `/dashboard/ngo/impact`.
+- `KpiCard` helper reused for impact stats with tone-based icons.
+- Charts leverage Recharts line/pie/bar wrappers with skeleton placeholders and responsive containers.
+- Impact stories grid uses Card + modal for read-more flow with drag zoom image transitions.
+
 - Route: `/dashboard/ngo/compliance`.
 - Checklist groups reuse Card + badge styling with modal upload flow and status filter select.
 - Alerts card highlights expiring/missing documents; timeline uses icon-tagged list with refresh CTA.
