@@ -98,6 +98,12 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Detail view adds banner hero, quick stat pills, overview tabs (Overview/NGO/Milestones/Documents/Updates), and right rail with contacts, related programmes, and tag cloud (desktop).
 - Includes skeleton loader, error placeholder, empty updates state, and responsive stacking for mobile (sidebar hidden).
 
+- Route: `/dashboard/company/donations`.
+- Donations overview page with hero filters, summary tiles, responsive table-to-card view, desktop sidebar filters, and skeleton/empty/error fallbacks.
+
+- Route: `/dashboard/company/reports`.
+- Reports & Exports page with summary cards, filters, export modal, responsive table/cards, and skeleton/empty/error states.
+
 - Route: `/dashboard/company`.
 - KPI tiles highlight CSR budget, allocations, disbursements, and active programmes with tone-mapped icons.
 - Analytics suite includes quarterly spend bar chart, category pie split, and programme progress line chart with skeleton fallbacks.

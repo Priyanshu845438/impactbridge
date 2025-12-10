@@ -662,3 +662,15 @@
 - Built /dashboard/company/programmes/[id] with hero banner, stat pills, tabbed content (Overview, NGO, Milestones, Documents, Updates), and desktop sidebar containing contact card, related list, and tag cloud.
 - Added skeleton loader, error placeholder, empty updates card, and responsive mobile layout (sidebar hidden, stats stacked).
 - Expanded mock dataset with detailed fields, refreshed docs (dashboard, component catalog, routing, TODO, progress), reran lint/build.
+
+### **125. Company Donations Overview Added**
+
+- Added /dashboard/company/donations with hero filters, KPI tiles, responsive table-to-card layout, desktop sidebar filters, and skeleton/empty/error fallback states.
+- Seeded mock donation dataset and filter metadata; wired summary metrics and filter logic to mock data.
+- Updated documentation suite (dashboard, component catalog, routing, TODO, progress) and reran lint/build successfully.
+
+### **126. Company Reports & Exports Page Added**
+
+- Built /dashboard/company/reports with summary tiles powered by `ReportsSummaryCard`, filter controls, responsive table/cards, export modal, and skeleton/empty/error states.
+- Ensured mock export data aligns with donation programmes and wired hero filters to state.
+- Documentation refreshed (dashboard, component catalog, routing, TODO, progress) and lint/build validated.
