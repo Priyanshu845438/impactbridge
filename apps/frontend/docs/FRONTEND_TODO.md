@@ -7,9 +7,15 @@
 - [ ] Integrate NGO payout requests
 - [ ] Hook NGO compliance center
 - [ ] Connect NGO impact reports
-- [ ] Wire company dashboard (`/dashboard/company`) to real CSR analytics.
-  - Replace mock KPI + chart data with backend metrics.
-  - Connect quick actions and activity feed to programme services.
+- [ ] Wire company dashboard
+- [ ] Integrate company NGO directory (`/dashboard/company/ngos`) with partner management APIs.
+  - Sync search/filter options with backend metadata.
+  - Replace mock detail drawer with real compliance + campaign data.
+
+(`/dashboard/company`) to real CSR analytics.
+
+- Replace mock KPI + chart data with backend metrics.
+- Connect quick actions and activity feed to programme services.
 
 (`/dashboard/ngo/impact`) to analytics data sources.
 

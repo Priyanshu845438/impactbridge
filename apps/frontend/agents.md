@@ -638,3 +638,9 @@
 - Upgraded /dashboard/company with CSR KPI tiles, quarterly spend bar chart, allocation pie, programme progress line chart, quick actions, and activity feed.
 - Added mock skeleton states and responsive layout to match NGO/Admin quality.
 - Updated dashboard/component/routing/TODO/progress docs; ran Prettier, lint, and build.
+
+### **121. Company Partnered NGOs Directory Added**
+
+- Built /dashboard/company/ngos with search/category/status filters, responsive NGO cards, skeleton/empty states, and modal detail drawer.
+- Highlighted verification, compliance docs, and key campaigns to aid CSR partner management.
+- Documentation updated (dashboard, component catalog, routing, TODO, progress) and lint/build verified.

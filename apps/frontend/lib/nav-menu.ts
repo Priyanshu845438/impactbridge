@@ -242,6 +242,11 @@ export const navMenu: NavItem[] = [
         href: "/dashboard/company/reporting",
         roles: ["COMPANY"],
       },
+      {
+        label: "Partnered NGOs",
+        href: "/dashboard/company/ngos",
+        roles: ["COMPANY"],
+      },
     ],
   },
   {

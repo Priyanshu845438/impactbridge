@@ -75,6 +75,13 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 
 ### Company dashboard
 
+### Company partnered NGOs
+
+- Route: `/dashboard/company/ngos`.
+- Provides search, category, and status filters with responsive card grid for CSR-approved partners.
+- Cards display mission, category tags, verification badge, and profile CTA; drawer reveals compliance status and key campaigns.
+- Includes skeleton loaders and empty-state messaging for filter combinations.
+
 - Route: `/dashboard/company`.
 - KPI tiles highlight CSR budget, allocations, disbursements, and active programmes with tone-mapped icons.
 - Analytics suite includes quarterly spend bar chart, category pie split, and programme progress line chart with skeleton fallbacks.

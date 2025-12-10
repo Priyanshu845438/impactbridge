@@ -165,6 +165,13 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### Company dashboard components
 
+### Company NGO directory components
+
+- Route: `/dashboard/company/ngos`.
+- Uses Card grid with inline badges, tag chips, and modal detail drawer.
+- Search and select filters reuse shadcn Input/Select components.
+- Skeleton grid mirrors card layout and empty state aids onboarding guidance.
+
 - Route: `/dashboard/company`.
 - Reuses `KpiCard`, QuickActionCard, and Recharts wrappers for CSR-specific analytics.
 - Charts share skeleton fallbacks and responsive containers for quarterly spend, category allocation, and programme trend.
