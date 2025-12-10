@@ -614,3 +614,9 @@
 - Built /dashboard/ngo/billing with tabbed invoices/payouts/downloadables, status/date filters, search, and Create Invoice CTA.
 - Added invoice table with skeleton/empty states plus modal preview containing metadata, line items, and PDF placeholder.
 - Updated NGO navigation, dashboard/component/routing/TODO/progress docs, ran Prettier, lint, build, and restarted dev server.
+
+### **117. NGO Payout Requests Workspace Added**
+
+- Built /dashboard/ngo/payouts with search, status filters, pagination, skeleton/empty states, and detail drawer for timeline + receipts.
+- Added payout request modal capturing amount, purpose, optional attachment placeholder, and mock submit loading.
+- Updated NGO navigation and documentation suite (dashboard, component catalog, routing, TODO, progress), ran Prettier, lint, build to confirm.

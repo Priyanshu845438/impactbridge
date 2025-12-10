@@ -144,6 +144,13 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 
 ### NGO billing workspace
 
+### NGO payout workspace
+
+- Route: `/dashboard/ngo/payouts`.
+- Provides table view with search, status filters, pagination, and action menu to inspect or cancel requests.
+- New payout modal captures amount, purpose, and optional supporting document with inline loading feedback.
+- Detail drawer surfaces timeline, receipt download placeholder, and cancellation controls.
+
 - Route: `/dashboard/ngo/billing`.
 - Tabs for invoices, payout requests, and downloadables keep financial records organised.
 - Invoice tab includes search, status/date filters, table with action menu, skeleton placeholder, and empty state messaging.

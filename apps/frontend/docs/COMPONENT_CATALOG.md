@@ -157,6 +157,13 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### NGO billing components
 
+### NGO payout components
+
+- Route: `/dashboard/ngo/payouts`.
+- `PayoutTable` reuses Table primitive with status badges, skeletons, and pagination footer.
+- Request modal leverages shared Modal + Input/Textarea components with loader state on submit.
+- Detail drawer combines timeline list, download card, and destructive CTA using existing button variants.
+
 - Route: `/dashboard/ngo/billing`.
 - Billing tabs use shadcn Tabs with glassmorphism styling shared across NGO modules.
 - `InvoiceTable` leverages Table + status pills and invokes the shared Modal for invoice preview.

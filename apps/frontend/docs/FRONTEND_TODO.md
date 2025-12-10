@@ -3,9 +3,15 @@
 ## High Priority
 
 - [ ] Wire NGO finance overview page
-- [ ] Wire NGO billing workspace (`/dashboard/ngo/billing`) to invoices/payments APIs once ready.
-  - Replace mock invoice data, status filters, and preview drawer with live responses.
-  - Hook action buttons to mutation endpoints and introduce optimistic state handling.
+- [ ] Wire NGO billing workspace
+- [ ] Integrate NGO payout requests (`/dashboard/ngo/payouts`) with finance service once available.
+  - Persist new requests, timeline updates, and cancellation via API.
+  - Replace mock pagination and status filters with server-driven metadata.
+
+(`/dashboard/ngo/billing`) to invoices/payments APIs once ready.
+
+- Replace mock invoice data, status filters, and preview drawer with live responses.
+- Hook action buttons to mutation endpoints and introduce optimistic state handling.
 
 (`/dashboard/ngo/finance`) to backend once finance APIs are ready.
 
