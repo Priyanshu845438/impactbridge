@@ -99,6 +99,7 @@ npm run start                 # serve built app
 npm run storybook             # Storybook playground (port 6006)
 npm run build-storybook       # Storybook static export
 npm run snapshot:ui           # Percy visual snapshots (requires Storybook + system libs)
+# Company CSR programme directory lives at `/dashboard/company/programmes`; mock catalog is in `app/dashboard/company/programmes/mock-data.ts`.
 # clean rebuild when chunks mismatch
 rm -rf .next node_modules/.cache && npm install && npm run build
 ```

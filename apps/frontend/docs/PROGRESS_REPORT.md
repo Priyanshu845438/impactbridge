@@ -16,8 +16,11 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Added NGO compliance center UI
 - Added NGO impact & reports page
 - Added company CSR dashboard
-- Added company partnered NGOs directory with filters, responsive cards, and detail drawer (route: `/dashboard/company/ngos`).
-  with KPI tiles, analytics charts, quick actions, and activity feed (route: `/dashboard/company`).
+- Added company partnered NGOs directory (route: `/dashboard/company/ngos`).
+- Added company NGO profile view with stats, tabs, and contact panel (route: `/dashboard/company/ngos/[ngoId]`).
+- Added company CSR programme directory with filters, search, responsive cards, skeletons, and empty states (route: `/dashboard/company/programmes`).
+- Added `useDebouncedValue` hook and extended badge variants for soft SDG tags.
+- Documented new page across dashboard overview, component catalog, routing guide, and TODO.
   with KPI tiles, chart suite, story cards, and export controls (route: `/dashboard/ngo/impact`).
   with grouped checklist, alerts, timeline, status filters, and action modal (route: `/dashboard/ngo/compliance`).
   with request modal, filterable table, timeline drawer, and pagination (route: `/dashboard/ngo/payouts`).

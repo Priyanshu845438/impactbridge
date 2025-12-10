@@ -95,6 +95,20 @@ export const navMenu: NavItem[] = [
     ],
   },
   {
+    label: "Company dashboard",
+    icon: LayoutDashboard,
+    roles: ["COMPANY"],
+    group: "Workspace",
+    href: "/dashboard/company",
+  },
+  {
+    label: "CSR programmes",
+    icon: ClipboardList,
+    roles: ["COMPANY"],
+    group: "Workspace",
+    href: "/dashboard/company/programmes",
+  },
+  {
     label: "Programmes",
     icon: ClipboardList,
     roles: ["SUPER_ADMIN"],

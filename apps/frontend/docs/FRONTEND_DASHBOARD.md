@@ -77,10 +77,22 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 
 ### Company partnered NGOs
 
+### Company NGO profile view
+
+- Route: `/dashboard/company/ngos/[ngoId]`.
+- Header highlights logo initials, mission, categories, verification, and CSR alignment score.
+- Stat tiles summarise donations, active campaigns, alignment, and compliance status.
+- Tabbed overview/campaigns/documents sections with empty-state messaging plus side panel covering contact info and quick actions.
+
 - Route: `/dashboard/company/ngos`.
 - Provides search, category, and status filters with responsive card grid for CSR-approved partners.
 - Cards display mission, category tags, verification badge, and profile CTA; drawer reveals compliance status and key campaigns.
 - Includes skeleton loaders and empty-state messaging for filter combinations.
+
+- Route: `/dashboard/company/programmes`.
+- CSR programme marketplace with top-level category/status/region filters, search, skeleton loaders, and empty state messaging.
+- Cards surface banner imagery, NGO owner, SDG tags, and status badge with CTA to detailed view.
+- `hooks/use-debounced-value.ts` introduced for directory search responsiveness.
 
 - Route: `/dashboard/company`.
 - KPI tiles highlight CSR budget, allocations, disbursements, and active programmes with tone-mapped icons.

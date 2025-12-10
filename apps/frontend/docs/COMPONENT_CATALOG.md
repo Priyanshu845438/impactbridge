@@ -167,6 +167,17 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### Company NGO directory components
 
+### Company NGO profile components
+
+- Route: `/dashboard/company/programmes`.
+- `CompanyProgrammeCard` component showcases banner imagery, NGO owner initials, SDG tags, and status badge with CTA.
+- Includes skeleton grid helper and empty state card for filtered views.
+- Hooks include `useDebouncedValue` for search responsiveness.
+
+- Route: `/dashboard/company/ngos/[ngoId]`.
+- Reuses SectionHeader, card stats, Tabs, and detail side panel to mirror CSR partner insights.
+- Includes skeleton fallback, empty states for campaigns/documents, and modal-ready CTA buttons.
+
 - Route: `/dashboard/company/ngos`.
 - Uses Card grid with inline badges, tag chips, and modal detail drawer.
 - Search and select filters reuse shadcn Input/Select components.

@@ -8,9 +8,16 @@
 - [ ] Hook NGO compliance center
 - [ ] Connect NGO impact reports
 - [ ] Wire company dashboard
-- [ ] Integrate company NGO directory (`/dashboard/company/ngos`) with partner management APIs.
-  - Sync search/filter options with backend metadata.
-  - Replace mock detail drawer with real compliance + campaign data.
+- [ ] Integrate company NGO directory
+- [ ] Wire company CSR programme directory (`/dashboard/company/programmes`) once backend search API is available.
+- [ ] Connect company NGO profile (`/dashboard/company/ngos/[ngoId]`) to backend partner data.
+  - Replace mock stats, campaigns, and documents with live payloads.
+  - Wire quick actions to messaging/workflow endpoints.
+
+(`/dashboard/company/ngos`) with partner management APIs.
+
+- Sync search/filter options with backend metadata.
+- Replace mock detail drawer with real compliance + campaign data.
 
 (`/dashboard/company`) to real CSR analytics.
 
@@ -130,3 +137,4 @@ Update this file as features ship or priorities shift.
 - ✅ NGO campaign detail view scaffolded with status header, KPIs, donations table, media placeholder, and settings tab.
 - ✅ NGO document center scaffolded with checklist, upload area, notes sidebar, skeletons, and status badges.
 - ✅ NGO donations overview built with filters, KPI cards, responsive table, and placeholder states.
+- ✅ Company CSR programme directory scaffolded with filters, search, responsive cards, skeletons, and empty states.

@@ -644,3 +644,15 @@
 - Built /dashboard/company/ngos with search/category/status filters, responsive NGO cards, skeleton/empty states, and modal detail drawer.
 - Highlighted verification, compliance docs, and key campaigns to aid CSR partner management.
 - Documentation updated (dashboard, component catalog, routing, TODO, progress) and lint/build verified.
+
+### **122. Company NGO Profile Surface Added**
+
+- Implemented /dashboard/company/ngos/[ngoId] with CSR-aligned header, stat tiles, overview/campaign/doc tabs, and contact action panel.
+- Includes skeleton fallback, empty states, and responsive two-column layout.
+- Documentation updated (dashboard, component catalog, routing, TODO, progress) and lint/build validated.
+
+### **123. Company CSR Programme Directory Added**
+
+- Added /dashboard/company/programmes with banner-rich cards, search, category/status/region filters, SDG tags, skeleton and empty states, and mock CTA navigation.
+- Introduced `useDebouncedValue` hook and extended badge variants for soft tags to support the directory UI.
+- Updated navigation, dashboard docs, component catalog, routing guide, TODO list, setup guide, and progress report; lint/build re-run successfully.

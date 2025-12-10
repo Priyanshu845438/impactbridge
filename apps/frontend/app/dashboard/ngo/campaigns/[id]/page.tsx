@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   BadgeCheck,
@@ -224,9 +225,11 @@ export default function NGOCampaignDetailPage({ params }: { params: { id: string
                   </div>
                 </div>
                 <div className="overflow-hidden rounded-3xl border border-slate-200 shadow-sm dark:border-slate-700">
-                  <img
+                  <Image
                     src={campaign.coverImageUrl}
                     alt="Campaign cover"
+                    width={640}
+                    height={320}
                     className="h-48 w-full object-cover"
                   />
                 </div>
@@ -364,4 +367,3 @@ function StatCard({ label, primary, helper, accent, icon }: StatCardProps) {
     </div>
   );
 }
-

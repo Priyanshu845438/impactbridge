@@ -11,6 +11,7 @@ import {
   PieChart as PieIcon,
   Printer,
 } from "lucide-react";
+import Image from "next/image";
 import {
   Bar,
   BarChart,
@@ -268,7 +269,13 @@ export default function NGOImpactReportsPage() {
           {stories.map((story) => (
             <Card key={story.id} className="group flex h-full flex-col overflow-hidden rounded-4xl border border-slate-200 bg-white/90 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900/70">
               <div className="aspect-[4/3] w-full overflow-hidden bg-slate-200">
-                <img src={story.image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                <Image
+                  src={story.image}
+                  alt={story.title}
+                  width={640}
+                  height={480}
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                />
               </div>
               <div className="flex flex-1 flex-col gap-3 p-5">
                 <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">{story.title}</h3>
@@ -294,7 +301,13 @@ export default function NGOImpactReportsPage() {
       >
         {selectedStory ? (
           <article className="space-y-4 text-sm text-slate-600 dark:text-slate-300">
-            <img src={selectedStory.image} alt="" className="h-48 w-full rounded-3xl object-cover" />
+            <Image
+              src={selectedStory.image}
+              alt={selectedStory.title}
+              width={960}
+              height={480}
+              className="h-48 w-full rounded-3xl object-cover"
+            />
             <p>
               {selectedStory.excerpt} This is a placeholder for full story content describing the outcomes, beneficiary quotes,
               and next steps. Integrate with CMS once available.

@@ -38,6 +38,8 @@
 - `/dashboard/ngo/donations`
 - `/dashboard/company`
 - `/dashboard/company/ngos`
+- `/dashboard/company/programmes`
+- `/dashboard/company/ngos/[ngoId]`
 - `/dashboard/donor`
 
 Protection is enforced client-side in `app/dashboard/layout.tsx` via `useAuth()`. Server-side middleware will be added when backend sessions/cookies are in place.
