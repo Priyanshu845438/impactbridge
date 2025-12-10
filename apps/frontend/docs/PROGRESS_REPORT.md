@@ -14,7 +14,9 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Added NGO invoices & billing page
 - Added NGO payout request workspace
 - Added NGO compliance center UI
-- Added NGO impact & reports page with KPI tiles, chart suite, story cards, and export controls (route: `/dashboard/ngo/impact`).
+- Added NGO impact & reports page
+- Added company CSR dashboard with KPI tiles, analytics charts, quick actions, and activity feed (route: `/dashboard/company`).
+  with KPI tiles, chart suite, story cards, and export controls (route: `/dashboard/ngo/impact`).
   with grouped checklist, alerts, timeline, status filters, and action modal (route: `/dashboard/ngo/compliance`).
   with request modal, filterable table, timeline drawer, and pagination (route: `/dashboard/ngo/payouts`).
   with tabbed workspace, filterable invoice table, payout/download placeholders, skeletons, and preview modal (route: `/dashboard/ngo/billing`).

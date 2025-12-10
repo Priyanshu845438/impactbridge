@@ -632,3 +632,9 @@
 - Crafted /dashboard/ngo/impact with KPI tiles, export controls, line/pie/bar analytics, and impact story grid + modal.
 - Added skeleton fallbacks for charts and ensured responsive layouts across sections.
 - Updated NGO navigation and documentation suite (dashboard, component catalog, routing, TODO, progress); prettified, linted, and built.
+
+### **120. Company CSR Dashboard Refreshed**
+
+- Upgraded /dashboard/company with CSR KPI tiles, quarterly spend bar chart, allocation pie, programme progress line chart, quick actions, and activity feed.
+- Added mock skeleton states and responsive layout to match NGO/Admin quality.
+- Updated dashboard/component/routing/TODO/progress docs; ran Prettier, lint, and build.

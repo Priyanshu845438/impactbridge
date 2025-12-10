@@ -163,6 +163,13 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### NGO impact components
 
+### Company dashboard components
+
+- Route: `/dashboard/company`.
+- Reuses `KpiCard`, QuickActionCard, and Recharts wrappers for CSR-specific analytics.
+- Charts share skeleton fallbacks and responsive containers for quarterly spend, category allocation, and programme trend.
+- Activity feed leverages timeline styling with CSR-centric metadata.
+
 - Route: `/dashboard/ngo/impact`.
 - `KpiCard` helper reused for impact stats with tone-based icons.
 - Charts leverage Recharts line/pie/bar wrappers with skeleton placeholders and responsive containers.

@@ -6,9 +6,15 @@
 - [ ] Wire NGO billing workspace
 - [ ] Integrate NGO payout requests
 - [ ] Hook NGO compliance center
-- [ ] Connect NGO impact reports (`/dashboard/ngo/impact`) to analytics data sources.
-  - Replace mock KPI/chart data with live API responses.
-  - Wire impact stories to CMS feed and enable export actions.
+- [ ] Connect NGO impact reports
+- [ ] Wire company dashboard (`/dashboard/company`) to real CSR analytics.
+  - Replace mock KPI + chart data with backend metrics.
+  - Connect quick actions and activity feed to programme services.
+
+(`/dashboard/ngo/impact`) to analytics data sources.
+
+- Replace mock KPI/chart data with live API responses.
+- Wire impact stories to CMS feed and enable export actions.
 
 (`/dashboard/ngo/compliance`) to compliance service APIs.
 

@@ -73,6 +73,14 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 
 ## Other Role Pages
 
+### Company dashboard
+
+- Route: `/dashboard/company`.
+- KPI tiles highlight CSR budget, allocations, disbursements, and active programmes with tone-mapped icons.
+- Analytics suite includes quarterly spend bar chart, category pie split, and programme progress line chart with skeleton fallbacks.
+- Quick action grid points to NGO partners, proposal reviews, disbursement tracking, and compliance reports.
+- Recent activity feed surfaces CSR disbursements, partnership renewals, and compliance uploads.
+
 - **NGO dashboard (`/dashboard/ngo`)** now delivers a warm, campaign-first experience with welcome hero, KPI stat cards, donation trend + supporter-mix charts, quick actions, and skeleton/empty states for loading resilience.
 - **My Campaigns (`/dashboard/ngo/campaigns`)** lets NGOs manage only the campaigns they created with search, quick filters, responsive table/list, skeleton loaders, empty state, and pagination.
 - **Campaign Detail (`/dashboard/ngo/campaigns/[id]`)** gives NGOs a dedicated management view with status-aware header controls, KPI tiles, tabbed overview/donations/media/settings panels, breadcrumb, and skeleton fallbacks.
