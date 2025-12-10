@@ -656,3 +656,9 @@
 - Added /dashboard/company/programmes with banner-rich cards, search, category/status/region filters, SDG tags, skeleton and empty states, and mock CTA navigation.
 - Introduced `useDebouncedValue` hook and extended badge variants for soft tags to support the directory UI.
 - Updated navigation, dashboard docs, component catalog, routing guide, TODO list, setup guide, and progress report; lint/build re-run successfully.
+
+### **124. Company Programme Detail View Added**
+
+- Built /dashboard/company/programmes/[id] with hero banner, stat pills, tabbed content (Overview, NGO, Milestones, Documents, Updates), and desktop sidebar containing contact card, related list, and tag cloud.
+- Added skeleton loader, error placeholder, empty updates card, and responsive mobile layout (sidebar hidden, stats stacked).
+- Expanded mock dataset with detailed fields, refreshed docs (dashboard, component catalog, routing, TODO, progress), reran lint/build.

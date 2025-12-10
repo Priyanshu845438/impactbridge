@@ -94,6 +94,10 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Cards surface banner imagery, NGO owner, SDG tags, and status badge with CTA to detailed view.
 - `hooks/use-debounced-value.ts` introduced for directory search responsiveness.
 
+- Route: `/dashboard/company/programmes/[id]`.
+- Detail view adds banner hero, quick stat pills, overview tabs (Overview/NGO/Milestones/Documents/Updates), and right rail with contacts, related programmes, and tag cloud (desktop).
+- Includes skeleton loader, error placeholder, empty updates state, and responsive stacking for mobile (sidebar hidden).
+
 - Route: `/dashboard/company`.
 - KPI tiles highlight CSR budget, allocations, disbursements, and active programmes with tone-mapped icons.
 - Analytics suite includes quarterly spend bar chart, category pie split, and programme progress line chart with skeleton fallbacks.

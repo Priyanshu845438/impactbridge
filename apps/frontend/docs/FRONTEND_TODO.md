@@ -10,6 +10,7 @@
 - [ ] Wire company dashboard
 - [ ] Integrate company NGO directory
 - [ ] Wire company CSR programme directory (`/dashboard/company/programmes`) once backend search API is available.
+- [ ] Wire company programme detail view (`/dashboard/company/programmes/[id]`) to backend APIs for real milestones, documents, updates, and related listings.
 - [ ] Connect company NGO profile (`/dashboard/company/ngos/[ngoId]`) to backend partner data.
   - Replace mock stats, campaigns, and documents with live payloads.
   - Wire quick actions to messaging/workflow endpoints.
@@ -138,3 +139,4 @@ Update this file as features ship or priorities shift.
 - ✅ NGO document center scaffolded with checklist, upload area, notes sidebar, skeletons, and status badges.
 - ✅ NGO donations overview built with filters, KPI cards, responsive table, and placeholder states.
 - ✅ Company CSR programme directory scaffolded with filters, search, responsive cards, skeletons, and empty states.
+- ✅ Company programme detail view scaffolded with hero, tabs, sidebar, skeleton/error states.

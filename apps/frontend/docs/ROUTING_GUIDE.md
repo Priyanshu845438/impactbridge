@@ -39,6 +39,7 @@
 - `/dashboard/company`
 - `/dashboard/company/ngos`
 - `/dashboard/company/programmes`
+- `/dashboard/company/programmes/[id]`
 - `/dashboard/company/ngos/[ngoId]`
 - `/dashboard/donor`
 

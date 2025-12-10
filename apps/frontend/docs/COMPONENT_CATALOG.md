@@ -174,6 +174,10 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - Includes skeleton grid helper and empty state card for filtered views.
 - Hooks include `useDebouncedValue` for search responsiveness.
 
+- Route: `/dashboard/company/programmes/[id]`.
+- Uses `StatPill`, tabbed layout, timeline rows, document list, updates feed, and right-rail cards (`ContactCard`, `RelatedProgrammes`, `TagCloud`).
+- Shares skeleton + error components with cards for fallback states.
+
 - Route: `/dashboard/company/ngos/[ngoId]`.
 - Reuses SectionHeader, card stats, Tabs, and detail side panel to mirror CSR partner insights.
 - Includes skeleton fallback, empty states for campaigns/documents, and modal-ready CTA buttons.
