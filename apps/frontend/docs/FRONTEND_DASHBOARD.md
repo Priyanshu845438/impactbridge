@@ -107,6 +107,10 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 ### Company compliance overview
 
 - Route: `/dashboard/company/compliance`.
+- Insight chips summarise compliant, pending, missing document, and expiring registration counts at a glance.
+- Searchable table (desktop) and responsive cards (mobile) share pill filters and link directly to NGO profiles for deeper review.
+- Upcoming deadlines sidebar highlights imminent filings with status tags, while drawer view surfaces missing documents, due dates, notes, and follow-up CTA.
+- Skeleton loaders and empty state keep UX steady until real compliance APIs plug in.
 
 ### Company budget planner
 ### Company partnership insights

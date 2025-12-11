@@ -714,3 +714,8 @@
 
 - Delivered /dashboard/company/impact-explorer with filter panel, summary stats, interactive map placeholder, beneficiary table, and detail drawer fed by mock data.
 - Navigation, dashboard docs, component catalog, routing guide, and TODO list refreshed to document the new explorer and future API integration.
+
+### **135. Company Compliance Overview Polished**
+
+- Rounded out /dashboard/company/compliance with doc updates covering insight pills, responsive list, drawer details, and upcoming deadline sidebar mechanics.
+- Verified navigation entry, refreshed dashboard/component/routing/TODO/progress docs, and reran lint/build to confirm a clean state (existing Next warning only).

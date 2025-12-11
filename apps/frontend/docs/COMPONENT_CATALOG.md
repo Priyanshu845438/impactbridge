@@ -166,6 +166,11 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 ### Company dashboard components
 
 ### Company compliance components
+
+- Route: `/dashboard/company/compliance`.
+- `InsightCard` helper renders tone-mapped pill, metric value, and helper label for compliance highlights.
+- `ComplianceList` toggles table vs mobile card layouts while sharing filter/search state and navigation links.
+- Drawer composes status badge, missing document list, deadline cards, and notes block with follow-up CTA using shared Card/Button primitives.
 ### Company budget planner components
 ### Company partner insights components
 ### Company vendor directory components
