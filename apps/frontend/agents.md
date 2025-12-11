@@ -704,3 +704,8 @@
 
 - Built /dashboard/company/engagement-hub with Updates, Conversations, and Outreach tabs, chat-style messaging panel, responsive layout, and skeleton/empty states.
 - Added company navigation entry, refreshed routing guide and dashboard documentation, and noted future RTL coverage for engagement tabs.
+
+### **133. Company Programme Comparison Dashboard Added**
+
+- Created /dashboard/company/comparison featuring multi-select selector, KPI comparison grid, trio of Recharts visualisations, and insight callouts using mock data.
+- Updated navigation, dashboard/component docs, routing guide, and TODOs to cover the new comparison surface and upcoming API/test needs.

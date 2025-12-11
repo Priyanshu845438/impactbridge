@@ -45,6 +45,7 @@
 - `/dashboard/company/donations`
 - `/dashboard/company/reports`
 - `/dashboard/company/compliance`
+- `/dashboard/company/comparison`
 - `/dashboard/company/budget-planner`
 - `/dashboard/company/partner-insights`
 - `/dashboard/company/vendors`
@@ -78,4 +79,4 @@ Protection is enforced client-side in `app/dashboard/layout.tsx` via `useAuth()`
 - Introduce dynamic routes for entities (e.g., `/dashboard/admin/ngos/[id]`)
 - Use parallel routes for modals if needed (e.g., editing tasks)
 
-- Dashboard shell prefetches `/dashboard/admin`, `/dashboard/users`, `/dashboard/admin/modules/reports`, `/dashboard/admin/audit-logs`, `/dashboard/company`, and `/dashboard/company/engagement-hub`; keep the list updated when adding new high-traffic sections.
+- Dashboard shell prefetches `/dashboard/admin`, `/dashboard/users`, `/dashboard/admin/modules/reports`, `/dashboard/admin/audit-logs`, `/dashboard/company`, `/dashboard/company/engagement-hub`, and `/dashboard/company/comparison`; keep the list updated when adding new high-traffic sections.

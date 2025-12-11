@@ -119,6 +119,7 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 
 ### Company vendor directory
 ### Company audit & compliance center
+### Company programme comparison
 
 - Route: `/dashboard/company/audit-center`.
 - Filters combine NGO select, compliance status, year, and search to refine audit records.
@@ -131,6 +132,11 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Filters combine free-text search, service type, and rating thresholds with reset control.
 - Vendor grid uses mock data with gradient logo placeholders, rating stars, and profile CTA opening detail drawer.
 - Drawer highlights services, past clients, certifications, and contact info; skeleton/empty states keep UX resilient.
+
+- Route: `/dashboard/company/comparison`.
+- Multi-select dropdown allows choosing up to four programmes; requires at least two selections to render the grid.
+- KPI grid compares budget utilisation, milestone completion, beneficiaries, and compliance score side-by-side with responsive layout.
+- Chart trio (bar, line, radial) visualises budget vs utilisation, monthly progress, and compliance snapshot while insights list calls out key differences.
 
 - Route: `/dashboard/company/budget-planner`.
 - Year selector swaps mock datasets for 2024–2026 while breadcrumb + badge contextualise planning mode.
