@@ -6,6 +6,7 @@ import {
   FolderKanban,
   HandCoins,
   LayoutDashboard,
+  MessageCircle,
   LifeBuoy,
   LucideIcon,
   Settings2,
@@ -136,6 +137,13 @@ export const navMenu: NavItem[] = [
     roles: ["COMPANY"],
     group: "Workspace",
     href: "/dashboard/company/vendors",
+  },
+  {
+    label: "Engagement hub",
+    icon: MessageCircle,
+    roles: ["COMPANY"],
+    group: "Workspace",
+    href: "/dashboard/company/engagement-hub",
   },
   {
     label: "Audit & compliance",

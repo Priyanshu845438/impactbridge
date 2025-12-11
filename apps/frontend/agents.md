@@ -699,3 +699,8 @@
 
 - Implemented /dashboard/company/audit-center with filters, desktop table/mobile cards, score + status badges, and detailed report drawer.
 - Documentation, routing, TODO, and progress report updated; navigation now links to the audit center.
+
+### **132. Company Stakeholder Engagement Hub Added**
+
+- Built /dashboard/company/engagement-hub with Updates, Conversations, and Outreach tabs, chat-style messaging panel, responsive layout, and skeleton/empty states.
+- Added company navigation entry, refreshed routing guide and dashboard documentation, and noted future RTL coverage for engagement tabs.

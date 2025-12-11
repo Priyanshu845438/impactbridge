@@ -36,6 +36,8 @@
 - `/dashboard/ngo/payouts`
 - `/dashboard/ngo/impact`
 - `/dashboard/ngo/donations`
+- `/dashboard/ngo/impact`
+- `/dashboard/ngo/payouts`
 - `/dashboard/company`
 - `/dashboard/company/ngos`
 - `/dashboard/company/programmes`
@@ -48,6 +50,7 @@
 - `/dashboard/company/vendors`
 - `/dashboard/company/audit-center`
 - `/dashboard/company/ngos/[ngoId]`
+- `/dashboard/company/engagement-hub`
 - `/dashboard/donor`
 
 Protection is enforced client-side in `app/dashboard/layout.tsx` via `useAuth()`. Server-side middleware will be added when backend sessions/cookies are in place.
@@ -75,4 +78,4 @@ Protection is enforced client-side in `app/dashboard/layout.tsx` via `useAuth()`
 - Introduce dynamic routes for entities (e.g., `/dashboard/admin/ngos/[id]`)
 - Use parallel routes for modals if needed (e.g., editing tasks)
 
-- Dashboard shell prefetches `/dashboard/admin`, `/dashboard/users`, `/dashboard/admin/modules/reports`, and `/dashboard/admin/audit-logs`; keep the list updated when adding new high-traffic sections.
+- Dashboard shell prefetches `/dashboard/admin`, `/dashboard/users`, `/dashboard/admin/modules/reports`, `/dashboard/admin/audit-logs`, `/dashboard/company`, and `/dashboard/company/engagement-hub`; keep the list updated when adding new high-traffic sections.
