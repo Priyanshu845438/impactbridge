@@ -104,6 +104,14 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Route: `/dashboard/company/reports`.
 - Reports & Exports page with summary cards, filters, export modal, responsive table/cards, and skeleton/empty/error states.
 
+### Company compliance overview
+
+- Route: `/dashboard/company/compliance`.
+- Insight tiles surface compliant, pending, missing-document, and expiring-registration counts using live badge tones.
+- Status filters and search power a responsive table-to-card list with profile links and “View details” drawer showing deadlines, notes, and actions.
+- Right-hand deadline column highlights upcoming renewals; skeleton placeholders and empty state keep UX steady while loading.
+
+
 - Route: `/dashboard/company`.
 - KPI tiles highlight CSR budget, allocations, disbursements, and active programmes with tone-mapped icons.
 - Analytics suite includes quarterly spend bar chart, category pie split, and programme progress line chart with skeleton fallbacks.

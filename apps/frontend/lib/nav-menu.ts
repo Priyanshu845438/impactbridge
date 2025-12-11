@@ -109,6 +109,13 @@ export const navMenu: NavItem[] = [
     href: "/dashboard/company/programmes",
   },
   {
+    label: "Compliance overview",
+    icon: ShieldCheck,
+    roles: ["COMPANY"],
+    group: "Workspace",
+    href: "/dashboard/company/compliance",
+  },
+  {
     label: "Programmes",
     icon: ClipboardList,
     roles: ["SUPER_ADMIN"],

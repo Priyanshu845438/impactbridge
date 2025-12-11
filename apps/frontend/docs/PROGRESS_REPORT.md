@@ -24,6 +24,7 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Added company programme detail view with hero banner, stat pills, tabs (Overview/NGO/Milestones/Documents/Updates), desktop sidebar, skeleton/error states, and empty updates placeholder (route: `/dashboard/company/programmes/[id]`).
 - Added company donations overview page with filterable hero, KPI tiles, responsive table-to-card presentation, sidebar filters, and skeleton/empty/error states (route: `/dashboard/company/donations`).
 - Added company reports & exports page with summary tiles, filters, responsive table/cards, export modal, and skeleton/empty/error coverage (route: `/dashboard/company/reports`).
+- Added company compliance overview page with insight cards, responsive table-to-card list, drawer detail view, and upcoming deadline sidebar (route: `/dashboard/company/compliance`).
   with KPI tiles, chart suite, story cards, and export controls (route: `/dashboard/ngo/impact`).
   with grouped checklist, alerts, timeline, status filters, and action modal (route: `/dashboard/ngo/compliance`).
   with request modal, filterable table, timeline drawer, and pagination (route: `/dashboard/ngo/payouts`).

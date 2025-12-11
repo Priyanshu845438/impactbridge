@@ -674,3 +674,8 @@
 - Built /dashboard/company/reports with summary tiles powered by `ReportsSummaryCard`, filter controls, responsive table/cards, export modal, and skeleton/empty/error states.
 - Ensured mock export data aligns with donation programmes and wired hero filters to state.
 - Documentation refreshed (dashboard, component catalog, routing, TODO, progress) and lint/build validated.
+
+### **127. Company Compliance Overview Added**
+
+- Implemented /dashboard/company/compliance with insight cards, status-filtered table + mobile cards, upcoming deadlines sidebar, and drawer for detailed NGO compliance notes.
+- Hooked navigation for company role, refreshed docs (dashboard, component catalog, routing, TODO, progress), and tracked need for backend wiring/tests in TODO.

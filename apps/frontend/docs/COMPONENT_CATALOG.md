@@ -165,6 +165,14 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### Company dashboard components
 
+### Company compliance components
+
+- Route: `/dashboard/company/compliance`.
+- Insight cards reuse `Card` + `Badge` primitives with tone classes for quick compliance KPIs.
+- `ComplianceList` swaps between table (desktop) and card layout (mobile) using shared Button and Badge components.
+- Drawer leverages `components/ui/drawer` to surface status badge header, missing document alerts, deadline cards, and notes summary.
+- Upcoming deadlines sidebar is Card-based with icon chips and badge tone hints for fast scanning.
+
 ### Company NGO directory components
 
 ### Company NGO profile components
