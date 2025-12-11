@@ -6,6 +6,7 @@ import {
   FolderKanban,
   HandCoins,
   SlidersHorizontal,
+  Globe2,
   LayoutDashboard,
   MessageCircle,
   LifeBuoy,
@@ -124,6 +125,13 @@ export const navMenu: NavItem[] = [
     roles: ["COMPANY"],
     group: "Workspace",
     href: "/dashboard/company/comparison",
+  },
+  {
+    label: "Impact explorer",
+    icon: Globe2,
+    roles: ["COMPANY"],
+    group: "Workspace",
+    href: "/dashboard/company/impact-explorer",
   },
   {
     label: "CSR budget planner",

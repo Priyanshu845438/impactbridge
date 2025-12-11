@@ -171,6 +171,7 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 ### Company vendor directory components
 ### Company audit center components
 ### Company programme comparison components
+### Company impact explorer components
 
 - Route: `/dashboard/company/audit-center`.
 - Filter row shares Select/Input controls with reset button similar to other company modules.
@@ -190,6 +191,12 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - `ComparisonGrid` renders responsive metric columns using grid CSS while `MultiSelect` handles custom multi-select toggle with check indicators.
 - Recharts bar/line/radar compositions reuse shared colour palette to visualise budget, progress, and compliance.
 - Insights card consumes mock analytics to produce highlight bullets; empty state guides users to select programmes.
+
+
+- Route: `/dashboard/company/impact-explorer`.
+- `FiltersPanel` reuses Button-based custom selects for region/age/gender/outcome controls with Clear action.
+- `MapPlaceholder` provides interactive SVG dots, tooltip, and region list for mock geographic impact exploration.
+- Detail drawer surfaces outcome distribution bars and recent activities, mirroring other sheet/drawer UX patterns.
 
 
 - Route: `/dashboard/company/partner-insights`.

@@ -709,3 +709,8 @@
 
 - Created /dashboard/company/comparison featuring multi-select selector, KPI comparison grid, trio of Recharts visualisations, and insight callouts using mock data.
 - Updated navigation, dashboard/component docs, routing guide, and TODOs to cover the new comparison surface and upcoming API/test needs.
+
+### **134. Company Beneficiary Impact Explorer Added**
+
+- Delivered /dashboard/company/impact-explorer with filter panel, summary stats, interactive map placeholder, beneficiary table, and detail drawer fed by mock data.
+- Navigation, dashboard docs, component catalog, routing guide, and TODO list refreshed to document the new explorer and future API integration.

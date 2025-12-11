@@ -15,6 +15,7 @@
 - [ ] Wire company reports & exports (`/dashboard/company/reports`) to reporting APIs, replace mock rows and export actions.
 - [ ] Wire company compliance overview (`/dashboard/company/compliance`) to compliance service once ready.
 - [ ] Wire company programme comparison (`/dashboard/company/comparison`) to analytics service for live KPI and insight generation.
+- [ ] Wire company impact explorer (`/dashboard/company/impact-explorer`) to beneficiary analytics APIs, replacing mock map, table, and drawer data.
 - [ ] Wire company budget planner (`/dashboard/company/budget-planner`) to finance planning APIs and persist allocations.
 - [ ] Wire company partner insights (`/dashboard/company/partner-insights`) to analytics/compliance APIs.
 - [ ] Wire company vendor directory (`/dashboard/company/vendors`) to vendor management APIs and contact workflows.

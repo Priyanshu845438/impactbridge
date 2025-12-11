@@ -120,6 +120,7 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 ### Company vendor directory
 ### Company audit & compliance center
 ### Company programme comparison
+### Company impact explorer
 
 - Route: `/dashboard/company/audit-center`.
 - Filters combine NGO select, compliance status, year, and search to refine audit records.
@@ -137,6 +138,11 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Multi-select dropdown allows choosing up to four programmes; requires at least two selections to render the grid.
 - KPI grid compares budget utilisation, milestone completion, beneficiaries, and compliance score side-by-side with responsive layout.
 - Chart trio (bar, line, radial) visualises budget vs utilisation, monthly progress, and compliance snapshot while insights list calls out key differences.
+
+- Route: `/dashboard/company/impact-explorer`.
+- Filters for region, age, gender, and outcome provide contextual slicing with clear button.
+- Summary cards highlight total beneficiaries, average outcome score, high-impact regions, and recent growth using tone-mapped icons.
+- Interactive map placeholder with tooltips, beneficiary table, and detail drawer deliver mock beneficiary-level insights; empty state guides filter adjustments.
 
 - Route: `/dashboard/company/budget-planner`.
 - Year selector swaps mock datasets for 2024–2026 while breadcrumb + badge contextualise planning mode.
