@@ -694,3 +694,8 @@
 
 - Launched /dashboard/company/vendors with search + filters, responsive card grid, vendor drawer, and skeleton/empty states using mock data.
 - Updated navigation, dashboard documentation, component catalog, routing guide, TODO list, and progress report for new vendor ecosystem UI.
+
+### **131. Company Audit & Compliance Center Added**
+
+- Implemented /dashboard/company/audit-center with filters, desktop table/mobile cards, score + status badges, and detailed report drawer.
+- Documentation, routing, TODO, and progress report updated; navigation now links to the audit center.

@@ -118,6 +118,14 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Includes skeleton and empty-state messaging; ready to wire into future analytics APIs.
 
 ### Company vendor directory
+### Company audit & compliance center
+
+- Route: `/dashboard/company/audit-center`.
+- Filters combine NGO select, compliance status, year, and search to refine audit records.
+- Desktop table + mobile cards present audit metadata with status and score badges plus report CTA.
+- Drawer summarises audit objective/scope, score breakdown bars, key findings, recommended actions, and download placeholder.
+- Skeleton + empty states keep review flow resilient prior to wiring real data.
+
 
 - Route: `/dashboard/company/vendors`.
 - Filters combine free-text search, service type, and rating thresholds with reset control.

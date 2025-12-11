@@ -28,6 +28,7 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Added company CSR budget planner page with year selector, summary cards, allocation table/cards, edit drawer, and add-allocation modal (route: `/dashboard/company/budget-planner`).
 - Added company partnership insights page with gradient KPI row, filters, responsive NGO list, skeletons, and empty state (route: `/dashboard/company/partner-insights`).
 - Added company vendor directory page with search/filters, responsive card grid, detail drawer, and skeleton/empty states (route: `/dashboard/company/vendors`).
+- Added company audit & compliance center with filters, table/cards, score badges, drawer summary, and placeholder download flow (route: `/dashboard/company/audit-center`).
   with KPI tiles, chart suite, story cards, and export controls (route: `/dashboard/ngo/impact`).
   with grouped checklist, alerts, timeline, status filters, and action modal (route: `/dashboard/ngo/compliance`).
   with request modal, filterable table, timeline drawer, and pagination (route: `/dashboard/ngo/payouts`).

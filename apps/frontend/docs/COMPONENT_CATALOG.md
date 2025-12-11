@@ -169,6 +169,14 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 ### Company budget planner components
 ### Company partner insights components
 ### Company vendor directory components
+### Company audit center components
+
+- Route: `/dashboard/company/audit-center`.
+- Filter row shares Select/Input controls with reset button similar to other company modules.
+- `AuditList` toggles table vs mobile cards, reusing ScoreBadge/StatusBadge helpers.
+- Drawer combines summary card, breakdown progress bars, findings/actions lists, and download placeholder.
+- Skeleton + empty state reuse Card/Skeleton primitives for loading resilience.
+
 
 - Route: `/dashboard/company/vendors`.
 - Filter row reuses Select/Input primitives with reset button.

@@ -138,6 +138,13 @@ export const navMenu: NavItem[] = [
     href: "/dashboard/company/vendors",
   },
   {
+    label: "Audit & compliance",
+    icon: ShieldCheck,
+    roles: ["COMPANY"],
+    group: "Workspace",
+    href: "/dashboard/company/audit-center",
+  },
+  {
     label: "Programmes",
     icon: ClipboardList,
     roles: ["SUPER_ADMIN"],
