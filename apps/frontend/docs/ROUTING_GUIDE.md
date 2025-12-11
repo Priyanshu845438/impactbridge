@@ -43,6 +43,7 @@
 - `/dashboard/company/donations`
 - `/dashboard/company/reports`
 - `/dashboard/company/compliance`
+- `/dashboard/company/budget-planner`
 - `/dashboard/company/ngos/[ngoId]`
 - `/dashboard/donor`
 

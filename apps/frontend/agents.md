@@ -679,3 +679,8 @@
 
 - Implemented /dashboard/company/compliance with insight cards, status-filtered table + mobile cards, upcoming deadlines sidebar, and drawer for detailed NGO compliance notes.
 - Hooked navigation for company role, refreshed docs (dashboard, component catalog, routing, TODO, progress), and tracked need for backend wiring/tests in TODO.
+
+### **128. Company CSR Budget Planner Added**
+
+- Built /dashboard/company/budget-planner with year selector, summary cards, responsive allocation table/cards, edit drawer, and add-programme modal using mock datasets.
+- Added nav entry for company role, refreshed docs (dashboard, component catalog, routing, TODO, progress), and noted API/test follow-ups.

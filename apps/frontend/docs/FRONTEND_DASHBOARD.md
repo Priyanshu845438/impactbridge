@@ -107,6 +107,16 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 ### Company compliance overview
 
 - Route: `/dashboard/company/compliance`.
+
+### Company budget planner
+
+- Route: `/dashboard/company/budget-planner`.
+- Year selector swaps mock datasets for 2024–2026 while breadcrumb + badge contextualise planning mode.
+- Summary row highlights total budget, allocated, and remaining funds with tone-mapped cards.
+- Responsive allocation table/cards support edit drawer with slider + numeric input and modal for adding allocations.
+- Skeleton state keeps UX steady before data appears; all interactions remain mock-only until APIs land.
+
+
 - Insight tiles surface compliant, pending, missing-document, and expiring-registration counts using live badge tones.
 - Status filters and search power a responsive table-to-card list with profile links and “View details” drawer showing deadlines, notes, and actions.
 - Right-hand deadline column highlights upcoming renewals; skeleton placeholders and empty state keep UX steady while loading.

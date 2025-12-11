@@ -166,6 +166,13 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 ### Company dashboard components
 
 ### Company compliance components
+### Company budget planner components
+
+- Route: `/dashboard/company/budget-planner`.
+- `SummaryRow` reuses Card + badge styling for CSR totals; tone reacts to remaining budget sign.
+- `AllocationList` switches between table and mobile card layouts while reusing ProgressBar helper.
+- Drawer leverages numeric input + range slider for mock allocation edits; modal mirrors shared Select/Input UI.
+
 
 - Route: `/dashboard/company/compliance`.
 - Insight cards reuse `Card` + `Badge` primitives with tone classes for quick compliance KPIs.

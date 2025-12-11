@@ -14,6 +14,8 @@
 - [ ] Wire company donations overview (`/dashboard/company/donations`) to finance APIs (filters, pagination, receipts, summary metrics).
 - [ ] Wire company reports & exports (`/dashboard/company/reports`) to reporting APIs, replace mock rows and export actions.
 - [ ] Wire company compliance overview (`/dashboard/company/compliance`) to compliance service once ready.
+- [ ] Wire company budget planner (`/dashboard/company/budget-planner`) to finance planning APIs and persist allocations.
+- [ ] Add RTL coverage for budget planner year selector, drawer edits, and modal submission.
 - [ ] Add RTL coverage for compliance table/card responsiveness and drawer interactions.
 - [ ] Connect company NGO profile (`/dashboard/company/ngos/[ngoId]`) to backend partner data.
   - Replace mock stats, campaigns, and documents with live payloads.

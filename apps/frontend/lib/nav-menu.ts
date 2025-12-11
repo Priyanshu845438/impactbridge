@@ -1,4 +1,5 @@
 import {
+  BarChart3,
   BookOpen,
   ClipboardList,
   FileBarChart,
@@ -114,6 +115,13 @@ export const navMenu: NavItem[] = [
     roles: ["COMPANY"],
     group: "Workspace",
     href: "/dashboard/company/compliance",
+  },
+  {
+    label: "CSR budget planner",
+    icon: BarChart3,
+    roles: ["COMPANY"],
+    group: "Workspace",
+    href: "/dashboard/company/budget-planner",
   },
   {
     label: "Programmes",
