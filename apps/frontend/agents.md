@@ -689,3 +689,8 @@
 
 - Implemented /dashboard/company/partner-insights with gradient KPI row, filters, responsive NGO performance list, skeleton/empty states, and nav entry.
 - Documentation refreshed (dashboard, component catalog, routing, TODO, progress) and TODOs capture future API wiring + RTL tests.
+
+### **130. Company Vendor Directory Added**
+
+- Launched /dashboard/company/vendors with search + filters, responsive card grid, vendor drawer, and skeleton/empty states using mock data.
+- Updated navigation, dashboard documentation, component catalog, routing guide, TODO list, and progress report for new vendor ecosystem UI.

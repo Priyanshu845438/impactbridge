@@ -131,6 +131,13 @@ export const navMenu: NavItem[] = [
     href: "/dashboard/company/partner-insights",
   },
   {
+    label: "Vendor directory",
+    icon: FolderKanban,
+    roles: ["COMPANY"],
+    group: "Workspace",
+    href: "/dashboard/company/vendors",
+  },
+  {
     label: "Programmes",
     icon: ClipboardList,
     roles: ["SUPER_ADMIN"],

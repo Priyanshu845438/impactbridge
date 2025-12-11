@@ -45,6 +45,7 @@
 - `/dashboard/company/compliance`
 - `/dashboard/company/budget-planner`
 - `/dashboard/company/partner-insights`
+- `/dashboard/company/vendors`
 - `/dashboard/company/ngos/[ngoId]`
 - `/dashboard/donor`
 

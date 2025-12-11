@@ -16,6 +16,8 @@
 - [ ] Wire company compliance overview (`/dashboard/company/compliance`) to compliance service once ready.
 - [ ] Wire company budget planner (`/dashboard/company/budget-planner`) to finance planning APIs and persist allocations.
 - [ ] Wire company partner insights (`/dashboard/company/partner-insights`) to analytics/compliance APIs.
+- [ ] Wire company vendor directory (`/dashboard/company/vendors`) to vendor management APIs and contact workflows.
+- [ ] Add RTL coverage for vendor directory filters, card CTA, and drawer interactions.
 - [ ] Add RTL coverage for partner insights filters, sorting, and responsive list rendering.
 - [ ] Add RTL coverage for budget planner year selector, drawer edits, and modal submission.
 - [ ] Add RTL coverage for compliance table/card responsiveness and drawer interactions.

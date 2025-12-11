@@ -168,6 +168,14 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 ### Company compliance components
 ### Company budget planner components
 ### Company partner insights components
+### Company vendor directory components
+
+- Route: `/dashboard/company/vendors`.
+- Filter row reuses Select/Input primitives with reset button.
+- Vendor cards leverage Card with hover elevation, gradient border, badge tags, and rating helper.
+- Drawer composes service/client/certification sections plus contact block using shared badges.
+- Skeleton grid + empty card maintain loading/empty resilience.
+
 
 - Route: `/dashboard/company/partner-insights`.
 - KPI row reuses Card with gradient overlays and Lucide icons for quick metrics.

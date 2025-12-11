@@ -117,6 +117,12 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Responsive list renders table on desktop and stacked cards on mobile with progress bars, compliance badges, and profile CTA.
 - Includes skeleton and empty-state messaging; ready to wire into future analytics APIs.
 
+### Company vendor directory
+
+- Route: `/dashboard/company/vendors`.
+- Filters combine free-text search, service type, and rating thresholds with reset control.
+- Vendor grid uses mock data with gradient logo placeholders, rating stars, and profile CTA opening detail drawer.
+- Drawer highlights services, past clients, certifications, and contact info; skeleton/empty states keep UX resilient.
 
 - Route: `/dashboard/company/budget-planner`.
 - Year selector swaps mock datasets for 2024–2026 while breadcrumb + badge contextualise planning mode.
