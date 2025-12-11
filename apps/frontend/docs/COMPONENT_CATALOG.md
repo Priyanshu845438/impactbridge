@@ -167,6 +167,14 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### Company compliance components
 ### Company budget planner components
+### Company partner insights components
+
+- Route: `/dashboard/company/partner-insights`.
+- KPI row reuses Card with gradient overlays and Lucide icons for quick metrics.
+- Filters use Select + range input to keep state local; no backend wiring yet.
+- `PartnerList` toggles table/cards with shared LogoPlaceholder, ProgressBar, and ComplianceBadge helpers.
+- Skeleton + empty state maintain UX parity with other company modules.
+
 
 - Route: `/dashboard/company/budget-planner`.
 - `SummaryRow` reuses Card + badge styling for CSR totals; tone reacts to remaining budget sign.

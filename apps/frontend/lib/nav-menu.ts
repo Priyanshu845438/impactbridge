@@ -124,6 +124,13 @@ export const navMenu: NavItem[] = [
     href: "/dashboard/company/budget-planner",
   },
   {
+    label: "Partnership insights",
+    icon: Users,
+    roles: ["COMPANY"],
+    group: "Workspace",
+    href: "/dashboard/company/partner-insights",
+  },
+  {
     label: "Programmes",
     icon: ClipboardList,
     roles: ["SUPER_ADMIN"],

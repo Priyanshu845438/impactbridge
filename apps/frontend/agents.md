@@ -684,3 +684,8 @@
 
 - Built /dashboard/company/budget-planner with year selector, summary cards, responsive allocation table/cards, edit drawer, and add-programme modal using mock datasets.
 - Added nav entry for company role, refreshed docs (dashboard, component catalog, routing, TODO, progress), and noted API/test follow-ups.
+
+### **129. Company Partnership Insights Added**
+
+- Implemented /dashboard/company/partner-insights with gradient KPI row, filters, responsive NGO performance list, skeleton/empty states, and nav entry.
+- Documentation refreshed (dashboard, component catalog, routing, TODO, progress) and TODOs capture future API wiring + RTL tests.

@@ -109,6 +109,14 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Route: `/dashboard/company/compliance`.
 
 ### Company budget planner
+### Company partnership insights
+
+- Route: `/dashboard/company/partner-insights`.
+- KPI row surfaces programme progress, milestone timeliness, compliance score, and engagement rating via gradient cards.
+- Filters (compliance, performance slider, sort) refine the NGO performance list backed by mock dataset.
+- Responsive list renders table on desktop and stacked cards on mobile with progress bars, compliance badges, and profile CTA.
+- Includes skeleton and empty-state messaging; ready to wire into future analytics APIs.
+
 
 - Route: `/dashboard/company/budget-planner`.
 - Year selector swaps mock datasets for 2024–2026 while breadcrumb + badge contextualise planning mode.
