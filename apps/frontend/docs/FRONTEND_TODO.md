@@ -168,3 +168,5 @@ Update this file as features ship or priorities shift.
 - ✅ Company impact benchmarks page built with dual-value KPIs, comparative charts, and insight guidance (mock data).
 - ✅ Company impact stories page built with storytelling cards, filters, and narrative drawer (mock data).
 - ✅ Company impact story builder page built with structured form, live preview, mock gallery upload, and CTA controls (UI only).
+
+- [ ] Add Story workflow tests (status transitions Draft ⇄ Submitted ⇄ Published) once RTL harness lands

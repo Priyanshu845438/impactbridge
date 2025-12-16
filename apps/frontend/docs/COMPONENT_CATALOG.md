@@ -181,6 +181,8 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 ### Company impact story management components
 
+- `StatusBadge` (components/ui/status-badge.tsx) – pill badge for Draft/Submitted/Published with Lucide icon and fade-in animation; now reused across listing/drawer
+- Drawer status toolbar pairs StatusBadge with submit/publish CTA buttons (local state only)
 - Route: `/dashboard/company/impact-stories/manage`.
 - Story repository cards reuse Card, Badge, Button, Select, TagSelector, and Skeleton primitives to expose status badge, action cluster, timeline note, and tag chips.
 - `handleChangeStatus` updates local state instantly; dropdown mirrors company listing select styling for consistency, while TagSelector offers pill toggles for multi-tag filtering.

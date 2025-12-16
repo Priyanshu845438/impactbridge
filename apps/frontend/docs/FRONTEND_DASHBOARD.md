@@ -150,11 +150,14 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Story cards pair programme/NGO branding with warm imagery, snippets, and CTAs while filters slice by theme, partner, and newly added tags.
 - Drawer expands stories with extended narrative, before/after stats, gallery chips, outcome badges, and tagged focus areas (mock data today).
 - Designed for storytelling-first layout with soft shadows, rounded corners, and mobile-friendly stacking.
+- Status badge now reuses the shared component to reflect Draft → Submitted → Published workflow, with inline status selector and local state transitions.
+- Drawer header shows the current status with contextual actions (Submit for review / Publish story) that update only client-side for now.
 
 - Route: `/dashboard/company/impact-stories/manage`.
 - Repository view for all stories with search, NGO/status/tag filters, sort controls, skeletons, and responsive card grid.
 - Cards now surface cover, summary, status badge, timeline note, tag chips, and mock actions (Review/Publish/Edit/Delete) alongside a change-status dropdown that updates local state instantly.
 - Empty-state encourages authors to draft narratives when filters yield no results.
+- Publishing workflow mirrors the main page: Draft, Submitted, and Published states are reflected in badges, filter options, and the change-status dropdown, each animating softly to keep the handoffs friendly.
 
 - Route: `/dashboard/company/impact-stories/review/[id]`.
 - Review mode mirrors donor-facing presentation with hero cover, anchored sections, reading progress bar, and sidebar metadata.

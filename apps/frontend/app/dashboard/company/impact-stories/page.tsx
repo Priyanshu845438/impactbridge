@@ -12,10 +12,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { TagSelector, type TagOption } from "@/components/ui/tag-selector";
+import { StatusBadge, type StoryPublishingStatus } from "@/components/ui/status-badge";
 
 const THEMES = ["All themes", "Education", "Health", "Environment"] as const;
 const NGO_FILTERS = ["All partners", "Swasthya Foundation", "GreenFuture Trust", "TeachBridge Collective"] as const;
-const STATUS_FILTERS = ["All", "Draft", "Under Review", "Published"] as const;
+const STATUS_FILTERS = ["All", "Draft", "Submitted", "Published"] as const;
 const TAG_OPTIONS: TagOption[] = [
   { label: "Education", value: "education" },
   { label: "Health", value: "health" },
@@ -37,7 +38,7 @@ type Story = {
   beforeAfter: Array<{ label: string; before: string; after: string }>;
   outcomes: string[];
   gallery: string[];
-  status: "Draft" | "Under Review" | "Published";
+  status: StoryPublishingStatus;
   updatedDays: number;
   tags: string[];
 };
@@ -87,7 +88,7 @@ const INITIAL_STORIES: Story[] = [
       "https://images.unsplash.com/photo-1527613426441-4da17471b66d?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1550831107-1553da8c8464?auto=format&fit=crop&w=900&q=80",
     ],
-    status: "Under Review",
+    status: "Submitted",
     updatedDays: 2,
     tags: ["health", "rural"],
   },
@@ -141,13 +142,7 @@ const INITIAL_STORIES: Story[] = [
   },
 ];
 
-const STATUS_BADGE: Record<Story["status"], string> = {
-  Draft: "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-200",
-  "Under Review": "bg-amber-500/15 text-amber-600 dark:bg-amber-500/15 dark:text-amber-200",
-  Published: "bg-emerald-500/15 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-200",
-};
-
-const STATUS_OPTIONS: Story["status"][] = ["Draft", "Under Review", "Published"];
+const STATUS_OPTIONS: Story["status"][] = ["Draft", "Submitted", "Published"];
 
 export default function ImpactStoriesPage() {
   const [stories, setStories] = useState(INITIAL_STORIES);
@@ -157,6 +152,7 @@ export default function ImpactStoriesPage() {
   const [tagFilter, setTagFilter] = useState<string[]>([]);
   const [activeStoryId, setActiveStoryId] = useState<string | null>(null);
   const [galleryIndex, setGalleryIndex] = useState(0);
+  const [drawerStatus, setDrawerStatus] = useState<Story["status"] | null>(null);
 
   const filteredStories = useMemo(() => {
     return stories.filter((story) => {
@@ -172,11 +168,22 @@ export default function ImpactStoriesPage() {
 
   const handleOpenStory = (story: Story) => {
     setActiveStoryId(story.id);
+    setDrawerStatus(story.status);
     setGalleryIndex(0);
   };
 
   const handleStatusChange = (storyId: string, status: Story["status"]) => {
-    setStories((current) => current.map((story) => (story.id === storyId ? { ...story, status } : story)));
+    setStories((current) =>
+      current.map((story) =>
+        story.id === storyId
+          ? {
+              ...story,
+              status,
+            }
+          : story,
+      ),
+    );
+    setDrawerStatus((current) => (activeStoryId === storyId ? status : current));
   };
 
   return (
@@ -267,6 +274,40 @@ export default function ImpactStoriesPage() {
           </div>
         ) : (
           <div className="space-y-6">
+            <div className="flex items-center justify-between gap-3 rounded-3xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
+              <div className="space-y-1">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">
+                  Status
+                </p>
+                <StatusBadge status={drawerStatus ?? activeStory.status} />
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                {drawerStatus === "Draft" ? (
+                  <Button
+                    size="sm"
+                    className="rounded-full px-4"
+                    onClick={() => {
+                      setDrawerStatus("Submitted");
+                      handleStatusChange(activeStory.id, "Submitted");
+                    }}
+                  >
+                    Submit for review
+                  </Button>
+                ) : null}
+                {drawerStatus === "Submitted" ? (
+                  <Button
+                    size="sm"
+                    className="rounded-full px-4"
+                    onClick={() => {
+                      setDrawerStatus("Published");
+                      handleStatusChange(activeStory.id, "Published");
+                    }}
+                  >
+                    Publish story
+                  </Button>
+                ) : null}
+              </div>
+            </div>
             <div className="relative overflow-hidden rounded-3xl border border-slate-200 shadow-sm dark:border-slate-800">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -397,7 +438,7 @@ function StoryCard({ story, onReadMore, onStatusChange }: StoryCardProps) {
               <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">{story.programme}</h3>
               <p className="text-xs uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">{story.ngo}</p>
             </div>
-            <Badge className={cn("rounded-full px-3 py-1 text-[11px] font-semibold", STATUS_BADGE[story.status])}>{story.status}</Badge>
+            <StatusBadge status={story.status} className="text-[11px]" />
           </div>
           <p className="line-clamp-3 text-sm text-slate-600 dark:text-slate-300">{story.snippet}</p>
         </div>

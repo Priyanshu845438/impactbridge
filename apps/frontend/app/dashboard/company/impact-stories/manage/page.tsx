@@ -3,21 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import {
-  CalendarClock,
-  ChevronDown,
-  Clock,
-  Filter,
-  Layers,
-  Plus,
-} from "lucide-react";
-
-import { Badge } from "@/components/ui/badge";
+import { CalendarClock, ChevronDown, Clock, Filter, Layers, Plus } from "lucide-react";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { TagSelector, type TagOption } from "@/components/ui/tag-selector";
+import { StatusBadge, type StoryPublishingStatus } from "@/components/ui/status-badge";
 import {
   Select,
   SelectContent,
@@ -26,9 +18,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
 
-const STORY_STATUS = ["All", "Published", "Under Review", "Draft"] as const;
+const STORY_STATUS = ["All", "Published", "Submitted", "Draft"] as const;
 
 const STORY_SORT = [
   { label: "Newest", value: "newest" },
@@ -41,7 +32,7 @@ type StoryStatus = (typeof STORY_STATUS)[number];
 type StoryCard = {
   id: string;
   title: string;
-  status: "Published" | "Under Review" | "Draft";
+  status: StoryPublishingStatus;
   updated: string;
   ngo: string;
   programme: string;
@@ -83,7 +74,7 @@ const INITIAL_STORIES: StoryCard[] = [
   {
     id: "ST-2403",
     title: "Mangrove Guardians Restore Coastal Shields",
-    status: "Under Review",
+    status: "Submitted",
     updated: "2024-07-11",
     ngo: "GreenFuture Trust",
     programme: "Mangrove Guardians",
@@ -134,14 +125,7 @@ const STORY_TAG_OPTIONS: TagOption[] = [
   { label: "Rural Development", value: "rural" },
 ];
 
-const statusBadgeStyles: Record<StoryCard["status"], string> = {
-  Published:
-    "bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-200",
-  "Under Review":
-    "bg-amber-500/10 text-amber-600 dark:bg-amber-500/10 dark:text-amber-200",
-  Draft:
-    "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-200",
-};
+const statusOptions: StoryPublishingStatus[] = ["Draft", "Submitted", "Published"];
 
 export default function ImpactStoriesManagePage() {
   const [stories, setStories] = useState(INITIAL_STORIES);
@@ -343,14 +327,7 @@ const filteredStories = useMemo(() => {
                 />
                 <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-gradient-to-t from-slate-950/60 to-transparent px-4 pb-4 pt-10 text-xs text-white">
                   <span className="font-medium">{story.programme}</span>
-                  <Badge
-                    className={cn(
-                      "rounded-full px-3 py-1 text-[11px] font-semibold",
-                      statusBadgeStyles[story.status],
-                    )}
-                  >
-                    {story.status}
-                  </Badge>
+                  <StatusBadge status={story.status} className="text-[11px] backdrop-blur" />
                 </div>
               </div>
 
@@ -422,16 +399,14 @@ const filteredStories = useMemo(() => {
                       <SelectValue placeholder="Change status" />
                       <ChevronDown className="h-4 w-4" />
                     </SelectTrigger>
-                    <SelectContent align="end" className="rounded-3xl">
-                      {(["Published", "Under Review", "Draft"] as const).map(
-                        (option) => (
-                          <SelectItem key={option} value={option}>
-                            {option}
-                          </SelectItem>
-                        ),
-                      )}
-                    </SelectContent>
-                  </Select>
+                  <SelectContent align="end" className="rounded-3xl">
+                    {statusOptions.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 </div>
 
                 <div className="flex items-center justify-between gap-2 rounded-3xl bg-slate-100/70 px-4 py-2 text-xs text-slate-500 dark:bg-slate-800/60 dark:text-slate-300">

@@ -122,3 +122,6 @@ All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATA
 - Route reference: /dashboard/company/impact-stories/publish/[id] orchestrates checklist validation, SEO metadata, visibility toggles, scheduling, and mock publish confirmation (UI only).
 
 - Route reference: /dashboard/company/impact-stories/gallery surfaces supporter-facing grid, filters, modal preview, and pagination with mock data.
+
+### Company Impact Stories
+- Added StatusBadge component and publishing flow (Draft → Submitted → Published) on listings and drawer.

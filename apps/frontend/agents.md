@@ -769,3 +769,8 @@
 
 - Introduced reusable TagSelector component and wired story tags across create, listing, and manage flows with pill badges, client-side filters, and preview syncing.
 - Refreshed documentation suite (dashboard, component catalog, routing, TODO, progress) to reflect tagging, then reran lint/build confirming only the known Next module-type warning.
+
+### **146. Impact Story Publishing Workflow UI Added**
+
+- Added StatusBadge primitive and upgraded impact story pages to support Draft → Submitted → Published flow with animated badges, filters, and drawer controls.
+- Synced documentation (dashboard overview, component catalog, routing guide, progress report, TODO) and revalidated with lint/build (only longstanding Next module-type warning remains).
