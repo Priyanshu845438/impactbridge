@@ -103,3 +103,8 @@ All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATA
 - Added System Settings UI with general/security/notifications/branding sections, summary sidebar, and toast-based save confirmation.
 
 - Route reference: /dashboard/ngo/donations now live.
+- Route reference: /dashboard/company/impact-forecast delivers interactive budget controls, scenario comparisons, and insights with mock forecasting logic and responsive Recharts visualisation.
+
+- Route reference: /dashboard/company/impact-benchmarks compares company KPIs with industry medians via dual-value cards, bar + radar charts, and narrative insights (mock data).
+
+- Route reference: /dashboard/company/impact-stories showcases narrative cards, filter pills, and a detail drawer with before/after metrics and gallery (mock data).

@@ -16,6 +16,9 @@
 - [ ] Wire company compliance overview (`/dashboard/company/compliance`) to compliance service once ready.
 - [ ] Wire company programme comparison (`/dashboard/company/comparison`) to analytics service for live KPI and insight generation.
 - [ ] Wire company impact explorer (`/dashboard/company/impact-explorer`) to beneficiary analytics APIs, replacing mock map, table, and drawer data.
+- [ ] Wire company impact forecasting (`/dashboard/company/impact-forecast`) to forecasting engine once analytics service is available.
+- [ ] Wire company impact benchmarks (`/dashboard/company/impact-benchmarks`) once benchmarking service exposes sector medians.
+- [ ] Wire company impact stories (`/dashboard/company/impact-stories`) to CMS storytelling backend once available.
 - [ ] Wire company budget planner (`/dashboard/company/budget-planner`) to finance planning APIs and persist allocations.
 - [ ] Wire company partner insights (`/dashboard/company/partner-insights`) to analytics/compliance APIs.
 - [ ] Wire company vendor directory (`/dashboard/company/vendors`) to vendor management APIs and contact workflows.
@@ -156,3 +159,6 @@ Update this file as features ship or priorities shift.
 - ✅ Company programme detail view scaffolded with hero, tabs, sidebar, skeleton/error states.
 - ✅ Company donations overview built with summary tiles, responsive table/cards, sidebar filters, and skeleton/empty/error states.
 - ✅ Company reports & exports page built with summary tiles, filters, responsive table/cards, export modal, and skeleton/empty/error states.
+- ✅ Company impact forecasting page built with live budget controls, scenario comparisons, insights, and responsive forecast chart (mock data only).
+- ✅ Company impact benchmarks page built with dual-value KPIs, comparative charts, and insight guidance (mock data).
+- ✅ Company impact stories page built with storytelling cards, filters, and narrative drawer (mock data).

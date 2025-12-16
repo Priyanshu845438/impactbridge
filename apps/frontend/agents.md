@@ -719,3 +719,19 @@
 
 - Rounded out /dashboard/company/compliance with doc updates covering insight pills, responsive list, drawer details, and upcoming deadline sidebar mechanics.
 - Verified navigation entry, refreshed dashboard/component/routing/TODO/progress docs, and reran lint/build to confirm a clean state (existing Next warning only).
+
+### **136. Company Impact Forecasting Simulator Added**
+
+- Implemented /dashboard/company/impact-forecast with adjustable budget controls, dynamic summary cards, scenario comparisons, and insight panels powered by mock forecasting helpers.
+- Updated company navigation, refreshed dashboard/component/routing/TODO/progress docs, appended progress note, and reran lint/build (Next module-type warning persists as expected).
+
+### **137. Company Impact Benchmarks Added**
+
+- Delivered /dashboard/company/impact-benchmarks with dual-value KPI cards, comparative bar + radar charts, and automated insight messaging (mock data only).
+- Inserted navigation entry, refreshed frontend docs (dashboard, component catalog, routing, TODO, progress), and reran lint/build (Next module-type warning persists by design).
+
+### **138. Company Impact Stories Added**
+
+- Shipped /dashboard/company/impact-stories with storytelling cards, theme/NGO filters, and a rich drawer containing full narrative, before/after metrics, gallery, and outcome badges (mock content).
+- Updated navigation, dashboard/component/routing/TODO/progress docs, and reran lint/build/dev (port busy note) with only existing Next module-type warning remaining.
+

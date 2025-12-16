@@ -13,6 +13,8 @@ import {
   LucideIcon,
   Settings2,
   ShieldCheck,
+  Sparkles,
+  TrendingUp,
   Users,
   Users2,
 } from "lucide-react";
@@ -127,11 +129,32 @@ export const navMenu: NavItem[] = [
     href: "/dashboard/company/comparison",
   },
   {
+    label: "Impact benchmarks",
+    icon: Sparkles,
+    roles: ["COMPANY"],
+    group: "Workspace",
+    href: "/dashboard/company/impact-benchmarks",
+  },
+  {
     label: "Impact explorer",
     icon: Globe2,
     roles: ["COMPANY"],
     group: "Workspace",
     href: "/dashboard/company/impact-explorer",
+  },
+  {
+    label: "Impact stories",
+    icon: Sparkles,
+    roles: ["COMPANY"],
+    group: "Workspace",
+    href: "/dashboard/company/impact-stories",
+  },
+  {
+    label: "Impact forecasting",
+    icon: TrendingUp,
+    roles: ["COMPANY"],
+    group: "Workspace",
+    href: "/dashboard/company/impact-forecast",
   },
   {
     label: "CSR budget planner",

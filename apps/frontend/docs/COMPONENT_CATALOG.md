@@ -177,6 +177,7 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 ### Company audit center components
 ### Company programme comparison components
 ### Company impact explorer components
+### Company impact forecasting components
 
 - Route: `/dashboard/company/audit-center`.
 - Filter row shares Select/Input controls with reset button similar to other company modules.
@@ -192,6 +193,20 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - Skeleton grid + empty card maintain loading/empty resilience.
 
 
+
+
+
+
+- Route: `/dashboard/company/impact-stories`.
+- `StoryCard` uses Card + Button primitives with soft hover lift, badge overlays, and mock image thumbs (to swap for CMS assets later).
+- Drawer leverages shared Drawer component, outcome badges, and before/after chips styled via Tailwind utilities.
+- FilterPill helper reuses button tokens for theme/NGO toggles with active tones.
+
+- Route: `/dashboard/company/impact-benchmarks`.
+- KPI card component extends Card with dual value display, badge delta, and gradient progress indicator.
+- Shared `describeMetric` helper formats currency/percent/score units and styles ahead/lagging tones.
+- BarChart + RadarChart pair reuse existing Recharts wrappers for company vs industry comparisons.
+
 - Route: `/dashboard/company/comparison`.
 - `ComparisonGrid` renders responsive metric columns using grid CSS while `MultiSelect` handles custom multi-select toggle with check indicators.
 - Recharts bar/line/radar compositions reuse shared colour palette to visualise budget, progress, and compliance.
@@ -202,6 +217,12 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - `FiltersPanel` reuses Button-based custom selects for region/age/gender/outcome controls with Clear action.
 - `MapPlaceholder` provides interactive SVG dots, tooltip, and region list for mock geographic impact exploration.
 - Detail drawer surfaces outcome distribution bars and recent activities, mirroring other sheet/drawer UX patterns.
+
+
+- Route: `/dashboard/company/impact-forecast`.
+- BudgetControl stack blends preset chip buttons, slider, and numeric input bound to a multiplier state for live recalculation.
+- `buildForecast` produces 12-month area chart data; scenario cards share mock metrics across optimistic/expected/guardrail cases.
+- Insight blocks and methodology card use shared Card/Button primitives to explain assumptions and highlight action cues.
 
 
 - Route: `/dashboard/company/partner-insights`.

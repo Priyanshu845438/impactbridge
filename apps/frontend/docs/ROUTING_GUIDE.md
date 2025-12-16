@@ -50,7 +50,10 @@
 - `/dashboard/company/partner-insights`
 - `/dashboard/company/vendors`
 - `/dashboard/company/audit-center`
+- `/dashboard/company/impact-benchmarks`
+- `/dashboard/company/impact-stories`
 - `/dashboard/company/impact-explorer`
+- `/dashboard/company/impact-forecast`
 - `/dashboard/company/ngos/[ngoId]`
 - `/dashboard/company/engagement-hub`
 - `/dashboard/donor`

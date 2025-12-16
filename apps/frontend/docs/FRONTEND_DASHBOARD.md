@@ -125,6 +125,7 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 ### Company audit & compliance center
 ### Company programme comparison
 ### Company impact explorer
+### Company impact forecasting
 
 - Route: `/dashboard/company/audit-center`.
 - Filters combine NGO select, compliance status, year, and search to refine audit records.
@@ -138,10 +139,30 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Vendor grid uses mock data with gradient logo placeholders, rating stars, and profile CTA opening detail drawer.
 - Drawer highlights services, past clients, certifications, and contact info; skeleton/empty states keep UX resilient.
 
+
+
+- Route: `/dashboard/company/impact-stories`.
+- Story cards pair programme/NGO branding with warm imagery, snippets, and CTAs while filters slice by theme and partner.
+- Drawer expands stories with extended narrative, before/after stats, gallery chips, and outcome badges (mock data today).
+- Designed for storytelling-first layout with soft shadows, rounded corners, and mobile-friendly stacking.
+
+- Route: `/dashboard/company/impact-benchmarks`.
+- KPI cards juxtapose company vs industry values with delta badges and progress bars to highlight relative performance.
+- Dual Recharts (bar + radar) surfaces efficiency, compliance, and outreach strengths against sector medians.
+- Insight stack narrates where the company leads or trails and suggests next steps until live benchmarking APIs arrive.
+
 - Route: `/dashboard/company/comparison`.
 - Multi-select dropdown allows choosing up to four programmes; requires at least two selections to render the grid.
 - KPI grid compares budget utilisation, milestone completion, beneficiaries, and compliance score side-by-side with responsive layout.
 - Chart trio (bar, line, radial) visualises budget vs utilisation, monthly progress, and compliance snapshot while insights list calls out key differences.
+
+
+### Company impact forecasting
+
+- Route: `/dashboard/company/impact-forecast`.
+- Budget controls combine preset chips, slider, and numeric input to recalculate projections live.
+- Summary cards highlight projected beneficiaries, cost efficiency range, outcome uplift, and timeline adjustments with tone-mapped icons.
+- Forecast chart uses a Recharts area visualization, scenario stack compares optimistic/expected/guardrail cases, and insight panels narrate the mock methodology.
 
 - Route: `/dashboard/company/impact-explorer`.
 - Filters for region, age, gender, and outcome provide contextual slicing with clear button.
