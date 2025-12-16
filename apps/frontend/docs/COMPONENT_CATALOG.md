@@ -213,6 +213,10 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - `ReadingProgressBar` component tracks scroll and renders a gradient progress indicator pinned to the viewport top.
 - Anchored section buttons highlight via IntersectionObserver while Card blocks render text, metric, and image narratives with consistent spacing.
 - Sidebar cards reuse Card/Separator primitives to highlight status, version, metadata, and reviewer notes.
+- Route: `/dashboard/company/impact-stories/publish/[id]`.
+- Checklist rows reuse Card styling with tone-aware border/background classes; publish CTA stays disabled until all pass.
+- `MetricCard` helper renders SEO stats with tone-aware styling; preview card mirrors public listing card.
+- Publish modal leverages shared Modal primitive with mock scheduling confirmation.
 
 - Route: `/dashboard/company/impact-benchmarks`.
 - KPI card component extends Card with dual value display, badge delta, and gradient progress indicator.

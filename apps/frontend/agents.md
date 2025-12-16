@@ -749,3 +749,8 @@
 
 - Built /dashboard/company/impact-stories/review/[id] with hero presentation, anchored sections, reading progress bar, reviewer sidebar, and approve/request-change actions (mock only).
 - Wired manage-page CTA to review route, updated documentation suite (dashboard, component catalog, routing, TODO, progress), and reran lint/build confirming clean state aside from known Next warning.
+
+### **142. Company Impact Story Publishing Flow Added**
+
+- Created /dashboard/company/impact-stories/publish/[id] featuring validation checklist, SEO panel, preview card, visibility/scheduling controls, and mock publish confirmation modal.
+- Linked publish CTA from management cards, refreshed documentation set, and reran lint/build (Next module-type warning persists as expected).

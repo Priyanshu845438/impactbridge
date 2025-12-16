@@ -160,6 +160,10 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Review mode mirrors donor-facing presentation with hero cover, anchored sections, reading progress bar, and sidebar metadata.
 - Mock actions let reviewers approve, request changes, or download a placeholder PDF while tracking status/version/notes.
 
+- Route: `/dashboard/company/impact-stories/publish/[id]`.
+- Final publishing workspace with validation checklist, SEO tuning, listing preview, visibility controls, scheduling, and mock publish modal.
+- Publish CTA remains disabled until all checklist items pass, matching expected CMS safeguards.
+
 - Route: `/dashboard/company/impact-benchmarks`.
 - KPI cards juxtapose company vs industry values with delta badges and progress bars to highlight relative performance.
 - Dual Recharts (bar + radar) surfaces efficiency, compliance, and outreach strengths against sector medians.

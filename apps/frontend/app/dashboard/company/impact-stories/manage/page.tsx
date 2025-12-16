@@ -321,6 +321,11 @@ export default function ImpactStoriesManagePage() {
                       Review
                     </Link>
                   </Button>
+                  <Button variant="outline" size="sm" className="rounded-full px-4" asChild>
+                    <Link href={`/dashboard/company/impact-stories/publish/${story.id}`}>
+                      Publish
+                    </Link>
+                  </Button>
                   <Button
                     variant="outline"
                     size="sm"
