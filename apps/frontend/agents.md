@@ -735,3 +735,8 @@
 - Shipped /dashboard/company/impact-stories with storytelling cards, theme/NGO filters, and a rich drawer containing full narrative, before/after metrics, gallery, and outcome badges (mock content).
 - Updated navigation, dashboard/component/routing/TODO/progress docs, and reran lint/build/dev (port busy note) with only existing Next module-type warning remaining.
 
+### **139. Company Impact Story Builder Added**
+
+- Built /dashboard/company/impact-stories/create with structured form fields, auto-expanding narrative textarea, gallery preview, and live story card preview.
+- Updated navigation and documentation (dashboard, component catalog, routing, TODO, progress) and re-ran lint/build/dev (port 3400 busy) to confirm clean state aside from existing module-type warning.
+

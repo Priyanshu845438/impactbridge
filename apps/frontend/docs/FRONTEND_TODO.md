@@ -19,6 +19,7 @@
 - [ ] Wire company impact forecasting (`/dashboard/company/impact-forecast`) to forecasting engine once analytics service is available.
 - [ ] Wire company impact benchmarks (`/dashboard/company/impact-benchmarks`) once benchmarking service exposes sector medians.
 - [ ] Wire company impact stories (`/dashboard/company/impact-stories`) to CMS storytelling backend once available.
+- [ ] Wire company impact story builder (`/dashboard/company/impact-stories/create`) to CMS authoring + uploads.
 - [ ] Wire company budget planner (`/dashboard/company/budget-planner`) to finance planning APIs and persist allocations.
 - [ ] Wire company partner insights (`/dashboard/company/partner-insights`) to analytics/compliance APIs.
 - [ ] Wire company vendor directory (`/dashboard/company/vendors`) to vendor management APIs and contact workflows.
@@ -162,3 +163,4 @@ Update this file as features ship or priorities shift.
 - ✅ Company impact forecasting page built with live budget controls, scenario comparisons, insights, and responsive forecast chart (mock data only).
 - ✅ Company impact benchmarks page built with dual-value KPIs, comparative charts, and insight guidance (mock data).
 - ✅ Company impact stories page built with storytelling cards, filters, and narrative drawer (mock data).
+- ✅ Company impact story builder page built with structured form, live preview, mock gallery upload, and CTA controls (UI only).

@@ -150,6 +150,13 @@ export const navMenu: NavItem[] = [
     href: "/dashboard/company/impact-stories",
   },
   {
+    label: "Story builder",
+    icon: Sparkles,
+    roles: ["COMPANY"],
+    group: "Workspace",
+    href: "/dashboard/company/impact-stories/create",
+  },
+  {
     label: "Impact forecasting",
     icon: TrendingUp,
     roles: ["COMPANY"],

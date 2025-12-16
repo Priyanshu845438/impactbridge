@@ -141,6 +141,11 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 
 
 
+
+- Route: `/dashboard/company/impact-stories/create`.
+- Builder pairs structured form (title, NGO/programme selectors, summary, narrative, outcomes, mock upload preview) with live card preview.
+- Auto-expanding narrative textarea, skeleton preview init, and CTA pair (Draft/Publish) keep the UX polished for future CMS wiring.
+
 - Route: `/dashboard/company/impact-stories`.
 - Story cards pair programme/NGO branding with warm imagery, snippets, and CTAs while filters slice by theme and partner.
 - Drawer expands stories with extended narrative, before/after stats, gallery chips, and outcome badges (mock data today).

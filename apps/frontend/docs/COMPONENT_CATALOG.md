@@ -197,6 +197,12 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 
 
 
+
+
+- Route: `/dashboard/company/impact-stories/create`.
+- Story builder uses Input/Select/Textarea primitives, AutoTextarea helper for auto-sizing, and preview card reusing badge/button tokens.
+- Mock gallery uploader stores data URLs locally for immediate preview (placeholder until real storage hooks up).
+
 - Route: `/dashboard/company/impact-stories`.
 - `StoryCard` uses Card + Button primitives with soft hover lift, badge overlays, and mock image thumbs (to swap for CMS assets later).
 - Drawer leverages shared Drawer component, outcome badges, and before/after chips styled via Tailwind utilities.

@@ -108,3 +108,5 @@ All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATA
 - Route reference: /dashboard/company/impact-benchmarks compares company KPIs with industry medians via dual-value cards, bar + radar charts, and narrative insights (mock data).
 
 - Route reference: /dashboard/company/impact-stories showcases narrative cards, filter pills, and a detail drawer with before/after metrics and gallery (mock data).
+
+- Route reference: /dashboard/company/impact-stories/create delivers a rich story builder with live preview, auto-sizing narrative, mock gallery uploads, and CTA actions (UI only).
