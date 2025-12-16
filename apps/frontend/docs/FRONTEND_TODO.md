@@ -20,6 +20,7 @@
 - [ ] Wire company impact benchmarks (`/dashboard/company/impact-benchmarks`) once benchmarking service exposes sector medians.
 - [ ] Wire company impact stories (`/dashboard/company/impact-stories`) to CMS storytelling backend once available.
 - [ ] Wire company impact stories management (`/dashboard/company/impact-stories/manage`) to CMS list + moderation APIs.
+- [ ] Wire company impact story review mode (`/dashboard/company/impact-stories/review/[id]`) to real narrative payloads, reviewer workflow, and PDF export service.
 - [ ] Wire company impact story builder (`/dashboard/company/impact-stories/create`) to CMS authoring + uploads.
 - [ ] Wire company budget planner (`/dashboard/company/budget-planner`) to finance planning APIs and persist allocations.
 - [ ] Wire company partner insights (`/dashboard/company/partner-insights`) to analytics/compliance APIs.

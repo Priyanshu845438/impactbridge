@@ -209,6 +209,11 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - FilterPill helper reuses button tokens for theme/NGO toggles with active tones.
 - Story management grid extends the card pattern with admin footer actions, updated timestamp chips, and status badge colour mapping. Skeleton loaders mimic the card proportions to smooth state changes.
 
+- Route: `/dashboard/company/impact-stories/review/[id]`.
+- `ReadingProgressBar` component tracks scroll and renders a gradient progress indicator pinned to the viewport top.
+- Anchored section buttons highlight via IntersectionObserver while Card blocks render text, metric, and image narratives with consistent spacing.
+- Sidebar cards reuse Card/Separator primitives to highlight status, version, metadata, and reviewer notes.
+
 - Route: `/dashboard/company/impact-benchmarks`.
 - KPI card component extends Card with dual value display, badge delta, and gradient progress indicator.
 - Shared `describeMetric` helper formats currency/percent/score units and styles ahead/lagging tones.

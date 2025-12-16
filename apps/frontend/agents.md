@@ -744,3 +744,8 @@
 
 - Implemented /dashboard/company/impact-stories/manage with filters, sorting, skeletons, responsive story cards, and mock action buttons to govern narratives.
 - Added company nav entry, refreshed dashboard/component/routing/TODO/progress docs, and reran lint/build (Next module-type warning remains the sole known lint note).
+
+### **141. Company Impact Story Review Mode Added**
+
+- Built /dashboard/company/impact-stories/review/[id] with hero presentation, anchored sections, reading progress bar, reviewer sidebar, and approve/request-change actions (mock only).
+- Wired manage-page CTA to review route, updated documentation suite (dashboard, component catalog, routing, TODO, progress), and reran lint/build confirming clean state aside from known Next warning.

@@ -156,6 +156,10 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Each card surfaces cover, summary, tags, and mock action buttons (View/Edit/Delete) plus CTA to create new stories.
 - Empty-state encourages authors to draft narratives when filters yield no results.
 
+- Route: `/dashboard/company/impact-stories/review/[id]`.
+- Review mode mirrors donor-facing presentation with hero cover, anchored sections, reading progress bar, and sidebar metadata.
+- Mock actions let reviewers approve, request changes, or download a placeholder PDF while tracking status/version/notes.
+
 - Route: `/dashboard/company/impact-benchmarks`.
 - KPI cards juxtapose company vs industry values with delta badges and progress bars to highlight relative performance.
 - Dual Recharts (bar + radar) surfaces efficiency, compliance, and outreach strengths against sector medians.

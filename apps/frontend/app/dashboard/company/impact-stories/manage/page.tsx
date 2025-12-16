@@ -317,10 +317,8 @@ export default function ImpactStoriesManagePage() {
 
                 <div className="mt-auto flex flex-wrap items-center gap-3 border-t border-slate-200 pt-4 dark:border-slate-800">
                   <Button variant="outline" size="sm" className="rounded-full px-4" asChild>
-                    <Link
-                      href={`/dashboard/company/impact-stories/${story.id}`}
-                    >
-                      View
+                    <Link href={`/dashboard/company/impact-stories/review/${story.id}`}>
+                      Review
                     </Link>
                   </Button>
                   <Button
