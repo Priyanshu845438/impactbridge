@@ -280,3 +280,4 @@ For any new feature, follow the established pattern: create DTO → service → 
 ---
 
 *End of document.*
+- Added auto-creation hooks for NGO, company, and donor profiles during registration.

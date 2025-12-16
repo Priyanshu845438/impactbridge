@@ -11,7 +11,9 @@ export class AuthService {
   constructor(private readonly prisma: PrismaService) {}
 
   async login(dto: LoginDto) {
-    const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
 
     if (!user || !(await comparePassword(dto.password, user.password))) {
       throw new BadRequestException('Invalid credentials');
@@ -28,7 +30,9 @@ export class AuthService {
   }
 
   async register(dto: RegisterDto) {
-    const existingUser = await this.prisma.user.findUnique({ where: { email: dto.email } });
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
 
     if (existingUser) {
       throw new BadRequestException('Email already registered');

@@ -126,3 +126,5 @@ All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATA
 ### Company Impact Stories
 - Added StatusBadge component and publishing flow (Draft → Submitted → Published) on listings and drawer.
 - Added analytics snapshot with mock KPI cards, trend chart, and download CTA in drawer.
+## Company Impact Stories
+- Restored impact stories page to clean state after syntax regression.

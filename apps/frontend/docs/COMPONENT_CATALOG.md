@@ -355,3 +355,4 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - `TeamTable` renders desktop table + mobile cards using Button, Card, and Table primitives.
 - `InviteMemberModal` and `EditMemberModal` reuse shared Modal, Select, Switch, Textarea components with tone maps for badges.
 - Skeleton + empty state maintain onboarding UX while real data loads.
+- Reverted analytics snapshot memoization change to restore build stability; refer to impact stories page for current usage.

@@ -779,3 +779,8 @@
 
 - Injected analytics snapshot row inside the story drawer with mock KPI tiles, engagement micro-chart, and download CTA to aid quick performance reviews.
 - Updated dashboard/component/progress/TODO docs plus agents log, then reran lint/build (Next module-type warning persists by design).
+
+### **148. Restored Impact Stories Page After Regression**
+
+- Reverted the attempted memoisation edit so the drawer + analytics snapshot compile again.
+- Documented the rollback across dashboard/component/routing/TODO/progress docs and reran lint/build (only the known Next module-type warning remains).

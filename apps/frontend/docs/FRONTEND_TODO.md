@@ -172,3 +172,4 @@ Update this file as features ship or priorities shift.
 - [ ] Add Story workflow tests (status transitions Draft ⇄ Submitted ⇄ Published) once RTL harness lands
 
 - [ ] Add analytics snapshot tests (KPI cards + chart render) once mock data replaced with API.
+- Reverted the impact stories page to the last passing commit after a malformed memoization edit introduced syntax errors.

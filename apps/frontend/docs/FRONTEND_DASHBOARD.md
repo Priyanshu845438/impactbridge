@@ -336,3 +336,5 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 - Route: `/dashboard/ngo/team`.
 - Manage staff with invite modal, table + mobile cards, role/status badges, edit modal with role toggle placeholder, and sonner toasts.
 - Skeleton rows and empty state cover loading/new NGOs; responsive layout shifts between grid/table.
+- Impact stories page restored from regression; future refactor should reapply memoization carefully.
+- Impact stories page restored to clean state after the memoization regression; future refactors should branch from this baseline.

@@ -24,3 +24,4 @@
 5. Introduce refresh tokens & MFA
 6. Add automated test suites
 
+- Noted new admin oversight endpoints (NGO/company/donor listings, bank/address modules).

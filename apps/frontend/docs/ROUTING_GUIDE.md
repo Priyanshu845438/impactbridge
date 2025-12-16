@@ -94,3 +94,4 @@ Protection is enforced client-side in `app/dashboard/layout.tsx` via `useAuth()`
 - Use parallel routes for modals if needed (e.g., editing tasks)
 
 - Dashboard shell prefetches `/dashboard/admin`, `/dashboard/users`, `/dashboard/admin/modules/reports`, `/dashboard/admin/audit-logs`, `/dashboard/company`, `/dashboard/company/engagement-hub`, `/dashboard/company/comparison`, and `/dashboard/company/impact-explorer`; keep the list updated when adding new high-traffic sections.
+- Documented restoration of /dashboard/company/impact-stories after syntax regression.

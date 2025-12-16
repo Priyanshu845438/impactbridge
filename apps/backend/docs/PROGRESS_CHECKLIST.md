@@ -204,3 +204,4 @@ Use it alongside `PROJECT_FULL_STATUS.md`, `agents.md`, and the module-specific 
 5. Leave a brief note in the applicable `agents.md` entry referencing the update.
 
 > **Reminder:** Do **not** modify application source files when editing this document unless your task explicitly requires it.
+- Documented NGO profile/finance listings and address/bank management endpoints in backend checklist.
