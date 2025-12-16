@@ -774,3 +774,8 @@
 
 - Added StatusBadge primitive and upgraded impact story pages to support Draft → Submitted → Published flow with animated badges, filters, and drawer controls.
 - Synced documentation (dashboard overview, component catalog, routing guide, progress report, TODO) and revalidated with lint/build (only longstanding Next module-type warning remains).
+
+### **147. Impact Story Analytics Snapshot Added**
+
+- Injected analytics snapshot row inside the story drawer with mock KPI tiles, engagement micro-chart, and download CTA to aid quick performance reviews.
+- Updated dashboard/component/progress/TODO docs plus agents log, then reran lint/build (Next module-type warning persists by design).

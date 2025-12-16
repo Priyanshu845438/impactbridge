@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Camera, CheckCircle2, ChevronDown, Film, Sparkles, Star } from "lucide-react";
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
+import { ArrowUpRight, Camera, CheckCircle2, ChevronDown, Download, Film, Sparkles, Star } from "lucide-react";
 
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Badge } from "@/components/ui/badge";
@@ -308,6 +309,8 @@ export default function ImpactStoriesPage() {
                 ) : null}
               </div>
             </div>
+
+            <AnalyticsSnapshot />
             <div className="relative overflow-hidden rounded-3xl border border-slate-200 shadow-sm dark:border-slate-800">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -481,5 +484,117 @@ function StoryCard({ story, onReadMore, onStatusChange }: StoryCardProps) {
         </div>
       </div>
     </Card>
+  );
+}
+
+
+function AnalyticsSnapshot() {
+  const cards = [
+    {
+      label: "Views",
+      value: "12,480",
+      delta: "+8.4%",
+      tone: "from-emerald-500/15 to-emerald-500/5",
+    },
+    {
+      label: "Shares",
+      value: "1,042",
+      delta: "+12.1%",
+      tone: "from-sky-500/15 to-sky-500/5",
+    },
+    {
+      label: "Estimated influence score",
+      value: "86 / 100",
+      delta: "+4.6%",
+      tone: "from-violet-500/15 to-violet-500/5",
+    },
+  ];
+
+  const engagementTrend = [
+    { week: "W1", value: 42 },
+    { week: "W2", value: 58 },
+    { week: "W3", value: 61 },
+    { week: "W4", value: 72 },
+    { week: "W5", value: 69 },
+    { week: "W6", value: 80 },
+    { week: "W7", value: 84 },
+  ];
+
+  return (
+    <div className="space-y-4 rounded-3xl border border-slate-200 bg-white/95 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500">
+            Analytics snapshot
+          </p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Mock engagement data for quick reference before publishing.
+          </p>
+        </div>
+        <Button variant="outline" size="sm" className="rounded-full px-4">
+          <Download className="mr-2 h-4 w-4" /> Download snapshot
+        </Button>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-3">
+        {cards.map((card) => (
+          <div
+            key={card.label}
+            className={`rounded-3xl bg-gradient-to-br ${card.tone} p-4 transition hover:-translate-y-0.5 hover:shadow-md dark:from-slate-800/80 dark:to-slate-900/80`}
+          >
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500">
+              {card.label}
+            </p>
+            <div className="mt-2 flex items-baseline gap-2">
+              <span className="text-xl font-semibold text-slate-900 dark:text-slate-50">{card.value}</span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[11px] font-medium text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-200">
+                <ArrowUpRight className="h-3 w-3" />
+                {card.delta}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="h-32 w-full rounded-2xl border border-slate-200 bg-white/90 px-2 py-3 dark:border-slate-800 dark:bg-slate-900/70">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={engagementTrend} margin={{ top: 8, right: 16, left: -10, bottom: 0 }}>
+            <defs>
+              <linearGradient id="snapshotArea" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.35} />
+                <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0.03} />
+              </linearGradient>
+            </defs>
+            <XAxis
+              dataKey="week"
+              tickLine={false}
+              axisLine={false}
+              tick={{ fill: "#94a3b8", fontSize: 11 }}
+              tickMargin={10}
+            />
+            <Tooltip
+              cursor={{ stroke: "#38bdf8", strokeDasharray: "4 4" }}
+              contentStyle={{
+                borderRadius: 16,
+                border: "1px solid rgba(125, 211, 252, 0.35)",
+                background: "rgba(15,23,42,0.9)",
+                color: "#f8fafc",
+                fontSize: 12,
+              }}
+              labelStyle={{ color: "#e0f2fe" }}
+              formatter={(value: number) => [`${value}`, "Engagement"]}
+            />
+            <Area
+              type="monotone"
+              dataKey="value"
+              stroke="#0ea5e9"
+              fill="url(#snapshotArea)"
+              strokeWidth={2}
+              activeDot={{ r: 5, strokeWidth: 2, stroke: "#ffffff", fill: "#0ea5e9" }}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
   );
 }

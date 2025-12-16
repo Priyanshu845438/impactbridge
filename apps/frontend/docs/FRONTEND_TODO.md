@@ -170,3 +170,5 @@ Update this file as features ship or priorities shift.
 - ✅ Company impact story builder page built with structured form, live preview, mock gallery upload, and CTA controls (UI only).
 
 - [ ] Add Story workflow tests (status transitions Draft ⇄ Submitted ⇄ Published) once RTL harness lands
+
+- [ ] Add analytics snapshot tests (KPI cards + chart render) once mock data replaced with API.
