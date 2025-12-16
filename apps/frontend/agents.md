@@ -740,3 +740,7 @@
 - Built /dashboard/company/impact-stories/create with structured form fields, auto-expanding narrative textarea, gallery preview, and live story card preview.
 - Updated navigation and documentation (dashboard, component catalog, routing, TODO, progress) and re-ran lint/build/dev (port 3400 busy) to confirm clean state aside from existing module-type warning.
 
+### **140. Company Impact Story Management Library Added**
+
+- Implemented /dashboard/company/impact-stories/manage with filters, sorting, skeletons, responsive story cards, and mock action buttons to govern narratives.
+- Added company nav entry, refreshed dashboard/component/routing/TODO/progress docs, and reran lint/build (Next module-type warning remains the sole known lint note).

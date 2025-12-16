@@ -151,6 +151,11 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Drawer expands stories with extended narrative, before/after stats, gallery chips, and outcome badges (mock data today).
 - Designed for storytelling-first layout with soft shadows, rounded corners, and mobile-friendly stacking.
 
+- Route: `/dashboard/company/impact-stories/manage`.
+- Repository view for all stories with search, NGO/status filters, sort controls, skeletons, and responsive card grid.
+- Each card surfaces cover, summary, tags, and mock action buttons (View/Edit/Delete) plus CTA to create new stories.
+- Empty-state encourages authors to draft narratives when filters yield no results.
+
 - Route: `/dashboard/company/impact-benchmarks`.
 - KPI cards juxtapose company vs industry values with delta badges and progress bars to highlight relative performance.
 - Dual Recharts (bar + radar) surfaces efficiency, compliance, and outreach strengths against sector medians.

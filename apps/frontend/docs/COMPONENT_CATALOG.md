@@ -207,6 +207,7 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - `StoryCard` uses Card + Button primitives with soft hover lift, badge overlays, and mock image thumbs (to swap for CMS assets later).
 - Drawer leverages shared Drawer component, outcome badges, and before/after chips styled via Tailwind utilities.
 - FilterPill helper reuses button tokens for theme/NGO toggles with active tones.
+- Story management grid extends the card pattern with admin footer actions, updated timestamp chips, and status badge colour mapping. Skeleton loaders mimic the card proportions to smooth state changes.
 
 - Route: `/dashboard/company/impact-benchmarks`.
 - KPI card component extends Card with dual value display, badge delta, and gradient progress indicator.

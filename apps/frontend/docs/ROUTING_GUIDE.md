@@ -53,6 +53,7 @@
 - `/dashboard/company/impact-benchmarks`
 - `/dashboard/company/impact-stories`
   - `/dashboard/company/impact-stories/create`
+  - `/dashboard/company/impact-stories/manage`
 - `/dashboard/company/impact-explorer`
 - `/dashboard/company/impact-forecast`
 - `/dashboard/company/ngos/[ngoId]`
