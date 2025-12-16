@@ -53,7 +53,7 @@
 - `/dashboard/company/impact-benchmarks`
 - `/dashboard/company/impact-stories`
   - `/dashboard/company/impact-stories/create`
-  - `/dashboard/company/impact-stories/manage`
+  - `/dashboard/company/impact-stories/manage` – library view with inline status control + timeline note
   - `/dashboard/company/impact-stories/review/[id]`
   - `/dashboard/company/impact-stories/publish/[id]`
   - `/dashboard/company/impact-stories/gallery`

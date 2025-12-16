@@ -13,10 +13,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { TagSelector, type TagOption, resolveTags } from "@/components/ui/tag-selector";
 
 const NGO_OPTIONS = ["Swasthya Foundation", "GreenFuture Trust", "TeachBridge Collective", "Women Rise Coalition"];
 const PROGRAMME_OPTIONS = ["Rural Clinics on Wheels", "Mangrove Guardians", "Science Wings Fellowship", "Urban Youth Innovators"];
 const MAX_SUMMARY = 200;
+const STORY_TAG_OPTIONS: TagOption[] = [
+  { label: "Education", value: "education" },
+  { label: "Health", value: "health" },
+  { label: "Women Empowerment", value: "women" },
+  { label: "Climate Action", value: "climate" },
+  { label: "Livelihoods", value: "livelihoods" },
+  { label: "Child Rights", value: "child-rights" },
+  { label: "Rural Development", value: "rural" },
+];
 
 export default function ImpactStoryBuilderPage() {
   const [title, setTitle] = useState("");
@@ -27,6 +37,7 @@ export default function ImpactStoryBuilderPage() {
   const [outcomes, setOutcomes] = useState("Mentorship; Community clinics; Climate resilience");
   const [images, setImages] = useState<string[]>([]);
   const [previewReady, setPreviewReady] = useState(false);
+  const [tags, setTags] = useState<string[]>(["education", "women"]);
 
   useEffect(() => {
     const tm = setTimeout(() => setPreviewReady(true), 350);
@@ -188,6 +199,12 @@ export default function ImpactStoryBuilderPage() {
             ) : null}
           </div>
 
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-slate-700 dark:text-slate-200">Story tags</label>
+            <TagSelector options={STORY_TAG_OPTIONS} value={tags} onChange={setTags} />
+            <p className="text-xs text-slate-500 dark:text-slate-400">Use tags to help stakeholders filter stories by focus area. Multiple selections allowed.</p>
+          </div>
+
           <div className="flex flex-wrap items-center justify-end gap-3 border-t border-slate-200 pt-4 dark:border-slate-800">
             <Button type="button" variant="outline" className="rounded-full px-5">
               Save draft
@@ -223,6 +240,7 @@ export default function ImpactStoryBuilderPage() {
                 narrative={narrative}
                 outcomes={parsedOutcomes}
                 images={images}
+                tags={resolveTags(tags, STORY_TAG_OPTIONS).map((option) => option.label)}
               />
             )}
           </div>
@@ -269,9 +287,10 @@ interface StoryPreviewProps {
   narrative: string;
   outcomes: string[];
   images: string[];
+  tags: string[];
 }
 
-function StoryPreview({ title, ngo, programme, summary, narrative, outcomes, images }: StoryPreviewProps) {
+function StoryPreview({ title, ngo, programme, summary, narrative, outcomes, images, tags }: StoryPreviewProps) {
   const readyImages = images.length ? images : ["https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80"];
 
   const safeSummary = summary || "Add a short 2-line summary describing the headline impact.";
@@ -291,6 +310,18 @@ function StoryPreview({ title, ngo, programme, summary, narrative, outcomes, ima
         <p className="text-xs uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">{ngo ?? "Select an NGO"}</p>
         <p className="text-sm text-slate-600 dark:text-slate-300">{safeSummary}</p>
       </div>
+      {tags.length ? (
+        <div className="flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span
+              key={tag}
+              className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-200"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      ) : null}
       <div className="space-y-3 rounded-3xl border border-slate-200 bg-white/90 p-4 text-sm text-slate-600 shadow-sm dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-300">
         <p>{safeNarrative}</p>
         {outcomes.length ? (

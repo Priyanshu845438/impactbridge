@@ -147,13 +147,13 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Auto-expanding narrative textarea, skeleton preview init, and CTA pair (Draft/Publish) keep the UX polished for future CMS wiring.
 
 - Route: `/dashboard/company/impact-stories`.
-- Story cards pair programme/NGO branding with warm imagery, snippets, and CTAs while filters slice by theme and partner.
-- Drawer expands stories with extended narrative, before/after stats, gallery chips, and outcome badges (mock data today).
+- Story cards pair programme/NGO branding with warm imagery, snippets, and CTAs while filters slice by theme, partner, and newly added tags.
+- Drawer expands stories with extended narrative, before/after stats, gallery chips, outcome badges, and tagged focus areas (mock data today).
 - Designed for storytelling-first layout with soft shadows, rounded corners, and mobile-friendly stacking.
 
 - Route: `/dashboard/company/impact-stories/manage`.
-- Repository view for all stories with search, NGO/status filters, sort controls, skeletons, and responsive card grid.
-- Cards now surface cover, summary, status badge, timeline note, and mock actions (Review/Publish/Edit/Delete) alongside a change-status dropdown that updates local state instantly.
+- Repository view for all stories with search, NGO/status/tag filters, sort controls, skeletons, and responsive card grid.
+- Cards now surface cover, summary, status badge, timeline note, tag chips, and mock actions (Review/Publish/Edit/Delete) alongside a change-status dropdown that updates local state instantly.
 - Empty-state encourages authors to draft narratives when filters yield no results.
 
 - Route: `/dashboard/company/impact-stories/review/[id]`.

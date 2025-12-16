@@ -11,10 +11,20 @@ import { Drawer } from "@/components/ui/drawer";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { TagSelector, type TagOption } from "@/components/ui/tag-selector";
 
 const THEMES = ["All themes", "Education", "Health", "Environment"] as const;
 const NGO_FILTERS = ["All partners", "Swasthya Foundation", "GreenFuture Trust", "TeachBridge Collective"] as const;
 const STATUS_FILTERS = ["All", "Draft", "Under Review", "Published"] as const;
+const TAG_OPTIONS: TagOption[] = [
+  { label: "Education", value: "education" },
+  { label: "Health", value: "health" },
+  { label: "Women Empowerment", value: "women" },
+  { label: "Climate Action", value: "climate" },
+  { label: "Livelihoods", value: "livelihoods" },
+  { label: "Child Rights", value: "child-rights" },
+  { label: "Rural Development", value: "rural" },
+];
 
 type Story = {
   id: string;
@@ -29,6 +39,7 @@ type Story = {
   gallery: string[];
   status: "Draft" | "Under Review" | "Published";
   updatedDays: number;
+  tags: string[];
 };
 
 const INITIAL_STORIES: Story[] = [
@@ -54,6 +65,7 @@ const INITIAL_STORIES: Story[] = [
     ],
     status: "Published",
     updatedDays: 4,
+    tags: ["education", "women"],
   },
   {
     id: "rural-clinics",
@@ -77,6 +89,7 @@ const INITIAL_STORIES: Story[] = [
     ],
     status: "Under Review",
     updatedDays: 2,
+    tags: ["health", "rural"],
   },
   {
     id: "mangrove-guardians",
@@ -100,6 +113,7 @@ const INITIAL_STORIES: Story[] = [
     ],
     status: "Draft",
     updatedDays: 7,
+    tags: ["climate", "livelihoods"],
   },
   {
     id: "urban-youth",
@@ -123,6 +137,7 @@ const INITIAL_STORIES: Story[] = [
     ],
     status: "Published",
     updatedDays: 1,
+    tags: ["women", "child-rights"],
   },
 ];
 
@@ -139,6 +154,7 @@ export default function ImpactStoriesPage() {
   const [selectedTheme, setSelectedTheme] = useState<typeof THEMES[number]>(THEMES[0]!);
   const [selectedNgo, setSelectedNgo] = useState<typeof NGO_FILTERS[number]>(NGO_FILTERS[0]!);
   const [statusFilter, setStatusFilter] = useState<typeof STATUS_FILTERS[number]>(STATUS_FILTERS[0]!);
+  const [tagFilter, setTagFilter] = useState<string[]>([]);
   const [activeStoryId, setActiveStoryId] = useState<string | null>(null);
   const [galleryIndex, setGalleryIndex] = useState(0);
 
@@ -147,9 +163,10 @@ export default function ImpactStoriesPage() {
       const themeMatch = selectedTheme === "All themes" || story.theme === selectedTheme;
       const ngoMatch = selectedNgo === "All partners" || story.ngo === selectedNgo;
       const statusMatch = statusFilter === "All" || story.status === statusFilter;
-      return themeMatch && ngoMatch && statusMatch;
+      const tagMatch = tagFilter.length === 0 || tagFilter.some((tag) => story.tags.includes(tag));
+      return themeMatch && ngoMatch && statusMatch && tagMatch;
     });
-  }, [stories, selectedNgo, selectedTheme, statusFilter]);
+  }, [stories, selectedNgo, selectedTheme, statusFilter, tagFilter]);
 
   const activeStory = activeStoryId ? stories.find((story) => story.id === activeStoryId) ?? null : null;
 
@@ -208,6 +225,10 @@ export default function ImpactStoriesPage() {
           activeOption={statusFilter}
           onSelect={(value) => setStatusFilter(value as typeof STATUS_FILTERS[number])}
         />
+        <div className="flex flex-col gap-1">
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">Tags</span>
+          <TagSelector options={TAG_OPTIONS} value={tagFilter} onChange={setTagFilter} className="max-w-[420px]" />
+        </div>
       </section>
 
       <section>
@@ -398,6 +419,15 @@ function StoryCard({ story, onReadMore, onStatusChange }: StoryCardProps) {
             <span>Last updated: {story.updatedDays} days ago</span>
             <span>Status: {story.status}</span>
           </div>
+          {story.tags.length ? (
+            <div className="flex flex-wrap gap-2 text-xs text-slate-500 dark:text-slate-400">
+              {story.tags.map((tag) => (
+                <span key={tag} className="rounded-full bg-slate-100 px-2 py-0.5 dark:bg-slate-800/70">
+                  {TAG_OPTIONS.find((option) => option.value === tag)?.label ?? tag}
+                </span>
+              ))}
+            </div>
+          ) : null}
           <div className="mt-2 flex items-center justify-between pt-3">
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-1 text-[11px] font-medium text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-200">
               <Camera className="h-3 w-3" />

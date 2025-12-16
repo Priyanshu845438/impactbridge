@@ -182,8 +182,8 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 ### Company impact story management components
 
 - Route: `/dashboard/company/impact-stories/manage`.
-- Story repository cards reuse Card, Badge, Button, DropdownMenu, and Skeleton primitives to expose status badge, action cluster, and timeline note.
-- `handleChangeStatus` updates local state instantly; dropdown mirrors company listing select styling for consistency.
+- Story repository cards reuse Card, Badge, Button, Select, TagSelector, and Skeleton primitives to expose status badge, action cluster, timeline note, and tag chips.
+- `handleChangeStatus` updates local state instantly; dropdown mirrors company listing select styling for consistency, while TagSelector offers pill toggles for multi-tag filtering.
 
 - Route: `/dashboard/company/audit-center`.
 - Filter row shares Select/Input controls with reset button similar to other company modules.

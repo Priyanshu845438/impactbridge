@@ -17,6 +17,7 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { TagSelector, type TagOption } from "@/components/ui/tag-selector";
 import {
   Select,
   SelectContent,
@@ -47,6 +48,7 @@ type StoryCard = {
   summary: string;
   cover: string;
   updatedDays: number;
+  tags: string[];
 };
 
 const INITIAL_STORIES: StoryCard[] = [
@@ -62,6 +64,7 @@ const INITIAL_STORIES: StoryCard[] = [
     cover:
       "https://images.unsplash.com/photo-1587502537147-117fbb0d4906?auto=format&fit=crop&w=960&q=80",
     updatedDays: 3,
+    tags: ["health", "rural"],
   },
   {
     id: "ST-2402",
@@ -75,6 +78,7 @@ const INITIAL_STORIES: StoryCard[] = [
     cover:
       "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=960&q=80",
     updatedDays: 5,
+    tags: ["education", "women"],
   },
   {
     id: "ST-2403",
@@ -88,6 +92,7 @@ const INITIAL_STORIES: StoryCard[] = [
     cover:
       "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=960&q=80",
     updatedDays: 10,
+    tags: ["climate", "livelihoods"],
   },
   {
     id: "ST-2404",
@@ -101,6 +106,7 @@ const INITIAL_STORIES: StoryCard[] = [
     cover:
       "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=960&q=80",
     updatedDays: 1,
+    tags: ["climate", "education"],
   },
   {
     id: "ST-2405",
@@ -114,7 +120,18 @@ const INITIAL_STORIES: StoryCard[] = [
     cover:
       "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=960&q=80",
     updatedDays: 6,
+    tags: ["women", "health"],
   },
+];
+
+const STORY_TAG_OPTIONS: TagOption[] = [
+  { label: "Education", value: "education" },
+  { label: "Health", value: "health" },
+  { label: "Women Empowerment", value: "women" },
+  { label: "Climate Action", value: "climate" },
+  { label: "Livelihoods", value: "livelihoods" },
+  { label: "Child Rights", value: "child-rights" },
+  { label: "Rural Development", value: "rural" },
 ];
 
 const statusBadgeStyles: Record<StoryCard["status"], string> = {
@@ -133,6 +150,7 @@ export default function ImpactStoriesManagePage() {
   const [sort, setSort] = useState<string>(STORY_SORT[0].value);
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
+  const [tags, setTags] = useState<string[]>([]);
 
   useEffect(() => {
     const tm = setTimeout(() => setLoading(false), 360);
@@ -152,7 +170,8 @@ const filteredStories = useMemo(() => {
         ? story.title.toLowerCase().includes(query.toLowerCase()) ||
           story.programme.toLowerCase().includes(query.toLowerCase())
         : true;
-      return matchesStatus && matchesNgo && matchesQuery;
+      const matchesTags = tags.length === 0 || tags.some((tag) => story.tags.includes(tag));
+      return matchesStatus && matchesNgo && matchesQuery && matchesTags;
     });
 
     return list.sort((a, b) => {
@@ -166,7 +185,7 @@ const filteredStories = useMemo(() => {
           return new Date(b.updated).getTime() - new Date(a.updated).getTime();
       }
     });
-  }, [stories, status, ngo, sort, query]);
+  }, [stories, status, ngo, sort, query, tags]);
 
   const handleChangeStatus = (storyId: string, nextStatus: StoryCard["status"]) => {
     setStories((current) =>
@@ -227,7 +246,7 @@ const filteredStories = useMemo(() => {
       </header>
 
       <section className="flex flex-col gap-4 rounded-4xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
-        <div className="grid gap-4 lg:grid-cols-[1.2fr_repeat(3,minmax(0,1fr))]">
+        <div className="grid gap-4 xl:grid-cols-[1.2fr_repeat(3,minmax(0,1fr))]">
           <div className="flex items-center gap-2 rounded-3xl border border-slate-200 bg-slate-50/70 px-3 py-2 text-slate-500 transition focus-within:border-emerald-500/60 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300">
             <Filter className="h-4 w-4" />
             <Input
@@ -279,6 +298,12 @@ const filteredStories = useMemo(() => {
               ))}
             </SelectContent>
           </Select>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
+            Tags
+          </span>
+          <TagSelector options={STORY_TAG_OPTIONS} value={tags} onChange={setTags} className="max-w-[460px]" />
         </div>
       </section>
 
@@ -351,6 +376,16 @@ const filteredStories = useMemo(() => {
                     })}
                   </span>
                 </div>
+
+                {story.tags.length ? (
+                  <div className="flex flex-wrap gap-2 text-xs text-slate-500 dark:text-slate-400">
+                    {story.tags.map((tag) => (
+                      <span key={tag} className="rounded-full bg-slate-100 px-2 py-0.5 dark:bg-slate-800/70">
+                        {STORY_TAG_OPTIONS.find((option) => option.value === tag)?.label ?? tag}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
 
                 <div className="mt-auto flex flex-wrap items-center gap-3 border-t border-slate-200 pt-4 dark:border-slate-800">
                   <Button variant="outline" size="sm" className="rounded-full px-4" asChild>

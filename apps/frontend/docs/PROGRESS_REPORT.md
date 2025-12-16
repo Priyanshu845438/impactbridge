@@ -29,7 +29,7 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Added company partnership insights page with gradient KPI row, filters, responsive NGO list, skeletons, and empty state (route: `/dashboard/company/partner-insights`).
 - Added company vendor directory page with search/filters, responsive card grid, detail drawer, and skeleton/empty states (route: `/dashboard/company/vendors`).
 - Added company audit & compliance center with filters, table/cards, score badges, drawer summary, and placeholder download flow (route: `/dashboard/company/audit-center`).
-- Added company impact story management page with search, filters, sort controls, responsive card grid, status dropdown workflow, timeline note, skeleton loaders, empty state, and builder CTA (route: `/dashboard/company/impact-stories/manage`).
+- Added company impact story management page with search, filters, sort controls, responsive card grid, status dropdown workflow, tag selector, timeline note, skeleton loaders, empty state, and builder CTA (route: `/dashboard/company/impact-stories/manage`).
 - Added company impact story review mode with hero presentation, anchored sections, reading progress, and reviewer metadata/actions to mimic donor-facing experience (route: `/dashboard/company/impact-stories/review/[id]`).
 - Added company impact story publishing flow with validation checklist, SEO tuning, preview card, visibility/schedule controls, and mock publish confirmation (route: `/dashboard/company/impact-stories/publish/[id]`).
 - Added company impact story public gallery preview with filters, responsive cards, modal previews, and pagination mock (route: `/dashboard/company/impact-stories/gallery`).

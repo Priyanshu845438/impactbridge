@@ -764,3 +764,8 @@
 
 - Enhanced /dashboard/company/impact-stories/manage with inline status Select, timeline note, and refreshed badges while keeping actions mock-only.
 - Updated docs (dashboard overview, component catalog, routing guide, progress report) to capture the new controls, reran lint/build (Next module-type warning persists as expected).
+
+### **145. Company Impact Story Tagging Added**
+
+- Introduced reusable TagSelector component and wired story tags across create, listing, and manage flows with pill badges, client-side filters, and preview syncing.
+- Refreshed documentation suite (dashboard, component catalog, routing, TODO, progress) to reflect tagging, then reran lint/build confirming only the known Next module-type warning.
