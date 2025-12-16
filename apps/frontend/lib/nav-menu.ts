@@ -164,6 +164,13 @@ export const navMenu: NavItem[] = [
     href: "/dashboard/company/impact-stories/create",
   },
   {
+    label: "Public story gallery",
+    icon: Sparkles,
+    roles: ["COMPANY"],
+    group: "Workspace",
+    href: "/dashboard/company/impact-stories/gallery",
+  },
+  {
     label: "Impact forecasting",
     icon: TrendingUp,
     roles: ["COMPANY"],

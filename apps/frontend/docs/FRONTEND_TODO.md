@@ -22,6 +22,7 @@
 - [ ] Wire company impact stories management (`/dashboard/company/impact-stories/manage`) to CMS list + moderation APIs.
 - [ ] Wire company impact story review mode (`/dashboard/company/impact-stories/review/[id]`) to real narrative payloads, reviewer workflow, and PDF export service.
 - [ ] Wire company impact story publishing flow (`/dashboard/company/impact-stories/publish/[id]`) to CMS validation, SEO metadata API, and scheduling queue.
+- [ ] Wire company impact story public gallery (`/dashboard/company/impact-stories/gallery`) to live publishing APIs and CDN-backed assets.
 - [ ] Wire company impact story builder (`/dashboard/company/impact-stories/create`) to CMS authoring + uploads.
 - [ ] Wire company budget planner (`/dashboard/company/budget-planner`) to finance planning APIs and persist allocations.
 - [ ] Wire company partner insights (`/dashboard/company/partner-insights`) to analytics/compliance APIs.

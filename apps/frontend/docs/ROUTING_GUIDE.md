@@ -56,6 +56,7 @@
   - `/dashboard/company/impact-stories/manage`
   - `/dashboard/company/impact-stories/review/[id]`
   - `/dashboard/company/impact-stories/publish/[id]`
+  - `/dashboard/company/impact-stories/gallery`
 - `/dashboard/company/impact-explorer`
 - `/dashboard/company/impact-forecast`
 - `/dashboard/company/ngos/[ngoId]`

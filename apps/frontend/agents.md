@@ -754,3 +754,8 @@
 
 - Created /dashboard/company/impact-stories/publish/[id] featuring validation checklist, SEO panel, preview card, visibility/scheduling controls, and mock publish confirmation modal.
 - Linked publish CTA from management cards, refreshed documentation set, and reran lint/build (Next module-type warning persists as expected).
+
+### **143. Company Impact Story Public Gallery Added**
+
+- Delivered /dashboard/company/impact-stories/gallery with filter toolbar, responsive story grid, modal preview, and pagination stub to mirror the supporter-facing gallery.
+- Added navigation link, updated docs (dashboard, component catalog, routing, TODO, progress), and reran lint/build verifying the standard Next warning only.

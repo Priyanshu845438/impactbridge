@@ -164,6 +164,10 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Final publishing workspace with validation checklist, SEO tuning, listing preview, visibility controls, scheduling, and mock publish modal.
 - Publish CTA remains disabled until all checklist items pass, matching expected CMS safeguards.
 
+- Route: `/dashboard/company/impact-stories/gallery`.
+- Public-facing gallery preview with NGO/programme/year/topic filters, responsive card grid, modal preview, and pagination mock.
+- Mirrors supporter exploration experience while keeping data mock-only for now.
+
 - Route: `/dashboard/company/impact-benchmarks`.
 - KPI cards juxtapose company vs industry values with delta badges and progress bars to highlight relative performance.
 - Dual Recharts (bar + radar) surfaces efficiency, compliance, and outreach strengths against sector medians.

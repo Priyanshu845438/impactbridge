@@ -217,6 +217,10 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - Checklist rows reuse Card styling with tone-aware border/background classes; publish CTA stays disabled until all pass.
 - `MetricCard` helper renders SEO stats with tone-aware styling; preview card mirrors public listing card.
 - Publish modal leverages shared Modal primitive with mock scheduling confirmation.
+- Route: `/dashboard/company/impact-stories/gallery`.
+- Gallery cards reuse story card styling with gradient overlays, CTA button, and hover scaling.
+- Filter toolbar reuses Input/Select primitives alongside icon copywriting; modal preview shares Modal + metric pills.
+- Pagination bar uses Button primitives to mimic public navigation.
 
 - Route: `/dashboard/company/impact-benchmarks`.
 - KPI card component extends Card with dual value display, badge delta, and gradient progress indicator.
