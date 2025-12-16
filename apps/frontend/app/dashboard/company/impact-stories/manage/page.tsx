@@ -3,7 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { CalendarClock, Filter, Layers, Plus } from "lucide-react";
+import {
+  CalendarClock,
+  ChevronDown,
+  Clock,
+  Filter,
+  Layers,
+  Plus,
+} from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
@@ -20,7 +27,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
-const STORY_STATUS = ["All", "Published", "Draft"] as const;
+const STORY_STATUS = ["All", "Published", "Under Review", "Draft"] as const;
 
 const STORY_SORT = [
   { label: "Newest", value: "newest" },
@@ -33,15 +40,16 @@ type StoryStatus = (typeof STORY_STATUS)[number];
 type StoryCard = {
   id: string;
   title: string;
-  status: "Published" | "Draft";
+  status: "Published" | "Under Review" | "Draft";
   updated: string;
   ngo: string;
   programme: string;
   summary: string;
   cover: string;
+  updatedDays: number;
 };
 
-const STORIES: StoryCard[] = [
+const INITIAL_STORIES: StoryCard[] = [
   {
     id: "ST-2401",
     title: "Mobile Clinics Reached 40 New Villages",
@@ -53,6 +61,7 @@ const STORIES: StoryCard[] = [
       "Field doctors and midwives delivered primary care and antenatal support in remote hamlets.",
     cover:
       "https://images.unsplash.com/photo-1587502537147-117fbb0d4906?auto=format&fit=crop&w=960&q=80",
+    updatedDays: 3,
   },
   {
     id: "ST-2402",
@@ -65,11 +74,12 @@ const STORIES: StoryCard[] = [
       "Mentors ran experiment labs after school, boosting science scores across three districts.",
     cover:
       "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=960&q=80",
+    updatedDays: 5,
   },
   {
     id: "ST-2403",
     title: "Mangrove Guardians Restore Coastal Shields",
-    status: "Draft",
+    status: "Under Review",
     updated: "2024-07-11",
     ngo: "GreenFuture Trust",
     programme: "Mangrove Guardians",
@@ -77,6 +87,7 @@ const STORIES: StoryCard[] = [
       "Women-led collectives replanted 12,000 saplings protecting shoreline communities.",
     cover:
       "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=960&q=80",
+    updatedDays: 10,
   },
   {
     id: "ST-2404",
@@ -89,6 +100,7 @@ const STORIES: StoryCard[] = [
       "Student innovators prototyped neighborhood solar hubs with local technicians.",
     cover:
       "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=960&q=80",
+    updatedDays: 1,
   },
   {
     id: "ST-2405",
@@ -101,17 +113,21 @@ const STORIES: StoryCard[] = [
       "Entrepreneurs set up micro-canteens offering fortified meals to adolescent girls.",
     cover:
       "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=960&q=80",
+    updatedDays: 6,
   },
 ];
 
 const statusBadgeStyles: Record<StoryCard["status"], string> = {
   Published:
     "bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-200",
-  Draft:
+  "Under Review":
     "bg-amber-500/10 text-amber-600 dark:bg-amber-500/10 dark:text-amber-200",
+  Draft:
+    "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-200",
 };
 
 export default function ImpactStoriesManagePage() {
+  const [stories, setStories] = useState(INITIAL_STORIES);
   const [status, setStatus] = useState<StoryStatus>("All");
   const [ngo, setNgo] = useState<string>("All");
   const [sort, setSort] = useState<string>(STORY_SORT[0].value);
@@ -124,12 +140,12 @@ export default function ImpactStoriesManagePage() {
   }, []);
 
   const ngoOptions = useMemo(
-    () => ["All", ...new Set(STORIES.map((story) => story.ngo))],
-    [],
+    () => ["All", ...new Set(stories.map((story) => story.ngo))],
+    [stories],
   );
 
-  const filteredStories = useMemo(() => {
-    const list = STORIES.filter((story) => {
+const filteredStories = useMemo(() => {
+    const list = stories.filter((story) => {
       const matchesStatus = status === "All" || story.status === status;
       const matchesNgo = ngo === "All" || story.ngo === ngo;
       const matchesQuery = query
@@ -150,7 +166,28 @@ export default function ImpactStoriesManagePage() {
           return new Date(b.updated).getTime() - new Date(a.updated).getTime();
       }
     });
-  }, [status, ngo, sort, query]);
+  }, [stories, status, ngo, sort, query]);
+
+  const handleChangeStatus = (storyId: string, nextStatus: StoryCard["status"]) => {
+    setStories((current) =>
+      current.map((story) =>
+        story.id === storyId
+          ? {
+              ...story,
+              status: nextStatus,
+              updated: new Date().toISOString(),
+              updatedDays: 0,
+            }
+          : story,
+      ),
+    );
+  };
+
+  const describeLastUpdated = (days: number) => {
+    if (days <= 0) return "Just updated";
+    if (days === 1) return "Updated 1 day ago";
+    return `Updated ${days} days ago`;
+  };
 
   return (
     <div className="space-y-8 pb-16">
@@ -340,6 +377,39 @@ export default function ImpactStoriesManagePage() {
                   >
                     Delete
                   </Button>
+                  <Select
+                    value={story.status}
+                    onValueChange={(value: StoryCard["status"]) =>
+                      handleChangeStatus(story.id, value)
+                    }
+                  >
+                    <SelectTrigger className="h-9 w-40 justify-between rounded-full border border-slate-200 bg-white px-3 text-xs font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300">
+                      <SelectValue placeholder="Change status" />
+                      <ChevronDown className="h-4 w-4" />
+                    </SelectTrigger>
+                    <SelectContent align="end" className="rounded-3xl">
+                      {(["Published", "Under Review", "Draft"] as const).map(
+                        (option) => (
+                          <SelectItem key={option} value={option}>
+                            {option}
+                          </SelectItem>
+                        ),
+                      )}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex items-center justify-between gap-2 rounded-3xl bg-slate-100/70 px-4 py-2 text-xs text-slate-500 dark:bg-slate-800/60 dark:text-slate-300">
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="h-3.5 w-3.5" />
+                    <span>
+                      {describeLastUpdated(story.updatedDays)}
+                      <span className="mx-2 text-slate-400">•</span>
+                      <span className="font-semibold uppercase tracking-tight text-slate-600 dark:text-slate-200">
+                        Status: {story.status}
+                      </span>
+                    </span>
+                  </span>
                 </div>
               </div>
             </Card>

@@ -759,3 +759,8 @@
 
 - Delivered /dashboard/company/impact-stories/gallery with filter toolbar, responsive story grid, modal preview, and pagination stub to mirror the supporter-facing gallery.
 - Added navigation link, updated docs (dashboard, component catalog, routing, TODO, progress), and reran lint/build verifying the standard Next warning only.
+
+### **144. Company Story Management Status Controls Added**
+
+- Enhanced /dashboard/company/impact-stories/manage with inline status Select, timeline note, and refreshed badges while keeping actions mock-only.
+- Updated docs (dashboard overview, component catalog, routing guide, progress report) to capture the new controls, reran lint/build (Next module-type warning persists as expected).

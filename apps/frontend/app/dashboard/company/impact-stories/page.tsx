@@ -1,18 +1,20 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Camera, CheckCircle2, Film, Sparkles, Star } from "lucide-react";
+import { Camera, CheckCircle2, ChevronDown, Film, Sparkles, Star } from "lucide-react";
 
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Drawer } from "@/components/ui/drawer";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 const THEMES = ["All themes", "Education", "Health", "Environment"] as const;
 const NGO_FILTERS = ["All partners", "Swasthya Foundation", "GreenFuture Trust", "TeachBridge Collective"] as const;
+const STATUS_FILTERS = ["All", "Draft", "Under Review", "Published"] as const;
 
 type Story = {
   id: string;
@@ -25,9 +27,11 @@ type Story = {
   beforeAfter: Array<{ label: string; before: string; after: string }>;
   outcomes: string[];
   gallery: string[];
+  status: "Draft" | "Under Review" | "Published";
+  updatedDays: number;
 };
 
-const STORIES: Story[] = [
+const INITIAL_STORIES: Story[] = [
   {
     id: "science-wings",
     programme: "Science Wings Fellowship",
@@ -48,6 +52,8 @@ const STORIES: Story[] = [
       "https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&w=900&q=80",
     ],
+    status: "Published",
+    updatedDays: 4,
   },
   {
     id: "rural-clinics",
@@ -69,6 +75,8 @@ const STORIES: Story[] = [
       "https://images.unsplash.com/photo-1527613426441-4da17471b66d?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1550831107-1553da8c8464?auto=format&fit=crop&w=900&q=80",
     ],
+    status: "Under Review",
+    updatedDays: 2,
   },
   {
     id: "mangrove-guardians",
@@ -90,6 +98,8 @@ const STORIES: Story[] = [
       "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1526711657229-bad3d702c5d5?auto=format&fit=crop&w=900&q=80",
     ],
+    status: "Draft",
+    updatedDays: 7,
   },
   {
     id: "urban-youth",
@@ -111,28 +121,45 @@ const STORIES: Story[] = [
       "https://images.unsplash.com/photo-1484589065579-248aad0d8b13?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1462536943532-57a629f6cc60?auto=format&fit=crop&w=900&q=80",
     ],
+    status: "Published",
+    updatedDays: 1,
   },
 ];
 
+const STATUS_BADGE: Record<Story["status"], string> = {
+  Draft: "bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-200",
+  "Under Review": "bg-amber-500/15 text-amber-600 dark:bg-amber-500/15 dark:text-amber-200",
+  Published: "bg-emerald-500/15 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-200",
+};
+
+const STATUS_OPTIONS: Story["status"][] = ["Draft", "Under Review", "Published"];
+
 export default function ImpactStoriesPage() {
+  const [stories, setStories] = useState(INITIAL_STORIES);
   const [selectedTheme, setSelectedTheme] = useState<typeof THEMES[number]>(THEMES[0]!);
   const [selectedNgo, setSelectedNgo] = useState<typeof NGO_FILTERS[number]>(NGO_FILTERS[0]!);
+  const [statusFilter, setStatusFilter] = useState<typeof STATUS_FILTERS[number]>(STATUS_FILTERS[0]!);
   const [activeStoryId, setActiveStoryId] = useState<string | null>(null);
   const [galleryIndex, setGalleryIndex] = useState(0);
 
   const filteredStories = useMemo(() => {
-    return STORIES.filter((story) => {
+    return stories.filter((story) => {
       const themeMatch = selectedTheme === "All themes" || story.theme === selectedTheme;
       const ngoMatch = selectedNgo === "All partners" || story.ngo === selectedNgo;
-      return themeMatch && ngoMatch;
+      const statusMatch = statusFilter === "All" || story.status === statusFilter;
+      return themeMatch && ngoMatch && statusMatch;
     });
-  }, [selectedNgo, selectedTheme]);
+  }, [stories, selectedNgo, selectedTheme, statusFilter]);
 
-  const activeStory = activeStoryId ? STORIES.find((story) => story.id === activeStoryId) ?? null : null;
+  const activeStory = activeStoryId ? stories.find((story) => story.id === activeStoryId) ?? null : null;
 
   const handleOpenStory = (story: Story) => {
     setActiveStoryId(story.id);
     setGalleryIndex(0);
+  };
+
+  const handleStatusChange = (storyId: string, status: Story["status"]) => {
+    setStories((current) => current.map((story) => (story.id === storyId ? { ...story, status } : story)));
   };
 
   return (
@@ -175,13 +202,24 @@ export default function ImpactStoriesPage() {
           activeOption={selectedNgo}
           onSelect={(value) => setSelectedNgo(value as typeof NGO_FILTERS[number])}
         />
+        <FilterPill
+          label="Status"
+          options={STATUS_FILTERS as unknown as string[]}
+          activeOption={statusFilter}
+          onSelect={(value) => setStatusFilter(value as typeof STATUS_FILTERS[number])}
+        />
       </section>
 
       <section>
         {filteredStories.length > 0 ? (
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {filteredStories.map((story) => (
-              <StoryCard key={story.id} story={story} onReadMore={() => handleOpenStory(story)} />
+              <StoryCard
+                key={story.id}
+                story={story}
+                onReadMore={() => handleOpenStory(story)}
+                onStatusChange={(status) => handleStatusChange(story.id, status)}
+              />
             ))}
           </div>
         ) : (
@@ -317,9 +355,10 @@ function FilterPill({ label, options, activeOption, onSelect }: FilterPillProps)
 interface StoryCardProps {
   story: Story;
   onReadMore: () => void;
+  onStatusChange: (status: Story["status"]) => void;
 }
 
-function StoryCard({ story, onReadMore }: StoryCardProps) {
+function StoryCard({ story, onReadMore, onStatusChange }: StoryCardProps) {
   return (
     <Card className="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white/90 shadow-md transition hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900/70">
       <div className="relative h-44 overflow-hidden">
@@ -331,19 +370,43 @@ function StoryCard({ story, onReadMore }: StoryCardProps) {
         </div>
       </div>
       <div className="flex flex-1 flex-col gap-3 p-5">
-        <div className="space-y-1">
-          <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">{story.programme}</h3>
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">{story.ngo}</p>
+        <div className="space-y-2">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">{story.programme}</h3>
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">{story.ngo}</p>
+            </div>
+            <Badge className={cn("rounded-full px-3 py-1 text-[11px] font-semibold", STATUS_BADGE[story.status])}>{story.status}</Badge>
+          </div>
+          <p className="line-clamp-3 text-sm text-slate-600 dark:text-slate-300">{story.snippet}</p>
         </div>
-        <p className="line-clamp-3 text-sm text-slate-600 dark:text-slate-300">{story.snippet}</p>
-        <div className="mt-auto flex items-center justify-between pt-4">
-          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-1 text-[11px] font-medium text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-200">
-            <Camera className="h-3 w-3" />
-            Field verified
-          </span>
-          <Button variant="outline" size="sm" onClick={onReadMore} className="rounded-full px-4">
-            Read full story
-          </Button>
+        <div className="space-y-3">
+          <Select value={story.status} onValueChange={(value: Story["status"]) => onStatusChange(value)}>
+            <SelectTrigger className="h-9 w-full justify-between rounded-full border border-slate-200 bg-slate-50 px-3 text-xs font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300">
+              <SelectValue placeholder="Change status" />
+              <ChevronDown className="h-4 w-4" />
+            </SelectTrigger>
+            <SelectContent>
+              {STATUS_OPTIONS.map((status) => (
+                <SelectItem key={status} value={status}>
+                  {status}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <span>Last updated: {story.updatedDays} days ago</span>
+            <span>Status: {story.status}</span>
+          </div>
+          <div className="mt-2 flex items-center justify-between pt-3">
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-1 text-[11px] font-medium text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-200">
+              <Camera className="h-3 w-3" />
+              Field verified
+            </span>
+            <Button variant="outline" size="sm" onClick={onReadMore} className="rounded-full px-4">
+              Read full story
+            </Button>
+          </div>
         </div>
       </div>
     </Card>

@@ -179,6 +179,12 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 ### Company impact explorer components
 ### Company impact forecasting components
 
+### Company impact story management components
+
+- Route: `/dashboard/company/impact-stories/manage`.
+- Story repository cards reuse Card, Badge, Button, DropdownMenu, and Skeleton primitives to expose status badge, action cluster, and timeline note.
+- `handleChangeStatus` updates local state instantly; dropdown mirrors company listing select styling for consistency.
+
 - Route: `/dashboard/company/audit-center`.
 - Filter row shares Select/Input controls with reset button similar to other company modules.
 - `AuditList` toggles table vs mobile cards, reusing ScoreBadge/StatusBadge helpers.
