@@ -172,3 +172,9 @@
 - Added `sanitizeEntity`/`sanitizeEntities` helpers to remove sensitive fields consistently (password, tokens, salts).
 - Refactored AuthService, UserService, and UsersService to reuse the helper without altering response shapes.
 - Added dedicated unit tests for the utility and refreshed docs (README, technical overview, progress checklist).
+
+## 38. Pagination helper & soft-delete defaults
+
+- Delivered `pagination.util.ts` and `query.util.ts` normalising limit/offset/page inputs and ensuring `deletedAt` filters apply by default.
+- Updated user- and profile-related services to accept optional pagination/filter options without changing existing endpoint behaviour.
+- Added unit coverage for pagination maths and soft-delete guards; reran full test/build suite and documented the infrastructure update.

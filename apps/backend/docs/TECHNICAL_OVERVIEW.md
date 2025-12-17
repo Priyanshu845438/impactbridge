@@ -75,6 +75,7 @@
 - Soft delete handling (`deletedAt`).
 - Notification service (email/SMS) and reviewer dashboards.
 - Automated integration tests.
+- Pagination helpers & soft-delete filters wired into shared query utilities (controllers still default to full lists).
 
 
 ## Utilization Reporting

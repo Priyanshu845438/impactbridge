@@ -165,8 +165,8 @@ All tables include timestamps and indexes where needed. Sensitive data (password
 | Activity logging | Audit trail for key actions | ✅ Complete |
 | **Company–NGO approval workflow** | Campaign approvals before company donations | 🔄 In design (schema drafted, services partially scaffolded, not deployed) |
 | **NGO financial reporting** | Upload/list quarterly & annual reports | 🔄 Planned |
-| Pagination & search | Consistent pagination across lists | 🔄 Planned |
-| Soft delete approach | Replace hard deletes with `deletedAt` | 🔄 Planned |
+| Pagination & search | Consistent pagination across lists | ✅ Base helpers shipped (list endpoints still default to full results) |
+| Soft delete approach | Replace hard deletes with `deletedAt` | ✅ Soft delete filters enforced in shared query helpers (delete endpoints still hard-delete) |
 | Email/SMS notifications | Receipts, password change, invitation reminders | 🔄 Planned |
 | Reviewer/Auditor dashboards | Read-only portals for new roles | 🔄 Planned |
 | Automated tests | Integration/e2e coverage | 🔄 Planned |

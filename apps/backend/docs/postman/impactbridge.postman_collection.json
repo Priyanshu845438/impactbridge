@@ -1,8 +1,8 @@
 {
   "info": {
-    "name": "ImpactBridge Backend",
+    "name": "ImpactBridge API Collection",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": "Collection covering authentication, NGO self-service, donations, and admin APIs."
+    "description": "Postman collection for ImpactBridge backend (includes shared token capture and sanitised response expectations)."
   },
   "variable": [
     {

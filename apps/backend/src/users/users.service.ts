@@ -7,6 +7,8 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { comparePassword, hashPassword } from '../auth/utils/password.util';
 import { sanitizeEntity, sanitizeEntities } from '../utils/sanitize.util';
+import { ListQueryOptions } from '../utils/pagination.util';
+import { buildFindManyArgs, mergeWhere } from '../utils/query.util';
 
 @Injectable()
 export class UsersService {
@@ -23,8 +25,9 @@ export class UsersService {
     return this.prisma.user.create({ data });
   }
 
-  findAll() {
-    return this.prisma.user.findMany();
+  findAll(options?: ListQueryOptions<Prisma.UserWhereInput>) {
+    const args = buildFindManyArgs<'User', Prisma.UserWhereInput>(options);
+    return this.prisma.user.findMany(args);
   }
 
   findOne(id: string) {
@@ -97,26 +100,42 @@ export class UsersService {
     return sanitizeEntity(user);
   }
 
-  async getNGOsWithCampaigns() {
+  async getNGOsWithCampaigns(
+    options?: ListQueryOptions<Prisma.UserWhereInput>,
+  ) {
+    const args = buildFindManyArgs<'User', Prisma.UserWhereInput>({
+      ...options,
+      where: mergeWhere(options?.where, { role: Role.NGO }) as Prisma.UserWhereInput,
+    });
+
     const ngos = await this.prisma.user.findMany({
-      where: { role: Role.NGO },
-      include: { campaigns: true },
-    } as Prisma.UserFindManyArgs);
+      ...(args as Prisma.UserFindManyArgs),
+      include: { campaigns: true } as any,
+    });
 
     return sanitizeEntities(ngos);
   }
 
-  async getCompaniesWithDonations() {
+  async getCompaniesWithDonations(
+    options?: ListQueryOptions<Prisma.UserWhereInput>,
+  ) {
+    const args = buildFindManyArgs<'User', Prisma.UserWhereInput>({
+      ...options,
+      where: mergeWhere(options?.where, {
+        role: Role.COMPANY,
+      }) as Prisma.UserWhereInput,
+    });
+
     const companies = await this.prisma.user.findMany({
-      where: { role: Role.COMPANY },
+      ...(args as Prisma.UserFindManyArgs),
       include: {
         donations: {
           include: {
             campaign: true,
           },
         },
-      },
-    } as Prisma.UserFindManyArgs);
+      } as any,
+    });
 
     return sanitizeEntities(companies);
   }
@@ -152,8 +171,15 @@ export class UsersService {
     });
   }
 
-  async getAllNGOProfiles() {
+  async getAllNGOProfiles(
+    options?: ListQueryOptions<Prisma.NGOProfileWhereInput>,
+  ) {
+    const args = buildFindManyArgs<'NGOProfile', Prisma.NGOProfileWhereInput>(
+      options,
+    );
+
     const ngos = await this.prisma.nGOProfile.findMany({
+      ...args,
       include: {
         user: true,
         bankDetails: true,
@@ -171,8 +197,15 @@ export class UsersService {
     });
   }
 
-  async getAllCompanyProfiles() {
+  async getAllCompanyProfiles(
+    options?: ListQueryOptions<Prisma.CompanyProfileWhereInput>,
+  ) {
+    const args = buildFindManyArgs<'CompanyProfile', Prisma.CompanyProfileWhereInput>(
+      options,
+    );
+
     const companies = await this.prisma.companyProfile.findMany({
+      ...args,
       include: {
         user: true,
         bankDetails: true,
@@ -190,8 +223,15 @@ export class UsersService {
     });
   }
 
-  async getAllDonorProfiles() {
+  async getAllDonorProfiles(
+    options?: ListQueryOptions<Prisma.DonorProfileWhereInput>,
+  ) {
+    const args = buildFindManyArgs<'DonorProfile', Prisma.DonorProfileWhereInput>(
+      options,
+    );
+
     const donors = await this.prisma.donorProfile.findMany({
+      ...args,
       include: {
         user: true,
         addresses: true,
