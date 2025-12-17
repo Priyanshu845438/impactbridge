@@ -26,6 +26,7 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Added company reports & exports page with summary tiles, filters, responsive table/cards, export modal, and skeleton/empty/error coverage (route: `/dashboard/company/reports`).
 - Added company compliance overview page with insight cards, responsive table-to-card list, drawer detail view, and upcoming deadline sidebar (route: `/dashboard/company/compliance`).
 - Added company CSR budget planner page with year selector, summary cards, allocation table/cards, edit drawer, and add-allocation modal (route: `/dashboard/company/budget-planner`).
+- Added Jest/RTL budget planner tests covering year selector, edit drawer sanitisation, and add allocation modal interactions using mock data.
 - Added company partnership insights page with gradient KPI row, filters, responsive NGO list, skeletons, and empty state (route: `/dashboard/company/partner-insights`).
 - Added company vendor directory page with search/filters, responsive card grid, detail drawer, and skeleton/empty states (route: `/dashboard/company/vendors`).
 - Added company audit & compliance center with filters, table/cards, score badges, drawer summary, and placeholder download flow (route: `/dashboard/company/audit-center`).
@@ -34,6 +35,7 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Added company impact story publishing flow with validation checklist, SEO tuning, preview card, visibility/schedule controls, and mock publish confirmation (route: `/dashboard/company/impact-stories/publish/[id]`).
 - Added company impact story public gallery preview with filters, responsive cards, modal previews, and pagination mock (route: `/dashboard/company/impact-stories/gallery`).
 - Established Jest/RTL coverage for impact stories (tagging, workflow, analytics, drawer/empty state) using existing mock data.
+- Expanded RTL coverage to the budget planner core flows; documented in TODO/catalog/dashboard guides.
   with KPI tiles, chart suite, story cards, and export controls (route: `/dashboard/ngo/impact`).
   with grouped checklist, alerts, timeline, status filters, and action modal (route: `/dashboard/ngo/compliance`).
   with request modal, filterable table, timeline drawer, and pagination (route: `/dashboard/ngo/payouts`).

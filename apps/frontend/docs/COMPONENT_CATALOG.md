@@ -172,6 +172,12 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - `ComplianceList` toggles table vs mobile card layouts while sharing filter/search state and navigation links.
 - Drawer composes status badge, missing document list, deadline cards, and notes block with follow-up CTA using shared Card/Button primitives.
 ### Company budget planner components
+
+- Route: `/dashboard/company/budget-planner`.
+- Uses shared `Select`, `Drawer`, `Modal`, and `Input` primitives with finance-toned cards.
+- Summary cards highlight total/allocated/remaining budgets with icon badges and responsive grid.
+- `AllocationList` renders responsive table→card layouts with `ProgressBar` helper.
+- RTL suite covers year selector, edit drawer sanitisation, and add-allocation modal workflows.
 ### Company partner insights components
 ### Company vendor directory components
 ### Company audit center components

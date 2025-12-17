@@ -31,7 +31,7 @@
 - [ ] Add RTL coverage for audit filters, table/card toggles, and drawer content.
 - [ ] Add RTL coverage for vendor directory filters, card CTA, and drawer interactions.
 - [ ] Add RTL coverage for partner insights filters, sorting, and responsive list rendering.
-- [ ] Add RTL coverage for budget planner year selector, drawer edits, and modal submission.
+- [x] Add RTL coverage for budget planner year selector, drawer edits, and modal submission.
 - [ ] Add RTL coverage for compliance table/card responsiveness and drawer interactions.
 - [ ] Connect company NGO profile (`/dashboard/company/ngos/[ngoId]`) to backend partner data.
   - Replace mock stats, campaigns, and documents with live payloads.

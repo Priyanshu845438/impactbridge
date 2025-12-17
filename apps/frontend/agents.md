@@ -794,3 +794,8 @@
 
 - Replaced legacy company story specs with targeted RTL suites for impact story workflow, tagging, analytics snapshot, and drawer/empty-state interactions using mock data.
 - Added test-friendly data attributes, refreshed documentation set (dashboard, component catalog, routing guide, TODO, progress report) to capture the new coverage, and reran full jest/lint/build with the usual Next module-type warning as the only output.
+
+### **151. Budget Planner RTL Coverage Added**
+
+- Authored `__tests__/budget-planner.test.tsx` to validate year switching, allocation drawer sanitisation, and add-allocation modal flows using existing mock data.
+- Augmented jest setup with pointer/scroll polyfills, refreshed component/dashboard/routing/progress/TODO docs, and reran jest, lint, and build (expected Next module-type warning only).

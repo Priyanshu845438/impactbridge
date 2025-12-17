@@ -201,6 +201,7 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Summary row highlights total budget, allocated, and remaining funds with tone-mapped cards.
 - Responsive allocation table/cards support edit drawer with slider + numeric input and modal for adding allocations.
 - Skeleton state keeps UX steady before data appears; all interactions remain mock-only until APIs land.
+- New RTL suite covers year selection, edit drawer sanitisation, and add allocation modal interactions to guard core UX flows.
 
 
 - Insight tiles surface compliant, pending, missing-document, and expiring-registration counts using live badge tones.

@@ -46,7 +46,7 @@
 - `/dashboard/company/reports`
 - `/dashboard/company/compliance`
 - `/dashboard/company/comparison`
-- `/dashboard/company/budget-planner`
+- `/dashboard/company/budget-planner` (UI-only; protected by new RTL tests covering year switch, edit drawer, modal)
 - `/dashboard/company/partner-insights`
 - `/dashboard/company/vendors`
 - `/dashboard/company/audit-center`
