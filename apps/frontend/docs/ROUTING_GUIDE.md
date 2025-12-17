@@ -46,12 +46,12 @@
 - `/dashboard/company/reports`
 - `/dashboard/company/compliance`
 - `/dashboard/company/comparison`
-- `/dashboard/company/budget-planner` (UI-only; protected by new RTL tests covering year switch, edit drawer, modal)
+- `/dashboard/company/budget-planner` (UI-only; protected by RTL tests covering year switch, edit drawer, modal)
 - `/dashboard/company/partner-insights`
 - `/dashboard/company/vendors`
 - `/dashboard/company/audit-center`
 - `/dashboard/company/impact-benchmarks`
-- `/dashboard/company/impact-stories` (mock-only storytelling hub; workflow/tagging/drawer/analytics RTL suites now in place)
+- `/dashboard/company/impact-stories` (mock-only storytelling hub; workflow/tagging/drawer/analytics RTL suites in place)
   - `/dashboard/company/impact-stories/create`
   - `/dashboard/company/impact-stories/manage` – library view with inline status control + timeline note
     - `/dashboard/company/impact-stories/review/[id]`
@@ -60,7 +60,7 @@
   - `/dashboard/company/impact-stories/publish/[id]`
   - `/dashboard/company/impact-stories/gallery`
 - `/dashboard/company/impact-explorer`
-- `/dashboard/company/impact-forecast`
+- `/dashboard/company/impact-forecast` (mock forecasting simulator; RTL suite exercises preset chips and timeline insight)
 - `/dashboard/company/ngos/[ngoId]`
 - `/dashboard/company/engagement-hub`
 - `/dashboard/donor`

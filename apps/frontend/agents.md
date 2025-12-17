@@ -809,3 +809,8 @@
 
 - Patched impact forecasting insight markup with a stable `data-testid` and updated `impact-analytics-widgets.test.tsx` to drive forecast presets, ensuring phased-rollout guidance renders under budget trims.
 - Reran jest, lint, and build (all green apart from the known Next module-type warning) and refreshed dashboard/component/progress docs to capture the analytics coverage.
+
+### **154. Storybook Coverage for Tagging & Status Primitives**
+
+- Authored Storybook stories for TagSelector, StatusBadge, and ReportsSummaryCard components with light/dark variants so design review can happen in isolation.
+- Updated dashboard/component/TODO/progress docs to record the new stories and appended this log entry; `npm run build` and `npm run storybook` both succeed (expected `xdg-open` warning + Next module-type notice only).

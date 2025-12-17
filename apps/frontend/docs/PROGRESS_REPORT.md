@@ -37,6 +37,7 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Established Jest/RTL coverage for impact stories (tagging, workflow, analytics, drawer/empty state) using existing mock data.
 - Added Jest/RTL suites for vendor directory, audit center, engagement hub, and impact analytics widgets (comparison, forecast, benchmark) to lock core CSR tooling before backend wiring.
 - Expanded RTL coverage to the budget planner core flows; documented in TODO/catalog/dashboard guides.
+- Expanded Storybook coverage with TagSelector, StatusBadge, and ReportsSummaryCard primitives for design/QA review.
   with KPI tiles, chart suite, story cards, and export controls (route: `/dashboard/ngo/impact`).
   with grouped checklist, alerts, timeline, status filters, and action modal (route: `/dashboard/ngo/compliance`).
   with request modal, filterable table, timeline drawer, and pagination (route: `/dashboard/ngo/payouts`).
