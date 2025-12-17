@@ -51,7 +51,7 @@
 - `/dashboard/company/vendors`
 - `/dashboard/company/audit-center`
 - `/dashboard/company/impact-benchmarks`
-- `/dashboard/company/impact-stories`
+- `/dashboard/company/impact-stories` (mock-only storytelling hub; workflow/tagging/drawer/analytics RTL suites now in place)
   - `/dashboard/company/impact-stories/create`
   - `/dashboard/company/impact-stories/manage` – library view with inline status control + timeline note
     - `/dashboard/company/impact-stories/review/[id]`
@@ -59,9 +59,6 @@
   - `/dashboard/company/impact-stories/review/[id]`
   - `/dashboard/company/impact-stories/publish/[id]`
   - `/dashboard/company/impact-stories/gallery`
-    - `/dashboard/company/impact-stories/review/[id]`
-    - `/dashboard/company/impact-stories/publish/[id]`
-    - `/dashboard/company/impact-stories/manage`
 - `/dashboard/company/impact-explorer`
 - `/dashboard/company/impact-forecast`
 - `/dashboard/company/ngos/[ngoId]`

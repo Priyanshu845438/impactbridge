@@ -33,6 +33,7 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Added company impact story review mode with hero presentation, anchored sections, reading progress, and reviewer metadata/actions to mimic donor-facing experience (route: `/dashboard/company/impact-stories/review/[id]`).
 - Added company impact story publishing flow with validation checklist, SEO tuning, preview card, visibility/schedule controls, and mock publish confirmation (route: `/dashboard/company/impact-stories/publish/[id]`).
 - Added company impact story public gallery preview with filters, responsive cards, modal previews, and pagination mock (route: `/dashboard/company/impact-stories/gallery`).
+- Established Jest/RTL coverage for impact stories (tagging, workflow, analytics, drawer/empty state) using existing mock data.
   with KPI tiles, chart suite, story cards, and export controls (route: `/dashboard/ngo/impact`).
   with grouped checklist, alerts, timeline, status filters, and action modal (route: `/dashboard/ngo/compliance`).
   with request modal, filterable table, timeline drawer, and pagination (route: `/dashboard/ngo/payouts`).
@@ -125,7 +126,7 @@ All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATA
 
 ### Company Impact Stories
 - Added StatusBadge component and publishing flow (Draft → Submitted → Published) on listings and drawer.
-- Added analytics snapshot with mock KPI cards, trend chart, and download CTA in drawer.
+- Added analytics snapshot with mock KPI cards, trend chart, and download CTA in drawer, now verified via RTL tests.
 ## Company Impact Stories
 - Restored impact stories page to clean state after syntax regression.
-- Established frontend testing baseline: NGO filters + impact stories drawer covered via RTL using mock data (no UI changes).
+- Extended frontend testing baseline: NGO filters and impact stories workflow/tagging/analytics/drawer covered via RTL using mock data (no UI changes).

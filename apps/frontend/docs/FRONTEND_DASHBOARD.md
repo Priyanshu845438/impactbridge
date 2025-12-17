@@ -151,8 +151,8 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - Drawer expands stories with extended narrative, before/after stats, gallery chips, outcome badges, and tagged focus areas (mock data today).
 - Designed for storytelling-first layout with soft shadows, rounded corners, and mobile-friendly stacking.
 - Status badge now reuses the shared component to reflect Draft → Submitted → Published workflow, with inline status selector and local state transitions.
-- Drawer header shows the current status with contextual actions (Submit for review / Publish story) that update only client-side for now.
-- Drawer now includes an analytics snapshot row with mock KPIs, micro chart, and download CTA for quick story performance context.
+- Drawer header shows the current status with contextual actions (Submit for review / Publish story) that update only client-side for now. RTL workflow, tagging, analytics, and drawer specs now cover the flow end-to-end.
+- Drawer now includes an analytics snapshot row with mock KPIs, micro chart, and download CTA for quick story performance context, covered by RTL tests.
 
 
 - Route: `/dashboard/company/impact-stories/manage`.

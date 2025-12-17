@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-interface ModalProps {
+interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
   open: boolean;
   onClose: () => void;
   title?: string;
@@ -21,7 +21,17 @@ const sizeClass: Record<NonNullable<ModalProps["size"]>, string> = {
   lg: "max-w-2xl",
 };
 
-export function Modal({ open, onClose, title, description, children, footer, size = "md" }: ModalProps) {
+export function Modal({
+  open,
+  onClose,
+  title,
+  description,
+  children,
+  footer,
+  size = "md",
+  className,
+  ...rest
+}: ModalProps) {
   const panelRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
@@ -59,7 +69,9 @@ export function Modal({ open, onClose, title, description, children, footer, siz
         className={cn(
           "relative w-full rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl",
           sizeClass[size],
+          className,
         )}
+        {...rest}
       >
         <button
           type="button"

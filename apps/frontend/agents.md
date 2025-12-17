@@ -789,3 +789,8 @@
 
 - Added first RTL suites covering company partnered NGO filters and impact story drawer behaviour using existing mock datasets.
 - Verified jest setup, ran targeted tests locally, refreshed documentation (dashboard, component catalog, routing, TODO, progress) to note the new coverage, and re-confirmed `npm run build`.
+
+### **150. Impact Story Workflow Tests Stabilised**
+
+- Replaced legacy company story specs with targeted RTL suites for impact story workflow, tagging, analytics snapshot, and drawer/empty-state interactions using mock data.
+- Added test-friendly data attributes, refreshed documentation set (dashboard, component catalog, routing guide, TODO, progress report) to capture the new coverage, and reran full jest/lint/build with the usual Next module-type warning as the only output.

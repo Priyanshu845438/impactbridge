@@ -169,8 +169,8 @@ Update this file as features ship or priorities shift.
 - ✅ Company impact stories page built with storytelling cards, filters, and narrative drawer (mock data).
 - ✅ Company impact story builder page built with structured form, live preview, mock gallery upload, and CTA controls (UI only).
 
-- [ ] Add Story workflow tests (status transitions Draft ⇄ Submitted ⇄ Published) once RTL harness lands
-
-- [ ] Add analytics snapshot tests (KPI cards + chart render) once mock data replaced with API.
+- ✅ Impact story workflow tests added (status transitions Draft ⇄ Submitted ⇄ Published using mock state).
+- ✅ Analytics snapshot tests added (KPI cards + chart render) for mock data.
+- ✅ Drawer/filter tests ensure impact story empty state renders once tags + status filters narrow results.
 - Reverted the impact stories page to the last passing commit after a malformed memoization edit introduced syntax errors.
 - [ ] Expand RTL suite for company partner drawers and impact story filters once API wiring is complete.

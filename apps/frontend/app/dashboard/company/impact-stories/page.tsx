@@ -216,24 +216,27 @@ export default function ImpactStoriesPage() {
 
       <section className="flex flex-wrap items-center gap-3 rounded-3xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur dark:border-slate-800 dark:bg-slate-900/60">
         <FilterPill
+          data-testid="filter-theme"
           label="Theme"
           options={THEMES as unknown as string[]}
           activeOption={selectedTheme}
           onSelect={(value) => setSelectedTheme(value as typeof THEMES[number])}
         />
         <FilterPill
+          data-testid="filter-ngo"
           label="NGO"
           options={NGO_FILTERS as unknown as string[]}
           activeOption={selectedNgo}
           onSelect={(value) => setSelectedNgo(value as typeof NGO_FILTERS[number])}
         />
         <FilterPill
+          data-testid="filter-status"
           label="Status"
           options={STATUS_FILTERS as unknown as string[]}
           activeOption={statusFilter}
           onSelect={(value) => setStatusFilter(value as typeof STATUS_FILTERS[number])}
         />
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1" data-testid="filter-tags">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">Tags</span>
           <TagSelector options={TAG_OPTIONS} value={tagFilter} onChange={setTagFilter} className="max-w-[420px]" />
         </div>
@@ -275,7 +278,7 @@ export default function ImpactStoriesPage() {
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="flex items-center justify-between gap-3 rounded-3xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
+            <div className="flex items-center justify-between gap-3 rounded-3xl border border-slate-200 bg-white/90 px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-900/60" data-testid="status-header">
               <div className="space-y-1">
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">
                   Status
@@ -392,10 +395,10 @@ interface FilterPillProps {
   onSelect: (value: string) => void;
 }
 
-function FilterPill({ label, options, activeOption, onSelect }: FilterPillProps) {
+function FilterPill({ label, options, activeOption, onSelect, ...rest }: FilterPillProps & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">{label}</span>
+    <div className="flex flex-wrap items-center gap-2" {...rest}>
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">{label}</span>
       <div className="flex flex-wrap gap-2">
         {options.map((option) => (
           <button
@@ -425,7 +428,10 @@ interface StoryCardProps {
 
 function StoryCard({ story, onReadMore, onStatusChange }: StoryCardProps) {
   return (
-    <Card className="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white/90 shadow-md transition hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900/70">
+    <Card
+      data-testid="story-card"
+      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white/90 shadow-md transition hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900/70"
+    >
       <div className="relative h-44 overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={story.cover} alt={story.programme} className="h-full w-full object-cover transition group-hover:scale-105" />
@@ -521,7 +527,12 @@ function AnalyticsSnapshot() {
   ];
 
   return (
-    <div className="space-y-4 rounded-3xl border border-slate-200 bg-white/95 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+    <div
+      className="space-y-4 rounded-3xl border border-slate-200 bg-white/95 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/70"
+      role="region"
+      aria-label="Analytics snapshot"
+      data-testid="analytics-snapshot"
+    >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500">
@@ -556,7 +567,10 @@ function AnalyticsSnapshot() {
         ))}
       </div>
 
-      <div className="h-32 w-full rounded-2xl border border-slate-200 bg-white/90 px-2 py-3 dark:border-slate-800 dark:bg-slate-900/70">
+      <div
+        className="h-32 w-full rounded-2xl border border-slate-200 bg-white/90 px-2 py-3 dark:border-slate-800 dark:bg-slate-900/70"
+        data-testid="analytics-chart"
+      >
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={engagementTrend} margin={{ top: 8, right: 16, left: -10, bottom: 0 }}>
             <defs>

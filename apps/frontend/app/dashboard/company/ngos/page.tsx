@@ -150,6 +150,7 @@ export default function CompanyPartneredNgosPage() {
       )}
 
       <Modal
+        data-testid="ngo-modal"
         open={!!selectedNgo}
         onClose={() => setSelectedNgo(null)}
         title={selectedNgo?.name ?? "NGO profile"}
@@ -170,7 +171,10 @@ function NgoCard({ ngo, onOpen }: { ngo: NgoCard; onOpen: () => void }) {
     .join("");
 
   return (
-    <Card className="flex h-full flex-col gap-4 rounded-4xl border border-slate-200 bg-white/90 p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900/70">
+    <Card
+      data-testid={`ngo-card-${ngo.id}`}
+      className="flex h-full flex-col gap-4 rounded-4xl border border-slate-200 bg-white/90 p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900/70"
+    >
       <div className="flex items-center gap-3">
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-base font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-200">
           {initials}
