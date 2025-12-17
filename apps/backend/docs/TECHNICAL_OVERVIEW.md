@@ -5,6 +5,7 @@
 - **Prisma ORM** with Neon PostgreSQL; migrations tracked under `prisma/migrations/*`.
 - **Auth** via JWT (1-day expiry) + bcrypt hashed passwords.
 - **Validation** using DTOs (`class-validator`); global `ValidationPipe` enforces input hygiene.
+- **Testing** scaffold via Jest (config, setup, bootstrap helper, guard smoke tests) plus shared sanitize utility for consistent responses.
 - **Tooling**: ESLint, Prettier, Postman collection, Activity logging.
 
 ## Module Inventory
@@ -57,8 +58,9 @@
 - Company donations trigger `CSRService.updateSpent` to keep budgets aligned.
 - Future: Campaign approvals will gate company donations (schema in place).
 
-## Observability & Docs
+## Observability, Testing & Docs
 - Audit logs (login, profile updates, campaign creation, donations, receipts, CSR, milestones) stored in `AuditLog` table.
+- Jest baseline (`jest.config.ts`, `test/setup.ts`, `test/unit/*`) ensures app bootstrap + guard behaviour without hitting real database or migrations.
 - Documentation set:
   - `PROJECT_MASTER_CONTEXT.md` – architecture summary.
   - `PROJECT_FULL_STATUS.md` – non-technical working overview + status.

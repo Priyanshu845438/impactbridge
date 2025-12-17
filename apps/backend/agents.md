@@ -160,3 +160,15 @@
 
 - Implemented `getCompaniesWithDonations()` returning companies with nested donations + campaign info.
 - Added SUPER_ADMIN-only `/users/companies-with-reports` endpoint.
+
+## 36. Backend testing skeleton established
+
+- Added `jest.config.ts`, `test/setup.ts`, and shared testing helpers to bootstrap the Nest app with mocked Prisma enums.
+- Created initial smoke tests for app bootstrap and JWT guard behaviour without touching production logic.
+- Updated docs (README, Technical Overview, Progress Checklist) to reflect the new testing baseline; scripts now include `npm run init` notice.
+
+## 37. Shared sanitisation utility introduced
+
+- Added `sanitizeEntity`/`sanitizeEntities` helpers to remove sensitive fields consistently (password, tokens, salts).
+- Refactored AuthService, UserService, and UsersService to reuse the helper without altering response shapes.
+- Added dedicated unit tests for the utility and refreshed docs (README, technical overview, progress checklist).

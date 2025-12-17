@@ -6,21 +6,12 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { comparePassword, hashPassword } from '../auth/utils/password.util';
+import { sanitizeEntity, sanitizeEntities } from '../utils/sanitize.util';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  private sanitize<T extends { password?: string | null }>(
-    user: T | null,
-  ): Omit<T, 'password'> | null {
-    if (!user) {
-      return null;
-    }
-    const { password: _password, ...rest } = user;
-    void _password;
-    return rest;
-  }
 
   create(dto: CreateUserDto) {
     const { role, ...rest } = dto;
@@ -80,7 +71,7 @@ export class UsersService {
       where: { id, role: Role.NGO },
     });
 
-    return this.sanitize(user);
+    return sanitizeEntity(user);
   }
 
   async getNGOProfileByUserId(userId: string) {
@@ -94,7 +85,7 @@ export class UsersService {
     const { user, ...rest } = profile;
     return {
       ...rest,
-      user: user ? this.sanitize(user) : null,
+      user: user ? sanitizeEntity(user) : null,
     };
   }
 
@@ -103,7 +94,7 @@ export class UsersService {
       where: { id, role: Role.COMPANY },
     });
 
-    return this.sanitize(user);
+    return sanitizeEntity(user);
   }
 
   async getNGOsWithCampaigns() {
@@ -112,7 +103,7 @@ export class UsersService {
       include: { campaigns: true },
     } as Prisma.UserFindManyArgs);
 
-    return ngos.map((ngo) => this.sanitize(ngo));
+    return sanitizeEntities(ngos);
   }
 
   async getCompaniesWithDonations() {
@@ -127,7 +118,7 @@ export class UsersService {
       },
     } as Prisma.UserFindManyArgs);
 
-    return companies.map((company) => this.sanitize(company));
+    return sanitizeEntities(companies);
   }
 
   async createNGOProfile(userId: string) {
@@ -175,7 +166,7 @@ export class UsersService {
       const { user, ...rest } = ngo;
       return {
         ...rest,
-        user: user ? this.sanitize(user) : null,
+        user: sanitizeEntity(user),
       };
     });
   }
@@ -194,7 +185,7 @@ export class UsersService {
       const { user, ...rest } = company;
       return {
         ...rest,
-        user: user ? this.sanitize(user) : null,
+        user: sanitizeEntity(user),
       };
     });
   }
@@ -211,7 +202,7 @@ export class UsersService {
       const { user, ...rest } = donor;
       return {
         ...rest,
-        user: user ? this.sanitize(user) : null,
+        user: sanitizeEntity(user),
       };
     });
   }

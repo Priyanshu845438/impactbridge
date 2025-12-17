@@ -67,3 +67,10 @@ ImpactBridge is a compliance-focused CSR platform that connects NGOs, companies,
 - Automated integration tests.
 
 For detailed change history, see `AGENTS.md`.
+
+## Testing
+- Shared sanitize utility keeps responses consistent across services.
+- Shared sanitize utility keeps responses consistent across services.
+- `npm run init` – placeholder (warns that DB deps needed for full suites).
+- `npm run test -- --runInBand` – executes Jest unit skeleton (bootstrap + guard).
+- `npm run build` – compiles Nest application.

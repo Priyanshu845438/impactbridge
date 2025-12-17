@@ -167,7 +167,8 @@ Use it alongside `PROJECT_FULL_STATUS.md`, `agents.md`, and the module-specific 
 - [ ] Security hardening: rate limiting, JWT refresh strategy, HTTP-only cookie option.
 
 ### 4.3 Testing & Tooling
-- [ ] Unit tests for services, guards, DTO validation.
+- [x] Jest unit skeleton (config, setup, bootstrap helper, guard + sanitize util smoke tests).
+- [ ] Expand unit tests for services, DTO validation, and additional guards.
 - [ ] Integration tests for auth and user flows (Jest + Supertest).
 - [ ] E2E/API smoke tests aligned with Postman suites.
 - [ ] CI pipeline to run lint/test/build for backend.

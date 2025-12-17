@@ -7,6 +7,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ActivityLogService } from '../activity/activity-log.service';
 import { Prisma, User } from 'prisma/generated';
+import { sanitizeEntity } from '../utils/sanitize.util';
 
 @Injectable()
 export class UserService {
@@ -17,7 +18,7 @@ export class UserService {
 
   async findById(id: string): Promise<Omit<User, 'password'> | null> {
     const user = await this.prisma.user.findUnique({ where: { id } });
-    return this.sanitize(user);
+    return sanitizeEntity(user);
   }
 
   async update(
@@ -63,18 +64,6 @@ export class UserService {
     }
 
     await this.activityLog.log(id, 'PROFILE_UPDATE', { updatedFields: dto });
-    return this.sanitize(updatedUser)!;
-  }
-
-  private sanitize<T extends { password?: string | null }>(
-    user: T | null,
-  ): Omit<T, 'password'> | null {
-    if (!user) {
-      return null;
-    }
-
-    const { password: _password, ...rest } = user;
-    void _password;
-    return rest;
+    return sanitizeEntity(updatedUser)!;
   }
 }

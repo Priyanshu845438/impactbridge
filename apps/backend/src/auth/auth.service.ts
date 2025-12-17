@@ -5,6 +5,7 @@ import { RegisterDto } from './dto/register.dto';
 import { hashPassword, comparePassword } from './utils/password.util';
 import { signToken } from './utils/jwt.util';
 import { UserRole } from '../user/user-role.enum';
+import { sanitizeEntity } from '../utils/sanitize.util';
 
 @Injectable()
 export class AuthService {
@@ -20,11 +21,10 @@ export class AuthService {
     }
 
     const token = signToken({ sub: user.id, role: user.role });
-    const { password, ...safeUser } = user;
-    void password;
+    const safeUser = sanitizeEntity(user);
 
     return {
-      user: safeUser,
+      user: safeUser!,
       accessToken: token,
     };
   }
@@ -78,9 +78,6 @@ export class AuthService {
       },
     });
 
-    const { password: _password, ...safeUser } = createdUser;
-    void _password;
-
-    return safeUser;
+    return sanitizeEntity(createdUser)!;
   }
 }
