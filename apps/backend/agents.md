@@ -178,3 +178,9 @@
 - Delivered `pagination.util.ts` and `query.util.ts` normalising limit/offset/page inputs and ensuring `deletedAt` filters apply by default.
 - Updated user- and profile-related services to accept optional pagination/filter options without changing existing endpoint behaviour.
 - Added unit coverage for pagination maths and soft-delete guards; reran full test/build suite and documented the infrastructure update.
+
+## 39. Company ↔ NGO approval workflow logic
+
+- Refined `ApprovalsService` with reusable transition helpers covering request, approve, reject, and revoke states plus idempotent handling.
+- Added comprehensive Jest unit tests exercising happy paths and invalid transitions using a Prisma mock without touching controllers yet.
+- Documented the new service-level workflow while keeping API surface unchanged pending future exposure.
