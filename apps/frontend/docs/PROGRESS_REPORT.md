@@ -38,6 +38,7 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Added Jest/RTL suites for vendor directory, audit center, engagement hub, and impact analytics widgets (comparison, forecast, benchmark) to lock core CSR tooling before backend wiring.
 - Expanded RTL coverage to the budget planner core flows; documented in TODO/catalog/dashboard guides.
 - Expanded Storybook coverage with TagSelector, StatusBadge, and ReportsSummaryCard primitives for design/QA review.
+- Visual regression prep staged: Percy config kept in repo, scripts disabled until Chromium libraries are available (see `docs/README.visual-regression.md`).
   with KPI tiles, chart suite, story cards, and export controls (route: `/dashboard/ngo/impact`).
   with grouped checklist, alerts, timeline, status filters, and action modal (route: `/dashboard/ngo/compliance`).
   with request modal, filterable table, timeline drawer, and pagination (route: `/dashboard/ngo/payouts`).

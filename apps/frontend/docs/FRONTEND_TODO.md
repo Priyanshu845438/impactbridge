@@ -128,7 +128,7 @@
 - CSR programme detail Action Center + milestone timeline toggle + assign NGO workflow
 - Optimistic NGO assignment (UI hooks live; swap to real API when ready)
 - Storybook setup with Button/Input/QuickActionCard/TagSelector/StatusBadge/ReportsSummaryCard stories covering light/dark + hover/disabled states
-- Percy CLI added with Storybook command; first run blocked by missing Chromium libraries and config warning
+- Percy CLI added with Storybook command; snapshot script disabled until Chromium libs installed (see `docs/README.visual-regression.md`).
 
 Update this file as features ship or priorities shift.
 

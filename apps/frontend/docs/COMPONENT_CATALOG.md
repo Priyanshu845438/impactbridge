@@ -75,6 +75,7 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - Stories reside in `/stories/`.
 - Percy config: `tests/percy.config.json` (includes `include` glob per spec). Percy CLI currently fails because headless Chromium system libraries (`libgobject-2.0.so.0` etc.) are missing; install via apt before expecting green runs.
 - New stories cover `TagSelector`, `StatusBadge`, and `ReportsSummaryCard` primitives so design can review tagging/status/pipeline widgets in isolation (light + dark variants).
+- Snapshot runs remain disabled; see `docs/README.visual-regression.md` for enablement steps. ESLint blocks `@percy/storybook` imports and Jest guard `__tests__/guards/no-analytics-snapshots.test.ts` ensures analytics snapshots are not committed accidentally.
 
 ## Adding New Components
 

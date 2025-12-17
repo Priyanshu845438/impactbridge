@@ -27,4 +27,13 @@ const eslintConfig = defineConfig([
   },
 ]);
 
+eslintConfig.push({
+  rules: {
+    "no-restricted-imports": ['error', {
+      name: "@percy/storybook",
+      message: "Percy imports are disabled until Chromium libs are installed. See docs/README.visual-regression.md."
+    }]
+  }
+});
+
 export default eslintConfig;

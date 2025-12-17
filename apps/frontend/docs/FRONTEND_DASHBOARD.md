@@ -13,7 +13,8 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 - **Main content**: `flex-1` scrollable region with gradient background, consistent padding, Suspense wrapper + skeleton fallback, and route progress bar integration (via `next-nprogress-bar`) to prevent white flashes.
 - **Command palette**: modal overlay providing quick navigation suggestions with keyboard support. Unit tests pending until Jest harness exists (see docs/TODO).
 - **Smart suggestions + action center**: contextual cards and quick-action sidebar exposed on large screens, collapsing gracefully on mobile.
-- **Storybook + Percy**: Buttons, Inputs, QuickActionCards, TagSelector, StatusBadge, and ReportsSummaryCard have live stories; Percy snapshots guard against style regressions (currently blocked by missing system libraries—see TODO).
+- **Storybook + Percy**: Buttons, Inputs, QuickActionCards, TagSelector, StatusBadge, and ReportsSummaryCard have live stories; Percy config remains in repo but snapshot script is disabled until headless Chromium deps land (see `docs/README.visual-regression.md`).
+- Visual regression prep captured in `docs/README.visual-regression.md`; Percy commands stay disabled until Chromium libraries are present.
 - **Mobile**: hamburger toggles drawer sidebar; notifications open via sheet; Action Center collapses by default.
 
 ## Admin Dashboard (`app/dashboard/admin/page.tsx`)

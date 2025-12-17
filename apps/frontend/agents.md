@@ -814,3 +814,8 @@
 
 - Authored Storybook stories for TagSelector, StatusBadge, and ReportsSummaryCard components with light/dark variants so design review can happen in isolation.
 - Updated dashboard/component/TODO/progress docs to record the new stories and appended this log entry; `npm run build` and `npm run storybook` both succeed (expected `xdg-open` warning + Next module-type notice only).
+
+### **155. Visual Regression Prep & Safety Guards**
+
+- Restored Percy configuration and added disabled scripts, ESLint guard, and Jest filesystem check to prevent accidental snapshot commits until Chromium libs are installed.
+- Documented the deferred workflow in `docs/README.visual-regression.md`, refreshed dashboard/component/TODO/progress guides, and verified `npm run init`, `npm run lint`, `npm run build`, and jest suites (Next module-type warning unchanged).

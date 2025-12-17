@@ -60,6 +60,7 @@ Key dashboard routes:
 - `npm run lint` for ESLint checks
 - `npm run build` to ensure Next.js produces a clean production build
 - Update `agents.md` with brief change summaries when contributing
+- `npm run snapshot:ui` currently prints a warning because visual regression is deferred; see `docs/README.visual-regression.md` once Chromium libs are installed.
 
 ## 🔮 Next Steps
 - Wire dashboards, profile editor, and notifications to real backend APIs
