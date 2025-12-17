@@ -784,3 +784,8 @@
 
 - Reverted the attempted memoisation edit so the drawer + analytics snapshot compile again.
 - Documented the rollback across dashboard/component/routing/TODO/progress docs and reran lint/build (only the known Next module-type warning remains).
+
+### **149. Frontend Testing Baseline Introduced**
+
+- Added first RTL suites covering company partnered NGO filters and impact story drawer behaviour using existing mock datasets.
+- Verified jest setup, ran targeted tests locally, refreshed documentation (dashboard, component catalog, routing, TODO, progress) to note the new coverage, and re-confirmed `npm run build`.

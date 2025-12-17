@@ -338,3 +338,4 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 - Skeleton rows and empty state cover loading/new NGOs; responsive layout shifts between grid/table.
 - Impact stories page restored from regression; future refactor should reapply memoization carefully.
 - Impact stories page restored to clean state after the memoization regression; future refactors should branch from this baseline.
+- Company dashboard now has baseline RTL coverage for NGO cards and impact stories drawer (2025-12-17).

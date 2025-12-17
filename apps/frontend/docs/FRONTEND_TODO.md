@@ -173,3 +173,4 @@ Update this file as features ship or priorities shift.
 
 - [ ] Add analytics snapshot tests (KPI cards + chart render) once mock data replaced with API.
 - Reverted the impact stories page to the last passing commit after a malformed memoization edit introduced syntax errors.
+- [ ] Expand RTL suite for company partner drawers and impact story filters once API wiring is complete.

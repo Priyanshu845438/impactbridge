@@ -128,3 +128,4 @@ All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATA
 - Added analytics snapshot with mock KPI cards, trend chart, and download CTA in drawer.
 ## Company Impact Stories
 - Restored impact stories page to clean state after syntax regression.
+- Established frontend testing baseline: NGO filters + impact stories drawer covered via RTL using mock data (no UI changes).

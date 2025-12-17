@@ -356,3 +356,4 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - `InviteMemberModal` and `EditMemberModal` reuse shared Modal, Select, Switch, Textarea components with tone maps for badges.
 - Skeleton + empty state maintain onboarding UX while real data loads.
 - Reverted analytics snapshot memoization change to restore build stability; refer to impact stories page for current usage.
+- Added testing notes for company NGO card filters and impact stories drawer (React Testing Library).
