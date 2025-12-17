@@ -253,9 +253,9 @@ export default function ImpactComparePage() {
       <StatsGrid programmeA={selectedA} programmeB={selectedB} />
 
       <section className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
-        <Card className="rounded-4xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">Outcome categories</h2>
-          <div className="mt-4 h-72">
+       <Card className="rounded-4xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+         <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">Outcome categories</h2>
+          <div className="mt-4 h-72" data-testid="impact-compare-bar">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={barData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
@@ -270,9 +270,9 @@ export default function ImpactComparePage() {
           </div>
         </Card>
 
-        <Card className="rounded-4xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">Progress over time</h2>
-          <div className="mt-4 h-72">
+       <Card className="rounded-4xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+         <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">Progress over time</h2>
+          <div className="mt-4 h-72" data-testid="impact-compare-line">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={lineData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
@@ -287,9 +287,9 @@ export default function ImpactComparePage() {
           </div>
         </Card>
 
-        <Card className="rounded-4xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">Efficiency profile</h2>
-          <div className="mt-4 h-72">
+       <Card className="rounded-4xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+         <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">Efficiency profile</h2>
+          <div className="mt-4 h-72" data-testid="impact-compare-radar">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart data={radarData} cx="50%" cy="50%" outerRadius="80%">
                 <PolarGrid stroke="#e2e8f0" />

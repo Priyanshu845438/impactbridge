@@ -28,8 +28,8 @@
 - [ ] Wire company partner insights (`/dashboard/company/partner-insights`) to analytics/compliance APIs.
 - [ ] Wire company vendor directory (`/dashboard/company/vendors`) to vendor management APIs and contact workflows.
 - [ ] Wire company audit center (`/dashboard/company/audit-center`) to audit/compliance APIs and document storage.
-- [ ] Add RTL coverage for audit filters, table/card toggles, and drawer content.
-- [ ] Add RTL coverage for vendor directory filters, card CTA, and drawer interactions.
+- [x] Add RTL coverage for audit filters, table/card toggles, and drawer content.
+- [x] Add RTL coverage for vendor directory filters, card CTA, and drawer interactions.
 - [ ] Add RTL coverage for partner insights filters, sorting, and responsive list rendering.
 - [x] Add RTL coverage for budget planner year selector, drawer edits, and modal submission.
 - [ ] Add RTL coverage for compliance table/card responsiveness and drawer interactions.
@@ -168,9 +168,11 @@ Update this file as features ship or priorities shift.
 - ✅ Company impact benchmarks page built with dual-value KPIs, comparative charts, and insight guidance (mock data).
 - ✅ Company impact stories page built with storytelling cards, filters, and narrative drawer (mock data).
 - ✅ Company impact story builder page built with structured form, live preview, mock gallery upload, and CTA controls (UI only).
+- ✅ Impact analytics widget tests added for comparison, forecast, and benchmark pages to confirm chart render + CTA behaviour using mock data only.
 
 - ✅ Impact story workflow tests added (status transitions Draft ⇄ Submitted ⇄ Published using mock state).
 - ✅ Analytics snapshot tests added (KPI cards + chart render) for mock data.
 - ✅ Drawer/filter tests ensure impact story empty state renders once tags + status filters narrow results.
 - Reverted the impact stories page to the last passing commit after a malformed memoization edit introduced syntax errors.
 - [ ] Expand RTL suite for company partner drawers and impact story filters once API wiring is complete.
+- Extend RTL coverage to remaining company modules (e.g., partner insights, compliance deadlines) after latest vendor/audit/engagement tests added in `vendor-audit-engagement.test.tsx`.

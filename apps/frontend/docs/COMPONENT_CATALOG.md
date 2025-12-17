@@ -188,7 +188,7 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 ### Company impact story management components
 
 - `StatusBadge` (components/ui/status-badge.tsx) – pill badge for Draft/Submitted/Published with Lucide icon and fade-in animation; now reused across listing/drawer.
-- `AnalyticsSnapshot` (inline helper in impact stories page) – renders compact KPI cards, area micro-chart, and download CTA for mock analytics.
+- `AnalyticsSnapshot` (inline helper in impact stories page) – renders compact KPI cards, area micro-chart, and download CTA for mock analytics; now exposed via stable test ids for RTL coverage.
 - Drawer status toolbar pairs StatusBadge with submit/publish CTA buttons (local state only). RTL workflow, tagging, drawer, and analytics suites validate the Draft → Submitted → Published transitions end-to-end.
 - Route: `/dashboard/company/impact-stories/manage`.
 - Story repository cards reuse Card, Badge, Button, Select, TagSelector, and Skeleton primitives to expose status badge, action cluster, timeline note, and tag chips.
@@ -363,3 +363,7 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - Skeleton + empty state maintain onboarding UX while real data loads.
 - Reverted analytics snapshot memoization change to restore build stability; refer to impact stories page for current usage.
 - Added testing notes for company NGO card filters and impact stories drawer (React Testing Library).
+
+### Testing additions
+
+- **vendor-audit-engagement.test.tsx**: Covers Vendor Directory filters, Audit Center responsive table/cards, Compliance Overview drawers, and Engagement Hub tab persistence using mock datasets only.

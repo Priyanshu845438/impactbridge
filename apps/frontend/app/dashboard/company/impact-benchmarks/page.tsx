@@ -167,17 +167,17 @@ export default function ImpactBenchmarksPage() {
       </section>
 
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
-        <Card className="rounded-4xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
-          <header className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50">Company vs industry metrics</h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Direct comparison across cost, success, compliance, and growth indicators.</p>
-            </div>
-            <Badge className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600 dark:bg-slate-800/70 dark:text-slate-300">
-              Updated monthly
-            </Badge>
-          </header>
-          <div className="mt-6 h-[320px] w-full">
+       <Card className="rounded-4xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+         <header className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+           <div>
+             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50">Company vs industry metrics</h2>
+             <p className="text-sm text-slate-500 dark:text-slate-400">Direct comparison across cost, success, compliance, and growth indicators.</p>
+           </div>
+           <Badge className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600 dark:bg-slate-800/70 dark:text-slate-300">
+             Updated monthly
+           </Badge>
+         </header>
+          <div className="mt-6 h-[320px] w-full" data-testid="impact-benchmark-bar">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={BAR_CHART_DATA} barCategoryGap={24}>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-slate-200 dark:stroke-slate-800" />
@@ -195,14 +195,14 @@ export default function ImpactBenchmarksPage() {
           </div>
         </Card>
 
-        <Card className="rounded-4xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
-          <header className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50">Strength radar</h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Identify areas where you outperform or trail the broader CSR landscape.</p>
-            </div>
-          </header>
-          <div className="mt-6 h-[320px] w-full">
+       <Card className="rounded-4xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+         <header className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+           <div>
+             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50">Strength radar</h2>
+             <p className="text-sm text-slate-500 dark:text-slate-400">Identify areas where you outperform or trail the broader CSR landscape.</p>
+           </div>
+         </header>
+          <div className="mt-6 h-[320px] w-full" data-testid="impact-benchmark-radar">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart data={RADAR_DATA} outerRadius="80%">
                 <PolarGrid stroke="rgba(148,163,184,0.3)" />

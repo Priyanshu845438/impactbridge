@@ -93,3 +93,4 @@ Protection is enforced client-side in `app/dashboard/layout.tsx` via `useAuth()`
 - Dashboard shell prefetches `/dashboard/admin`, `/dashboard/users`, `/dashboard/admin/modules/reports`, `/dashboard/admin/audit-logs`, `/dashboard/company`, `/dashboard/company/engagement-hub`, `/dashboard/company/comparison`, and `/dashboard/company/impact-explorer`; keep the list updated when adding new high-traffic sections.
 - Documented restoration of /dashboard/company/impact-stories after syntax regression.
 - Noted RTL coverage for /dashboard/company/ngos and /dashboard/company/impact-stories pages.
+- `/dashboard/company/vendors`, `/dashboard/company/audit-center`, `/dashboard/company/compliance`, and `/dashboard/company/engagement-hub` now ship with RTL tests (`vendor-audit-engagement.test.tsx`) covering filters, drawer interactions, and tab switching.

@@ -799,3 +799,13 @@
 
 - Authored `__tests__/budget-planner.test.tsx` to validate year switching, allocation drawer sanitisation, and add-allocation modal flows using existing mock data.
 - Augmented jest setup with pointer/scroll polyfills, refreshed component/dashboard/routing/progress/TODO docs, and reran jest, lint, and build (expected Next module-type warning only).
+
+### **152. Vendor, Audit & Engagement RTL Coverage Added**
+
+- Implemented `__tests__/vendor-audit-engagement.test.tsx` to exercise vendor directory filters, audit center responsiveness, compliance drawer flows, and engagement hub tab persistence using existing mock data.
+- Documented the new suites across dashboard/component/catalog/routing/progress/TODO refs and reran tests, lint, and build (Next module-type warning remains expected).
+
+### **153. Impact Analytics Widget Tests Fixed**
+
+- Patched impact forecasting insight markup with a stable `data-testid` and updated `impact-analytics-widgets.test.tsx` to drive forecast presets, ensuring phased-rollout guidance renders under budget trims.
+- Reran jest, lint, and build (all green apart from the known Next module-type warning) and refreshed dashboard/component/progress docs to capture the analytics coverage.

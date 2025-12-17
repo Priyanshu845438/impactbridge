@@ -173,18 +173,18 @@ export default function ImpactForecastPage() {
       </section>
 
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
-        <Card className="h-full rounded-4xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
-          <header className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50">Beneficiary forecast</h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Projected reach across the next 12 months based on the current budget setting.</p>
-            </div>
-            <Badge className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-200">
-              Auto-updates with slider
-            </Badge>
-          </header>
+       <Card className="h-full rounded-4xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+         <header className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+           <div>
+             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50">Beneficiary forecast</h2>
+             <p className="text-sm text-slate-500 dark:text-slate-400">Projected reach across the next 12 months based on the current budget setting.</p>
+           </div>
+           <Badge className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-200">
+             Auto-updates with slider
+           </Badge>
+         </header>
 
-          <div className="mt-6 h-[320px] w-full">
+          <div className="mt-6 h-[320px] w-full" data-testid="impact-forecast-chart">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={forecast} margin={{ left: 8, right: 8, top: 16, bottom: 0 }}>
                 <defs>
@@ -240,7 +240,7 @@ export default function ImpactForecastPage() {
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50">What the model suggests</h2>
           <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-300">
             {insights.secondary.map((item) => (
-              <li key={item.id} className="flex items-start gap-3 rounded-3xl border border-slate-200 bg-slate-50/70 p-3 shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
+              <li data-testid={item.id === "timeline" ? "insight-timeline" : undefined} key={item.id} className="flex items-start gap-3 rounded-3xl border border-slate-200 bg-slate-50/70 p-3 shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
                 <TrendingUp className="mt-0.5 h-4 w-4 text-emerald-500" />
                 <div>
                   <p className="font-medium text-slate-900 dark:text-slate-100">{item.title}</p>

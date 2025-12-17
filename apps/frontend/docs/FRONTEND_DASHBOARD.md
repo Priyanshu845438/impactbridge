@@ -187,9 +187,10 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 ### Company impact forecasting
 
 - Route: `/dashboard/company/impact-forecast`.
-- Budget controls combine preset chips, slider, and numeric input to recalculate projections live.
+- Budget controls combine preset chips, slider, and numeric input to recalculate projections live while the preset trim button now powers RTL coverage.
 - Summary cards highlight projected beneficiaries, cost efficiency range, outcome uplift, and timeline adjustments with tone-mapped icons.
 - Forecast chart uses a Recharts area visualization, scenario stack compares optimistic/expected/guardrail cases, and insight panels narrate the mock methodology.
+- Insight panel exposes `insight-timeline` test hook so RTL can assert the phased-rollout guidance after budget reductions.
 
 - Route: `/dashboard/company/impact-explorer`.
 - Filters for region, age, gender, and outcome provide contextual slicing with clear button.
@@ -340,3 +341,6 @@ Maintain this document as modules evolve, Storybook coverage expands, or new das
 - Impact stories page restored from regression; future refactor should reapply memoization carefully.
 - Impact stories page restored to clean state after the memoization regression; future refactors should branch from this baseline.
 - Company dashboard now has baseline RTL coverage for NGO cards and impact stories drawer (2025-12-17).
+
+- Route: `/dashboard/company/vendors` now has RTL coverage validating multi-filter interactions, empty state reset, and drawer open/close flows (see `__tests__/vendor-audit-engagement.test.tsx`).
+- The same suite exercises Audit Center desktop/mobile responsiveness, compliance checklist drawer interactions, and Engagement Hub tab persistence using existing mock data.

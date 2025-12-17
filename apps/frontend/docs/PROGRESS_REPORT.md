@@ -1,6 +1,6 @@
 # ImpactBridge Frontend Progress Report
 
-_Last updated: 2025-12-05 08:02 UTC_
+_Last updated: 2025-12-17 08:42 UTC_
 
 ## Overview
 
@@ -35,6 +35,7 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Added company impact story publishing flow with validation checklist, SEO tuning, preview card, visibility/schedule controls, and mock publish confirmation (route: `/dashboard/company/impact-stories/publish/[id]`).
 - Added company impact story public gallery preview with filters, responsive cards, modal previews, and pagination mock (route: `/dashboard/company/impact-stories/gallery`).
 - Established Jest/RTL coverage for impact stories (tagging, workflow, analytics, drawer/empty state) using existing mock data.
+- Added Jest/RTL suites for vendor directory, audit center, engagement hub, and impact analytics widgets (comparison, forecast, benchmark) to lock core CSR tooling before backend wiring.
 - Expanded RTL coverage to the budget planner core flows; documented in TODO/catalog/dashboard guides.
   with KPI tiles, chart suite, story cards, and export controls (route: `/dashboard/ngo/impact`).
   with grouped checklist, alerts, timeline, status filters, and action modal (route: `/dashboard/ngo/compliance`).
@@ -132,3 +133,4 @@ All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATA
 ## Company Impact Stories
 - Restored impact stories page to clean state after syntax regression.
 - Extended frontend testing baseline: NGO filters and impact stories workflow/tagging/analytics/drawer covered via RTL using mock data (no UI changes).
+- Added vendor/audit/engagement RTL suite validating directory filters, audit drawer, compliance resets, and engagement tabs; all mocks only.

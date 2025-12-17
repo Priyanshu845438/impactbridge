@@ -323,7 +323,7 @@ function AuditList({ audits, onSelect }: { audits: AuditRecord[]; onSelect: (aud
               <tr key={audit.id} className="transition hover:bg-emerald-50/40 dark:hover:bg-slate-900/40">
                 <td className="px-6 py-4">
                   <div className="font-semibold text-slate-900 dark:text-slate-100">{audit.title}</div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">Scope: {audit.scope}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400" data-testid={`audit-scope-${audit.id}`}>Scope: {audit.scope}</p>
                 </td>
                 <td className="px-6 py-4 text-slate-600 dark:text-slate-300">{audit.ngo}</td>
                 <td className="px-6 py-4">
@@ -356,7 +356,7 @@ function AuditList({ audits, onSelect }: { audits: AuditRecord[]; onSelect: (aud
               <StatusBadge status={audit.status} />
             </div>
             <ScoreBadge value={audit.score} />
-            <p className="text-sm text-slate-600 dark:text-slate-300">Scope: {audit.scope}</p>
+            <p className="text-sm text-slate-600 dark:text-slate-300" data-testid="audit-card-scope">Scope: {audit.scope}</p>
             <Button variant="outline" size="sm" className="w-full gap-2 rounded-2xl" onClick={() => onSelect(audit)}>
               Open report
               <ArrowUpRight className="h-4 w-4" />
@@ -488,4 +488,3 @@ function formatDate(input: string) {
     return input;
   }
 }
-
