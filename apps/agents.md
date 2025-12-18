@@ -18,3 +18,8 @@
 - Added lightweight fetch wrapper (`frontend/lib/api/client.ts`) returning typed responses and normalized errors while remaining unused by UI.
 - Wrote Jest coverage (`frontend/__tests__/api-client.test.ts`) for success, no-content, and error flows.
 - Updated frontend docs (`docs/API_CLIENT_SCAFFOLD.md`, `docs/FRONTEND_SETUP.md`, progress log) and reran `npm run test -- --runInBand`, `npm run build` (Next warning only).
+
+## 4. Backend Controller Plan & Integration Sign-Off (2025-02-14)
+- Documented `backend/docs/CONTROLLER_EXPOSURE_PLAN.md` detailing service↔controller mapping, `/api/v1` routing, RBAC guard stack, and read-only rollout sequencing.
+- Added `backend/docs/PRE_INTEGRATION_SIGN_OFF.md` final checklist summarizing frontend/back-end readiness, env/auth alignment, risks, and first API target (`POST /auth/login`, `POST /auth/register`).
+- Builds remain green (previous `npm run init` / `npm run build` confirmations stand); no runtime code changes introduced.

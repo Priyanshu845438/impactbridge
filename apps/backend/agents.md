@@ -225,3 +225,7 @@
 - Added status-code and sanitisation tests plus token reuse scripts to the collection.
 - Updated `docs/API_TESTING_GUIDE.md`, `docs/PROGRESS_CHECKLIST.md`, and `docs/README.md` to highlight the new QA coverage and collection execution order.
 - Coordinated frontend documentation updates so components are marked as API-ready vs mock-only, keeping navigation TODOs aligned with upcoming backend routes.
+## 32. Controller Preparation & Integration Sign-Off (2025-02-14)
+- Authored `docs/CONTROLLER_EXPOSURE_PLAN.md` mapping services → controllers, RBAC guard placement, versioning, and read-only rollout strategy.
+- Documented final readiness checklist (`docs/PRE_INTEGRATION_SIGN_OFF.md`) covering frontend/backend builds, env alignment, risks, and first API to wire (`POST /auth/login` & `POST /auth/register`).
+- Builds remain green (`npm run init`, `npm run build` confirmed earlier); no runtime changes introduced.
