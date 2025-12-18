@@ -49,6 +49,7 @@ ImpactBridge’s backend enables compliance-driven CSR collaborations between NG
 | Automated tests | Integration/e2e coverage | 🔄 Planned |
 | Migration playbook | Runbook for apply/rollback | ✅ Added `docs/MIGRATION_PLAYBOOK.md` |
 | API versioning policy | Versioning + DTO alignment | ✅ Added `docs/API_VERSIONING_GUIDE.md` |
+| Observability plan | Structured logging, tracing, error correlation | ✅ Added `docs/OBSERVABILITY_PLAN.md` |
 
 Legend: ✅ Delivered · 🔄 In progress / On roadmap · 🚧 Not started
 

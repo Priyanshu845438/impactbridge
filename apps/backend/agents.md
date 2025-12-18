@@ -211,3 +211,10 @@
 - Compared BullMQ (Redis-backed) vs simple cron/worker approaches with pros/cons, env requirements, and scaling considerations.
 - Updated documentation index (`docs/README.md`), technical overview, and progress checklist to reference the plan.
 - Clarified technical priorities: strategy documented, actual queue/worker implementation still pending.
+
+## 44. Observability & logging blueprint
+
+- Authored `docs/OBSERVABILITY_PLAN.md` covering structured logging, request tracing, and error correlation options.
+- Recommended `pino` + AsyncLocalStorage for request IDs as the minimal baseline, with Sentry for error capture.
+- Documented log field conventions (`requestId`, `actorId`, `role`, `module`, etc.) and placement guidelines for controllers, services, guards, and future background jobs.
+- Refreshed documentation (README, technical overview, progress checklist, project status) to reference the observability plan and its roadmap.

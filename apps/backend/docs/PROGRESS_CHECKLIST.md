@@ -163,6 +163,7 @@ Use it alongside `PROJECT_FULL_STATUS.md`, `agents.md`, and the module-specific 
 - [x] Shared sanitisation helper to remove password and sensitive fields consistently.
 - [x] Notification infrastructure scaffold (service + provider abstraction) ready for email/SMS channels with a default no-op implementation.
 - [x] Background job strategy documented (BullMQ vs cron, scaling considerations) ahead of implementation.
+- [x] Observability plan documented (structured logging, tracing, error correlation) ready for execution.
 - [ ] Enhanced error handling (Prisma `try/catch`, domain-specific exceptions, logging).
 - [ ] Background job infrastructure for heavy workflows (notifications, report generation).
 - [ ] Observability stack (structured logging, tracing, monitoring dashboards).
