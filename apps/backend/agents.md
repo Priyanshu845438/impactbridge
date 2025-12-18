@@ -204,3 +204,10 @@
 - Added `docs/API_VERSIONING_GUIDE.md` outlining prefix strategy (`/v1`), deprecation headers, shared DTO/type alignment cadence, and coordination expectations with the frontend.
 - Refreshed `docs/README.md`, `TECHNICAL_OVERVIEW.md`, `PROJECT_MASTER_CONTEXT.md`, `PROGRESS_CHECKLIST.md`, `PROJECT_FULL_STATUS.md`, `BUSINESS_STATUS.md`, and `FRONTEND_BUSINESS_GUIDE.md` to reference the new guides and highlight upcoming compliance/reporting modules.
 - Ran `npm run init` (noop) and `npm run build` to verify repository health after documentation updates.
+
+## 43. Background job infrastructure plan
+
+- Created `docs/BACKGROUND_JOBS_PLAN.md` outlining async workload strategy for notifications, report generation, and compliance tasks.
+- Compared BullMQ (Redis-backed) vs simple cron/worker approaches with pros/cons, env requirements, and scaling considerations.
+- Updated documentation index (`docs/README.md`), technical overview, and progress checklist to reference the plan.
+- Clarified technical priorities: strategy documented, actual queue/worker implementation still pending.

@@ -69,6 +69,7 @@
   - `FRONTEND_BUSINESS_GUIDE.md` – role-based business flows.
   - `MIGRATION_PLAYBOOK.md` – operational checklist for applying and rolling back Prisma migrations across local, staging, and production environments.
   - `API_VERSIONING_GUIDE.md` – versioning strategy, deprecation workflow, and shared DTO/type alignment guidelines.
+  - `BACKGROUND_JOBS_PLAN.md` – comparison of BullMQ vs cron workers and boundaries for async workloads (notifications, reports, compliance reminders).
 - Postman collection auto-injects tokens, captures IDs (`campaignId`, `donationId`, `milestoneId`).
 
 ## Pending Roadmap
