@@ -29,38 +29,38 @@ The admin/NGO/company/donor workspaces provide a central home for compliance tas
 
 ## Admin Modules (`app/dashboard/admin/modules/*`)
 
-### NGO workspace
+### NGO workspace *(API-ready: awaiting paginated endpoints)*
 
 - Search, multi-filter controls, sorting, pagination, and responsive layouts for both table and card views.
 - Detail drawer with overview/documents/activity tabs, collaboration sidebar, due-diligence timeline, and access control modal hooks.
 - Command palette shortcuts and action toasts help reviewers move faster.
 
-### NGO document review (`app/dashboard/admin/ngos/[id]/documents`)
+### NGO document review (`app/dashboard/admin/ngos/[id]/documents`) *(mock-only for documents payload)*
 
 - Split document preview with status workflow, comment stream, tags, activity log, and access modal.
 - Drag-and-drop hint surfaced via smart command hints; breadcrumb clarifies navigation depth.
 
-### Company workspace (`app/dashboard/admin/companies`)
+### Company workspace (`app/dashboard/admin/companies`) *(API-ready list view)*
 
 - Filterable company roster, modal stub for onboarding, and profile pages with CSR contribution snapshot, linked NGOs, and breadcrumbs.
 
-### Company programme detail (`app/dashboard/admin/company/[companyId]/programmes/[programmeId]`)
+### Company programme detail (`app/dashboard/admin/company/[companyId]/programmes/[programmeId]`) *(mock-only: programme milestones pending API)*
 
 - Summary cards, milestones tab with list/timeline toggle, assign NGO workflow (optimistic + offline aware), documents/comments tabs, progress insights, and Action Center sidebar.
 
-### Donor management (`/dashboard/admin/donors`)
+### Donor management (`/dashboard/admin/donors`) *(API-ready list view)*
 
 - Admin list with search, filters (status/location), pagination, skeleton loaders, and responsive mobile cards.
 
-### Donor profile (`/dashboard/admin/donors/[id]`)
+### Donor profile (`/dashboard/admin/donors/[id]`) *(mock-only for contribution breakdown)*
 
 - Header with status badge, contribution summary cards, tabs for profile info, donation history, and relationship notes with draft-saving affordances.
 
-### Donations ledger (`/dashboard/admin/donations`)
+### Donations ledger (`/dashboard/admin/donations`) *(API-ready once ledger endpoint ships)*
 
 - Platform-wide donation tracker with search, multi-filters (status/mode/donor/NGO/company), pagination, skeleton state, and receipt modal placeholder.
 
-### Campaign management (`/dashboard/admin/campaigns`)
+### Campaign management (`/dashboard/admin/campaigns`) *(API-ready; card/table hybrid ready for backend data)*
 
 - Campaign roster mirroring donor/NGO list UX with quick filters, search, pagination, skeleton rows, and create-campaign modal stub.
 

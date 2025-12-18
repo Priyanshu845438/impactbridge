@@ -32,6 +32,14 @@
     {
       "key": "milestoneId",
       "value": ""
+    },
+    {
+      "key": "page",
+      "value": "1"
+    },
+    {
+      "key": "limit",
+      "value": "10"
     }
   ],
   "event": [
@@ -944,12 +952,403 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test('Automation instructions', function () {",
-                  "    console.log('Use Collection Runner to execute folders Auth \u2192 NGO Self-Service \u2192 Milestones \u2192 Impact Metrics \u2192 Utilization Reports \u2192 CSR.');",
+                  "  console.log('Run folders in order: Auth → NGO Self-Service → Admin Registries → Aggregated Listings → CSR.');",
                   "});"
                 ]
               }
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "Admin Registries",
+      "item": [
+        {
+          "name": "List NGOs (paginated)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Returns array of sanitized records', function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(Array.isArray(json)).to.be.true;",
+                  "  if (json.length) {",
+                  "    pm.expect(json[0]).to.not.have.property('password');",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/admin/ngos?page={{page}}&limit={{limit}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "admin",
+                "ngos"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "{{page}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "{{limit}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Companies (paginated)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Returns array of sanitized records', function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(Array.isArray(json)).to.be.true;",
+                  "  if (json.length) {",
+                  "    pm.expect(json[0]).to.not.have.property('password');",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/admin/companies?page={{page}}&limit={{limit}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "admin",
+                "companies"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "{{page}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "{{limit}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Donors (paginated)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Returns array of sanitized records', function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(Array.isArray(json)).to.be.true;",
+                  "  if (json.length) {",
+                  "    pm.expect(json[0]).to.not.have.property('password');",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/admin/donors?page={{page}}&limit={{limit}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "admin",
+                "donors"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "{{page}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "{{limit}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "NGO Compliance – Address & Bank",
+      "item": [
+        {
+          "name": "Get NGO Address",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Returns sanitized object', function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(typeof json).to.eql(\"object\");",
+                  "  pm.expect(json).to.not.have.property('createdAt');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/address/ngo",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "address",
+                "ngo"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upsert NGO Address",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Returns sanitized object', function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(typeof json).to.eql(\"object\");",
+                  "  pm.expect(json).to.not.have.property('password');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"line1\": \"123 Impact Street\",\n  \"district\": \"Bengaluru Urban\",\n  \"state\": \"Karnataka\",\n  \"pincode\": \"560001\",\n  \"country\": \"India\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/address/ngo",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "address",
+                "ngo"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get NGO Bank Details",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Returns sanitized object', function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(typeof json).to.eql(\"object\");",
+                  "  pm.expect(json).to.not.have.property('password');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/bank/ngo",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bank",
+                "ngo"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upsert NGO Bank Details",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Returns sanitized object', function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(typeof json).to.eql(\"object\");",
+                  "  pm.expect(json).to.not.have.property('password');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountHolder\": \"ImpactBridge Foundation\",\n  \"accountNumber\": \"123456789012\",\n  \"ifsc\": \"HDFC0001234\",\n  \"bankName\": \"HDFC Bank\",\n  \"branch\": \"Brigade Road\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/bank/ngo",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bank",
+                "ngo"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Aggregated Listings",
+      "item": [
+        {
+          "name": "NGOs with Campaigns",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Returns array of sanitized records', function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(Array.isArray(json)).to.be.true;",
+                  "  if (json.length) {",
+                  "    pm.expect(json[0]).to.not.have.property('password');",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/ngos-with-campaigns",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "ngos-with-campaigns"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Companies with Donation Reports",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Returns array of sanitized records', function () {",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(Array.isArray(json)).to.be.true;",
+                  "  if (json.length) {",
+                  "    pm.expect(json[0]).to.not.have.property('password');",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/companies-with-reports",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "companies-with-reports"
+              ]
+            }
+          }
         }
       ]
     }

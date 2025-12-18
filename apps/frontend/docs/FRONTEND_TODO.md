@@ -26,8 +26,8 @@
 - [ ] Wire company impact story builder (`/dashboard/company/impact-stories/create`) to CMS authoring + uploads.
 - [ ] Wire company budget planner (`/dashboard/company/budget-planner`) to finance planning APIs and persist allocations.
 - [ ] Wire company partner insights (`/dashboard/company/partner-insights`) to analytics/compliance APIs.
-- [ ] Wire company vendor directory (`/dashboard/company/vendors`) to vendor management APIs and contact workflows.
-- [ ] Wire company audit center (`/dashboard/company/audit-center`) to audit/compliance APIs and document storage.
+- [ ] Wire company vendor directory (`/dashboard/company/vendors`) to vendor management APIs and contact workflows (filters/cards already API-safe).
+- [ ] Wire company audit center (`/dashboard/company/audit-center`) to audit/compliance APIs and document storage (UI ready; awaiting backend routes).
 - [x] Add RTL coverage for audit filters, table/card toggles, and drawer content.
 - [x] Add RTL coverage for vendor directory filters, card CTA, and drawer interactions.
 - [ ] Add RTL coverage for partner insights filters, sorting, and responsive list rendering.

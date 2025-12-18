@@ -218,3 +218,10 @@
 - Recommended `pino` + AsyncLocalStorage for request IDs as the minimal baseline, with Sentry for error capture.
 - Documented log field conventions (`requestId`, `actorId`, `role`, `module`, etc.) and placement guidelines for controllers, services, guards, and future background jobs.
 - Refreshed documentation (README, technical overview, progress checklist, project status) to reference the observability plan and its roadmap.
+
+## 45. Postman QA coverage expansion
+
+- Extended `docs/postman/impactbridge.postman_collection.json` with admin registry requests (pagination aware), NGO address/bank read/write flows, and aggregated NGO/company listings.
+- Added status-code and sanitisation tests plus token reuse scripts to the collection.
+- Updated `docs/API_TESTING_GUIDE.md`, `docs/PROGRESS_CHECKLIST.md`, and `docs/README.md` to highlight the new QA coverage and collection execution order.
+- Coordinated frontend documentation updates so components are marked as API-ready vs mock-only, keeping navigation TODOs aligned with upcoming backend routes.

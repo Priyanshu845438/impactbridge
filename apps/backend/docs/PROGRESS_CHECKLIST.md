@@ -179,6 +179,7 @@ Use it alongside `PROJECT_FULL_STATUS.md`, `agents.md`, and the module-specific 
 ### 4.4 Documentation & Process
 - [x] Migration playbook (how to apply/revert Prisma migrations per environment).
 - [x] API versioning policy once endpoints expand.
+- [x] Postman QA coverage extended (admin registries, compliance flows, aggregated listings).
 - [ ] Shared DTO/types package for frontend-backend sync.
 
 ---

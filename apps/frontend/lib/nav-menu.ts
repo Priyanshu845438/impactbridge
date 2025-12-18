@@ -69,11 +69,13 @@ export const navMenu: NavItem[] = [
         label: "Workspace",
         href: "/dashboard/admin/modules/ngos",
         roles: ["SUPER_ADMIN"],
+        // TODO(backlog): wire to paginated NGO registry endpoint once backend ships.
       },
       {
         label: "Review queue",
         href: "/dashboard/admin/modules/ngos/review-queue",
         roles: ["SUPER_ADMIN"],
+        // TODO(backlog): connect to approval workflow APIs when exposed.
       },
       {
         label: "Partner profiles",
@@ -84,6 +86,7 @@ export const navMenu: NavItem[] = [
         label: "Impact portfolio",
         href: "/dashboard/admin/modules/ngos/impact-portfolio",
         roles: ["SUPER_ADMIN"],
+        // TODO(backlog): replace mock insights with reporting service once available.
       },
     ],
   },
@@ -97,6 +100,7 @@ export const navMenu: NavItem[] = [
         label: "Workspace",
         href: "/dashboard/admin/companies",
         roles: ["SUPER_ADMIN"],
+        // TODO(backlog): connect to company registry API (pagination + filters) when backend ready.
       },
     ],
   },
@@ -197,6 +201,7 @@ export const navMenu: NavItem[] = [
     roles: ["COMPANY"],
     group: "Workspace",
     href: "/dashboard/company/vendors",
+    // TODO(backlog): hook to vendor management service once endpoints land.
   },
   {
     label: "Engagement hub",
@@ -211,6 +216,7 @@ export const navMenu: NavItem[] = [
     roles: ["COMPANY"],
     group: "Workspace",
     href: "/dashboard/company/audit-center",
+    // TODO(backlog): wire to audit/compliance API responses when backend exposes them.
   },
   {
     label: "Programmes",

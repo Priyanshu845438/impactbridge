@@ -26,11 +26,11 @@ This catalog lists the key reusable components in the frontend, their purpose, a
 - Inline component inside `app/dashboard/layout.tsx`; provides global quick actions (⌘/Ctrl+K) with fuzzy search.
 - Unit tests pending harness work.
 
-### Action Center
+### Action Center *(API-ready)*
 
 - Sidebar quick actions (`ActionItem` helper within programme detail page).
-- Toast-driven placeholders; ready for wiring to backend.
-- Assigned NGO tab now leverages an optimistic assignment flow with graceful rollback and offline messaging.
+- Toast-driven placeholders; backend wiring pending for actions.
+- Assigned NGO tab now leverages an optimistic assignment flow; ready to map to approval endpoints once exposed.
 - Dashboard onboarding overlay cleaned: ensures stable JSX and memoised handlers.
 
 ### `Breadcrumb`
@@ -173,19 +173,19 @@ Refer to `docs/STYLE_GUIDE.md` for typography/spacing tokens.
 - `InsightCard` helper renders tone-mapped pill, metric value, and helper label for compliance highlights.
 - `ComplianceList` toggles table vs mobile card layouts while sharing filter/search state and navigation links.
 - Drawer composes status badge, missing document list, deadline cards, and notes block with follow-up CTA using shared Card/Button primitives.
-### Company budget planner components
+### Company budget planner components *(API-ready)*
 
 - Route: `/dashboard/company/budget-planner`.
 - Uses shared `Select`, `Drawer`, `Modal`, and `Input` primitives with finance-toned cards.
 - Summary cards highlight total/allocated/remaining budgets with icon badges and responsive grid.
 - `AllocationList` renders responsive table→card layouts with `ProgressBar` helper.
 - RTL suite covers year selector, edit drawer sanitisation, and add-allocation modal workflows.
-### Company partner insights components
-### Company vendor directory components
-### Company audit center components
-### Company programme comparison components
-### Company impact explorer components
-### Company impact forecasting components
+### Company partner insights components *(mock-only)*
+### Company vendor directory components *(API-ready: list endpoints wired; filtering uses local state)*
+### Company audit center components *(API-ready; awaiting backend audit endpoints)*
+### Company programme comparison components *(mock-only)*
+### Company impact explorer components *(mock-only)*
+### Company impact forecasting components *(API-ready for dataset swap)*
 
 ### Company impact story management components
 
