@@ -190,3 +190,10 @@
 - Extended `FinancialService` with metadata upload, NGO/year-based listing, and admin aggregation helpers while reusing existing Prisma schema.
 - Added targeted Jest unit tests using mocked Prisma client to validate upload validation, filtering, and ordering behaviour.
 - Refreshed documentation to mark financial reporting services as delivered; controllers/audit hooks remain future work.
+
+## 41. Notification infrastructure scaffolded
+
+- Introduced `NotificationsService` with an injectable provider token so channels can be swapped without touching callers.
+- Wired a default `NoopNotificationProvider`, registered it inside `NotificationsModule`, and imported the module into `AppModule` to keep the abstraction available app-wide.
+- Added Jest unit coverage ensuring `enqueue()` composes intents and delegates to the provider while keeping the implementation side-effect free.
+- Updated technical docs, project status checklist, and AGENTS log to capture the new infrastructure.

@@ -14,7 +14,6 @@ import { buildFindManyArgs, mergeWhere } from '../utils/query.util';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-
   create(dto: CreateUserDto) {
     const { role, ...rest } = dto;
     const data = {
@@ -105,11 +104,13 @@ export class UsersService {
   ) {
     const args = buildFindManyArgs<'User', Prisma.UserWhereInput>({
       ...options,
-      where: mergeWhere(options?.where, { role: Role.NGO }) as Prisma.UserWhereInput,
+      where: mergeWhere(options?.where, {
+        role: Role.NGO,
+      }) as Prisma.UserWhereInput,
     });
 
     const ngos = await this.prisma.user.findMany({
-      ...(args as Prisma.UserFindManyArgs),
+      ...args,
       include: { campaigns: true } as any,
     });
 
@@ -127,7 +128,7 @@ export class UsersService {
     });
 
     const companies = await this.prisma.user.findMany({
-      ...(args as Prisma.UserFindManyArgs),
+      ...args,
       include: {
         donations: {
           include: {
@@ -200,9 +201,10 @@ export class UsersService {
   async getAllCompanyProfiles(
     options?: ListQueryOptions<Prisma.CompanyProfileWhereInput>,
   ) {
-    const args = buildFindManyArgs<'CompanyProfile', Prisma.CompanyProfileWhereInput>(
-      options,
-    );
+    const args = buildFindManyArgs<
+      'CompanyProfile',
+      Prisma.CompanyProfileWhereInput
+    >(options);
 
     const companies = await this.prisma.companyProfile.findMany({
       ...args,
@@ -226,9 +228,10 @@ export class UsersService {
   async getAllDonorProfiles(
     options?: ListQueryOptions<Prisma.DonorProfileWhereInput>,
   ) {
-    const args = buildFindManyArgs<'DonorProfile', Prisma.DonorProfileWhereInput>(
-      options,
-    );
+    const args = buildFindManyArgs<
+      'DonorProfile',
+      Prisma.DonorProfileWhereInput
+    >(options);
 
     const donors = await this.prisma.donorProfile.findMany({
       ...args,

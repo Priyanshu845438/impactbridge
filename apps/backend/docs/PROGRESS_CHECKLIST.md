@@ -160,7 +160,8 @@ Use it alongside `PROJECT_FULL_STATUS.md`, `agents.md`, and the module-specific 
 - [ ] Pagination + search utilities for list endpoints (NGOs, companies, donors).
 
 ### 4.2 Technical Improvements
-- [ ] Shared sanitisation helper to remove password and sensitive fields consistently.
+- [x] Shared sanitisation helper to remove password and sensitive fields consistently.
+- [x] Notification infrastructure scaffold (service + provider abstraction) ready for email/SMS channels with a default no-op implementation.
 - [ ] Enhanced error handling (Prisma `try/catch`, domain-specific exceptions, logging).
 - [ ] Background job infrastructure for heavy workflows (notifications, report generation).
 - [ ] Observability stack (structured logging, tracing, monitoring dashboards).

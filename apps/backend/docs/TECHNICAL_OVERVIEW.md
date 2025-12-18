@@ -61,6 +61,7 @@
 ## Observability, Testing & Docs
 - Audit logs (login, profile updates, campaign creation, donations, receipts, CSR, milestones) stored in `AuditLog` table.
 - Jest baseline (`jest.config.ts`, `test/setup.ts`, `test/unit/*`) ensures app bootstrap + guard behaviour without hitting real database or migrations.
+- Notifications infrastructure resides in `src/notifications/` where `NotificationsService` composes channel/recipient/payload intents and forwards them to an injected provider (`NOTIFICATION_PROVIDER`). The default `NoopNotificationProvider` enables safe local usage while allowing future providers (email/SMS) to plug in without runtime changes.
 - Documentation set:
   - `PROJECT_MASTER_CONTEXT.md` – architecture summary.
   - `PROJECT_FULL_STATUS.md` – non-technical working overview + status.

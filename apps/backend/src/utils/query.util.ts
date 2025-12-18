@@ -8,7 +8,8 @@ import {
 
 export const buildFindManyArgs = <
   TModel extends keyof Prisma.TypeMap['model'],
-  TWhere extends Prisma.TypeMap['model'][TModel]['operations']['findMany']['args']['where'],
+  TWhere extends
+    Prisma.TypeMap['model'][TModel]['operations']['findMany']['args']['where'],
 >(
   options?: ListQueryOptions<TWhere>,
 ): Prisma.TypeMap['model'][TModel]['operations']['findMany']['args'] => {
@@ -42,7 +43,9 @@ export const buildFindManyArgs = <
   return args;
 };
 
-export const mergeWhere = <T extends Record<string, unknown> | null | undefined>(
+export const mergeWhere = <
+  T extends Record<string, unknown> | null | undefined,
+>(
   base: T,
   patch?: Record<string, unknown>,
 ): Record<string, unknown> => {

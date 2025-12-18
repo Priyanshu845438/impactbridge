@@ -1,4 +1,7 @@
-import { sanitizeEntity, sanitizeEntities } from '../../../src/utils/sanitize.util';
+import {
+  sanitizeEntity,
+  sanitizeEntities,
+} from '../../../src/utils/sanitize.util';
 
 describe('sanitizeEntity', () => {
   it('removes sensitive keys and retains others', () => {

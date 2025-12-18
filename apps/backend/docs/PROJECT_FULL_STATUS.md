@@ -167,7 +167,7 @@ All tables include timestamps and indexes where needed. Sensitive data (password
 | **NGO financial reporting** | Upload/list quarterly & annual reports | ✅ Service layer available (admin/controller wiring pending) |
 | Pagination & search | Consistent pagination across lists | ✅ Base helpers shipped (list endpoints still default to full results) |
 | Soft delete approach | Replace hard deletes with `deletedAt` | ✅ Soft delete filters enforced in shared query helpers (delete endpoints still hard-delete) |
-| Email/SMS notifications | Receipts, password change, invitation reminders | 🔄 Planned |
+| Email/SMS notifications | Receipts, password change, invitation reminders | ✅ Service skeleton ready (no-op provider wired; delivery providers pending) |
 | Reviewer/Auditor dashboards | Read-only portals for new roles | 🔄 Planned |
 | Automated tests | Integration/e2e coverage | 🔄 Planned |
 
@@ -265,7 +265,7 @@ This section gathers the practical steps for running and testing the backend.
 
 ## 12. Key Takeaways
 - The backend is **production-ready** for authentication, NGO compliance, campaign publishing, donations, receipts, CSR tracking, invitations, and admin oversight.
-- Upcoming features concentrate on **approvals, financial reporting, pagination, soft delete, and notifications**.
+- Upcoming features concentrate on **approvals, financial reporting exposure, pagination, soft delete, and notification delivery providers**.
 - Documentation (this file, API guide, business guide, master context) is kept in sync with code changes via `AGENTS.md`.
 - Manual testing flows are consolidated in Postman; automated tests are planned.
 

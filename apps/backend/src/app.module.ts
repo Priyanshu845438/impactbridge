@@ -21,6 +21,7 @@ import { FinancialModule } from './financial/financial.module';
 import { MilestonesModule } from './milestones/milestones.module';
 import { ImpactModule } from './impact/impact.module';
 import { UtilizationModule } from './utilization/utilization.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { UtilizationModule } from './utilization/utilization.module';
     MilestonesModule,
     ImpactModule,
     UtilizationModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

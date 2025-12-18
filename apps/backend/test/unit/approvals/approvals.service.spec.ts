@@ -315,9 +315,9 @@ describe('ApprovalsService workflow', () => {
         status: 'PENDING',
       });
 
-      await expect(
-        service.revoke('campaign-1', 'company-1'),
-      ).rejects.toThrow('Only approved requests can be revoked');
+      await expect(service.revoke('campaign-1', 'company-1')).rejects.toThrow(
+        'Only approved requests can be revoked',
+      );
     });
   });
 

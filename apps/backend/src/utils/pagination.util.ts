@@ -45,7 +45,9 @@ const coercePositiveInteger = (value?: number): number | undefined => {
  * Normalises limit/page/offset inputs into Prisma-friendly pagination arguments while
  * keeping the default behaviour (unpaginated) when no values are provided.
  */
-export function resolvePagination(options?: PaginationOptions): PaginationResult {
+export function resolvePagination(
+  options?: PaginationOptions,
+): PaginationResult {
   if (!options) {
     return { meta: {} };
   }
@@ -87,8 +89,7 @@ export function resolvePagination(options?: PaginationOptions): PaginationResult
   return result;
 }
 
-export interface ListQueryOptions<TWhere>
-  extends PaginationOptions {
+export interface ListQueryOptions<TWhere> extends PaginationOptions {
   where?: TWhere | null;
   includeDeleted?: boolean;
   orderBy?: Record<string, unknown> | Record<string, unknown>[];
@@ -97,10 +98,9 @@ export interface ListQueryOptions<TWhere>
 /**
  * Ensures soft-deleted records stay excluded unless explicitly requested.
  */
-export function withSoftDelete<TWhere extends Record<string, unknown> | null | undefined>(
-  where?: TWhere,
-  includeDeleted = false,
-): Record<string, unknown> {
+export function withSoftDelete<
+  TWhere extends Record<string, unknown> | null | undefined,
+>(where?: TWhere, includeDeleted = false): Record<string, unknown> {
   if (includeDeleted) {
     return where ? { ...where } : {};
   }

@@ -25,10 +25,7 @@ export class ApprovalsService {
     } as const;
   }
 
-  private async getApprovalOrThrow(
-    campaignId: string,
-    companyId: string,
-  ) {
+  private async getApprovalOrThrow(campaignId: string, companyId: string) {
     const approval = await this.prisma.campaignApproval.findUnique({
       where: this.buildUniqueKey(campaignId, companyId),
     });
@@ -128,11 +125,7 @@ export class ApprovalsService {
     );
   }
 
-  async revoke(
-    campaignId: string,
-    companyProfileId: string,
-    remarks?: string,
-  ) {
+  async revoke(campaignId: string, companyProfileId: string, remarks?: string) {
     const approval = await this.getApprovalOrThrow(
       campaignId,
       companyProfileId,
