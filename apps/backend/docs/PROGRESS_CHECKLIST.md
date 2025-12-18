@@ -16,7 +16,7 @@ Use it alongside `PROJECT_FULL_STATUS.md`, `agents.md`, and the module-specific 
 | Area | Delivered Highlights | In Progress / Outstanding |
 | --- | --- | --- |
 | Frontend (Next.js) | Dashboard shells, CSR programme workspace, theming + dark mode, Action Center | Real data wiring, automated a11y testing, design system docs expansion |
-| Backend (NestJS + Prisma) | Auth, user lifecycle, RBAC, compliance profiles, NGO/company listings | CSR programme APIs, audit surfacing, pagination/search, soft delete |
+| Backend (NestJS + Prisma) | Auth, user lifecycle, RBAC, compliance profiles, NGO/company listings, NGO financial reporting service | CSR programme APIs, audit surfacing, pagination/search, soft delete |
 | Tooling & Docs | Postman automation, business/tech guides, progress logs | Keep docs synced with future releases, testing playbooks |
 
 ---
@@ -154,7 +154,7 @@ Use it alongside `PROJECT_FULL_STATUS.md`, `agents.md`, and the module-specific 
 
 ### 4.1 High Priority Features
 - [ ] CSR programme endpoints: create, update, assign NGOs, manage milestones, upload documents (align with frontend UI).
-- [ ] NGO financial reporting APIs (quarterly/annual filings, audit log integration).
+- [x] NGO financial reporting services (upload metadata, list by NGO/year; controllers + audit logging remain).
 - [ ] Company ↔ NGO approval workflow (requests, approvals, comments, audit trail).
 - [ ] Replace hard deletes with soft delete (`deletedAt`) across user/profile entities.
 - [ ] Pagination + search utilities for list endpoints (NGOs, companies, donors).

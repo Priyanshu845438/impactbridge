@@ -2,6 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { FinancialReportDto } from './dto/financial-report.dto';
 
+interface ListOptions {
+  year?: number;
+}
+
 @Injectable()
 export class FinancialService {
   constructor(private readonly prisma: PrismaService) {}
@@ -19,17 +23,21 @@ export class FinancialService {
     });
   }
 
-  async getReportsForNGO(ngoProfileId: string) {
+  async getReportsForNGO(ngoProfileId: string, options: ListOptions = {}) {
     await this.ensureNGOProfile(ngoProfileId);
 
     return this.prisma.financialReport.findMany({
-      where: { ngoId: ngoProfileId },
+      where: {
+        ngoId: ngoProfileId,
+        ...(options.year ? { year: options.year } : {}),
+      },
       orderBy: { createdAt: 'desc' },
     });
   }
 
-  async getReportsForAdmin() {
+  async getReportsForYear(year: number) {
     return this.prisma.financialReport.findMany({
+      where: { year },
       include: {
         ngo: {
           include: {
@@ -42,8 +50,18 @@ export class FinancialService {
   }
 
   async getReportsForNGOId(ngoProfileId: string) {
+    return this.getReportsForNGO(ngoProfileId);
+  }
+
+  async getReportsForAdmin() {
     return this.prisma.financialReport.findMany({
-      where: { ngoId: ngoProfileId },
+      include: {
+        ngo: {
+          include: {
+            user: { select: { id: true, name: true, email: true } },
+          },
+        },
+      },
       orderBy: { createdAt: 'desc' },
     });
   }

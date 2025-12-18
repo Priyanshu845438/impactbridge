@@ -70,7 +70,7 @@
 
 ## Pending Roadmap
 - Company–NGO approvals (service partially drafted; full integration pending).
-- NGO financial reporting endpoints.
+- NGO financial reporting services (upload/list). Controllers pending exposure.
 - Pagination/search for admin lists.
 - Soft delete handling (`deletedAt`).
 - Notification service (email/SMS) and reviewer dashboards.

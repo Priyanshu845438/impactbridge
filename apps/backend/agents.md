@@ -184,3 +184,9 @@
 - Refined `ApprovalsService` with reusable transition helpers covering request, approve, reject, and revoke states plus idempotent handling.
 - Added comprehensive Jest unit tests exercising happy paths and invalid transitions using a Prisma mock without touching controllers yet.
 - Documented the new service-level workflow while keeping API surface unchanged pending future exposure.
+
+## 40. NGO financial reporting services
+
+- Extended `FinancialService` with metadata upload, NGO/year-based listing, and admin aggregation helpers while reusing existing Prisma schema.
+- Added targeted Jest unit tests using mocked Prisma client to validate upload validation, filtering, and ordering behaviour.
+- Refreshed documentation to mark financial reporting services as delivered; controllers/audit hooks remain future work.
