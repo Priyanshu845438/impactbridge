@@ -197,3 +197,10 @@
 - Wired a default `NoopNotificationProvider`, registered it inside `NotificationsModule`, and imported the module into `AppModule` to keep the abstraction available app-wide.
 - Added Jest unit coverage ensuring `enqueue()` composes intents and delegates to the provider while keeping the implementation side-effect free.
 - Updated technical docs, project status checklist, and AGENTS log to capture the new infrastructure.
+
+## 42. Migration & API governance documentation
+
+- Authored `docs/MIGRATION_PLAYBOOK.md` covering apply/rollback flows for local, staging, and production databases plus rollback checklists.
+- Added `docs/API_VERSIONING_GUIDE.md` outlining prefix strategy (`/v1`), deprecation headers, shared DTO/type alignment cadence, and coordination expectations with the frontend.
+- Refreshed `docs/README.md`, `TECHNICAL_OVERVIEW.md`, `PROJECT_MASTER_CONTEXT.md`, `PROGRESS_CHECKLIST.md`, `PROJECT_FULL_STATUS.md`, `BUSINESS_STATUS.md`, and `FRONTEND_BUSINESS_GUIDE.md` to reference the new guides and highlight upcoming compliance/reporting modules.
+- Ran `npm run init` (noop) and `npm run build` to verify repository health after documentation updates.

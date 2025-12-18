@@ -28,6 +28,8 @@ ImpactBridge is a compliance-focused CSR platform that connects NGOs, corporates
 15. Milestones (campaign progress tracking)
 16. Impact Metrics (campaign & milestone outcomes)
 17. Utilization Reports (fund usage with proofs)
+18. Notifications (intent queue with pluggable providers)
+19. CSR Compliance & Reporting (financial reports, CSR-2 exports – services pending exposure)
 
 ## Core Backend Rules
 - Follow strict `controller → service → prisma` layering.
@@ -95,3 +97,12 @@ ImpactBridge is a compliance-focused CSR platform that connects NGOs, corporates
 - Endpoint: `POST /csr/summary` (COMPANY, SUPER_ADMIN).
 - Aggregates budgets, approved projects, disbursed amounts, utilization reports, and impact metrics.
 - Outputs CSR-2 style fields: obligation, amount spent, unspent, project list, beneficiary totals, admin notes.
+-## Notifications Layer
+- The backend now exposes a `NotificationsService` that builds notification intents (channel, recipient, payload) and delegates them to an injected provider token (`NOTIFICATION_PROVIDER`).
+- A default `NoopNotificationProvider` is registered for development and testing, allowing future email/SMS providers to be swapped in without touching callers.
+- No outbound messaging occurs yet; later milestones will introduce provider implementations and background jobs.
+
+## Compliance & Reporting Roadmap
+- **NGO Financial Reports** – service layer exists for uploading and listing quarterly/annual reports; controllers and exposure endpoints are scheduled next.
+- **CSR Compliance Exports** – upcoming module will generate CSR-2 compliant summaries combining donation, utilization, and impact data.
+- **API Versioning** – `/v1` remains the default prefix. Breaking-change releases will introduce `/v2` endpoints with deprecation headers, as documented in `API_VERSIONING_GUIDE.md`.

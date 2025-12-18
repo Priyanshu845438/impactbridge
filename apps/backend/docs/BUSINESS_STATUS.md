@@ -13,6 +13,7 @@
 - Campaign update/archive endpoints
 - Detailed company dashboards (currently admin-only)
 - Donor receipt emailing automation
+- Compliance & reporting pipelines (CSR-2 export, NGO financial report surfacing)
 - Refresh tokens/MFA implementation
 - E2E test coverage and CI automation
 
@@ -21,7 +22,8 @@
 2. Add update/archive for campaigns & campaign reporting
 3. Enhance company dashboards for CSR metrics
 4. Implement donor receipt email + PDF templating
-5. Introduce refresh tokens & MFA
-6. Add automated test suites
+5. Publish compliance/financial reporting APIs for CSR-2 readiness
+6. Introduce refresh tokens & MFA
+7. Add automated test suites
 
 - Noted new admin oversight endpoints (NGO/company/donor listings, bank/address modules).

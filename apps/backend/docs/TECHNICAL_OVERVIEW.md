@@ -67,11 +67,15 @@
   - `PROJECT_FULL_STATUS.md` – non-technical working overview + status.
   - `API_TESTING_GUIDE.md` – Postman instructions.
   - `FRONTEND_BUSINESS_GUIDE.md` – role-based business flows.
+  - `MIGRATION_PLAYBOOK.md` – operational checklist for applying and rolling back Prisma migrations across local, staging, and production environments.
+  - `API_VERSIONING_GUIDE.md` – versioning strategy, deprecation workflow, and shared DTO/type alignment guidelines.
 - Postman collection auto-injects tokens, captures IDs (`campaignId`, `donationId`, `milestoneId`).
 
 ## Pending Roadmap
 - Company–NGO approvals (service partially drafted; full integration pending).
 - NGO financial reporting services (upload/list). Controllers pending exposure.
+- Compliance evidence ingestion (regulatory filings, CSR-2 schedules) – schema ready, services/controllers next.
+- Impact reporting exports (board/CSR summaries) – to build on existing analytics module.
 - Pagination/search for admin lists.
 - Soft delete handling (`deletedAt`).
 - Notification service (email/SMS) and reviewer dashboards.

@@ -175,8 +175,8 @@ Use it alongside `PROJECT_FULL_STATUS.md`, `agents.md`, and the module-specific 
 - [ ] CI pipeline to run lint/test/build for backend.
 
 ### 4.4 Documentation & Process
-- [ ] Migration playbook (how to apply/revert Prisma migrations per environment).
-- [ ] API versioning policy once endpoints expand.
+- [x] Migration playbook (how to apply/revert Prisma migrations per environment).
+- [x] API versioning policy once endpoints expand.
 - [ ] Shared DTO/types package for frontend-backend sync.
 
 ---

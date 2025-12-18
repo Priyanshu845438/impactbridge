@@ -101,9 +101,10 @@ Legend: ✔ Delivered | 🔄 Planned/In progress
 
 ## 5. Roadmap Impact on Frontends
 - **Company–NGO approvals** will introduce new screens for requesting approvals and showing status before donations.
-- **NGO financial reporting** will require upload forms + admin viewers for quarterly/annual disclosures.
+- **NGO financial reporting** will require upload forms + admin viewers for quarterly/annual disclosures (service layer in place; APIs coming soon).
+- **CSR compliance exports** will add download flows for CSR-2 summaries powered by upcoming reporting endpoints.
 - **Pagination/soft delete** will alter list endpoints; prepare UI to handle page/limit response metadata.
-- **Notifications** will surface receipt emails and invite reminders; frontends should expose toggles as needed.
+- **Notifications** will surface receipt emails and invite reminders once real providers are wired; consider user-facing toggles ahead of time.
 
 Keep this document handy alongside `PROJECT_FULL_STATUS.md` to align design and development teams on what’s live versus upcoming.
 
