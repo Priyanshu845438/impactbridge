@@ -11,7 +11,7 @@
 - **sonner** toaster (`components/ui/sonner`) for global notifications
 - **Offline status provider** (`providers/offline-status-provider.tsx`) surfaces connectivity toasts, disables risky actions, and queues mutations for replay.
 - **Skeleton system** (`components/ui/skeleton.tsx`) for shimmer loading states
-- **ky** based API client (`lib/api-client.ts`) with JWT header support
+- Fetch-based API client scaffold (`lib/api/client.ts`) for upcoming backend wiring
 
 ## Directory Overview
 - `app/`

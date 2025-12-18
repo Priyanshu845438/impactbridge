@@ -1,0 +1,20 @@
+# ImpactBridge Apps Progress Log
+
+## 1. Pre-Integration Readiness & Auth Contract (2025-02-14)
+
+- Authored "API Integration Readiness" checklist outlining frontend/backend modules ready for wiring, high-risk areas (approvals, financial reporting exposure, notification providers), and recommended integration order.
+- Documented auth token contract (JWT bearer, Authorization header, 1-day expiry with 60s renewal buffer) and environment placeholders (`NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_API_AUTH_HEADER`, `NEXT_PUBLIC_AUTH_EXPIRY_BUFFER_SECONDS`).
+- Added backend `.env` guidance (JWT secret, rotation cadence) and confirmed no runtime code changes were introduced.
+- Verified `npm run init` / `npm run build` for both backend and frontend to maintain green builds.
+
+## 2. API readiness & auth contract documentation (2025-02-14)
+
+- Drafted backend `API_INTEGRATION_READINESS.md` and `AUTH_TOKEN_CONTRACT.md`, plus frontend counterpart readiness note.
+- Added frontend env placeholders (`NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_API_AUTH_HEADER`, `NEXT_PUBLIC_AUTH_EXPIRY_BUFFER_SECONDS`) for future wiring.
+- Captured JWT contract (Bearer header, 24h expiry, 60s buffer) and backend JWT secret expectations.
+- Executed `npm run init && npm run build` for backend and frontend to ensure clean state.
+
+## 3. Frontend API Client Scaffold (2025-02-14)
+- Added lightweight fetch wrapper (`frontend/lib/api/client.ts`) returning typed responses and normalized errors while remaining unused by UI.
+- Wrote Jest coverage (`frontend/__tests__/api-client.test.ts`) for success, no-content, and error flows.
+- Updated frontend docs (`docs/API_CLIENT_SCAFFOLD.md`, `docs/FRONTEND_SETUP.md`, progress log) and reran `npm run test -- --runInBand`, `npm run build` (Next warning only).

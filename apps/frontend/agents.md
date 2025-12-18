@@ -819,3 +819,7 @@
 
 - Restored Percy configuration and added disabled scripts, ESLint guard, and Jest filesystem check to prevent accidental snapshot commits until Chromium libs are installed.
 - Documented the deferred workflow in `docs/README.visual-regression.md`, refreshed dashboard/component/TODO/progress guides, and verified `npm run init`, `npm run lint`, `npm run build`, and jest suites (Next module-type warning unchanged).
+## 2025-02-14 — API Client Scaffold
+- Added tree-shakable fetch-based client helper in `lib/api/client.ts` ahead of backend wiring.
+- Wrote Jest unit tests (`__tests__/api-client.test.ts`) covering success, no-content, and error paths.
+- Updated setup docs plus new `docs/API_CLIENT_SCAFFOLD.md`; noted script runs (`npm run test -- --runInBand`, `npm run build`).

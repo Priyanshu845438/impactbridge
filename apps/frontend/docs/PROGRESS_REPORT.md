@@ -136,3 +136,8 @@ All relevant docs (`FRONTEND_SETUP.md`, `FRONTEND_DASHBOARD.md`, `COMPONENT_CATA
 - Restored impact stories page to clean state after syntax regression.
 - Extended frontend testing baseline: NGO filters and impact stories workflow/tagging/analytics/drawer covered via RTL using mock data (no UI changes).
 - Added vendor/audit/engagement RTL suite validating directory filters, audit drawer, compliance resets, and engagement tabs; all mocks only.
+
+### 2025-02-14
+- Added fetch-based API client scaffold (`lib/api/client.ts`) with typed request/response handling.
+- Introduced unit tests for API client covering success, no-content, and error cases.
+- Documented the scaffold and readiness notes in `API_CLIENT_SCAFFOLD.md` and updated setup documentation.
