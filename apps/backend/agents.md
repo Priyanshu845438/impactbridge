@@ -242,3 +242,8 @@
 - Wired `ApprovalsModule` into `AppModule` and confirmed versioned routes at `/api/v1/approvals` live alongside existing v1 modules.
 - Stabilised e2e coverage (`test/v1/approvals.e2e-spec.ts`) with Prisma + audit log mocks, ensuring request/approve/reject/revoke paths enforce guards and transitions.
 - Re-ran `npm run test -- --runInBand` and `npm run test:e2e`; both suites pass. `npm run build` remains green. ESLint still surfaces legacy `any` usage warnings in older specs and utilities; no additional lint debt introduced.
+
+## 49. Pagination & soft-delete enforcement deferred (2025-02-20)
+- Investigated applying default pagination + soft-delete filters to admin listing endpoints; change would require broad controller/service rewrites plus fresh DTO plumbing.
+- Work paused before code modifications to avoid partial refactors; no source files altered and existing tests/build left untouched.
+- Next iteration should re-scope the effort, covering DTOs, controllers, integration tests, and lint clean-up in a single pass.

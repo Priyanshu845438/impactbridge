@@ -34,58 +34,58 @@ model Invitation {
   createdAt DateTime @default(now())
   createdBy String
 
-  creator   User     @relation("UserInvitations", fields: [createdBy], references: [id])
+  creator User @relation("UserInvitations", fields: [createdBy], references: [id])
 }
 
 model NGOProfile {
-  id                 String              @id @default(uuid())
-  userId             String              @unique
-  registrationType   NGORegistrationType
-  registrationNumber String
-  founderNames       String
-  yearEstablished    Int
-  missionStatement   String
-  impactSummary      String?
-  website            String?
-  twelveARegistered  Boolean             @default(false)
-  eightyGRegistered  Boolean             @default(false)
-  csrEligibility     Boolean             @default(false)
-  deletedAt          DateTime?
-  verificationStatus String              @default("PENDING")
-  verificationRemarks String?
-  addresses          Address[]           @relation("NGOAddresses")
-  auditLogs          AuditLog[]          @relation("NGOAuditLogs")
-  bankDetails        BankDetail[]        @relation("NGOBankDetails")
-  campaigns          Campaign[]
-  documents          Document[]          @relation("NGODocuments")
-  financialReports   FinancialReport[]   @relation("NGOFinancialReports")
-  approvals          CampaignApproval[]  @relation("NGOCampaignApprovals")
+  id                   String                @id @default(uuid())
+  userId               String                @unique
+  registrationType     NGORegistrationType
+  registrationNumber   String
+  founderNames         String
+  yearEstablished      Int
+  missionStatement     String
+  impactSummary        String?
+  website              String?
+  twelveARegistered    Boolean               @default(false)
+  eightyGRegistered    Boolean               @default(false)
+  csrEligibility       Boolean               @default(false)
+  deletedAt            DateTime?
+  verificationStatus   String                @default("PENDING")
+  verificationRemarks  String?
+  addresses            Address[]             @relation("NGOAddresses")
+  auditLogs            AuditLog[]            @relation("NGOAuditLogs")
+  bankDetails          BankDetail[]          @relation("NGOBankDetails")
+  campaigns            Campaign[]
+  documents            Document[]            @relation("NGODocuments")
+  financialReports     FinancialReport[]     @relation("NGOFinancialReports")
+  approvals            CampaignApproval[]    @relation("NGOCampaignApprovals")
   programmeAssignments ProgrammeAssignment[]
-  user               User                @relation(fields: [userId], references: [id])
+  user                 User                  @relation(fields: [userId], references: [id])
 }
 
 model CompanyProfile {
-  id            String       @id @default(uuid())
-  userId        String       @unique
-  cin           String       @unique
-  csrPolicyUrl  String?
-  industry      String
-  netWorth        Float?
-  averageProfit   Float?
-  csrAnnualBudget Float?
-  csrAllocated    Float?
-  csrSpent        Float?
-  csrCommittee  String?
-  deletedAt     DateTime?
-  addresses     Address[]    @relation("CompanyAddresses")
-  auditLogs     AuditLog[]   @relation("CompanyAuditLogs")
-  bankDetails   BankDetail[] @relation("CompanyBankDetails")
-  user          User         @relation(fields: [userId], references: [id])
-  documents     Document[]   @relation("CompanyDocuments")
-  donations     Donation[]
-  approvals     CampaignApproval[]  @relation("CompanyCampaignApprovals")
-  utilizationReports   UtilizationReport[]
-  programmes    CSRProgramme[]
+  id                 String              @id @default(uuid())
+  userId             String              @unique
+  cin                String              @unique
+  csrPolicyUrl       String?
+  industry           String
+  netWorth           Float?
+  averageProfit      Float?
+  csrAnnualBudget    Float?
+  csrAllocated       Float?
+  csrSpent           Float?
+  csrCommittee       String?
+  deletedAt          DateTime?
+  addresses          Address[]           @relation("CompanyAddresses")
+  auditLogs          AuditLog[]          @relation("CompanyAuditLogs")
+  bankDetails        BankDetail[]        @relation("CompanyBankDetails")
+  user               User                @relation(fields: [userId], references: [id])
+  documents          Document[]          @relation("CompanyDocuments")
+  donations          Donation[]
+  approvals          CampaignApproval[]  @relation("CompanyCampaignApprovals")
+  utilizationReports UtilizationReport[]
+  programmes         CSRProgramme[]
 }
 
 model DonorProfile {
@@ -101,24 +101,24 @@ model DonorProfile {
 }
 
 model Campaign {
-  id           String           @id @default(uuid())
-  ngoId        String
-  title        String
-  description  String
-  category     CampaignCategory
-  goalAmount   Float
-  raisedAmount Float            @default(0)
-  startDate    DateTime
-  endDate      DateTime?
-  status       String
-  deletedAt    DateTime?
-  auditLogs    AuditLog[]       @relation("CampaignAuditLogs")
-  ngo          NGOProfile       @relation(fields: [ngoId], references: [id])
-  documents    Document[]       @relation("CampaignDocuments")
-  donations    Donation[]
-  milestones   Milestone[]
-  approvals    CampaignApproval[] @relation("CampaignApprovals")
-  impactMetrics ImpactMetric[]
+  id                 String              @id @default(uuid())
+  ngoId              String
+  title              String
+  description        String
+  category           CampaignCategory
+  goalAmount         Float
+  raisedAmount       Float               @default(0)
+  startDate          DateTime
+  endDate            DateTime?
+  status             String
+  deletedAt          DateTime?
+  auditLogs          AuditLog[]          @relation("CampaignAuditLogs")
+  ngo                NGOProfile          @relation(fields: [ngoId], references: [id])
+  documents          Document[]          @relation("CampaignDocuments")
+  donations          Donation[]
+  milestones         Milestone[]
+  approvals          CampaignApproval[]  @relation("CampaignApprovals")
+  impactMetrics      ImpactMetric[]
   utilizationReports UtilizationReport[]
 }
 
@@ -205,7 +205,7 @@ model ImpactMetric {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  campaign  Campaign  @relation(fields: [campaignId], references: [id])
+  campaign  Campaign   @relation(fields: [campaignId], references: [id])
   milestone Milestone? @relation(fields: [milestoneId], references: [id])
 }
 
@@ -219,27 +219,27 @@ model UtilizationReport {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  companyId   String?
+  companyId String?
 
-  campaign  Campaign  @relation(fields: [campaignId], references: [id])
-  milestone Milestone? @relation(fields: [milestoneId], references: [id])
+  campaign  Campaign        @relation(fields: [campaignId], references: [id])
+  milestone Milestone?      @relation(fields: [milestoneId], references: [id])
   company   CompanyProfile? @relation(fields: [companyId], references: [id])
 }
 
 model Milestone {
-  id             String   @id @default(uuid())
-  campaignId     String
-  title          String
-  description    String
-  targetDate     DateTime
-  budget         Float
-  status         String   @default("PENDING")
-  progressPercent Float   @default(0)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id              String   @id @default(uuid())
+  campaignId      String
+  title           String
+  description     String
+  targetDate      DateTime
+  budget          Float
+  status          String   @default("PENDING")
+  progressPercent Float    @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  campaign Campaign @relation(fields: [campaignId], references: [id])
-  impactMetrics ImpactMetric[]
+  campaign           Campaign            @relation(fields: [campaignId], references: [id])
+  impactMetrics      ImpactMetric[]
   utilizationReports UtilizationReport[]
 }
 
@@ -280,50 +280,50 @@ model AuditLog {
 }
 
 model CSRProgramme {
-  id          String            @id @default(uuid())
+  id          String          @id @default(uuid())
   companyId   String
   title       String
   description String?
-  status      ProgrammeStatus   @default(DRAFT)
+  status      ProgrammeStatus @default(DRAFT)
   budget      Float?
   startDate   DateTime?
   endDate     DateTime?
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
   deletedAt   DateTime?
 
-  company     CompanyProfile    @relation(fields: [companyId], references: [id])
+  company     CompanyProfile        @relation(fields: [companyId], references: [id])
   milestones  ProgrammeMilestone[]
   assignments ProgrammeAssignment[]
 }
 
 model ProgrammeMilestone {
-  id          String                    @id @default(uuid())
+  id          String                   @id @default(uuid())
   programmeId String
   title       String
   description String?
   dueDate     DateTime?
   status      ProgrammeMilestoneStatus @default(PENDING)
-  progress    Int                     @default(0)
-  createdAt   DateTime                @default(now())
-  updatedAt   DateTime                @updatedAt
+  progress    Int                      @default(0)
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
   deletedAt   DateTime?
 
-  programme   CSRProgramme            @relation(fields: [programmeId], references: [id])
+  programme CSRProgramme @relation(fields: [programmeId], references: [id])
 }
 
 model ProgrammeAssignment {
-  id          String                     @id @default(uuid())
+  id          String                    @id @default(uuid())
   programmeId String
   ngoId       String
-  status      ProgrammeAssignmentStatus  @default(INVITED)
+  status      ProgrammeAssignmentStatus @default(INVITED)
   notes       String?
-  assignedAt  DateTime                   @default(now())
-  createdAt   DateTime                   @default(now())
-  updatedAt   DateTime                   @updatedAt
+  assignedAt  DateTime                  @default(now())
+  createdAt   DateTime                  @default(now())
+  updatedAt   DateTime                  @updatedAt
 
-  programme   CSRProgramme               @relation(fields: [programmeId], references: [id])
-  ngo         NGOProfile                 @relation(fields: [ngoId], references: [id])
+  programme CSRProgramme @relation(fields: [programmeId], references: [id])
+  ngo       NGOProfile   @relation(fields: [ngoId], references: [id])
 
   @@unique([programmeId, ngoId])
 }
