@@ -158,7 +158,9 @@ export class CSRProgrammeService {
     }
 
     if (milestone.programme.companyId !== companyId) {
-      throw new ForbiddenException('Cannot modify milestone for another company');
+      throw new ForbiddenException(
+        'Cannot modify milestone for another company',
+      );
     }
 
     return this.prisma.programmeMilestone.update({
@@ -187,7 +189,10 @@ export class CSRProgrammeService {
     }
   }
 
-  private async ensureProgrammeOwnership(programmeId: string, companyId: string) {
+  private async ensureProgrammeOwnership(
+    programmeId: string,
+    companyId: string,
+  ) {
     const programme = await this.prisma.cSRProgramme.findUnique({
       where: { id: programmeId },
     });

@@ -8,32 +8,25 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { AuthUser } from '../auth/types/auth-user.type';
 import { ApproveProjectDto } from './dto/approve-project.dto';
 import { RequestApprovalDto } from './dto/request-approval.dto';
-import { UsersService } from '../users/users.service';
 
-@Controller('approvals')
+@Controller('api/v1/approvals')
 export class ApprovalsController {
-  constructor(
-    private readonly approvalsService: ApprovalsService,
-    private readonly usersService: UsersService,
-  ) {}
+  constructor(private readonly approvalsService: ApprovalsService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.NGO)
   @Post(':campaignId/request')
-  async requestApproval(
+  requestApproval(
     @CurrentUser() user: AuthUser,
     @Param('campaignId') campaignId: string,
     @Body() dto: RequestApprovalDto,
   ) {
-    const profile = await this.usersService.getNGOProfileByUserId(user.sub);
-    if (!profile) {
-      throw new Error('NGO profile not found');
-    }
-
     return this.approvalsService.requestApproval(
       campaignId,
       user.sub,
       dto.companyId,
+      user.sub,
+      dto.remarks,
     );
   }
 
@@ -45,7 +38,7 @@ export class ApprovalsController {
     @Param('campaignId') campaignId: string,
     @Body() dto: ApproveProjectDto,
   ) {
-    return this.approvalsService.approve(campaignId, user.sub, dto);
+    return this.approvalsService.approve(campaignId, user.sub, dto, user.sub);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -56,7 +49,23 @@ export class ApprovalsController {
     @Param('campaignId') campaignId: string,
     @Body() dto: ApproveProjectDto,
   ) {
-    return this.approvalsService.reject(campaignId, user.sub, dto);
+    return this.approvalsService.reject(campaignId, user.sub, dto, user.sub);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.COMPANY)
+  @Post(':campaignId/revoke')
+  revoke(
+    @CurrentUser() user: AuthUser,
+    @Param('campaignId') campaignId: string,
+    @Body('remarks') remarks?: string,
+  ) {
+    return this.approvalsService.revoke(
+      campaignId,
+      user.sub,
+      user.sub,
+      remarks,
+    );
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

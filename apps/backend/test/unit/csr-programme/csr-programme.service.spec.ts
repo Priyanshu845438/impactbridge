@@ -39,9 +39,11 @@ describe('CSRProgrammeService', () => {
           assignments: [],
         }),
         findUnique: jest.fn().mockResolvedValue(programme),
-        findMany: jest.fn().mockResolvedValue([
-          { ...programme, milestones: [], assignments: [] },
-        ]),
+        findMany: jest
+          .fn()
+          .mockResolvedValue([
+            { ...programme, milestones: [], assignments: [] },
+          ]),
         update: jest.fn().mockResolvedValue({
           ...programme,
           title: 'Updated',
@@ -173,9 +175,13 @@ describe('CSRProgrammeService', () => {
 
   describe('createMilestone', () => {
     it('creates milestone', async () => {
-      const milestone = await service.createMilestone('programme-1', 'company-1', {
-        title: 'Kickoff',
-      });
+      const milestone = await service.createMilestone(
+        'programme-1',
+        'company-1',
+        {
+          title: 'Kickoff',
+        },
+      );
 
       expect(milestone.title).toBe('Kickoff');
       expect(prisma.programmeMilestone.create).toHaveBeenCalled();
@@ -184,11 +190,15 @@ describe('CSRProgrammeService', () => {
 
   describe('updateMilestone', () => {
     it('updates milestone for owned programme', async () => {
-      const milestone = await service.updateMilestone('milestone-1', 'company-1', {
-        title: 'Kickoff updated',
-        progress: 25,
-        status: ProgrammeMilestoneStatus.IN_PROGRESS,
-      });
+      const milestone = await service.updateMilestone(
+        'milestone-1',
+        'company-1',
+        {
+          title: 'Kickoff updated',
+          progress: 25,
+          status: ProgrammeMilestoneStatus.IN_PROGRESS,
+        },
+      );
 
       expect(milestone.title).toBe('Kickoff updated');
       expect(prisma.programmeMilestone.update).toHaveBeenCalled();
@@ -208,7 +218,9 @@ describe('CSRProgrammeService', () => {
       } as any);
 
       await expect(
-        service.updateMilestone('milestone-1', 'company-1', { title: 'Invalid' }),
+        service.updateMilestone('milestone-1', 'company-1', {
+          title: 'Invalid',
+        }),
       ).rejects.toBeInstanceOf(ForbiddenException);
     });
   });

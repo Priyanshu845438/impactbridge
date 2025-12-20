@@ -1,9 +1,11 @@
-import { IsString } from 'class-validator';
+import { IsString, IsUUID, IsOptional, MaxLength } from 'class-validator';
 
 export class RequestApprovalDto {
-  @IsString()
+  @IsUUID()
   companyId!: string;
 
+  @IsOptional()
   @IsString()
-  remarks!: string;
+  @MaxLength(1000)
+  remarks?: string;
 }

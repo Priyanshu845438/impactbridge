@@ -1,23 +1,38 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ApproveProjectDto } from './dto/approve-project.dto';
+import { ActivityLogService } from '../activity/activity-log.service';
 
-type ApprovalStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'REVOKED';
+export type ApprovalStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'REVOKED';
+
+type ApprovalEntity = Awaited<
+  ReturnType<ApprovalsService['getApprovalOrThrow']>
+>;
+
+type ApprovalTransition =
+  | 'APPROVAL_APPROVED'
+  | 'APPROVAL_REJECTED'
+  | 'APPROVAL_REVOKED'
+  | 'APPROVAL_REQUESTED'
+  | 'APPROVAL_RESET';
 
 const ApprovalErrors = {
   notFound: 'Approval request not found',
   notPending: 'Only pending requests can transition',
   notApproved: 'Only approved requests can be revoked',
-  alreadyApproved: 'Campaign already approved for this company',
 } as const;
 
 @Injectable()
 export class ApprovalsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly activityLog: ActivityLogService,
+  ) {}
 
   private buildUniqueKey(campaignId: string, companyId: string) {
     return {
@@ -28,22 +43,46 @@ export class ApprovalsService {
   private async getApprovalOrThrow(campaignId: string, companyId: string) {
     const approval = await this.prisma.campaignApproval.findUnique({
       where: this.buildUniqueKey(campaignId, companyId),
+      include: {
+        campaign: { select: { id: true, ngoId: true, title: true } },
+        company: { select: { id: true, userId: true, deletedAt: true } },
+        ngo: { select: { id: true, userId: true } },
+      },
     });
 
     if (!approval) {
       throw new NotFoundException(ApprovalErrors.notFound);
     }
 
+    if (!approval.company || approval.company.deletedAt) {
+      throw new NotFoundException('Company profile not found');
+    }
+
     return approval;
+  }
+
+  private async logTransition(
+    approvalId: string,
+    action: ApprovalTransition,
+    actorId: string | null,
+    metadata?: Record<string, unknown>,
+  ) {
+    await this.activityLog.log(actorId, action, {
+      approvalId,
+      ...metadata,
+    });
   }
 
   async requestApproval(
     campaignId: string,
     ngoProfileId: string,
     companyProfileId: string,
+    actorId: string,
+    remarks?: string,
   ) {
     const campaign = await this.prisma.campaign.findUnique({
       where: { id: campaignId },
+      select: { id: true, ngoId: true },
     });
 
     if (!campaign) {
@@ -56,9 +95,10 @@ export class ApprovalsService {
 
     const company = await this.prisma.companyProfile.findUnique({
       where: { id: companyProfileId },
+      select: { id: true, deletedAt: true },
     });
 
-    if (!company) {
+    if (!company || company.deletedAt) {
       throw new NotFoundException('Company profile not found');
     }
 
@@ -79,53 +119,96 @@ export class ApprovalsService {
         return existing;
       }
 
-      return this.prisma.campaignApproval.update({
+      const reset = await this.prisma.campaignApproval.update({
         where: this.buildUniqueKey(campaignId, companyProfileId),
         data: { status: 'PENDING', remarks: null },
       });
+
+      await this.logTransition(reset.id, 'APPROVAL_RESET', actorId, {
+        campaignId,
+        companyProfileId,
+      });
+
+      return reset;
     }
 
-    return this.prisma.campaignApproval.create({
+    const created = await this.prisma.campaignApproval.create({
       data: {
         campaignId,
         companyId: companyProfileId,
         ngoId: ngoProfileId,
         status: 'PENDING',
+        remarks: remarks ?? null,
       },
     });
+
+    await this.logTransition(created.id, 'APPROVAL_REQUESTED', actorId, {
+      campaignId,
+      companyProfileId,
+      remarks: remarks ?? null,
+    });
+
+    return created;
   }
 
-  approve(
+  async approve(
     campaignId: string,
     companyProfileId: string,
     dto: ApproveProjectDto,
+    actorId: string,
   ) {
     if (dto.status && dto.status !== 'APPROVED') {
-      throw new ForbiddenException('Status must be APPROVED');
+      throw new BadRequestException('Status must be APPROVED');
     }
 
-    return this.transition(
+    const updated = await this.transition(
       campaignId,
       companyProfileId,
       'APPROVED',
       dto.remarks,
     );
+
+    await this.logTransition(updated.id, 'APPROVAL_APPROVED', actorId, {
+      campaignId,
+      companyProfileId,
+      remarks: dto.remarks ?? null,
+    });
+
+    return updated;
   }
 
-  reject(campaignId: string, companyProfileId: string, dto: ApproveProjectDto) {
+  async reject(
+    campaignId: string,
+    companyProfileId: string,
+    dto: ApproveProjectDto,
+    actorId: string,
+  ) {
     if (dto.status && dto.status !== 'REJECTED') {
-      throw new ForbiddenException('Status must be REJECTED');
+      throw new BadRequestException('Status must be REJECTED');
     }
 
-    return this.transition(
+    const updated = await this.transition(
       campaignId,
       companyProfileId,
       'REJECTED',
       dto.remarks,
     );
+
+    await this.logTransition(updated.id, 'APPROVAL_REJECTED', actorId, {
+      campaignId,
+      companyProfileId,
+      remarks: dto.remarks ?? null,
+    });
+
+    return updated;
   }
 
-  async revoke(campaignId: string, companyProfileId: string, remarks?: string) {
+  async revoke(
+    campaignId: string,
+    companyProfileId: string,
+    actorId: string,
+    remarks?: string,
+  ) {
     const approval = await this.getApprovalOrThrow(
       campaignId,
       companyProfileId,
@@ -139,10 +222,18 @@ export class ApprovalsService {
       throw new ForbiddenException(ApprovalErrors.notApproved);
     }
 
-    return this.prisma.campaignApproval.update({
+    const updated = await this.prisma.campaignApproval.update({
       where: this.buildUniqueKey(campaignId, companyProfileId),
       data: { status: 'REVOKED', remarks: remarks ?? approval.remarks },
     });
+
+    await this.logTransition(updated.id, 'APPROVAL_REVOKED', actorId, {
+      campaignId,
+      companyProfileId,
+      remarks: remarks ?? approval.remarks ?? null,
+    });
+
+    return updated;
   }
 
   private async transition(
@@ -167,24 +258,10 @@ export class ApprovalsService {
       return approval;
     }
 
-    if (target === 'APPROVED') {
+    if (target === 'APPROVED' || target === 'REJECTED') {
       if (approval.status !== 'PENDING') {
         throw new ForbiddenException(ApprovalErrors.notPending);
       }
-    }
-
-    if (target === 'REJECTED') {
-      if (approval.status !== 'PENDING') {
-        throw new ForbiddenException(ApprovalErrors.notPending);
-      }
-    }
-
-    if (target === 'PENDING') {
-      // Should only be triggered via request handler.
-      return this.prisma.campaignApproval.update({
-        where: this.buildUniqueKey(campaignId, companyProfileId),
-        data: { status: 'PENDING', remarks: remarks ?? null },
-      });
     }
 
     return this.prisma.campaignApproval.update({
@@ -198,30 +275,22 @@ export class ApprovalsService {
       where: { companyId: companyProfileId, status: 'PENDING' },
       include: {
         campaign: {
-          include: {
-            ngo: {
-              include: {
-                user: { select: { id: true, name: true, email: true } },
-              },
+          select: {
+            id: true,
+            title: true,
+            description: true,
+          },
+        },
+        ngo: {
+          select: {
+            id: true,
+            user: {
+              select: { id: true, name: true, email: true },
             },
           },
         },
       },
       orderBy: { createdAt: 'desc' },
     });
-  }
-
-  async ensureApproved(campaignId: string, companyId: string) {
-    const approval = await this.prisma.campaignApproval.findUnique({
-      where: {
-        campaignId_companyId: { campaignId, companyId },
-      },
-    });
-
-    if (!approval || approval.status !== 'APPROVED') {
-      throw new ForbiddenException('Campaign not approved for this company');
-    }
-
-    return approval;
   }
 }

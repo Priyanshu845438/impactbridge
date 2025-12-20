@@ -1,10 +1,6 @@
 import type { Prisma } from 'prisma/generated';
-import {
-  PaginationOptions,
-  resolvePagination,
-  withSoftDelete,
-  ListQueryOptions,
-} from './pagination.util';
+import { resolvePagination, withSoftDelete } from './pagination.util';
+import type { ListQueryOptions } from './pagination.util';
 
 export const buildFindManyArgs = <
   TModel extends keyof Prisma.TypeMap['model'],

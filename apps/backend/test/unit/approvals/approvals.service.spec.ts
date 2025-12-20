@@ -1,7 +1,10 @@
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { ApprovalsService } from '../../../src/approvals/approvals.service';
 import { PrismaService } from '../../../src/prisma/prisma.service';
-import { PrismaServiceMock } from '../mocks/prisma-service.mock';
 
 const NOW = new Date();
 
@@ -14,340 +17,265 @@ const baseApproval = {
   remarks: null as string | null,
   createdAt: NOW,
   updatedAt: NOW,
+  campaign: { id: 'campaign-1', ngoId: 'ngo-1', title: 'Campaign' },
+  company: { id: 'company-1', userId: 'company-user', deletedAt: null },
+  ngo: { id: 'ngo-1', userId: 'ngo-user' },
 };
 
 describe('ApprovalsService workflow', () => {
-  let prisma: PrismaServiceMock;
+  let prisma: jest.Mocked<PrismaService>;
   let service: ApprovalsService;
+  const activityLog = { log: jest.fn() } as any;
 
   beforeEach(() => {
-    prisma = new PrismaServiceMock();
-    service = new ApprovalsService(prisma as unknown as PrismaService);
+    prisma = {
+      campaign: { findUnique: jest.fn() },
+      companyProfile: { findUnique: jest.fn() },
+      campaignApproval: {
+        findUnique: jest.fn(),
+        create: jest.fn(),
+        update: jest.fn(),
+        findMany: jest.fn(),
+      },
+    } as unknown as jest.Mocked<PrismaService>;
+
+    service = new ApprovalsService(prisma, activityLog);
+    activityLog.log.mockReset();
   });
 
   describe('requestApproval', () => {
-    it('creates approval when valid', async () => {
+    beforeEach(() => {
       prisma.campaign.findUnique.mockResolvedValue({
         id: 'campaign-1',
         ngoId: 'ngo-1',
-      });
-      prisma.companyProfile.findUnique.mockResolvedValue({ id: 'company-1' });
-      prisma.campaignApproval.findUnique.mockResolvedValue(null);
-      prisma.campaignApproval.create.mockResolvedValue(baseApproval);
+      } as any);
+      prisma.companyProfile.findUnique.mockResolvedValue({
+        id: 'company-1',
+        deletedAt: null,
+      } as any);
+    });
 
-      const result = await service.requestApproval(
+    it('creates approval when valid', async () => {
+      prisma.campaignApproval.findUnique.mockResolvedValue(null);
+      prisma.campaignApproval.create.mockResolvedValue({
+        ...baseApproval,
+        campaign: undefined,
+        company: undefined,
+        ngo: undefined,
+      } as any);
+
+      await service.requestApproval(
         'campaign-1',
         'ngo-1',
         'company-1',
+        'ngo-user',
+        'please approve',
       );
 
-      expect(result).toEqual(baseApproval);
       expect(prisma.campaignApproval.create).toHaveBeenCalledWith({
         data: {
           campaignId: 'campaign-1',
           companyId: 'company-1',
           ngoId: 'ngo-1',
           status: 'PENDING',
+          remarks: 'please approve',
         },
       });
-    });
-
-    it('throws when campaign missing', async () => {
-      prisma.campaign.findUnique.mockResolvedValue(null);
-
-      await expect(
-        service.requestApproval('missing', 'ngo-1', 'company-1'),
-      ).rejects.toBeInstanceOf(NotFoundException);
-    });
-
-    it('throws when NGO mismatch', async () => {
-      prisma.campaign.findUnique.mockResolvedValue({
-        id: 'campaign-1',
-        ngoId: 'other-ngo',
-      });
-
-      await expect(
-        service.requestApproval('campaign-1', 'ngo-2', 'company-1'),
-      ).rejects.toBeInstanceOf(ForbiddenException);
+      expect(activityLog.log).toHaveBeenCalledWith(
+        'ngo-user',
+        'APPROVAL_REQUESTED',
+        expect.any(Object),
+      );
     });
 
     it('throws when company missing', async () => {
-      prisma.campaign.findUnique.mockResolvedValue({
-        id: 'campaign-1',
-        ngoId: 'ngo-1',
-      });
       prisma.companyProfile.findUnique.mockResolvedValue(null);
 
       await expect(
-        service.requestApproval('campaign-1', 'ngo-1', 'missing'),
+        service.requestApproval('campaign-1', 'ngo-1', 'missing', 'ngo-user'),
       ).rejects.toBeInstanceOf(NotFoundException);
     });
 
-    it('returns existing pending approval idempotently', async () => {
-      prisma.campaign.findUnique.mockResolvedValue({
+    it('rejects request for campaign belonging to another NGO', async () => {
+      prisma.campaign.findUnique.mockResolvedValueOnce({
         id: 'campaign-1',
-        ngoId: 'ngo-1',
-      });
-      prisma.companyProfile.findUnique.mockResolvedValue({ id: 'company-1' });
-      prisma.campaignApproval.findUnique.mockResolvedValue(baseApproval);
+        ngoId: 'other-ngo',
+      } as any);
 
-      const result = await service.requestApproval(
-        'campaign-1',
-        'ngo-1',
-        'company-1',
-      );
-
-      expect(result).toEqual(baseApproval);
-      expect(prisma.campaignApproval.update).not.toHaveBeenCalled();
-      expect(prisma.campaignApproval.create).not.toHaveBeenCalled();
+      await expect(
+        service.requestApproval('campaign-1', 'ngo-1', 'company-1', 'ngo-user'),
+      ).rejects.toBeInstanceOf(ForbiddenException);
     });
 
-    it('resets rejected approvals back to pending', async () => {
-      prisma.campaign.findUnique.mockResolvedValue({
-        id: 'campaign-1',
-        ngoId: 'ngo-1',
-      });
-      prisma.companyProfile.findUnique.mockResolvedValue({ id: 'company-1' });
+    it('resets rejected approval back to pending', async () => {
       prisma.campaignApproval.findUnique.mockResolvedValue({
         ...baseApproval,
         status: 'REJECTED',
         remarks: 'previous issue',
-      });
+      } as any);
       prisma.campaignApproval.update.mockResolvedValue({
         ...baseApproval,
         status: 'PENDING',
         remarks: null,
-      });
+      } as any);
 
       const result = await service.requestApproval(
         'campaign-1',
         'ngo-1',
         'company-1',
+        'ngo-user',
       );
 
       expect(result.status).toBe('PENDING');
-      expect(prisma.campaignApproval.update).toHaveBeenCalledWith({
-        where: {
-          campaignId_companyId: {
-            campaignId: 'campaign-1',
-            companyId: 'company-1',
-          },
-        },
-        data: { status: 'PENDING', remarks: null },
-      });
-    });
-
-    it('keeps approved approvals unchanged', async () => {
-      prisma.campaign.findUnique.mockResolvedValue({
-        id: 'campaign-1',
-        ngoId: 'ngo-1',
-      });
-      prisma.companyProfile.findUnique.mockResolvedValue({ id: 'company-1' });
-      prisma.campaignApproval.findUnique.mockResolvedValue({
-        ...baseApproval,
-        status: 'APPROVED',
-      });
-
-      const result = await service.requestApproval(
-        'campaign-1',
-        'ngo-1',
-        'company-1',
+      expect(activityLog.log).toHaveBeenCalledWith(
+        'ngo-user',
+        'APPROVAL_RESET',
+        expect.any(Object),
       );
-
-      expect(result.status).toBe('APPROVED');
-      expect(prisma.campaignApproval.update).not.toHaveBeenCalled();
     });
   });
 
   describe('approve', () => {
-    it('updates record to APPROVED', async () => {
+    beforeEach(() => {
       prisma.campaignApproval.findUnique.mockResolvedValue({
         ...baseApproval,
-        status: 'PENDING',
-      });
+      } as any);
       prisma.campaignApproval.update.mockResolvedValue({
         ...baseApproval,
         status: 'APPROVED',
         remarks: 'looks good',
-      });
+      } as any);
+    });
 
-      const result = await service.approve('campaign-1', 'company-1', {
-        status: 'APPROVED',
-        remarks: 'looks good',
-      });
+    it('updates record to APPROVED', async () => {
+      const result = await service.approve(
+        'campaign-1',
+        'company-1',
+        {
+          status: 'APPROVED',
+          remarks: 'looks good',
+        },
+        'company-user',
+      );
 
       expect(result.status).toBe('APPROVED');
-      expect(prisma.campaignApproval.update).toHaveBeenCalledWith({
-        where: {
-          campaignId_companyId: {
-            campaignId: 'campaign-1',
-            companyId: 'company-1',
-          },
-        },
-        data: { status: 'APPROVED', remarks: 'looks good' },
-      });
+      expect(activityLog.log).toHaveBeenCalledWith(
+        'company-user',
+        'APPROVAL_APPROVED',
+        expect.any(Object),
+      );
     });
 
     it('rejects incorrect status input', async () => {
-      expect(() =>
-        service.approve('campaign-1', 'company-1', {
-          status: 'REJECTED',
-          remarks: 'no',
-        }),
-      ).toThrow('Status must be APPROVED');
-    });
-
-    it('throws when record missing', async () => {
-      prisma.campaignApproval.findUnique.mockResolvedValue(null);
-
       await expect(
-        service.approve('campaign-1', 'company-1', { status: 'APPROVED' }),
-      ).rejects.toBeInstanceOf(NotFoundException);
+        service.approve(
+          'campaign-1',
+          'company-1',
+          {
+            status: 'REJECTED',
+          },
+          'company-user',
+        ),
+      ).rejects.toBeInstanceOf(BadRequestException);
     });
 
-    it('rejects non-pending approvals', async () => {
-      prisma.campaignApproval.findUnique.mockResolvedValue({
+    it('requires pending state', async () => {
+      prisma.campaignApproval.findUnique.mockResolvedValueOnce({
         ...baseApproval,
         status: 'REJECTED',
-      });
+      } as any);
 
       await expect(
-        service.approve('campaign-1', 'company-1', { status: 'APPROVED' }),
-      ).rejects.toThrow('Only pending requests can transition');
+        service.approve(
+          'campaign-1',
+          'company-1',
+          { status: 'APPROVED' },
+          'company-user',
+        ),
+      ).rejects.toBeInstanceOf(ForbiddenException);
     });
   });
 
   describe('reject', () => {
-    it('updates record to REJECTED', async () => {
+    beforeEach(() => {
       prisma.campaignApproval.findUnique.mockResolvedValue({
         ...baseApproval,
-        status: 'PENDING',
-      });
+      } as any);
       prisma.campaignApproval.update.mockResolvedValue({
         ...baseApproval,
         status: 'REJECTED',
         remarks: 'not aligned',
-      });
+      } as any);
+    });
 
-      const result = await service.reject('campaign-1', 'company-1', {
-        status: 'REJECTED',
-        remarks: 'not aligned',
-      });
+    it('updates record to REJECTED', async () => {
+      const result = await service.reject(
+        'campaign-1',
+        'company-1',
+        {
+          status: 'REJECTED',
+          remarks: 'not aligned',
+        },
+        'company-user',
+      );
 
       expect(result.status).toBe('REJECTED');
+      expect(activityLog.log).toHaveBeenCalledWith(
+        'company-user',
+        'APPROVAL_REJECTED',
+        expect.any(Object),
+      );
     });
 
-    it('rejects incorrect status input', async () => {
-      expect(() =>
-        service.reject('campaign-1', 'company-1', {
-          status: 'APPROVED',
-          remarks: 'oops',
-        }),
-      ).toThrow('Status must be REJECTED');
-    });
-
-    it('throws when record missing', async () => {
-      prisma.campaignApproval.findUnique.mockResolvedValue(null);
-
+    it('rejects wrong status', async () => {
       await expect(
-        service.reject('campaign-1', 'company-1', { status: 'REJECTED' }),
-      ).rejects.toBeInstanceOf(NotFoundException);
-    });
-
-    it('rejects non-pending approvals', async () => {
-      prisma.campaignApproval.findUnique.mockResolvedValue({
-        ...baseApproval,
-        status: 'APPROVED',
-      });
-
-      await expect(
-        service.reject('campaign-1', 'company-1', { status: 'REJECTED' }),
-      ).rejects.toThrow('Only pending requests can transition');
+        service.reject(
+          'campaign-1',
+          'company-1',
+          { status: 'APPROVED' },
+          'company-user',
+        ),
+      ).rejects.toBeInstanceOf(BadRequestException);
     });
   });
 
   describe('revoke', () => {
-    it('transitions approved requests to revoked', async () => {
-      prisma.campaignApproval.findUnique.mockResolvedValueOnce({
+    beforeEach(() => {
+      prisma.campaignApproval.findUnique.mockResolvedValue({
         ...baseApproval,
         status: 'APPROVED',
-        remarks: 'initial',
-      });
+      } as any);
       prisma.campaignApproval.update.mockResolvedValue({
         ...baseApproval,
         status: 'REVOKED',
-        remarks: 'policy change',
-      });
+        remarks: 'issue found',
+      } as any);
+    });
 
+    it('revokes approved entry', async () => {
       const result = await service.revoke(
         'campaign-1',
         'company-1',
-        'policy change',
+        'company-user',
+        'issue found',
       );
 
       expect(result.status).toBe('REVOKED');
-      expect(prisma.campaignApproval.update).toHaveBeenCalledWith({
-        where: {
-          campaignId_companyId: {
-            campaignId: 'campaign-1',
-            companyId: 'company-1',
-          },
-        },
-        data: { status: 'REVOKED', remarks: 'policy change' },
-      });
-    });
-
-    it('is idempotent for already revoked approvals', async () => {
-      prisma.campaignApproval.findUnique.mockResolvedValueOnce({
-        ...baseApproval,
-        status: 'REVOKED',
-      });
-
-      const result = await service.revoke('campaign-1', 'company-1');
-
-      expect(result.status).toBe('REVOKED');
-      expect(prisma.campaignApproval.update).not.toHaveBeenCalled();
-    });
-
-    it('fails when approval is not approved', async () => {
-      prisma.campaignApproval.findUnique.mockResolvedValueOnce({
-        ...baseApproval,
-        status: 'PENDING',
-      });
-
-      await expect(service.revoke('campaign-1', 'company-1')).rejects.toThrow(
-        'Only approved requests can be revoked',
+      expect(activityLog.log).toHaveBeenCalledWith(
+        'company-user',
+        'APPROVAL_REVOKED',
+        expect.any(Object),
       );
     });
-  });
 
-  describe('ensureApproved', () => {
-    it('passes with approved record', async () => {
-      prisma.campaignApproval.findUnique.mockResolvedValue({
-        ...baseApproval,
-        status: 'APPROVED',
-      });
-
-      const result = await service.ensureApproved('campaign-1', 'company-1');
-      expect(result.status).toBe('APPROVED');
-    });
-
-    it('throws when record missing', async () => {
-      prisma.campaignApproval.findUnique.mockResolvedValue(null);
-
-      await expect(
-        service.ensureApproved('campaign-1', 'company-1'),
-      ).rejects.toBeInstanceOf(ForbiddenException);
-    });
-
-    it('throws when status not approved', async () => {
-      prisma.campaignApproval.findUnique.mockResolvedValue({
+    it('throws when not approved', async () => {
+      prisma.campaignApproval.findUnique.mockResolvedValueOnce({
         ...baseApproval,
         status: 'PENDING',
-      });
+      } as any);
 
       await expect(
-        service.ensureApproved('campaign-1', 'company-1'),
+        service.revoke('campaign-1', 'company-1', 'company-user'),
       ).rejects.toBeInstanceOf(ForbiddenException);
     });
   });

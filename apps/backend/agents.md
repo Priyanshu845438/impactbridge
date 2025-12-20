@@ -237,3 +237,8 @@
 - Added `src/csr-programme/` module with DTOs and `CSRProgrammeService` covering create/update/list/assign/milestone operations; module exported for future controllers.
 - Updated `AppModule` to register the new module while keeping API surface unchanged.
 - Created unit coverage `test/unit/csr-programme/csr-programme.service.spec.ts` backed by mocked Prisma, adjusted `test/setup.ts` enum stubs, and re-ran `npm run init`, `npm run test -- --runInBand`, `npm run build` successfully.
+
+## 48. Approvals API exposed under v1 (2025-02-20)
+- Wired `ApprovalsModule` into `AppModule` and confirmed versioned routes at `/api/v1/approvals` live alongside existing v1 modules.
+- Stabilised e2e coverage (`test/v1/approvals.e2e-spec.ts`) with Prisma + audit log mocks, ensuring request/approve/reject/revoke paths enforce guards and transitions.
+- Re-ran `npm run test -- --runInBand` and `npm run test:e2e`; both suites pass. `npm run build` remains green. ESLint still surfaces legacy `any` usage warnings in older specs and utilities; no additional lint debt introduced.
