@@ -23,3 +23,8 @@
 - Documented `backend/docs/CONTROLLER_EXPOSURE_PLAN.md` detailing service↔controller mapping, `/api/v1` routing, RBAC guard stack, and read-only rollout sequencing.
 - Added `backend/docs/PRE_INTEGRATION_SIGN_OFF.md` final checklist summarizing frontend/back-end readiness, env/auth alignment, risks, and first API target (`POST /auth/login`, `POST /auth/register`).
 - Builds remain green (previous `npm run init` / `npm run build` confirmations stand); no runtime code changes introduced.
+
+## 5. Backend v1 auth & user APIs exposed (2025-02-15)
+- Wired versioned controllers under `backend/src/v1` exposing `/api/v1/auth` (login/register) and `/api/v1/users/me` (GET/PATCH) atop existing services.
+- Added integration specs to validate JWT-protected access and Prisma mock behaviour, including activity log stubbing.
+- Ensured `npm run init`, `npm test`, `npm run test:e2e`, and `npm run build` all pass post-change.

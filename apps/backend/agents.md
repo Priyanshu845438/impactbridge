@@ -225,7 +225,9 @@
 - Added status-code and sanitisation tests plus token reuse scripts to the collection.
 - Updated `docs/API_TESTING_GUIDE.md`, `docs/PROGRESS_CHECKLIST.md`, and `docs/README.md` to highlight the new QA coverage and collection execution order.
 - Coordinated frontend documentation updates so components are marked as API-ready vs mock-only, keeping navigation TODOs aligned with upcoming backend routes.
-## 32. Controller Preparation & Integration Sign-Off (2025-02-14)
-- Authored `docs/CONTROLLER_EXPOSURE_PLAN.md` mapping services → controllers, RBAC guard placement, versioning, and read-only rollout strategy.
-- Documented final readiness checklist (`docs/PRE_INTEGRATION_SIGN_OFF.md`) covering frontend/backend builds, env alignment, risks, and first API to wire (`POST /auth/login` & `POST /auth/register`).
-- Builds remain green (`npm run init`, `npm run build` confirmed earlier); no runtime changes introduced.
+## 46. Auth & User v1 controllers exposed (2025-02-15)
+- Introduced versioned modules under `src/v1/` wiring existing Auth/User services behind `/api/v1/auth` and `/api/v1/users` endpoints.
+- Added `V1AuthController` (`login`, `register`) and `V1UserController` (`GET/PATCH me`) guarded by `JwtAuthGuard`, keeping business logic in services.
+- Refreshed AppModule imports to rely on the new versioned module plus core service modules.
+- Authored e2e specs covering auth success/error scenarios and protected profile access, including Prisma/service mocks for activity logs.
+- Updated legacy bootstrap e2e to reflect the new routing shape; ran `npm run init`, `npm test`, `npm run test:e2e`, and `npm run build` to confirm green state.

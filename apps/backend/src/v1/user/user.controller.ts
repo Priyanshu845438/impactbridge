@@ -6,14 +6,14 @@ import {
   Patch,
   UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import type { AuthUser } from '../auth/types/auth-user.type';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { UserService } from './user.service';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import type { AuthUser } from '../../auth/types/auth-user.type';
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { UserService } from '../../user/user.service';
+import { UpdateUserDto } from '../../user/dto/update-user.dto';
 
-@Controller('v1/users')
-export class UserController {
+@Controller('api/v1/users')
+export class V1UserController {
   constructor(private readonly userService: UserService) {}
 
   @UseGuards(JwtAuthGuard)
