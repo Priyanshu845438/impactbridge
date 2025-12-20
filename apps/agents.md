@@ -28,3 +28,8 @@
 - Wired versioned controllers under `backend/src/v1` exposing `/api/v1/auth` (login/register) and `/api/v1/users/me` (GET/PATCH) atop existing services.
 - Added integration specs to validate JWT-protected access and Prisma mock behaviour, including activity log stubbing.
 - Ensured `npm run init`, `npm test`, `npm run test:e2e`, and `npm run build` all pass post-change.
+
+## 6. CSR programme API attempt blocked (2025-02-15)
+- Investigated adding `/api/v1/programmes` endpoints but found no CSR Programme service, DTOs, or Prisma models in the backend codebase.
+- Recorded the gap instead of shipping placeholder controllers to avoid breaking future integrations.
+- Awaiting foundational service layer before exposing routes; no code changes committed for this task.
