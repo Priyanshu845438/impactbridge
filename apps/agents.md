@@ -33,3 +33,9 @@
 - Investigated adding `/api/v1/programmes` endpoints but found no CSR Programme service, DTOs, or Prisma models in the backend codebase.
 - Recorded the gap instead of shipping placeholder controllers to avoid breaking future integrations.
 - Awaiting foundational service layer before exposing routes; no code changes committed for this task.
+
+## 7. Backend CSR programme foundation added (2025-02-15)
+- Added Prisma models (`CSRProgramme`, `ProgrammeMilestone`, `ProgrammeAssignment`) plus enums and migration `20251220072252_add_csr_programme_foundation`, keeping schema in sync.
+- Scaffoled `backend/src/csr-programme/` module with DTOs (`Create/UpdateProgramme`, `AssignNgo`, milestone DTOs) and service methods for create/update/list/assign/milestones; registered module in `AppModule` without exposing controllers yet.
+- Wrote unit coverage (`backend/test/unit/csr-programme/csr-programme.service.spec.ts`) with Prisma mocks and expanded `test/setup.ts` enum stubs to match new schema artefacts.
+- Confirmed `npm run init`, `npm run test -- --runInBand`, and `npm run build` pass after introducing the foundation.

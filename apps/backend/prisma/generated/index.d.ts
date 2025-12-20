@@ -93,6 +93,21 @@ export type Address = $Result.DefaultSelection<Prisma.$AddressPayload>
  * 
  */
 export type AuditLog = $Result.DefaultSelection<Prisma.$AuditLogPayload>
+/**
+ * Model CSRProgramme
+ * 
+ */
+export type CSRProgramme = $Result.DefaultSelection<Prisma.$CSRProgrammePayload>
+/**
+ * Model ProgrammeMilestone
+ * 
+ */
+export type ProgrammeMilestone = $Result.DefaultSelection<Prisma.$ProgrammeMilestonePayload>
+/**
+ * Model ProgrammeAssignment
+ * 
+ */
+export type ProgrammeAssignment = $Result.DefaultSelection<Prisma.$ProgrammeAssignmentPayload>
 
 /**
  * Enums
@@ -147,6 +162,36 @@ export const CampaignCategory: {
 
 export type CampaignCategory = (typeof CampaignCategory)[keyof typeof CampaignCategory]
 
+
+export const ProgrammeStatus: {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+  ARCHIVED: 'ARCHIVED'
+};
+
+export type ProgrammeStatus = (typeof ProgrammeStatus)[keyof typeof ProgrammeStatus]
+
+
+export const ProgrammeMilestoneStatus: {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  BLOCKED: 'BLOCKED'
+};
+
+export type ProgrammeMilestoneStatus = (typeof ProgrammeMilestoneStatus)[keyof typeof ProgrammeMilestoneStatus]
+
+
+export const ProgrammeAssignmentStatus: {
+  INVITED: 'INVITED',
+  ACTIVE: 'ACTIVE',
+  REJECTED: 'REJECTED',
+  COMPLETED: 'COMPLETED'
+};
+
+export type ProgrammeAssignmentStatus = (typeof ProgrammeAssignmentStatus)[keyof typeof ProgrammeAssignmentStatus]
+
 }
 
 export type Role = $Enums.Role
@@ -164,6 +209,18 @@ export const DocumentType: typeof $Enums.DocumentType
 export type CampaignCategory = $Enums.CampaignCategory
 
 export const CampaignCategory: typeof $Enums.CampaignCategory
+
+export type ProgrammeStatus = $Enums.ProgrammeStatus
+
+export const ProgrammeStatus: typeof $Enums.ProgrammeStatus
+
+export type ProgrammeMilestoneStatus = $Enums.ProgrammeMilestoneStatus
+
+export const ProgrammeMilestoneStatus: typeof $Enums.ProgrammeMilestoneStatus
+
+export type ProgrammeAssignmentStatus = $Enums.ProgrammeAssignmentStatus
+
+export const ProgrammeAssignmentStatus: typeof $Enums.ProgrammeAssignmentStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -442,6 +499,36 @@ export class PrismaClient<
     * ```
     */
   get auditLog(): Prisma.AuditLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.cSRProgramme`: Exposes CRUD operations for the **CSRProgramme** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CSRProgrammes
+    * const cSRProgrammes = await prisma.cSRProgramme.findMany()
+    * ```
+    */
+  get cSRProgramme(): Prisma.CSRProgrammeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.programmeMilestone`: Exposes CRUD operations for the **ProgrammeMilestone** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProgrammeMilestones
+    * const programmeMilestones = await prisma.programmeMilestone.findMany()
+    * ```
+    */
+  get programmeMilestone(): Prisma.ProgrammeMilestoneDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.programmeAssignment`: Exposes CRUD operations for the **ProgrammeAssignment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProgrammeAssignments
+    * const programmeAssignments = await prisma.programmeAssignment.findMany()
+    * ```
+    */
+  get programmeAssignment(): Prisma.ProgrammeAssignmentDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -898,7 +985,10 @@ export namespace Prisma {
     UtilizationReport: 'UtilizationReport',
     Milestone: 'Milestone',
     Address: 'Address',
-    AuditLog: 'AuditLog'
+    AuditLog: 'AuditLog',
+    CSRProgramme: 'CSRProgramme',
+    ProgrammeMilestone: 'ProgrammeMilestone',
+    ProgrammeAssignment: 'ProgrammeAssignment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -917,7 +1007,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "invitation" | "nGOProfile" | "companyProfile" | "donorProfile" | "campaign" | "donation" | "bankDetail" | "document" | "financialReport" | "campaignApproval" | "impactMetric" | "utilizationReport" | "milestone" | "address" | "auditLog"
+      modelProps: "user" | "invitation" | "nGOProfile" | "companyProfile" | "donorProfile" | "campaign" | "donation" | "bankDetail" | "document" | "financialReport" | "campaignApproval" | "impactMetric" | "utilizationReport" | "milestone" | "address" | "auditLog" | "cSRProgramme" | "programmeMilestone" | "programmeAssignment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2105,6 +2195,228 @@ export namespace Prisma {
           }
         }
       }
+      CSRProgramme: {
+        payload: Prisma.$CSRProgrammePayload<ExtArgs>
+        fields: Prisma.CSRProgrammeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CSRProgrammeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CSRProgrammePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CSRProgrammeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CSRProgrammePayload>
+          }
+          findFirst: {
+            args: Prisma.CSRProgrammeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CSRProgrammePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CSRProgrammeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CSRProgrammePayload>
+          }
+          findMany: {
+            args: Prisma.CSRProgrammeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CSRProgrammePayload>[]
+          }
+          create: {
+            args: Prisma.CSRProgrammeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CSRProgrammePayload>
+          }
+          createMany: {
+            args: Prisma.CSRProgrammeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CSRProgrammeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CSRProgrammePayload>[]
+          }
+          delete: {
+            args: Prisma.CSRProgrammeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CSRProgrammePayload>
+          }
+          update: {
+            args: Prisma.CSRProgrammeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CSRProgrammePayload>
+          }
+          deleteMany: {
+            args: Prisma.CSRProgrammeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CSRProgrammeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CSRProgrammeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CSRProgrammePayload>[]
+          }
+          upsert: {
+            args: Prisma.CSRProgrammeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CSRProgrammePayload>
+          }
+          aggregate: {
+            args: Prisma.CSRProgrammeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCSRProgramme>
+          }
+          groupBy: {
+            args: Prisma.CSRProgrammeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CSRProgrammeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CSRProgrammeCountArgs<ExtArgs>
+            result: $Utils.Optional<CSRProgrammeCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProgrammeMilestone: {
+        payload: Prisma.$ProgrammeMilestonePayload<ExtArgs>
+        fields: Prisma.ProgrammeMilestoneFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProgrammeMilestoneFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeMilestonePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProgrammeMilestoneFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeMilestonePayload>
+          }
+          findFirst: {
+            args: Prisma.ProgrammeMilestoneFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeMilestonePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProgrammeMilestoneFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeMilestonePayload>
+          }
+          findMany: {
+            args: Prisma.ProgrammeMilestoneFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeMilestonePayload>[]
+          }
+          create: {
+            args: Prisma.ProgrammeMilestoneCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeMilestonePayload>
+          }
+          createMany: {
+            args: Prisma.ProgrammeMilestoneCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProgrammeMilestoneCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeMilestonePayload>[]
+          }
+          delete: {
+            args: Prisma.ProgrammeMilestoneDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeMilestonePayload>
+          }
+          update: {
+            args: Prisma.ProgrammeMilestoneUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeMilestonePayload>
+          }
+          deleteMany: {
+            args: Prisma.ProgrammeMilestoneDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProgrammeMilestoneUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProgrammeMilestoneUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeMilestonePayload>[]
+          }
+          upsert: {
+            args: Prisma.ProgrammeMilestoneUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeMilestonePayload>
+          }
+          aggregate: {
+            args: Prisma.ProgrammeMilestoneAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProgrammeMilestone>
+          }
+          groupBy: {
+            args: Prisma.ProgrammeMilestoneGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProgrammeMilestoneGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProgrammeMilestoneCountArgs<ExtArgs>
+            result: $Utils.Optional<ProgrammeMilestoneCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProgrammeAssignment: {
+        payload: Prisma.$ProgrammeAssignmentPayload<ExtArgs>
+        fields: Prisma.ProgrammeAssignmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProgrammeAssignmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeAssignmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProgrammeAssignmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeAssignmentPayload>
+          }
+          findFirst: {
+            args: Prisma.ProgrammeAssignmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeAssignmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProgrammeAssignmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeAssignmentPayload>
+          }
+          findMany: {
+            args: Prisma.ProgrammeAssignmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeAssignmentPayload>[]
+          }
+          create: {
+            args: Prisma.ProgrammeAssignmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeAssignmentPayload>
+          }
+          createMany: {
+            args: Prisma.ProgrammeAssignmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProgrammeAssignmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeAssignmentPayload>[]
+          }
+          delete: {
+            args: Prisma.ProgrammeAssignmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeAssignmentPayload>
+          }
+          update: {
+            args: Prisma.ProgrammeAssignmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeAssignmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProgrammeAssignmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProgrammeAssignmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProgrammeAssignmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeAssignmentPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProgrammeAssignmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProgrammeAssignmentPayload>
+          }
+          aggregate: {
+            args: Prisma.ProgrammeAssignmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProgrammeAssignment>
+          }
+          groupBy: {
+            args: Prisma.ProgrammeAssignmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProgrammeAssignmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProgrammeAssignmentCountArgs<ExtArgs>
+            result: $Utils.Optional<ProgrammeAssignmentCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2217,6 +2529,9 @@ export namespace Prisma {
     milestone?: MilestoneOmit
     address?: AddressOmit
     auditLog?: AuditLogOmit
+    cSRProgramme?: CSRProgrammeOmit
+    programmeMilestone?: ProgrammeMilestoneOmit
+    programmeAssignment?: ProgrammeAssignmentOmit
   }
 
   /* Types for Logging */
@@ -2344,6 +2659,7 @@ export namespace Prisma {
     documents: number
     financialReports: number
     approvals: number
+    programmeAssignments: number
   }
 
   export type NGOProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2354,6 +2670,7 @@ export namespace Prisma {
     documents?: boolean | NGOProfileCountOutputTypeCountDocumentsArgs
     financialReports?: boolean | NGOProfileCountOutputTypeCountFinancialReportsArgs
     approvals?: boolean | NGOProfileCountOutputTypeCountApprovalsArgs
+    programmeAssignments?: boolean | NGOProfileCountOutputTypeCountProgrammeAssignmentsArgs
   }
 
   // Custom InputTypes
@@ -2416,6 +2733,13 @@ export namespace Prisma {
     where?: CampaignApprovalWhereInput
   }
 
+  /**
+   * NGOProfileCountOutputType without action
+   */
+  export type NGOProfileCountOutputTypeCountProgrammeAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgrammeAssignmentWhereInput
+  }
+
 
   /**
    * Count Type CompanyProfileCountOutputType
@@ -2429,6 +2753,7 @@ export namespace Prisma {
     donations: number
     approvals: number
     utilizationReports: number
+    programmes: number
   }
 
   export type CompanyProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2439,6 +2764,7 @@ export namespace Prisma {
     donations?: boolean | CompanyProfileCountOutputTypeCountDonationsArgs
     approvals?: boolean | CompanyProfileCountOutputTypeCountApprovalsArgs
     utilizationReports?: boolean | CompanyProfileCountOutputTypeCountUtilizationReportsArgs
+    programmes?: boolean | CompanyProfileCountOutputTypeCountProgrammesArgs
   }
 
   // Custom InputTypes
@@ -2499,6 +2825,13 @@ export namespace Prisma {
    */
   export type CompanyProfileCountOutputTypeCountUtilizationReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UtilizationReportWhereInput
+  }
+
+  /**
+   * CompanyProfileCountOutputType without action
+   */
+  export type CompanyProfileCountOutputTypeCountProgrammesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CSRProgrammeWhereInput
   }
 
 
@@ -2704,6 +3037,46 @@ export namespace Prisma {
    */
   export type MilestoneCountOutputTypeCountUtilizationReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UtilizationReportWhereInput
+  }
+
+
+  /**
+   * Count Type CSRProgrammeCountOutputType
+   */
+
+  export type CSRProgrammeCountOutputType = {
+    milestones: number
+    assignments: number
+  }
+
+  export type CSRProgrammeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    milestones?: boolean | CSRProgrammeCountOutputTypeCountMilestonesArgs
+    assignments?: boolean | CSRProgrammeCountOutputTypeCountAssignmentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CSRProgrammeCountOutputType without action
+   */
+  export type CSRProgrammeCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CSRProgrammeCountOutputType
+     */
+    select?: CSRProgrammeCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CSRProgrammeCountOutputType without action
+   */
+  export type CSRProgrammeCountOutputTypeCountMilestonesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgrammeMilestoneWhereInput
+  }
+
+  /**
+   * CSRProgrammeCountOutputType without action
+   */
+  export type CSRProgrammeCountOutputTypeCountAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgrammeAssignmentWhereInput
   }
 
 
@@ -5299,6 +5672,7 @@ export namespace Prisma {
     documents?: boolean | NGOProfile$documentsArgs<ExtArgs>
     financialReports?: boolean | NGOProfile$financialReportsArgs<ExtArgs>
     approvals?: boolean | NGOProfile$approvalsArgs<ExtArgs>
+    programmeAssignments?: boolean | NGOProfile$programmeAssignmentsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | NGOProfileCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["nGOProfile"]>
@@ -5368,6 +5742,7 @@ export namespace Prisma {
     documents?: boolean | NGOProfile$documentsArgs<ExtArgs>
     financialReports?: boolean | NGOProfile$financialReportsArgs<ExtArgs>
     approvals?: boolean | NGOProfile$approvalsArgs<ExtArgs>
+    programmeAssignments?: boolean | NGOProfile$programmeAssignmentsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | NGOProfileCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -5388,6 +5763,7 @@ export namespace Prisma {
       documents: Prisma.$DocumentPayload<ExtArgs>[]
       financialReports: Prisma.$FinancialReportPayload<ExtArgs>[]
       approvals: Prisma.$CampaignApprovalPayload<ExtArgs>[]
+      programmeAssignments: Prisma.$ProgrammeAssignmentPayload<ExtArgs>[]
       user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -5807,6 +6183,7 @@ export namespace Prisma {
     documents<T extends NGOProfile$documentsArgs<ExtArgs> = {}>(args?: Subset<T, NGOProfile$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     financialReports<T extends NGOProfile$financialReportsArgs<ExtArgs> = {}>(args?: Subset<T, NGOProfile$financialReportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinancialReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     approvals<T extends NGOProfile$approvalsArgs<ExtArgs> = {}>(args?: Subset<T, NGOProfile$approvalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignApprovalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    programmeAssignments<T extends NGOProfile$programmeAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, NGOProfile$programmeAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgrammeAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6416,6 +6793,30 @@ export namespace Prisma {
   }
 
   /**
+   * NGOProfile.programmeAssignments
+   */
+  export type NGOProfile$programmeAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeAssignment
+     */
+    select?: ProgrammeAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeAssignment
+     */
+    omit?: ProgrammeAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeAssignmentInclude<ExtArgs> | null
+    where?: ProgrammeAssignmentWhereInput
+    orderBy?: ProgrammeAssignmentOrderByWithRelationInput | ProgrammeAssignmentOrderByWithRelationInput[]
+    cursor?: ProgrammeAssignmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProgrammeAssignmentScalarFieldEnum | ProgrammeAssignmentScalarFieldEnum[]
+  }
+
+  /**
    * NGOProfile without action
    */
   export type NGOProfileDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6712,6 +7113,7 @@ export namespace Prisma {
     donations?: boolean | CompanyProfile$donationsArgs<ExtArgs>
     approvals?: boolean | CompanyProfile$approvalsArgs<ExtArgs>
     utilizationReports?: boolean | CompanyProfile$utilizationReportsArgs<ExtArgs>
+    programmes?: boolean | CompanyProfile$programmesArgs<ExtArgs>
     _count?: boolean | CompanyProfileCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["companyProfile"]>
 
@@ -6772,6 +7174,7 @@ export namespace Prisma {
     donations?: boolean | CompanyProfile$donationsArgs<ExtArgs>
     approvals?: boolean | CompanyProfile$approvalsArgs<ExtArgs>
     utilizationReports?: boolean | CompanyProfile$utilizationReportsArgs<ExtArgs>
+    programmes?: boolean | CompanyProfile$programmesArgs<ExtArgs>
     _count?: boolean | CompanyProfileCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CompanyProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6792,6 +7195,7 @@ export namespace Prisma {
       donations: Prisma.$DonationPayload<ExtArgs>[]
       approvals: Prisma.$CampaignApprovalPayload<ExtArgs>[]
       utilizationReports: Prisma.$UtilizationReportPayload<ExtArgs>[]
+      programmes: Prisma.$CSRProgrammePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7208,6 +7612,7 @@ export namespace Prisma {
     donations<T extends CompanyProfile$donationsArgs<ExtArgs> = {}>(args?: Subset<T, CompanyProfile$donationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DonationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     approvals<T extends CompanyProfile$approvalsArgs<ExtArgs> = {}>(args?: Subset<T, CompanyProfile$approvalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignApprovalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     utilizationReports<T extends CompanyProfile$utilizationReportsArgs<ExtArgs> = {}>(args?: Subset<T, CompanyProfile$utilizationReportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UtilizationReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    programmes<T extends CompanyProfile$programmesArgs<ExtArgs> = {}>(args?: Subset<T, CompanyProfile$programmesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CSRProgrammePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7810,6 +8215,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UtilizationReportScalarFieldEnum | UtilizationReportScalarFieldEnum[]
+  }
+
+  /**
+   * CompanyProfile.programmes
+   */
+  export type CompanyProfile$programmesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CSRProgramme
+     */
+    select?: CSRProgrammeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CSRProgramme
+     */
+    omit?: CSRProgrammeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CSRProgrammeInclude<ExtArgs> | null
+    where?: CSRProgrammeWhereInput
+    orderBy?: CSRProgrammeOrderByWithRelationInput | CSRProgrammeOrderByWithRelationInput[]
+    cursor?: CSRProgrammeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CSRProgrammeScalarFieldEnum | CSRProgrammeScalarFieldEnum[]
   }
 
   /**
@@ -22186,6 +22615,3496 @@ export namespace Prisma {
 
 
   /**
+   * Model CSRProgramme
+   */
+
+  export type AggregateCSRProgramme = {
+    _count: CSRProgrammeCountAggregateOutputType | null
+    _avg: CSRProgrammeAvgAggregateOutputType | null
+    _sum: CSRProgrammeSumAggregateOutputType | null
+    _min: CSRProgrammeMinAggregateOutputType | null
+    _max: CSRProgrammeMaxAggregateOutputType | null
+  }
+
+  export type CSRProgrammeAvgAggregateOutputType = {
+    budget: number | null
+  }
+
+  export type CSRProgrammeSumAggregateOutputType = {
+    budget: number | null
+  }
+
+  export type CSRProgrammeMinAggregateOutputType = {
+    id: string | null
+    companyId: string | null
+    title: string | null
+    description: string | null
+    status: $Enums.ProgrammeStatus | null
+    budget: number | null
+    startDate: Date | null
+    endDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+  }
+
+  export type CSRProgrammeMaxAggregateOutputType = {
+    id: string | null
+    companyId: string | null
+    title: string | null
+    description: string | null
+    status: $Enums.ProgrammeStatus | null
+    budget: number | null
+    startDate: Date | null
+    endDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+  }
+
+  export type CSRProgrammeCountAggregateOutputType = {
+    id: number
+    companyId: number
+    title: number
+    description: number
+    status: number
+    budget: number
+    startDate: number
+    endDate: number
+    createdAt: number
+    updatedAt: number
+    deletedAt: number
+    _all: number
+  }
+
+
+  export type CSRProgrammeAvgAggregateInputType = {
+    budget?: true
+  }
+
+  export type CSRProgrammeSumAggregateInputType = {
+    budget?: true
+  }
+
+  export type CSRProgrammeMinAggregateInputType = {
+    id?: true
+    companyId?: true
+    title?: true
+    description?: true
+    status?: true
+    budget?: true
+    startDate?: true
+    endDate?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+  }
+
+  export type CSRProgrammeMaxAggregateInputType = {
+    id?: true
+    companyId?: true
+    title?: true
+    description?: true
+    status?: true
+    budget?: true
+    startDate?: true
+    endDate?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+  }
+
+  export type CSRProgrammeCountAggregateInputType = {
+    id?: true
+    companyId?: true
+    title?: true
+    description?: true
+    status?: true
+    budget?: true
+    startDate?: true
+    endDate?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    _all?: true
+  }
+
+  export type CSRProgrammeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CSRProgramme to aggregate.
+     */
+    where?: CSRProgrammeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CSRProgrammes to fetch.
+     */
+    orderBy?: CSRProgrammeOrderByWithRelationInput | CSRProgrammeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CSRProgrammeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CSRProgrammes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CSRProgrammes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CSRProgrammes
+    **/
+    _count?: true | CSRProgrammeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CSRProgrammeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CSRProgrammeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CSRProgrammeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CSRProgrammeMaxAggregateInputType
+  }
+
+  export type GetCSRProgrammeAggregateType<T extends CSRProgrammeAggregateArgs> = {
+        [P in keyof T & keyof AggregateCSRProgramme]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCSRProgramme[P]>
+      : GetScalarType<T[P], AggregateCSRProgramme[P]>
+  }
+
+
+
+
+  export type CSRProgrammeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CSRProgrammeWhereInput
+    orderBy?: CSRProgrammeOrderByWithAggregationInput | CSRProgrammeOrderByWithAggregationInput[]
+    by: CSRProgrammeScalarFieldEnum[] | CSRProgrammeScalarFieldEnum
+    having?: CSRProgrammeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CSRProgrammeCountAggregateInputType | true
+    _avg?: CSRProgrammeAvgAggregateInputType
+    _sum?: CSRProgrammeSumAggregateInputType
+    _min?: CSRProgrammeMinAggregateInputType
+    _max?: CSRProgrammeMaxAggregateInputType
+  }
+
+  export type CSRProgrammeGroupByOutputType = {
+    id: string
+    companyId: string
+    title: string
+    description: string | null
+    status: $Enums.ProgrammeStatus
+    budget: number | null
+    startDate: Date | null
+    endDate: Date | null
+    createdAt: Date
+    updatedAt: Date
+    deletedAt: Date | null
+    _count: CSRProgrammeCountAggregateOutputType | null
+    _avg: CSRProgrammeAvgAggregateOutputType | null
+    _sum: CSRProgrammeSumAggregateOutputType | null
+    _min: CSRProgrammeMinAggregateOutputType | null
+    _max: CSRProgrammeMaxAggregateOutputType | null
+  }
+
+  type GetCSRProgrammeGroupByPayload<T extends CSRProgrammeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CSRProgrammeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CSRProgrammeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CSRProgrammeGroupByOutputType[P]>
+            : GetScalarType<T[P], CSRProgrammeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CSRProgrammeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    companyId?: boolean
+    title?: boolean
+    description?: boolean
+    status?: boolean
+    budget?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    company?: boolean | CompanyProfileDefaultArgs<ExtArgs>
+    milestones?: boolean | CSRProgramme$milestonesArgs<ExtArgs>
+    assignments?: boolean | CSRProgramme$assignmentsArgs<ExtArgs>
+    _count?: boolean | CSRProgrammeCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cSRProgramme"]>
+
+  export type CSRProgrammeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    companyId?: boolean
+    title?: boolean
+    description?: boolean
+    status?: boolean
+    budget?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    company?: boolean | CompanyProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cSRProgramme"]>
+
+  export type CSRProgrammeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    companyId?: boolean
+    title?: boolean
+    description?: boolean
+    status?: boolean
+    budget?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    company?: boolean | CompanyProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cSRProgramme"]>
+
+  export type CSRProgrammeSelectScalar = {
+    id?: boolean
+    companyId?: boolean
+    title?: boolean
+    description?: boolean
+    status?: boolean
+    budget?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+  }
+
+  export type CSRProgrammeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "companyId" | "title" | "description" | "status" | "budget" | "startDate" | "endDate" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["cSRProgramme"]>
+  export type CSRProgrammeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | CompanyProfileDefaultArgs<ExtArgs>
+    milestones?: boolean | CSRProgramme$milestonesArgs<ExtArgs>
+    assignments?: boolean | CSRProgramme$assignmentsArgs<ExtArgs>
+    _count?: boolean | CSRProgrammeCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CSRProgrammeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | CompanyProfileDefaultArgs<ExtArgs>
+  }
+  export type CSRProgrammeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    company?: boolean | CompanyProfileDefaultArgs<ExtArgs>
+  }
+
+  export type $CSRProgrammePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CSRProgramme"
+    objects: {
+      company: Prisma.$CompanyProfilePayload<ExtArgs>
+      milestones: Prisma.$ProgrammeMilestonePayload<ExtArgs>[]
+      assignments: Prisma.$ProgrammeAssignmentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      companyId: string
+      title: string
+      description: string | null
+      status: $Enums.ProgrammeStatus
+      budget: number | null
+      startDate: Date | null
+      endDate: Date | null
+      createdAt: Date
+      updatedAt: Date
+      deletedAt: Date | null
+    }, ExtArgs["result"]["cSRProgramme"]>
+    composites: {}
+  }
+
+  type CSRProgrammeGetPayload<S extends boolean | null | undefined | CSRProgrammeDefaultArgs> = $Result.GetResult<Prisma.$CSRProgrammePayload, S>
+
+  type CSRProgrammeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CSRProgrammeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CSRProgrammeCountAggregateInputType | true
+    }
+
+  export interface CSRProgrammeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CSRProgramme'], meta: { name: 'CSRProgramme' } }
+    /**
+     * Find zero or one CSRProgramme that matches the filter.
+     * @param {CSRProgrammeFindUniqueArgs} args - Arguments to find a CSRProgramme
+     * @example
+     * // Get one CSRProgramme
+     * const cSRProgramme = await prisma.cSRProgramme.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CSRProgrammeFindUniqueArgs>(args: SelectSubset<T, CSRProgrammeFindUniqueArgs<ExtArgs>>): Prisma__CSRProgrammeClient<$Result.GetResult<Prisma.$CSRProgrammePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CSRProgramme that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CSRProgrammeFindUniqueOrThrowArgs} args - Arguments to find a CSRProgramme
+     * @example
+     * // Get one CSRProgramme
+     * const cSRProgramme = await prisma.cSRProgramme.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CSRProgrammeFindUniqueOrThrowArgs>(args: SelectSubset<T, CSRProgrammeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CSRProgrammeClient<$Result.GetResult<Prisma.$CSRProgrammePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CSRProgramme that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CSRProgrammeFindFirstArgs} args - Arguments to find a CSRProgramme
+     * @example
+     * // Get one CSRProgramme
+     * const cSRProgramme = await prisma.cSRProgramme.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CSRProgrammeFindFirstArgs>(args?: SelectSubset<T, CSRProgrammeFindFirstArgs<ExtArgs>>): Prisma__CSRProgrammeClient<$Result.GetResult<Prisma.$CSRProgrammePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CSRProgramme that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CSRProgrammeFindFirstOrThrowArgs} args - Arguments to find a CSRProgramme
+     * @example
+     * // Get one CSRProgramme
+     * const cSRProgramme = await prisma.cSRProgramme.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CSRProgrammeFindFirstOrThrowArgs>(args?: SelectSubset<T, CSRProgrammeFindFirstOrThrowArgs<ExtArgs>>): Prisma__CSRProgrammeClient<$Result.GetResult<Prisma.$CSRProgrammePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CSRProgrammes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CSRProgrammeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CSRProgrammes
+     * const cSRProgrammes = await prisma.cSRProgramme.findMany()
+     * 
+     * // Get first 10 CSRProgrammes
+     * const cSRProgrammes = await prisma.cSRProgramme.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const cSRProgrammeWithIdOnly = await prisma.cSRProgramme.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CSRProgrammeFindManyArgs>(args?: SelectSubset<T, CSRProgrammeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CSRProgrammePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CSRProgramme.
+     * @param {CSRProgrammeCreateArgs} args - Arguments to create a CSRProgramme.
+     * @example
+     * // Create one CSRProgramme
+     * const CSRProgramme = await prisma.cSRProgramme.create({
+     *   data: {
+     *     // ... data to create a CSRProgramme
+     *   }
+     * })
+     * 
+     */
+    create<T extends CSRProgrammeCreateArgs>(args: SelectSubset<T, CSRProgrammeCreateArgs<ExtArgs>>): Prisma__CSRProgrammeClient<$Result.GetResult<Prisma.$CSRProgrammePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CSRProgrammes.
+     * @param {CSRProgrammeCreateManyArgs} args - Arguments to create many CSRProgrammes.
+     * @example
+     * // Create many CSRProgrammes
+     * const cSRProgramme = await prisma.cSRProgramme.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CSRProgrammeCreateManyArgs>(args?: SelectSubset<T, CSRProgrammeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CSRProgrammes and returns the data saved in the database.
+     * @param {CSRProgrammeCreateManyAndReturnArgs} args - Arguments to create many CSRProgrammes.
+     * @example
+     * // Create many CSRProgrammes
+     * const cSRProgramme = await prisma.cSRProgramme.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CSRProgrammes and only return the `id`
+     * const cSRProgrammeWithIdOnly = await prisma.cSRProgramme.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CSRProgrammeCreateManyAndReturnArgs>(args?: SelectSubset<T, CSRProgrammeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CSRProgrammePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CSRProgramme.
+     * @param {CSRProgrammeDeleteArgs} args - Arguments to delete one CSRProgramme.
+     * @example
+     * // Delete one CSRProgramme
+     * const CSRProgramme = await prisma.cSRProgramme.delete({
+     *   where: {
+     *     // ... filter to delete one CSRProgramme
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CSRProgrammeDeleteArgs>(args: SelectSubset<T, CSRProgrammeDeleteArgs<ExtArgs>>): Prisma__CSRProgrammeClient<$Result.GetResult<Prisma.$CSRProgrammePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CSRProgramme.
+     * @param {CSRProgrammeUpdateArgs} args - Arguments to update one CSRProgramme.
+     * @example
+     * // Update one CSRProgramme
+     * const cSRProgramme = await prisma.cSRProgramme.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CSRProgrammeUpdateArgs>(args: SelectSubset<T, CSRProgrammeUpdateArgs<ExtArgs>>): Prisma__CSRProgrammeClient<$Result.GetResult<Prisma.$CSRProgrammePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CSRProgrammes.
+     * @param {CSRProgrammeDeleteManyArgs} args - Arguments to filter CSRProgrammes to delete.
+     * @example
+     * // Delete a few CSRProgrammes
+     * const { count } = await prisma.cSRProgramme.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CSRProgrammeDeleteManyArgs>(args?: SelectSubset<T, CSRProgrammeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CSRProgrammes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CSRProgrammeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CSRProgrammes
+     * const cSRProgramme = await prisma.cSRProgramme.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CSRProgrammeUpdateManyArgs>(args: SelectSubset<T, CSRProgrammeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CSRProgrammes and returns the data updated in the database.
+     * @param {CSRProgrammeUpdateManyAndReturnArgs} args - Arguments to update many CSRProgrammes.
+     * @example
+     * // Update many CSRProgrammes
+     * const cSRProgramme = await prisma.cSRProgramme.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CSRProgrammes and only return the `id`
+     * const cSRProgrammeWithIdOnly = await prisma.cSRProgramme.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CSRProgrammeUpdateManyAndReturnArgs>(args: SelectSubset<T, CSRProgrammeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CSRProgrammePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CSRProgramme.
+     * @param {CSRProgrammeUpsertArgs} args - Arguments to update or create a CSRProgramme.
+     * @example
+     * // Update or create a CSRProgramme
+     * const cSRProgramme = await prisma.cSRProgramme.upsert({
+     *   create: {
+     *     // ... data to create a CSRProgramme
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CSRProgramme we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CSRProgrammeUpsertArgs>(args: SelectSubset<T, CSRProgrammeUpsertArgs<ExtArgs>>): Prisma__CSRProgrammeClient<$Result.GetResult<Prisma.$CSRProgrammePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CSRProgrammes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CSRProgrammeCountArgs} args - Arguments to filter CSRProgrammes to count.
+     * @example
+     * // Count the number of CSRProgrammes
+     * const count = await prisma.cSRProgramme.count({
+     *   where: {
+     *     // ... the filter for the CSRProgrammes we want to count
+     *   }
+     * })
+    **/
+    count<T extends CSRProgrammeCountArgs>(
+      args?: Subset<T, CSRProgrammeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CSRProgrammeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CSRProgramme.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CSRProgrammeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CSRProgrammeAggregateArgs>(args: Subset<T, CSRProgrammeAggregateArgs>): Prisma.PrismaPromise<GetCSRProgrammeAggregateType<T>>
+
+    /**
+     * Group by CSRProgramme.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CSRProgrammeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CSRProgrammeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CSRProgrammeGroupByArgs['orderBy'] }
+        : { orderBy?: CSRProgrammeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CSRProgrammeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCSRProgrammeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CSRProgramme model
+   */
+  readonly fields: CSRProgrammeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CSRProgramme.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CSRProgrammeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    company<T extends CompanyProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyProfileDefaultArgs<ExtArgs>>): Prisma__CompanyProfileClient<$Result.GetResult<Prisma.$CompanyProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    milestones<T extends CSRProgramme$milestonesArgs<ExtArgs> = {}>(args?: Subset<T, CSRProgramme$milestonesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgrammeMilestonePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assignments<T extends CSRProgramme$assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, CSRProgramme$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgrammeAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CSRProgramme model
+   */
+  interface CSRProgrammeFieldRefs {
+    readonly id: FieldRef<"CSRProgramme", 'String'>
+    readonly companyId: FieldRef<"CSRProgramme", 'String'>
+    readonly title: FieldRef<"CSRProgramme", 'String'>
+    readonly description: FieldRef<"CSRProgramme", 'String'>
+    readonly status: FieldRef<"CSRProgramme", 'ProgrammeStatus'>
+    readonly budget: FieldRef<"CSRProgramme", 'Float'>
+    readonly startDate: FieldRef<"CSRProgramme", 'DateTime'>
+    readonly endDate: FieldRef<"CSRProgramme", 'DateTime'>
+    readonly createdAt: FieldRef<"CSRProgramme", 'DateTime'>
+    readonly updatedAt: FieldRef<"CSRProgramme", 'DateTime'>
+    readonly deletedAt: FieldRef<"CSRProgramme", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CSRProgramme findUnique
+   */
+  export type CSRProgrammeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CSRProgramme
+     */
+    select?: CSRProgrammeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CSRProgramme
+     */
+    omit?: CSRProgrammeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CSRProgrammeInclude<ExtArgs> | null
+    /**
+     * Filter, which CSRProgramme to fetch.
+     */
+    where: CSRProgrammeWhereUniqueInput
+  }
+
+  /**
+   * CSRProgramme findUniqueOrThrow
+   */
+  export type CSRProgrammeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CSRProgramme
+     */
+    select?: CSRProgrammeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CSRProgramme
+     */
+    omit?: CSRProgrammeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CSRProgrammeInclude<ExtArgs> | null
+    /**
+     * Filter, which CSRProgramme to fetch.
+     */
+    where: CSRProgrammeWhereUniqueInput
+  }
+
+  /**
+   * CSRProgramme findFirst
+   */
+  export type CSRProgrammeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CSRProgramme
+     */
+    select?: CSRProgrammeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CSRProgramme
+     */
+    omit?: CSRProgrammeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CSRProgrammeInclude<ExtArgs> | null
+    /**
+     * Filter, which CSRProgramme to fetch.
+     */
+    where?: CSRProgrammeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CSRProgrammes to fetch.
+     */
+    orderBy?: CSRProgrammeOrderByWithRelationInput | CSRProgrammeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CSRProgrammes.
+     */
+    cursor?: CSRProgrammeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CSRProgrammes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CSRProgrammes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CSRProgrammes.
+     */
+    distinct?: CSRProgrammeScalarFieldEnum | CSRProgrammeScalarFieldEnum[]
+  }
+
+  /**
+   * CSRProgramme findFirstOrThrow
+   */
+  export type CSRProgrammeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CSRProgramme
+     */
+    select?: CSRProgrammeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CSRProgramme
+     */
+    omit?: CSRProgrammeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CSRProgrammeInclude<ExtArgs> | null
+    /**
+     * Filter, which CSRProgramme to fetch.
+     */
+    where?: CSRProgrammeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CSRProgrammes to fetch.
+     */
+    orderBy?: CSRProgrammeOrderByWithRelationInput | CSRProgrammeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CSRProgrammes.
+     */
+    cursor?: CSRProgrammeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CSRProgrammes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CSRProgrammes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CSRProgrammes.
+     */
+    distinct?: CSRProgrammeScalarFieldEnum | CSRProgrammeScalarFieldEnum[]
+  }
+
+  /**
+   * CSRProgramme findMany
+   */
+  export type CSRProgrammeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CSRProgramme
+     */
+    select?: CSRProgrammeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CSRProgramme
+     */
+    omit?: CSRProgrammeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CSRProgrammeInclude<ExtArgs> | null
+    /**
+     * Filter, which CSRProgrammes to fetch.
+     */
+    where?: CSRProgrammeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CSRProgrammes to fetch.
+     */
+    orderBy?: CSRProgrammeOrderByWithRelationInput | CSRProgrammeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CSRProgrammes.
+     */
+    cursor?: CSRProgrammeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CSRProgrammes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CSRProgrammes.
+     */
+    skip?: number
+    distinct?: CSRProgrammeScalarFieldEnum | CSRProgrammeScalarFieldEnum[]
+  }
+
+  /**
+   * CSRProgramme create
+   */
+  export type CSRProgrammeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CSRProgramme
+     */
+    select?: CSRProgrammeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CSRProgramme
+     */
+    omit?: CSRProgrammeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CSRProgrammeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CSRProgramme.
+     */
+    data: XOR<CSRProgrammeCreateInput, CSRProgrammeUncheckedCreateInput>
+  }
+
+  /**
+   * CSRProgramme createMany
+   */
+  export type CSRProgrammeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CSRProgrammes.
+     */
+    data: CSRProgrammeCreateManyInput | CSRProgrammeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CSRProgramme createManyAndReturn
+   */
+  export type CSRProgrammeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CSRProgramme
+     */
+    select?: CSRProgrammeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CSRProgramme
+     */
+    omit?: CSRProgrammeOmit<ExtArgs> | null
+    /**
+     * The data used to create many CSRProgrammes.
+     */
+    data: CSRProgrammeCreateManyInput | CSRProgrammeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CSRProgrammeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CSRProgramme update
+   */
+  export type CSRProgrammeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CSRProgramme
+     */
+    select?: CSRProgrammeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CSRProgramme
+     */
+    omit?: CSRProgrammeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CSRProgrammeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CSRProgramme.
+     */
+    data: XOR<CSRProgrammeUpdateInput, CSRProgrammeUncheckedUpdateInput>
+    /**
+     * Choose, which CSRProgramme to update.
+     */
+    where: CSRProgrammeWhereUniqueInput
+  }
+
+  /**
+   * CSRProgramme updateMany
+   */
+  export type CSRProgrammeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CSRProgrammes.
+     */
+    data: XOR<CSRProgrammeUpdateManyMutationInput, CSRProgrammeUncheckedUpdateManyInput>
+    /**
+     * Filter which CSRProgrammes to update
+     */
+    where?: CSRProgrammeWhereInput
+    /**
+     * Limit how many CSRProgrammes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CSRProgramme updateManyAndReturn
+   */
+  export type CSRProgrammeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CSRProgramme
+     */
+    select?: CSRProgrammeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CSRProgramme
+     */
+    omit?: CSRProgrammeOmit<ExtArgs> | null
+    /**
+     * The data used to update CSRProgrammes.
+     */
+    data: XOR<CSRProgrammeUpdateManyMutationInput, CSRProgrammeUncheckedUpdateManyInput>
+    /**
+     * Filter which CSRProgrammes to update
+     */
+    where?: CSRProgrammeWhereInput
+    /**
+     * Limit how many CSRProgrammes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CSRProgrammeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CSRProgramme upsert
+   */
+  export type CSRProgrammeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CSRProgramme
+     */
+    select?: CSRProgrammeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CSRProgramme
+     */
+    omit?: CSRProgrammeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CSRProgrammeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CSRProgramme to update in case it exists.
+     */
+    where: CSRProgrammeWhereUniqueInput
+    /**
+     * In case the CSRProgramme found by the `where` argument doesn't exist, create a new CSRProgramme with this data.
+     */
+    create: XOR<CSRProgrammeCreateInput, CSRProgrammeUncheckedCreateInput>
+    /**
+     * In case the CSRProgramme was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CSRProgrammeUpdateInput, CSRProgrammeUncheckedUpdateInput>
+  }
+
+  /**
+   * CSRProgramme delete
+   */
+  export type CSRProgrammeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CSRProgramme
+     */
+    select?: CSRProgrammeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CSRProgramme
+     */
+    omit?: CSRProgrammeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CSRProgrammeInclude<ExtArgs> | null
+    /**
+     * Filter which CSRProgramme to delete.
+     */
+    where: CSRProgrammeWhereUniqueInput
+  }
+
+  /**
+   * CSRProgramme deleteMany
+   */
+  export type CSRProgrammeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CSRProgrammes to delete
+     */
+    where?: CSRProgrammeWhereInput
+    /**
+     * Limit how many CSRProgrammes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CSRProgramme.milestones
+   */
+  export type CSRProgramme$milestonesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeMilestone
+     */
+    select?: ProgrammeMilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeMilestone
+     */
+    omit?: ProgrammeMilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeMilestoneInclude<ExtArgs> | null
+    where?: ProgrammeMilestoneWhereInput
+    orderBy?: ProgrammeMilestoneOrderByWithRelationInput | ProgrammeMilestoneOrderByWithRelationInput[]
+    cursor?: ProgrammeMilestoneWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProgrammeMilestoneScalarFieldEnum | ProgrammeMilestoneScalarFieldEnum[]
+  }
+
+  /**
+   * CSRProgramme.assignments
+   */
+  export type CSRProgramme$assignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeAssignment
+     */
+    select?: ProgrammeAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeAssignment
+     */
+    omit?: ProgrammeAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeAssignmentInclude<ExtArgs> | null
+    where?: ProgrammeAssignmentWhereInput
+    orderBy?: ProgrammeAssignmentOrderByWithRelationInput | ProgrammeAssignmentOrderByWithRelationInput[]
+    cursor?: ProgrammeAssignmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProgrammeAssignmentScalarFieldEnum | ProgrammeAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * CSRProgramme without action
+   */
+  export type CSRProgrammeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CSRProgramme
+     */
+    select?: CSRProgrammeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CSRProgramme
+     */
+    omit?: CSRProgrammeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CSRProgrammeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProgrammeMilestone
+   */
+
+  export type AggregateProgrammeMilestone = {
+    _count: ProgrammeMilestoneCountAggregateOutputType | null
+    _avg: ProgrammeMilestoneAvgAggregateOutputType | null
+    _sum: ProgrammeMilestoneSumAggregateOutputType | null
+    _min: ProgrammeMilestoneMinAggregateOutputType | null
+    _max: ProgrammeMilestoneMaxAggregateOutputType | null
+  }
+
+  export type ProgrammeMilestoneAvgAggregateOutputType = {
+    progress: number | null
+  }
+
+  export type ProgrammeMilestoneSumAggregateOutputType = {
+    progress: number | null
+  }
+
+  export type ProgrammeMilestoneMinAggregateOutputType = {
+    id: string | null
+    programmeId: string | null
+    title: string | null
+    description: string | null
+    dueDate: Date | null
+    status: $Enums.ProgrammeMilestoneStatus | null
+    progress: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+  }
+
+  export type ProgrammeMilestoneMaxAggregateOutputType = {
+    id: string | null
+    programmeId: string | null
+    title: string | null
+    description: string | null
+    dueDate: Date | null
+    status: $Enums.ProgrammeMilestoneStatus | null
+    progress: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    deletedAt: Date | null
+  }
+
+  export type ProgrammeMilestoneCountAggregateOutputType = {
+    id: number
+    programmeId: number
+    title: number
+    description: number
+    dueDate: number
+    status: number
+    progress: number
+    createdAt: number
+    updatedAt: number
+    deletedAt: number
+    _all: number
+  }
+
+
+  export type ProgrammeMilestoneAvgAggregateInputType = {
+    progress?: true
+  }
+
+  export type ProgrammeMilestoneSumAggregateInputType = {
+    progress?: true
+  }
+
+  export type ProgrammeMilestoneMinAggregateInputType = {
+    id?: true
+    programmeId?: true
+    title?: true
+    description?: true
+    dueDate?: true
+    status?: true
+    progress?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+  }
+
+  export type ProgrammeMilestoneMaxAggregateInputType = {
+    id?: true
+    programmeId?: true
+    title?: true
+    description?: true
+    dueDate?: true
+    status?: true
+    progress?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+  }
+
+  export type ProgrammeMilestoneCountAggregateInputType = {
+    id?: true
+    programmeId?: true
+    title?: true
+    description?: true
+    dueDate?: true
+    status?: true
+    progress?: true
+    createdAt?: true
+    updatedAt?: true
+    deletedAt?: true
+    _all?: true
+  }
+
+  export type ProgrammeMilestoneAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProgrammeMilestone to aggregate.
+     */
+    where?: ProgrammeMilestoneWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgrammeMilestones to fetch.
+     */
+    orderBy?: ProgrammeMilestoneOrderByWithRelationInput | ProgrammeMilestoneOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProgrammeMilestoneWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgrammeMilestones from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgrammeMilestones.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProgrammeMilestones
+    **/
+    _count?: true | ProgrammeMilestoneCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProgrammeMilestoneAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProgrammeMilestoneSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProgrammeMilestoneMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProgrammeMilestoneMaxAggregateInputType
+  }
+
+  export type GetProgrammeMilestoneAggregateType<T extends ProgrammeMilestoneAggregateArgs> = {
+        [P in keyof T & keyof AggregateProgrammeMilestone]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProgrammeMilestone[P]>
+      : GetScalarType<T[P], AggregateProgrammeMilestone[P]>
+  }
+
+
+
+
+  export type ProgrammeMilestoneGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgrammeMilestoneWhereInput
+    orderBy?: ProgrammeMilestoneOrderByWithAggregationInput | ProgrammeMilestoneOrderByWithAggregationInput[]
+    by: ProgrammeMilestoneScalarFieldEnum[] | ProgrammeMilestoneScalarFieldEnum
+    having?: ProgrammeMilestoneScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProgrammeMilestoneCountAggregateInputType | true
+    _avg?: ProgrammeMilestoneAvgAggregateInputType
+    _sum?: ProgrammeMilestoneSumAggregateInputType
+    _min?: ProgrammeMilestoneMinAggregateInputType
+    _max?: ProgrammeMilestoneMaxAggregateInputType
+  }
+
+  export type ProgrammeMilestoneGroupByOutputType = {
+    id: string
+    programmeId: string
+    title: string
+    description: string | null
+    dueDate: Date | null
+    status: $Enums.ProgrammeMilestoneStatus
+    progress: number
+    createdAt: Date
+    updatedAt: Date
+    deletedAt: Date | null
+    _count: ProgrammeMilestoneCountAggregateOutputType | null
+    _avg: ProgrammeMilestoneAvgAggregateOutputType | null
+    _sum: ProgrammeMilestoneSumAggregateOutputType | null
+    _min: ProgrammeMilestoneMinAggregateOutputType | null
+    _max: ProgrammeMilestoneMaxAggregateOutputType | null
+  }
+
+  type GetProgrammeMilestoneGroupByPayload<T extends ProgrammeMilestoneGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProgrammeMilestoneGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProgrammeMilestoneGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProgrammeMilestoneGroupByOutputType[P]>
+            : GetScalarType<T[P], ProgrammeMilestoneGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProgrammeMilestoneSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    programmeId?: boolean
+    title?: boolean
+    description?: boolean
+    dueDate?: boolean
+    status?: boolean
+    progress?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    programme?: boolean | CSRProgrammeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programmeMilestone"]>
+
+  export type ProgrammeMilestoneSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    programmeId?: boolean
+    title?: boolean
+    description?: boolean
+    dueDate?: boolean
+    status?: boolean
+    progress?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    programme?: boolean | CSRProgrammeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programmeMilestone"]>
+
+  export type ProgrammeMilestoneSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    programmeId?: boolean
+    title?: boolean
+    description?: boolean
+    dueDate?: boolean
+    status?: boolean
+    progress?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+    programme?: boolean | CSRProgrammeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programmeMilestone"]>
+
+  export type ProgrammeMilestoneSelectScalar = {
+    id?: boolean
+    programmeId?: boolean
+    title?: boolean
+    description?: boolean
+    dueDate?: boolean
+    status?: boolean
+    progress?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    deletedAt?: boolean
+  }
+
+  export type ProgrammeMilestoneOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "programmeId" | "title" | "description" | "dueDate" | "status" | "progress" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["programmeMilestone"]>
+  export type ProgrammeMilestoneInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    programme?: boolean | CSRProgrammeDefaultArgs<ExtArgs>
+  }
+  export type ProgrammeMilestoneIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    programme?: boolean | CSRProgrammeDefaultArgs<ExtArgs>
+  }
+  export type ProgrammeMilestoneIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    programme?: boolean | CSRProgrammeDefaultArgs<ExtArgs>
+  }
+
+  export type $ProgrammeMilestonePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProgrammeMilestone"
+    objects: {
+      programme: Prisma.$CSRProgrammePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      programmeId: string
+      title: string
+      description: string | null
+      dueDate: Date | null
+      status: $Enums.ProgrammeMilestoneStatus
+      progress: number
+      createdAt: Date
+      updatedAt: Date
+      deletedAt: Date | null
+    }, ExtArgs["result"]["programmeMilestone"]>
+    composites: {}
+  }
+
+  type ProgrammeMilestoneGetPayload<S extends boolean | null | undefined | ProgrammeMilestoneDefaultArgs> = $Result.GetResult<Prisma.$ProgrammeMilestonePayload, S>
+
+  type ProgrammeMilestoneCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProgrammeMilestoneFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProgrammeMilestoneCountAggregateInputType | true
+    }
+
+  export interface ProgrammeMilestoneDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProgrammeMilestone'], meta: { name: 'ProgrammeMilestone' } }
+    /**
+     * Find zero or one ProgrammeMilestone that matches the filter.
+     * @param {ProgrammeMilestoneFindUniqueArgs} args - Arguments to find a ProgrammeMilestone
+     * @example
+     * // Get one ProgrammeMilestone
+     * const programmeMilestone = await prisma.programmeMilestone.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProgrammeMilestoneFindUniqueArgs>(args: SelectSubset<T, ProgrammeMilestoneFindUniqueArgs<ExtArgs>>): Prisma__ProgrammeMilestoneClient<$Result.GetResult<Prisma.$ProgrammeMilestonePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProgrammeMilestone that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProgrammeMilestoneFindUniqueOrThrowArgs} args - Arguments to find a ProgrammeMilestone
+     * @example
+     * // Get one ProgrammeMilestone
+     * const programmeMilestone = await prisma.programmeMilestone.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProgrammeMilestoneFindUniqueOrThrowArgs>(args: SelectSubset<T, ProgrammeMilestoneFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProgrammeMilestoneClient<$Result.GetResult<Prisma.$ProgrammeMilestonePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProgrammeMilestone that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgrammeMilestoneFindFirstArgs} args - Arguments to find a ProgrammeMilestone
+     * @example
+     * // Get one ProgrammeMilestone
+     * const programmeMilestone = await prisma.programmeMilestone.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProgrammeMilestoneFindFirstArgs>(args?: SelectSubset<T, ProgrammeMilestoneFindFirstArgs<ExtArgs>>): Prisma__ProgrammeMilestoneClient<$Result.GetResult<Prisma.$ProgrammeMilestonePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProgrammeMilestone that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgrammeMilestoneFindFirstOrThrowArgs} args - Arguments to find a ProgrammeMilestone
+     * @example
+     * // Get one ProgrammeMilestone
+     * const programmeMilestone = await prisma.programmeMilestone.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProgrammeMilestoneFindFirstOrThrowArgs>(args?: SelectSubset<T, ProgrammeMilestoneFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProgrammeMilestoneClient<$Result.GetResult<Prisma.$ProgrammeMilestonePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProgrammeMilestones that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgrammeMilestoneFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProgrammeMilestones
+     * const programmeMilestones = await prisma.programmeMilestone.findMany()
+     * 
+     * // Get first 10 ProgrammeMilestones
+     * const programmeMilestones = await prisma.programmeMilestone.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const programmeMilestoneWithIdOnly = await prisma.programmeMilestone.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProgrammeMilestoneFindManyArgs>(args?: SelectSubset<T, ProgrammeMilestoneFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgrammeMilestonePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProgrammeMilestone.
+     * @param {ProgrammeMilestoneCreateArgs} args - Arguments to create a ProgrammeMilestone.
+     * @example
+     * // Create one ProgrammeMilestone
+     * const ProgrammeMilestone = await prisma.programmeMilestone.create({
+     *   data: {
+     *     // ... data to create a ProgrammeMilestone
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProgrammeMilestoneCreateArgs>(args: SelectSubset<T, ProgrammeMilestoneCreateArgs<ExtArgs>>): Prisma__ProgrammeMilestoneClient<$Result.GetResult<Prisma.$ProgrammeMilestonePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProgrammeMilestones.
+     * @param {ProgrammeMilestoneCreateManyArgs} args - Arguments to create many ProgrammeMilestones.
+     * @example
+     * // Create many ProgrammeMilestones
+     * const programmeMilestone = await prisma.programmeMilestone.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProgrammeMilestoneCreateManyArgs>(args?: SelectSubset<T, ProgrammeMilestoneCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProgrammeMilestones and returns the data saved in the database.
+     * @param {ProgrammeMilestoneCreateManyAndReturnArgs} args - Arguments to create many ProgrammeMilestones.
+     * @example
+     * // Create many ProgrammeMilestones
+     * const programmeMilestone = await prisma.programmeMilestone.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProgrammeMilestones and only return the `id`
+     * const programmeMilestoneWithIdOnly = await prisma.programmeMilestone.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProgrammeMilestoneCreateManyAndReturnArgs>(args?: SelectSubset<T, ProgrammeMilestoneCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgrammeMilestonePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProgrammeMilestone.
+     * @param {ProgrammeMilestoneDeleteArgs} args - Arguments to delete one ProgrammeMilestone.
+     * @example
+     * // Delete one ProgrammeMilestone
+     * const ProgrammeMilestone = await prisma.programmeMilestone.delete({
+     *   where: {
+     *     // ... filter to delete one ProgrammeMilestone
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProgrammeMilestoneDeleteArgs>(args: SelectSubset<T, ProgrammeMilestoneDeleteArgs<ExtArgs>>): Prisma__ProgrammeMilestoneClient<$Result.GetResult<Prisma.$ProgrammeMilestonePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProgrammeMilestone.
+     * @param {ProgrammeMilestoneUpdateArgs} args - Arguments to update one ProgrammeMilestone.
+     * @example
+     * // Update one ProgrammeMilestone
+     * const programmeMilestone = await prisma.programmeMilestone.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProgrammeMilestoneUpdateArgs>(args: SelectSubset<T, ProgrammeMilestoneUpdateArgs<ExtArgs>>): Prisma__ProgrammeMilestoneClient<$Result.GetResult<Prisma.$ProgrammeMilestonePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProgrammeMilestones.
+     * @param {ProgrammeMilestoneDeleteManyArgs} args - Arguments to filter ProgrammeMilestones to delete.
+     * @example
+     * // Delete a few ProgrammeMilestones
+     * const { count } = await prisma.programmeMilestone.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProgrammeMilestoneDeleteManyArgs>(args?: SelectSubset<T, ProgrammeMilestoneDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProgrammeMilestones.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgrammeMilestoneUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProgrammeMilestones
+     * const programmeMilestone = await prisma.programmeMilestone.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProgrammeMilestoneUpdateManyArgs>(args: SelectSubset<T, ProgrammeMilestoneUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProgrammeMilestones and returns the data updated in the database.
+     * @param {ProgrammeMilestoneUpdateManyAndReturnArgs} args - Arguments to update many ProgrammeMilestones.
+     * @example
+     * // Update many ProgrammeMilestones
+     * const programmeMilestone = await prisma.programmeMilestone.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProgrammeMilestones and only return the `id`
+     * const programmeMilestoneWithIdOnly = await prisma.programmeMilestone.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProgrammeMilestoneUpdateManyAndReturnArgs>(args: SelectSubset<T, ProgrammeMilestoneUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgrammeMilestonePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProgrammeMilestone.
+     * @param {ProgrammeMilestoneUpsertArgs} args - Arguments to update or create a ProgrammeMilestone.
+     * @example
+     * // Update or create a ProgrammeMilestone
+     * const programmeMilestone = await prisma.programmeMilestone.upsert({
+     *   create: {
+     *     // ... data to create a ProgrammeMilestone
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProgrammeMilestone we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProgrammeMilestoneUpsertArgs>(args: SelectSubset<T, ProgrammeMilestoneUpsertArgs<ExtArgs>>): Prisma__ProgrammeMilestoneClient<$Result.GetResult<Prisma.$ProgrammeMilestonePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProgrammeMilestones.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgrammeMilestoneCountArgs} args - Arguments to filter ProgrammeMilestones to count.
+     * @example
+     * // Count the number of ProgrammeMilestones
+     * const count = await prisma.programmeMilestone.count({
+     *   where: {
+     *     // ... the filter for the ProgrammeMilestones we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProgrammeMilestoneCountArgs>(
+      args?: Subset<T, ProgrammeMilestoneCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProgrammeMilestoneCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProgrammeMilestone.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgrammeMilestoneAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProgrammeMilestoneAggregateArgs>(args: Subset<T, ProgrammeMilestoneAggregateArgs>): Prisma.PrismaPromise<GetProgrammeMilestoneAggregateType<T>>
+
+    /**
+     * Group by ProgrammeMilestone.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgrammeMilestoneGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProgrammeMilestoneGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProgrammeMilestoneGroupByArgs['orderBy'] }
+        : { orderBy?: ProgrammeMilestoneGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProgrammeMilestoneGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProgrammeMilestoneGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProgrammeMilestone model
+   */
+  readonly fields: ProgrammeMilestoneFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProgrammeMilestone.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProgrammeMilestoneClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    programme<T extends CSRProgrammeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CSRProgrammeDefaultArgs<ExtArgs>>): Prisma__CSRProgrammeClient<$Result.GetResult<Prisma.$CSRProgrammePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProgrammeMilestone model
+   */
+  interface ProgrammeMilestoneFieldRefs {
+    readonly id: FieldRef<"ProgrammeMilestone", 'String'>
+    readonly programmeId: FieldRef<"ProgrammeMilestone", 'String'>
+    readonly title: FieldRef<"ProgrammeMilestone", 'String'>
+    readonly description: FieldRef<"ProgrammeMilestone", 'String'>
+    readonly dueDate: FieldRef<"ProgrammeMilestone", 'DateTime'>
+    readonly status: FieldRef<"ProgrammeMilestone", 'ProgrammeMilestoneStatus'>
+    readonly progress: FieldRef<"ProgrammeMilestone", 'Int'>
+    readonly createdAt: FieldRef<"ProgrammeMilestone", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProgrammeMilestone", 'DateTime'>
+    readonly deletedAt: FieldRef<"ProgrammeMilestone", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProgrammeMilestone findUnique
+   */
+  export type ProgrammeMilestoneFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeMilestone
+     */
+    select?: ProgrammeMilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeMilestone
+     */
+    omit?: ProgrammeMilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeMilestoneInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgrammeMilestone to fetch.
+     */
+    where: ProgrammeMilestoneWhereUniqueInput
+  }
+
+  /**
+   * ProgrammeMilestone findUniqueOrThrow
+   */
+  export type ProgrammeMilestoneFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeMilestone
+     */
+    select?: ProgrammeMilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeMilestone
+     */
+    omit?: ProgrammeMilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeMilestoneInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgrammeMilestone to fetch.
+     */
+    where: ProgrammeMilestoneWhereUniqueInput
+  }
+
+  /**
+   * ProgrammeMilestone findFirst
+   */
+  export type ProgrammeMilestoneFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeMilestone
+     */
+    select?: ProgrammeMilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeMilestone
+     */
+    omit?: ProgrammeMilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeMilestoneInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgrammeMilestone to fetch.
+     */
+    where?: ProgrammeMilestoneWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgrammeMilestones to fetch.
+     */
+    orderBy?: ProgrammeMilestoneOrderByWithRelationInput | ProgrammeMilestoneOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProgrammeMilestones.
+     */
+    cursor?: ProgrammeMilestoneWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgrammeMilestones from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgrammeMilestones.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgrammeMilestones.
+     */
+    distinct?: ProgrammeMilestoneScalarFieldEnum | ProgrammeMilestoneScalarFieldEnum[]
+  }
+
+  /**
+   * ProgrammeMilestone findFirstOrThrow
+   */
+  export type ProgrammeMilestoneFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeMilestone
+     */
+    select?: ProgrammeMilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeMilestone
+     */
+    omit?: ProgrammeMilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeMilestoneInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgrammeMilestone to fetch.
+     */
+    where?: ProgrammeMilestoneWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgrammeMilestones to fetch.
+     */
+    orderBy?: ProgrammeMilestoneOrderByWithRelationInput | ProgrammeMilestoneOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProgrammeMilestones.
+     */
+    cursor?: ProgrammeMilestoneWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgrammeMilestones from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgrammeMilestones.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgrammeMilestones.
+     */
+    distinct?: ProgrammeMilestoneScalarFieldEnum | ProgrammeMilestoneScalarFieldEnum[]
+  }
+
+  /**
+   * ProgrammeMilestone findMany
+   */
+  export type ProgrammeMilestoneFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeMilestone
+     */
+    select?: ProgrammeMilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeMilestone
+     */
+    omit?: ProgrammeMilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeMilestoneInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgrammeMilestones to fetch.
+     */
+    where?: ProgrammeMilestoneWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgrammeMilestones to fetch.
+     */
+    orderBy?: ProgrammeMilestoneOrderByWithRelationInput | ProgrammeMilestoneOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProgrammeMilestones.
+     */
+    cursor?: ProgrammeMilestoneWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgrammeMilestones from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgrammeMilestones.
+     */
+    skip?: number
+    distinct?: ProgrammeMilestoneScalarFieldEnum | ProgrammeMilestoneScalarFieldEnum[]
+  }
+
+  /**
+   * ProgrammeMilestone create
+   */
+  export type ProgrammeMilestoneCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeMilestone
+     */
+    select?: ProgrammeMilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeMilestone
+     */
+    omit?: ProgrammeMilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeMilestoneInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProgrammeMilestone.
+     */
+    data: XOR<ProgrammeMilestoneCreateInput, ProgrammeMilestoneUncheckedCreateInput>
+  }
+
+  /**
+   * ProgrammeMilestone createMany
+   */
+  export type ProgrammeMilestoneCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProgrammeMilestones.
+     */
+    data: ProgrammeMilestoneCreateManyInput | ProgrammeMilestoneCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProgrammeMilestone createManyAndReturn
+   */
+  export type ProgrammeMilestoneCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeMilestone
+     */
+    select?: ProgrammeMilestoneSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeMilestone
+     */
+    omit?: ProgrammeMilestoneOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProgrammeMilestones.
+     */
+    data: ProgrammeMilestoneCreateManyInput | ProgrammeMilestoneCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeMilestoneIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProgrammeMilestone update
+   */
+  export type ProgrammeMilestoneUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeMilestone
+     */
+    select?: ProgrammeMilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeMilestone
+     */
+    omit?: ProgrammeMilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeMilestoneInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProgrammeMilestone.
+     */
+    data: XOR<ProgrammeMilestoneUpdateInput, ProgrammeMilestoneUncheckedUpdateInput>
+    /**
+     * Choose, which ProgrammeMilestone to update.
+     */
+    where: ProgrammeMilestoneWhereUniqueInput
+  }
+
+  /**
+   * ProgrammeMilestone updateMany
+   */
+  export type ProgrammeMilestoneUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProgrammeMilestones.
+     */
+    data: XOR<ProgrammeMilestoneUpdateManyMutationInput, ProgrammeMilestoneUncheckedUpdateManyInput>
+    /**
+     * Filter which ProgrammeMilestones to update
+     */
+    where?: ProgrammeMilestoneWhereInput
+    /**
+     * Limit how many ProgrammeMilestones to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProgrammeMilestone updateManyAndReturn
+   */
+  export type ProgrammeMilestoneUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeMilestone
+     */
+    select?: ProgrammeMilestoneSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeMilestone
+     */
+    omit?: ProgrammeMilestoneOmit<ExtArgs> | null
+    /**
+     * The data used to update ProgrammeMilestones.
+     */
+    data: XOR<ProgrammeMilestoneUpdateManyMutationInput, ProgrammeMilestoneUncheckedUpdateManyInput>
+    /**
+     * Filter which ProgrammeMilestones to update
+     */
+    where?: ProgrammeMilestoneWhereInput
+    /**
+     * Limit how many ProgrammeMilestones to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeMilestoneIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProgrammeMilestone upsert
+   */
+  export type ProgrammeMilestoneUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeMilestone
+     */
+    select?: ProgrammeMilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeMilestone
+     */
+    omit?: ProgrammeMilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeMilestoneInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProgrammeMilestone to update in case it exists.
+     */
+    where: ProgrammeMilestoneWhereUniqueInput
+    /**
+     * In case the ProgrammeMilestone found by the `where` argument doesn't exist, create a new ProgrammeMilestone with this data.
+     */
+    create: XOR<ProgrammeMilestoneCreateInput, ProgrammeMilestoneUncheckedCreateInput>
+    /**
+     * In case the ProgrammeMilestone was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProgrammeMilestoneUpdateInput, ProgrammeMilestoneUncheckedUpdateInput>
+  }
+
+  /**
+   * ProgrammeMilestone delete
+   */
+  export type ProgrammeMilestoneDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeMilestone
+     */
+    select?: ProgrammeMilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeMilestone
+     */
+    omit?: ProgrammeMilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeMilestoneInclude<ExtArgs> | null
+    /**
+     * Filter which ProgrammeMilestone to delete.
+     */
+    where: ProgrammeMilestoneWhereUniqueInput
+  }
+
+  /**
+   * ProgrammeMilestone deleteMany
+   */
+  export type ProgrammeMilestoneDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProgrammeMilestones to delete
+     */
+    where?: ProgrammeMilestoneWhereInput
+    /**
+     * Limit how many ProgrammeMilestones to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProgrammeMilestone without action
+   */
+  export type ProgrammeMilestoneDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeMilestone
+     */
+    select?: ProgrammeMilestoneSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeMilestone
+     */
+    omit?: ProgrammeMilestoneOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeMilestoneInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProgrammeAssignment
+   */
+
+  export type AggregateProgrammeAssignment = {
+    _count: ProgrammeAssignmentCountAggregateOutputType | null
+    _min: ProgrammeAssignmentMinAggregateOutputType | null
+    _max: ProgrammeAssignmentMaxAggregateOutputType | null
+  }
+
+  export type ProgrammeAssignmentMinAggregateOutputType = {
+    id: string | null
+    programmeId: string | null
+    ngoId: string | null
+    status: $Enums.ProgrammeAssignmentStatus | null
+    notes: string | null
+    assignedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProgrammeAssignmentMaxAggregateOutputType = {
+    id: string | null
+    programmeId: string | null
+    ngoId: string | null
+    status: $Enums.ProgrammeAssignmentStatus | null
+    notes: string | null
+    assignedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProgrammeAssignmentCountAggregateOutputType = {
+    id: number
+    programmeId: number
+    ngoId: number
+    status: number
+    notes: number
+    assignedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProgrammeAssignmentMinAggregateInputType = {
+    id?: true
+    programmeId?: true
+    ngoId?: true
+    status?: true
+    notes?: true
+    assignedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProgrammeAssignmentMaxAggregateInputType = {
+    id?: true
+    programmeId?: true
+    ngoId?: true
+    status?: true
+    notes?: true
+    assignedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProgrammeAssignmentCountAggregateInputType = {
+    id?: true
+    programmeId?: true
+    ngoId?: true
+    status?: true
+    notes?: true
+    assignedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProgrammeAssignmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProgrammeAssignment to aggregate.
+     */
+    where?: ProgrammeAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgrammeAssignments to fetch.
+     */
+    orderBy?: ProgrammeAssignmentOrderByWithRelationInput | ProgrammeAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProgrammeAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgrammeAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgrammeAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProgrammeAssignments
+    **/
+    _count?: true | ProgrammeAssignmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProgrammeAssignmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProgrammeAssignmentMaxAggregateInputType
+  }
+
+  export type GetProgrammeAssignmentAggregateType<T extends ProgrammeAssignmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateProgrammeAssignment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProgrammeAssignment[P]>
+      : GetScalarType<T[P], AggregateProgrammeAssignment[P]>
+  }
+
+
+
+
+  export type ProgrammeAssignmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProgrammeAssignmentWhereInput
+    orderBy?: ProgrammeAssignmentOrderByWithAggregationInput | ProgrammeAssignmentOrderByWithAggregationInput[]
+    by: ProgrammeAssignmentScalarFieldEnum[] | ProgrammeAssignmentScalarFieldEnum
+    having?: ProgrammeAssignmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProgrammeAssignmentCountAggregateInputType | true
+    _min?: ProgrammeAssignmentMinAggregateInputType
+    _max?: ProgrammeAssignmentMaxAggregateInputType
+  }
+
+  export type ProgrammeAssignmentGroupByOutputType = {
+    id: string
+    programmeId: string
+    ngoId: string
+    status: $Enums.ProgrammeAssignmentStatus
+    notes: string | null
+    assignedAt: Date
+    createdAt: Date
+    updatedAt: Date
+    _count: ProgrammeAssignmentCountAggregateOutputType | null
+    _min: ProgrammeAssignmentMinAggregateOutputType | null
+    _max: ProgrammeAssignmentMaxAggregateOutputType | null
+  }
+
+  type GetProgrammeAssignmentGroupByPayload<T extends ProgrammeAssignmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProgrammeAssignmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProgrammeAssignmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProgrammeAssignmentGroupByOutputType[P]>
+            : GetScalarType<T[P], ProgrammeAssignmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProgrammeAssignmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    programmeId?: boolean
+    ngoId?: boolean
+    status?: boolean
+    notes?: boolean
+    assignedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    programme?: boolean | CSRProgrammeDefaultArgs<ExtArgs>
+    ngo?: boolean | NGOProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programmeAssignment"]>
+
+  export type ProgrammeAssignmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    programmeId?: boolean
+    ngoId?: boolean
+    status?: boolean
+    notes?: boolean
+    assignedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    programme?: boolean | CSRProgrammeDefaultArgs<ExtArgs>
+    ngo?: boolean | NGOProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programmeAssignment"]>
+
+  export type ProgrammeAssignmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    programmeId?: boolean
+    ngoId?: boolean
+    status?: boolean
+    notes?: boolean
+    assignedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    programme?: boolean | CSRProgrammeDefaultArgs<ExtArgs>
+    ngo?: boolean | NGOProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["programmeAssignment"]>
+
+  export type ProgrammeAssignmentSelectScalar = {
+    id?: boolean
+    programmeId?: boolean
+    ngoId?: boolean
+    status?: boolean
+    notes?: boolean
+    assignedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProgrammeAssignmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "programmeId" | "ngoId" | "status" | "notes" | "assignedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["programmeAssignment"]>
+  export type ProgrammeAssignmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    programme?: boolean | CSRProgrammeDefaultArgs<ExtArgs>
+    ngo?: boolean | NGOProfileDefaultArgs<ExtArgs>
+  }
+  export type ProgrammeAssignmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    programme?: boolean | CSRProgrammeDefaultArgs<ExtArgs>
+    ngo?: boolean | NGOProfileDefaultArgs<ExtArgs>
+  }
+  export type ProgrammeAssignmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    programme?: boolean | CSRProgrammeDefaultArgs<ExtArgs>
+    ngo?: boolean | NGOProfileDefaultArgs<ExtArgs>
+  }
+
+  export type $ProgrammeAssignmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProgrammeAssignment"
+    objects: {
+      programme: Prisma.$CSRProgrammePayload<ExtArgs>
+      ngo: Prisma.$NGOProfilePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      programmeId: string
+      ngoId: string
+      status: $Enums.ProgrammeAssignmentStatus
+      notes: string | null
+      assignedAt: Date
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["programmeAssignment"]>
+    composites: {}
+  }
+
+  type ProgrammeAssignmentGetPayload<S extends boolean | null | undefined | ProgrammeAssignmentDefaultArgs> = $Result.GetResult<Prisma.$ProgrammeAssignmentPayload, S>
+
+  type ProgrammeAssignmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProgrammeAssignmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProgrammeAssignmentCountAggregateInputType | true
+    }
+
+  export interface ProgrammeAssignmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProgrammeAssignment'], meta: { name: 'ProgrammeAssignment' } }
+    /**
+     * Find zero or one ProgrammeAssignment that matches the filter.
+     * @param {ProgrammeAssignmentFindUniqueArgs} args - Arguments to find a ProgrammeAssignment
+     * @example
+     * // Get one ProgrammeAssignment
+     * const programmeAssignment = await prisma.programmeAssignment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProgrammeAssignmentFindUniqueArgs>(args: SelectSubset<T, ProgrammeAssignmentFindUniqueArgs<ExtArgs>>): Prisma__ProgrammeAssignmentClient<$Result.GetResult<Prisma.$ProgrammeAssignmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProgrammeAssignment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProgrammeAssignmentFindUniqueOrThrowArgs} args - Arguments to find a ProgrammeAssignment
+     * @example
+     * // Get one ProgrammeAssignment
+     * const programmeAssignment = await prisma.programmeAssignment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProgrammeAssignmentFindUniqueOrThrowArgs>(args: SelectSubset<T, ProgrammeAssignmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProgrammeAssignmentClient<$Result.GetResult<Prisma.$ProgrammeAssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProgrammeAssignment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgrammeAssignmentFindFirstArgs} args - Arguments to find a ProgrammeAssignment
+     * @example
+     * // Get one ProgrammeAssignment
+     * const programmeAssignment = await prisma.programmeAssignment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProgrammeAssignmentFindFirstArgs>(args?: SelectSubset<T, ProgrammeAssignmentFindFirstArgs<ExtArgs>>): Prisma__ProgrammeAssignmentClient<$Result.GetResult<Prisma.$ProgrammeAssignmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProgrammeAssignment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgrammeAssignmentFindFirstOrThrowArgs} args - Arguments to find a ProgrammeAssignment
+     * @example
+     * // Get one ProgrammeAssignment
+     * const programmeAssignment = await prisma.programmeAssignment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProgrammeAssignmentFindFirstOrThrowArgs>(args?: SelectSubset<T, ProgrammeAssignmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProgrammeAssignmentClient<$Result.GetResult<Prisma.$ProgrammeAssignmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProgrammeAssignments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgrammeAssignmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProgrammeAssignments
+     * const programmeAssignments = await prisma.programmeAssignment.findMany()
+     * 
+     * // Get first 10 ProgrammeAssignments
+     * const programmeAssignments = await prisma.programmeAssignment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const programmeAssignmentWithIdOnly = await prisma.programmeAssignment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProgrammeAssignmentFindManyArgs>(args?: SelectSubset<T, ProgrammeAssignmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgrammeAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProgrammeAssignment.
+     * @param {ProgrammeAssignmentCreateArgs} args - Arguments to create a ProgrammeAssignment.
+     * @example
+     * // Create one ProgrammeAssignment
+     * const ProgrammeAssignment = await prisma.programmeAssignment.create({
+     *   data: {
+     *     // ... data to create a ProgrammeAssignment
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProgrammeAssignmentCreateArgs>(args: SelectSubset<T, ProgrammeAssignmentCreateArgs<ExtArgs>>): Prisma__ProgrammeAssignmentClient<$Result.GetResult<Prisma.$ProgrammeAssignmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProgrammeAssignments.
+     * @param {ProgrammeAssignmentCreateManyArgs} args - Arguments to create many ProgrammeAssignments.
+     * @example
+     * // Create many ProgrammeAssignments
+     * const programmeAssignment = await prisma.programmeAssignment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProgrammeAssignmentCreateManyArgs>(args?: SelectSubset<T, ProgrammeAssignmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProgrammeAssignments and returns the data saved in the database.
+     * @param {ProgrammeAssignmentCreateManyAndReturnArgs} args - Arguments to create many ProgrammeAssignments.
+     * @example
+     * // Create many ProgrammeAssignments
+     * const programmeAssignment = await prisma.programmeAssignment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProgrammeAssignments and only return the `id`
+     * const programmeAssignmentWithIdOnly = await prisma.programmeAssignment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProgrammeAssignmentCreateManyAndReturnArgs>(args?: SelectSubset<T, ProgrammeAssignmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgrammeAssignmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProgrammeAssignment.
+     * @param {ProgrammeAssignmentDeleteArgs} args - Arguments to delete one ProgrammeAssignment.
+     * @example
+     * // Delete one ProgrammeAssignment
+     * const ProgrammeAssignment = await prisma.programmeAssignment.delete({
+     *   where: {
+     *     // ... filter to delete one ProgrammeAssignment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProgrammeAssignmentDeleteArgs>(args: SelectSubset<T, ProgrammeAssignmentDeleteArgs<ExtArgs>>): Prisma__ProgrammeAssignmentClient<$Result.GetResult<Prisma.$ProgrammeAssignmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProgrammeAssignment.
+     * @param {ProgrammeAssignmentUpdateArgs} args - Arguments to update one ProgrammeAssignment.
+     * @example
+     * // Update one ProgrammeAssignment
+     * const programmeAssignment = await prisma.programmeAssignment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProgrammeAssignmentUpdateArgs>(args: SelectSubset<T, ProgrammeAssignmentUpdateArgs<ExtArgs>>): Prisma__ProgrammeAssignmentClient<$Result.GetResult<Prisma.$ProgrammeAssignmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProgrammeAssignments.
+     * @param {ProgrammeAssignmentDeleteManyArgs} args - Arguments to filter ProgrammeAssignments to delete.
+     * @example
+     * // Delete a few ProgrammeAssignments
+     * const { count } = await prisma.programmeAssignment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProgrammeAssignmentDeleteManyArgs>(args?: SelectSubset<T, ProgrammeAssignmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProgrammeAssignments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgrammeAssignmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProgrammeAssignments
+     * const programmeAssignment = await prisma.programmeAssignment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProgrammeAssignmentUpdateManyArgs>(args: SelectSubset<T, ProgrammeAssignmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProgrammeAssignments and returns the data updated in the database.
+     * @param {ProgrammeAssignmentUpdateManyAndReturnArgs} args - Arguments to update many ProgrammeAssignments.
+     * @example
+     * // Update many ProgrammeAssignments
+     * const programmeAssignment = await prisma.programmeAssignment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProgrammeAssignments and only return the `id`
+     * const programmeAssignmentWithIdOnly = await prisma.programmeAssignment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProgrammeAssignmentUpdateManyAndReturnArgs>(args: SelectSubset<T, ProgrammeAssignmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProgrammeAssignmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProgrammeAssignment.
+     * @param {ProgrammeAssignmentUpsertArgs} args - Arguments to update or create a ProgrammeAssignment.
+     * @example
+     * // Update or create a ProgrammeAssignment
+     * const programmeAssignment = await prisma.programmeAssignment.upsert({
+     *   create: {
+     *     // ... data to create a ProgrammeAssignment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProgrammeAssignment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProgrammeAssignmentUpsertArgs>(args: SelectSubset<T, ProgrammeAssignmentUpsertArgs<ExtArgs>>): Prisma__ProgrammeAssignmentClient<$Result.GetResult<Prisma.$ProgrammeAssignmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProgrammeAssignments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgrammeAssignmentCountArgs} args - Arguments to filter ProgrammeAssignments to count.
+     * @example
+     * // Count the number of ProgrammeAssignments
+     * const count = await prisma.programmeAssignment.count({
+     *   where: {
+     *     // ... the filter for the ProgrammeAssignments we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProgrammeAssignmentCountArgs>(
+      args?: Subset<T, ProgrammeAssignmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProgrammeAssignmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProgrammeAssignment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgrammeAssignmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProgrammeAssignmentAggregateArgs>(args: Subset<T, ProgrammeAssignmentAggregateArgs>): Prisma.PrismaPromise<GetProgrammeAssignmentAggregateType<T>>
+
+    /**
+     * Group by ProgrammeAssignment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProgrammeAssignmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProgrammeAssignmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProgrammeAssignmentGroupByArgs['orderBy'] }
+        : { orderBy?: ProgrammeAssignmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProgrammeAssignmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProgrammeAssignmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProgrammeAssignment model
+   */
+  readonly fields: ProgrammeAssignmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProgrammeAssignment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProgrammeAssignmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    programme<T extends CSRProgrammeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CSRProgrammeDefaultArgs<ExtArgs>>): Prisma__CSRProgrammeClient<$Result.GetResult<Prisma.$CSRProgrammePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    ngo<T extends NGOProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, NGOProfileDefaultArgs<ExtArgs>>): Prisma__NGOProfileClient<$Result.GetResult<Prisma.$NGOProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProgrammeAssignment model
+   */
+  interface ProgrammeAssignmentFieldRefs {
+    readonly id: FieldRef<"ProgrammeAssignment", 'String'>
+    readonly programmeId: FieldRef<"ProgrammeAssignment", 'String'>
+    readonly ngoId: FieldRef<"ProgrammeAssignment", 'String'>
+    readonly status: FieldRef<"ProgrammeAssignment", 'ProgrammeAssignmentStatus'>
+    readonly notes: FieldRef<"ProgrammeAssignment", 'String'>
+    readonly assignedAt: FieldRef<"ProgrammeAssignment", 'DateTime'>
+    readonly createdAt: FieldRef<"ProgrammeAssignment", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProgrammeAssignment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProgrammeAssignment findUnique
+   */
+  export type ProgrammeAssignmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeAssignment
+     */
+    select?: ProgrammeAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeAssignment
+     */
+    omit?: ProgrammeAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgrammeAssignment to fetch.
+     */
+    where: ProgrammeAssignmentWhereUniqueInput
+  }
+
+  /**
+   * ProgrammeAssignment findUniqueOrThrow
+   */
+  export type ProgrammeAssignmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeAssignment
+     */
+    select?: ProgrammeAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeAssignment
+     */
+    omit?: ProgrammeAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgrammeAssignment to fetch.
+     */
+    where: ProgrammeAssignmentWhereUniqueInput
+  }
+
+  /**
+   * ProgrammeAssignment findFirst
+   */
+  export type ProgrammeAssignmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeAssignment
+     */
+    select?: ProgrammeAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeAssignment
+     */
+    omit?: ProgrammeAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgrammeAssignment to fetch.
+     */
+    where?: ProgrammeAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgrammeAssignments to fetch.
+     */
+    orderBy?: ProgrammeAssignmentOrderByWithRelationInput | ProgrammeAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProgrammeAssignments.
+     */
+    cursor?: ProgrammeAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgrammeAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgrammeAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgrammeAssignments.
+     */
+    distinct?: ProgrammeAssignmentScalarFieldEnum | ProgrammeAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * ProgrammeAssignment findFirstOrThrow
+   */
+  export type ProgrammeAssignmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeAssignment
+     */
+    select?: ProgrammeAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeAssignment
+     */
+    omit?: ProgrammeAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgrammeAssignment to fetch.
+     */
+    where?: ProgrammeAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgrammeAssignments to fetch.
+     */
+    orderBy?: ProgrammeAssignmentOrderByWithRelationInput | ProgrammeAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProgrammeAssignments.
+     */
+    cursor?: ProgrammeAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgrammeAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgrammeAssignments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProgrammeAssignments.
+     */
+    distinct?: ProgrammeAssignmentScalarFieldEnum | ProgrammeAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * ProgrammeAssignment findMany
+   */
+  export type ProgrammeAssignmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeAssignment
+     */
+    select?: ProgrammeAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeAssignment
+     */
+    omit?: ProgrammeAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter, which ProgrammeAssignments to fetch.
+     */
+    where?: ProgrammeAssignmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProgrammeAssignments to fetch.
+     */
+    orderBy?: ProgrammeAssignmentOrderByWithRelationInput | ProgrammeAssignmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProgrammeAssignments.
+     */
+    cursor?: ProgrammeAssignmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProgrammeAssignments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProgrammeAssignments.
+     */
+    skip?: number
+    distinct?: ProgrammeAssignmentScalarFieldEnum | ProgrammeAssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * ProgrammeAssignment create
+   */
+  export type ProgrammeAssignmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeAssignment
+     */
+    select?: ProgrammeAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeAssignment
+     */
+    omit?: ProgrammeAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeAssignmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProgrammeAssignment.
+     */
+    data: XOR<ProgrammeAssignmentCreateInput, ProgrammeAssignmentUncheckedCreateInput>
+  }
+
+  /**
+   * ProgrammeAssignment createMany
+   */
+  export type ProgrammeAssignmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProgrammeAssignments.
+     */
+    data: ProgrammeAssignmentCreateManyInput | ProgrammeAssignmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProgrammeAssignment createManyAndReturn
+   */
+  export type ProgrammeAssignmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeAssignment
+     */
+    select?: ProgrammeAssignmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeAssignment
+     */
+    omit?: ProgrammeAssignmentOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProgrammeAssignments.
+     */
+    data: ProgrammeAssignmentCreateManyInput | ProgrammeAssignmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeAssignmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProgrammeAssignment update
+   */
+  export type ProgrammeAssignmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeAssignment
+     */
+    select?: ProgrammeAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeAssignment
+     */
+    omit?: ProgrammeAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeAssignmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProgrammeAssignment.
+     */
+    data: XOR<ProgrammeAssignmentUpdateInput, ProgrammeAssignmentUncheckedUpdateInput>
+    /**
+     * Choose, which ProgrammeAssignment to update.
+     */
+    where: ProgrammeAssignmentWhereUniqueInput
+  }
+
+  /**
+   * ProgrammeAssignment updateMany
+   */
+  export type ProgrammeAssignmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProgrammeAssignments.
+     */
+    data: XOR<ProgrammeAssignmentUpdateManyMutationInput, ProgrammeAssignmentUncheckedUpdateManyInput>
+    /**
+     * Filter which ProgrammeAssignments to update
+     */
+    where?: ProgrammeAssignmentWhereInput
+    /**
+     * Limit how many ProgrammeAssignments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProgrammeAssignment updateManyAndReturn
+   */
+  export type ProgrammeAssignmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeAssignment
+     */
+    select?: ProgrammeAssignmentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeAssignment
+     */
+    omit?: ProgrammeAssignmentOmit<ExtArgs> | null
+    /**
+     * The data used to update ProgrammeAssignments.
+     */
+    data: XOR<ProgrammeAssignmentUpdateManyMutationInput, ProgrammeAssignmentUncheckedUpdateManyInput>
+    /**
+     * Filter which ProgrammeAssignments to update
+     */
+    where?: ProgrammeAssignmentWhereInput
+    /**
+     * Limit how many ProgrammeAssignments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeAssignmentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProgrammeAssignment upsert
+   */
+  export type ProgrammeAssignmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeAssignment
+     */
+    select?: ProgrammeAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeAssignment
+     */
+    omit?: ProgrammeAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeAssignmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProgrammeAssignment to update in case it exists.
+     */
+    where: ProgrammeAssignmentWhereUniqueInput
+    /**
+     * In case the ProgrammeAssignment found by the `where` argument doesn't exist, create a new ProgrammeAssignment with this data.
+     */
+    create: XOR<ProgrammeAssignmentCreateInput, ProgrammeAssignmentUncheckedCreateInput>
+    /**
+     * In case the ProgrammeAssignment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProgrammeAssignmentUpdateInput, ProgrammeAssignmentUncheckedUpdateInput>
+  }
+
+  /**
+   * ProgrammeAssignment delete
+   */
+  export type ProgrammeAssignmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeAssignment
+     */
+    select?: ProgrammeAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeAssignment
+     */
+    omit?: ProgrammeAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeAssignmentInclude<ExtArgs> | null
+    /**
+     * Filter which ProgrammeAssignment to delete.
+     */
+    where: ProgrammeAssignmentWhereUniqueInput
+  }
+
+  /**
+   * ProgrammeAssignment deleteMany
+   */
+  export type ProgrammeAssignmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProgrammeAssignments to delete
+     */
+    where?: ProgrammeAssignmentWhereInput
+    /**
+     * Limit how many ProgrammeAssignments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProgrammeAssignment without action
+   */
+  export type ProgrammeAssignmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProgrammeAssignment
+     */
+    select?: ProgrammeAssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProgrammeAssignment
+     */
+    omit?: ProgrammeAssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProgrammeAssignmentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -22443,6 +26362,53 @@ export namespace Prisma {
   export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
 
 
+  export const CSRProgrammeScalarFieldEnum: {
+    id: 'id',
+    companyId: 'companyId',
+    title: 'title',
+    description: 'description',
+    status: 'status',
+    budget: 'budget',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt'
+  };
+
+  export type CSRProgrammeScalarFieldEnum = (typeof CSRProgrammeScalarFieldEnum)[keyof typeof CSRProgrammeScalarFieldEnum]
+
+
+  export const ProgrammeMilestoneScalarFieldEnum: {
+    id: 'id',
+    programmeId: 'programmeId',
+    title: 'title',
+    description: 'description',
+    dueDate: 'dueDate',
+    status: 'status',
+    progress: 'progress',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    deletedAt: 'deletedAt'
+  };
+
+  export type ProgrammeMilestoneScalarFieldEnum = (typeof ProgrammeMilestoneScalarFieldEnum)[keyof typeof ProgrammeMilestoneScalarFieldEnum]
+
+
+  export const ProgrammeAssignmentScalarFieldEnum: {
+    id: 'id',
+    programmeId: 'programmeId',
+    ngoId: 'ngoId',
+    status: 'status',
+    notes: 'notes',
+    assignedAt: 'assignedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProgrammeAssignmentScalarFieldEnum = (typeof ProgrammeAssignmentScalarFieldEnum)[keyof typeof ProgrammeAssignmentScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -22619,6 +26585,48 @@ export namespace Prisma {
    * Reference to a field of type 'QueryMode'
    */
   export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'ProgrammeStatus'
+   */
+  export type EnumProgrammeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProgrammeStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ProgrammeStatus[]'
+   */
+  export type ListEnumProgrammeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProgrammeStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ProgrammeMilestoneStatus'
+   */
+  export type EnumProgrammeMilestoneStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProgrammeMilestoneStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ProgrammeMilestoneStatus[]'
+   */
+  export type ListEnumProgrammeMilestoneStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProgrammeMilestoneStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ProgrammeAssignmentStatus'
+   */
+  export type EnumProgrammeAssignmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProgrammeAssignmentStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ProgrammeAssignmentStatus[]'
+   */
+  export type ListEnumProgrammeAssignmentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProgrammeAssignmentStatus[]'>
     
   /**
    * Deep Input Types
@@ -22803,6 +26811,7 @@ export namespace Prisma {
     documents?: DocumentListRelationFilter
     financialReports?: FinancialReportListRelationFilter
     approvals?: CampaignApprovalListRelationFilter
+    programmeAssignments?: ProgrammeAssignmentListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -22829,6 +26838,7 @@ export namespace Prisma {
     documents?: DocumentOrderByRelationAggregateInput
     financialReports?: FinancialReportOrderByRelationAggregateInput
     approvals?: CampaignApprovalOrderByRelationAggregateInput
+    programmeAssignments?: ProgrammeAssignmentOrderByRelationAggregateInput
     user?: UserOrderByWithRelationInput
   }
 
@@ -22858,6 +26868,7 @@ export namespace Prisma {
     documents?: DocumentListRelationFilter
     financialReports?: FinancialReportListRelationFilter
     approvals?: CampaignApprovalListRelationFilter
+    programmeAssignments?: ProgrammeAssignmentListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "userId">
 
@@ -22929,6 +26940,7 @@ export namespace Prisma {
     donations?: DonationListRelationFilter
     approvals?: CampaignApprovalListRelationFilter
     utilizationReports?: UtilizationReportListRelationFilter
+    programmes?: CSRProgrammeListRelationFilter
   }
 
   export type CompanyProfileOrderByWithRelationInput = {
@@ -22952,6 +26964,7 @@ export namespace Prisma {
     donations?: DonationOrderByRelationAggregateInput
     approvals?: CampaignApprovalOrderByRelationAggregateInput
     utilizationReports?: UtilizationReportOrderByRelationAggregateInput
+    programmes?: CSRProgrammeOrderByRelationAggregateInput
   }
 
   export type CompanyProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -22978,6 +26991,7 @@ export namespace Prisma {
     donations?: DonationListRelationFilter
     approvals?: CampaignApprovalListRelationFilter
     utilizationReports?: UtilizationReportListRelationFilter
+    programmes?: CSRProgrammeListRelationFilter
   }, "id" | "userId" | "cin">
 
   export type CompanyProfileOrderByWithAggregationInput = {
@@ -24006,6 +28020,255 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"AuditLog"> | Date | string
   }
 
+  export type CSRProgrammeWhereInput = {
+    AND?: CSRProgrammeWhereInput | CSRProgrammeWhereInput[]
+    OR?: CSRProgrammeWhereInput[]
+    NOT?: CSRProgrammeWhereInput | CSRProgrammeWhereInput[]
+    id?: StringFilter<"CSRProgramme"> | string
+    companyId?: StringFilter<"CSRProgramme"> | string
+    title?: StringFilter<"CSRProgramme"> | string
+    description?: StringNullableFilter<"CSRProgramme"> | string | null
+    status?: EnumProgrammeStatusFilter<"CSRProgramme"> | $Enums.ProgrammeStatus
+    budget?: FloatNullableFilter<"CSRProgramme"> | number | null
+    startDate?: DateTimeNullableFilter<"CSRProgramme"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"CSRProgramme"> | Date | string | null
+    createdAt?: DateTimeFilter<"CSRProgramme"> | Date | string
+    updatedAt?: DateTimeFilter<"CSRProgramme"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"CSRProgramme"> | Date | string | null
+    company?: XOR<CompanyProfileScalarRelationFilter, CompanyProfileWhereInput>
+    milestones?: ProgrammeMilestoneListRelationFilter
+    assignments?: ProgrammeAssignmentListRelationFilter
+  }
+
+  export type CSRProgrammeOrderByWithRelationInput = {
+    id?: SortOrder
+    companyId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    status?: SortOrder
+    budget?: SortOrderInput | SortOrder
+    startDate?: SortOrderInput | SortOrder
+    endDate?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    company?: CompanyProfileOrderByWithRelationInput
+    milestones?: ProgrammeMilestoneOrderByRelationAggregateInput
+    assignments?: ProgrammeAssignmentOrderByRelationAggregateInput
+  }
+
+  export type CSRProgrammeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CSRProgrammeWhereInput | CSRProgrammeWhereInput[]
+    OR?: CSRProgrammeWhereInput[]
+    NOT?: CSRProgrammeWhereInput | CSRProgrammeWhereInput[]
+    companyId?: StringFilter<"CSRProgramme"> | string
+    title?: StringFilter<"CSRProgramme"> | string
+    description?: StringNullableFilter<"CSRProgramme"> | string | null
+    status?: EnumProgrammeStatusFilter<"CSRProgramme"> | $Enums.ProgrammeStatus
+    budget?: FloatNullableFilter<"CSRProgramme"> | number | null
+    startDate?: DateTimeNullableFilter<"CSRProgramme"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"CSRProgramme"> | Date | string | null
+    createdAt?: DateTimeFilter<"CSRProgramme"> | Date | string
+    updatedAt?: DateTimeFilter<"CSRProgramme"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"CSRProgramme"> | Date | string | null
+    company?: XOR<CompanyProfileScalarRelationFilter, CompanyProfileWhereInput>
+    milestones?: ProgrammeMilestoneListRelationFilter
+    assignments?: ProgrammeAssignmentListRelationFilter
+  }, "id">
+
+  export type CSRProgrammeOrderByWithAggregationInput = {
+    id?: SortOrder
+    companyId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    status?: SortOrder
+    budget?: SortOrderInput | SortOrder
+    startDate?: SortOrderInput | SortOrder
+    endDate?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    _count?: CSRProgrammeCountOrderByAggregateInput
+    _avg?: CSRProgrammeAvgOrderByAggregateInput
+    _max?: CSRProgrammeMaxOrderByAggregateInput
+    _min?: CSRProgrammeMinOrderByAggregateInput
+    _sum?: CSRProgrammeSumOrderByAggregateInput
+  }
+
+  export type CSRProgrammeScalarWhereWithAggregatesInput = {
+    AND?: CSRProgrammeScalarWhereWithAggregatesInput | CSRProgrammeScalarWhereWithAggregatesInput[]
+    OR?: CSRProgrammeScalarWhereWithAggregatesInput[]
+    NOT?: CSRProgrammeScalarWhereWithAggregatesInput | CSRProgrammeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CSRProgramme"> | string
+    companyId?: StringWithAggregatesFilter<"CSRProgramme"> | string
+    title?: StringWithAggregatesFilter<"CSRProgramme"> | string
+    description?: StringNullableWithAggregatesFilter<"CSRProgramme"> | string | null
+    status?: EnumProgrammeStatusWithAggregatesFilter<"CSRProgramme"> | $Enums.ProgrammeStatus
+    budget?: FloatNullableWithAggregatesFilter<"CSRProgramme"> | number | null
+    startDate?: DateTimeNullableWithAggregatesFilter<"CSRProgramme"> | Date | string | null
+    endDate?: DateTimeNullableWithAggregatesFilter<"CSRProgramme"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"CSRProgramme"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CSRProgramme"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"CSRProgramme"> | Date | string | null
+  }
+
+  export type ProgrammeMilestoneWhereInput = {
+    AND?: ProgrammeMilestoneWhereInput | ProgrammeMilestoneWhereInput[]
+    OR?: ProgrammeMilestoneWhereInput[]
+    NOT?: ProgrammeMilestoneWhereInput | ProgrammeMilestoneWhereInput[]
+    id?: StringFilter<"ProgrammeMilestone"> | string
+    programmeId?: StringFilter<"ProgrammeMilestone"> | string
+    title?: StringFilter<"ProgrammeMilestone"> | string
+    description?: StringNullableFilter<"ProgrammeMilestone"> | string | null
+    dueDate?: DateTimeNullableFilter<"ProgrammeMilestone"> | Date | string | null
+    status?: EnumProgrammeMilestoneStatusFilter<"ProgrammeMilestone"> | $Enums.ProgrammeMilestoneStatus
+    progress?: IntFilter<"ProgrammeMilestone"> | number
+    createdAt?: DateTimeFilter<"ProgrammeMilestone"> | Date | string
+    updatedAt?: DateTimeFilter<"ProgrammeMilestone"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ProgrammeMilestone"> | Date | string | null
+    programme?: XOR<CSRProgrammeScalarRelationFilter, CSRProgrammeWhereInput>
+  }
+
+  export type ProgrammeMilestoneOrderByWithRelationInput = {
+    id?: SortOrder
+    programmeId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    dueDate?: SortOrderInput | SortOrder
+    status?: SortOrder
+    progress?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    programme?: CSRProgrammeOrderByWithRelationInput
+  }
+
+  export type ProgrammeMilestoneWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProgrammeMilestoneWhereInput | ProgrammeMilestoneWhereInput[]
+    OR?: ProgrammeMilestoneWhereInput[]
+    NOT?: ProgrammeMilestoneWhereInput | ProgrammeMilestoneWhereInput[]
+    programmeId?: StringFilter<"ProgrammeMilestone"> | string
+    title?: StringFilter<"ProgrammeMilestone"> | string
+    description?: StringNullableFilter<"ProgrammeMilestone"> | string | null
+    dueDate?: DateTimeNullableFilter<"ProgrammeMilestone"> | Date | string | null
+    status?: EnumProgrammeMilestoneStatusFilter<"ProgrammeMilestone"> | $Enums.ProgrammeMilestoneStatus
+    progress?: IntFilter<"ProgrammeMilestone"> | number
+    createdAt?: DateTimeFilter<"ProgrammeMilestone"> | Date | string
+    updatedAt?: DateTimeFilter<"ProgrammeMilestone"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ProgrammeMilestone"> | Date | string | null
+    programme?: XOR<CSRProgrammeScalarRelationFilter, CSRProgrammeWhereInput>
+  }, "id">
+
+  export type ProgrammeMilestoneOrderByWithAggregationInput = {
+    id?: SortOrder
+    programmeId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    dueDate?: SortOrderInput | SortOrder
+    status?: SortOrder
+    progress?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    _count?: ProgrammeMilestoneCountOrderByAggregateInput
+    _avg?: ProgrammeMilestoneAvgOrderByAggregateInput
+    _max?: ProgrammeMilestoneMaxOrderByAggregateInput
+    _min?: ProgrammeMilestoneMinOrderByAggregateInput
+    _sum?: ProgrammeMilestoneSumOrderByAggregateInput
+  }
+
+  export type ProgrammeMilestoneScalarWhereWithAggregatesInput = {
+    AND?: ProgrammeMilestoneScalarWhereWithAggregatesInput | ProgrammeMilestoneScalarWhereWithAggregatesInput[]
+    OR?: ProgrammeMilestoneScalarWhereWithAggregatesInput[]
+    NOT?: ProgrammeMilestoneScalarWhereWithAggregatesInput | ProgrammeMilestoneScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProgrammeMilestone"> | string
+    programmeId?: StringWithAggregatesFilter<"ProgrammeMilestone"> | string
+    title?: StringWithAggregatesFilter<"ProgrammeMilestone"> | string
+    description?: StringNullableWithAggregatesFilter<"ProgrammeMilestone"> | string | null
+    dueDate?: DateTimeNullableWithAggregatesFilter<"ProgrammeMilestone"> | Date | string | null
+    status?: EnumProgrammeMilestoneStatusWithAggregatesFilter<"ProgrammeMilestone"> | $Enums.ProgrammeMilestoneStatus
+    progress?: IntWithAggregatesFilter<"ProgrammeMilestone"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"ProgrammeMilestone"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProgrammeMilestone"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"ProgrammeMilestone"> | Date | string | null
+  }
+
+  export type ProgrammeAssignmentWhereInput = {
+    AND?: ProgrammeAssignmentWhereInput | ProgrammeAssignmentWhereInput[]
+    OR?: ProgrammeAssignmentWhereInput[]
+    NOT?: ProgrammeAssignmentWhereInput | ProgrammeAssignmentWhereInput[]
+    id?: StringFilter<"ProgrammeAssignment"> | string
+    programmeId?: StringFilter<"ProgrammeAssignment"> | string
+    ngoId?: StringFilter<"ProgrammeAssignment"> | string
+    status?: EnumProgrammeAssignmentStatusFilter<"ProgrammeAssignment"> | $Enums.ProgrammeAssignmentStatus
+    notes?: StringNullableFilter<"ProgrammeAssignment"> | string | null
+    assignedAt?: DateTimeFilter<"ProgrammeAssignment"> | Date | string
+    createdAt?: DateTimeFilter<"ProgrammeAssignment"> | Date | string
+    updatedAt?: DateTimeFilter<"ProgrammeAssignment"> | Date | string
+    programme?: XOR<CSRProgrammeScalarRelationFilter, CSRProgrammeWhereInput>
+    ngo?: XOR<NGOProfileScalarRelationFilter, NGOProfileWhereInput>
+  }
+
+  export type ProgrammeAssignmentOrderByWithRelationInput = {
+    id?: SortOrder
+    programmeId?: SortOrder
+    ngoId?: SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    assignedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    programme?: CSRProgrammeOrderByWithRelationInput
+    ngo?: NGOProfileOrderByWithRelationInput
+  }
+
+  export type ProgrammeAssignmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    programmeId_ngoId?: ProgrammeAssignmentProgrammeIdNgoIdCompoundUniqueInput
+    AND?: ProgrammeAssignmentWhereInput | ProgrammeAssignmentWhereInput[]
+    OR?: ProgrammeAssignmentWhereInput[]
+    NOT?: ProgrammeAssignmentWhereInput | ProgrammeAssignmentWhereInput[]
+    programmeId?: StringFilter<"ProgrammeAssignment"> | string
+    ngoId?: StringFilter<"ProgrammeAssignment"> | string
+    status?: EnumProgrammeAssignmentStatusFilter<"ProgrammeAssignment"> | $Enums.ProgrammeAssignmentStatus
+    notes?: StringNullableFilter<"ProgrammeAssignment"> | string | null
+    assignedAt?: DateTimeFilter<"ProgrammeAssignment"> | Date | string
+    createdAt?: DateTimeFilter<"ProgrammeAssignment"> | Date | string
+    updatedAt?: DateTimeFilter<"ProgrammeAssignment"> | Date | string
+    programme?: XOR<CSRProgrammeScalarRelationFilter, CSRProgrammeWhereInput>
+    ngo?: XOR<NGOProfileScalarRelationFilter, NGOProfileWhereInput>
+  }, "id" | "programmeId_ngoId">
+
+  export type ProgrammeAssignmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    programmeId?: SortOrder
+    ngoId?: SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    assignedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProgrammeAssignmentCountOrderByAggregateInput
+    _max?: ProgrammeAssignmentMaxOrderByAggregateInput
+    _min?: ProgrammeAssignmentMinOrderByAggregateInput
+  }
+
+  export type ProgrammeAssignmentScalarWhereWithAggregatesInput = {
+    AND?: ProgrammeAssignmentScalarWhereWithAggregatesInput | ProgrammeAssignmentScalarWhereWithAggregatesInput[]
+    OR?: ProgrammeAssignmentScalarWhereWithAggregatesInput[]
+    NOT?: ProgrammeAssignmentScalarWhereWithAggregatesInput | ProgrammeAssignmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProgrammeAssignment"> | string
+    programmeId?: StringWithAggregatesFilter<"ProgrammeAssignment"> | string
+    ngoId?: StringWithAggregatesFilter<"ProgrammeAssignment"> | string
+    status?: EnumProgrammeAssignmentStatusWithAggregatesFilter<"ProgrammeAssignment"> | $Enums.ProgrammeAssignmentStatus
+    notes?: StringNullableWithAggregatesFilter<"ProgrammeAssignment"> | string | null
+    assignedAt?: DateTimeWithAggregatesFilter<"ProgrammeAssignment"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"ProgrammeAssignment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProgrammeAssignment"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name: string
@@ -24201,6 +28464,7 @@ export namespace Prisma {
     documents?: DocumentCreateNestedManyWithoutNgoInput
     financialReports?: FinancialReportCreateNestedManyWithoutNgoInput
     approvals?: CampaignApprovalCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentCreateNestedManyWithoutNgoInput
     user: UserCreateNestedOneWithoutNgoProfileInput
   }
 
@@ -24227,6 +28491,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedCreateNestedManyWithoutNgoInput
     financialReports?: FinancialReportUncheckedCreateNestedManyWithoutNgoInput
     approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedCreateNestedManyWithoutNgoInput
   }
 
   export type NGOProfileUpdateInput = {
@@ -24251,6 +28516,7 @@ export namespace Prisma {
     documents?: DocumentUpdateManyWithoutNgoNestedInput
     financialReports?: FinancialReportUpdateManyWithoutNgoNestedInput
     approvals?: CampaignApprovalUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUpdateManyWithoutNgoNestedInput
     user?: UserUpdateOneRequiredWithoutNgoProfileNestedInput
   }
 
@@ -24277,6 +28543,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedUpdateManyWithoutNgoNestedInput
     financialReports?: FinancialReportUncheckedUpdateManyWithoutNgoNestedInput
     approvals?: CampaignApprovalUncheckedUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedUpdateManyWithoutNgoNestedInput
   }
 
   export type NGOProfileCreateManyInput = {
@@ -24352,6 +28619,7 @@ export namespace Prisma {
     donations?: DonationCreateNestedManyWithoutCompanyInput
     approvals?: CampaignApprovalCreateNestedManyWithoutCompanyInput
     utilizationReports?: UtilizationReportCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileUncheckedCreateInput = {
@@ -24374,6 +28642,7 @@ export namespace Prisma {
     donations?: DonationUncheckedCreateNestedManyWithoutCompanyInput
     approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutCompanyInput
     utilizationReports?: UtilizationReportUncheckedCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileUpdateInput = {
@@ -24396,6 +28665,7 @@ export namespace Prisma {
     donations?: DonationUpdateManyWithoutCompanyNestedInput
     approvals?: CampaignApprovalUpdateManyWithoutCompanyNestedInput
     utilizationReports?: UtilizationReportUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyProfileUncheckedUpdateInput = {
@@ -24418,6 +28688,7 @@ export namespace Prisma {
     donations?: DonationUncheckedUpdateManyWithoutCompanyNestedInput
     approvals?: CampaignApprovalUncheckedUpdateManyWithoutCompanyNestedInput
     utilizationReports?: UtilizationReportUncheckedUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyProfileCreateManyInput = {
@@ -25474,6 +29745,276 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CSRProgrammeCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status?: $Enums.ProgrammeStatus
+    budget?: number | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    company: CompanyProfileCreateNestedOneWithoutProgrammesInput
+    milestones?: ProgrammeMilestoneCreateNestedManyWithoutProgrammeInput
+    assignments?: ProgrammeAssignmentCreateNestedManyWithoutProgrammeInput
+  }
+
+  export type CSRProgrammeUncheckedCreateInput = {
+    id?: string
+    companyId: string
+    title: string
+    description?: string | null
+    status?: $Enums.ProgrammeStatus
+    budget?: number | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    milestones?: ProgrammeMilestoneUncheckedCreateNestedManyWithoutProgrammeInput
+    assignments?: ProgrammeAssignmentUncheckedCreateNestedManyWithoutProgrammeInput
+  }
+
+  export type CSRProgrammeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProgrammeStatusFieldUpdateOperationsInput | $Enums.ProgrammeStatus
+    budget?: NullableFloatFieldUpdateOperationsInput | number | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    company?: CompanyProfileUpdateOneRequiredWithoutProgrammesNestedInput
+    milestones?: ProgrammeMilestoneUpdateManyWithoutProgrammeNestedInput
+    assignments?: ProgrammeAssignmentUpdateManyWithoutProgrammeNestedInput
+  }
+
+  export type CSRProgrammeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProgrammeStatusFieldUpdateOperationsInput | $Enums.ProgrammeStatus
+    budget?: NullableFloatFieldUpdateOperationsInput | number | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    milestones?: ProgrammeMilestoneUncheckedUpdateManyWithoutProgrammeNestedInput
+    assignments?: ProgrammeAssignmentUncheckedUpdateManyWithoutProgrammeNestedInput
+  }
+
+  export type CSRProgrammeCreateManyInput = {
+    id?: string
+    companyId: string
+    title: string
+    description?: string | null
+    status?: $Enums.ProgrammeStatus
+    budget?: number | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type CSRProgrammeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProgrammeStatusFieldUpdateOperationsInput | $Enums.ProgrammeStatus
+    budget?: NullableFloatFieldUpdateOperationsInput | number | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CSRProgrammeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProgrammeStatusFieldUpdateOperationsInput | $Enums.ProgrammeStatus
+    budget?: NullableFloatFieldUpdateOperationsInput | number | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ProgrammeMilestoneCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    dueDate?: Date | string | null
+    status?: $Enums.ProgrammeMilestoneStatus
+    progress?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    programme: CSRProgrammeCreateNestedOneWithoutMilestonesInput
+  }
+
+  export type ProgrammeMilestoneUncheckedCreateInput = {
+    id?: string
+    programmeId: string
+    title: string
+    description?: string | null
+    dueDate?: Date | string | null
+    status?: $Enums.ProgrammeMilestoneStatus
+    progress?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type ProgrammeMilestoneUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumProgrammeMilestoneStatusFieldUpdateOperationsInput | $Enums.ProgrammeMilestoneStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    programme?: CSRProgrammeUpdateOneRequiredWithoutMilestonesNestedInput
+  }
+
+  export type ProgrammeMilestoneUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programmeId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumProgrammeMilestoneStatusFieldUpdateOperationsInput | $Enums.ProgrammeMilestoneStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ProgrammeMilestoneCreateManyInput = {
+    id?: string
+    programmeId: string
+    title: string
+    description?: string | null
+    dueDate?: Date | string | null
+    status?: $Enums.ProgrammeMilestoneStatus
+    progress?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type ProgrammeMilestoneUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumProgrammeMilestoneStatusFieldUpdateOperationsInput | $Enums.ProgrammeMilestoneStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ProgrammeMilestoneUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programmeId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumProgrammeMilestoneStatusFieldUpdateOperationsInput | $Enums.ProgrammeMilestoneStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ProgrammeAssignmentCreateInput = {
+    id?: string
+    status?: $Enums.ProgrammeAssignmentStatus
+    notes?: string | null
+    assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    programme: CSRProgrammeCreateNestedOneWithoutAssignmentsInput
+    ngo: NGOProfileCreateNestedOneWithoutProgrammeAssignmentsInput
+  }
+
+  export type ProgrammeAssignmentUncheckedCreateInput = {
+    id?: string
+    programmeId: string
+    ngoId: string
+    status?: $Enums.ProgrammeAssignmentStatus
+    notes?: string | null
+    assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgrammeAssignmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumProgrammeAssignmentStatusFieldUpdateOperationsInput | $Enums.ProgrammeAssignmentStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    programme?: CSRProgrammeUpdateOneRequiredWithoutAssignmentsNestedInput
+    ngo?: NGOProfileUpdateOneRequiredWithoutProgrammeAssignmentsNestedInput
+  }
+
+  export type ProgrammeAssignmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programmeId?: StringFieldUpdateOperationsInput | string
+    ngoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumProgrammeAssignmentStatusFieldUpdateOperationsInput | $Enums.ProgrammeAssignmentStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgrammeAssignmentCreateManyInput = {
+    id?: string
+    programmeId: string
+    ngoId: string
+    status?: $Enums.ProgrammeAssignmentStatus
+    notes?: string | null
+    assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgrammeAssignmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumProgrammeAssignmentStatusFieldUpdateOperationsInput | $Enums.ProgrammeAssignmentStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgrammeAssignmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programmeId?: StringFieldUpdateOperationsInput | string
+    ngoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumProgrammeAssignmentStatusFieldUpdateOperationsInput | $Enums.ProgrammeAssignmentStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -25777,6 +30318,12 @@ export namespace Prisma {
     none?: CampaignApprovalWhereInput
   }
 
+  export type ProgrammeAssignmentListRelationFilter = {
+    every?: ProgrammeAssignmentWhereInput
+    some?: ProgrammeAssignmentWhereInput
+    none?: ProgrammeAssignmentWhereInput
+  }
+
   export type AddressOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -25798,6 +30345,10 @@ export namespace Prisma {
   }
 
   export type CampaignApprovalOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProgrammeAssignmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -25920,11 +30471,21 @@ export namespace Prisma {
     none?: UtilizationReportWhereInput
   }
 
+  export type CSRProgrammeListRelationFilter = {
+    every?: CSRProgrammeWhereInput
+    some?: CSRProgrammeWhereInput
+    none?: CSRProgrammeWhereInput
+  }
+
   export type DonationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type UtilizationReportOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CSRProgrammeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -26646,6 +31207,207 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type EnumProgrammeStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProgrammeStatus | EnumProgrammeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProgrammeStatus[] | ListEnumProgrammeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProgrammeStatus[] | ListEnumProgrammeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProgrammeStatusFilter<$PrismaModel> | $Enums.ProgrammeStatus
+  }
+
+  export type ProgrammeMilestoneListRelationFilter = {
+    every?: ProgrammeMilestoneWhereInput
+    some?: ProgrammeMilestoneWhereInput
+    none?: ProgrammeMilestoneWhereInput
+  }
+
+  export type ProgrammeMilestoneOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CSRProgrammeCountOrderByAggregateInput = {
+    id?: SortOrder
+    companyId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    budget?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type CSRProgrammeAvgOrderByAggregateInput = {
+    budget?: SortOrder
+  }
+
+  export type CSRProgrammeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    companyId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    budget?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type CSRProgrammeMinOrderByAggregateInput = {
+    id?: SortOrder
+    companyId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    budget?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type CSRProgrammeSumOrderByAggregateInput = {
+    budget?: SortOrder
+  }
+
+  export type EnumProgrammeStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProgrammeStatus | EnumProgrammeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProgrammeStatus[] | ListEnumProgrammeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProgrammeStatus[] | ListEnumProgrammeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProgrammeStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProgrammeStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProgrammeStatusFilter<$PrismaModel>
+    _max?: NestedEnumProgrammeStatusFilter<$PrismaModel>
+  }
+
+  export type EnumProgrammeMilestoneStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProgrammeMilestoneStatus | EnumProgrammeMilestoneStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProgrammeMilestoneStatus[] | ListEnumProgrammeMilestoneStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProgrammeMilestoneStatus[] | ListEnumProgrammeMilestoneStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProgrammeMilestoneStatusFilter<$PrismaModel> | $Enums.ProgrammeMilestoneStatus
+  }
+
+  export type CSRProgrammeScalarRelationFilter = {
+    is?: CSRProgrammeWhereInput
+    isNot?: CSRProgrammeWhereInput
+  }
+
+  export type ProgrammeMilestoneCountOrderByAggregateInput = {
+    id?: SortOrder
+    programmeId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    dueDate?: SortOrder
+    status?: SortOrder
+    progress?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type ProgrammeMilestoneAvgOrderByAggregateInput = {
+    progress?: SortOrder
+  }
+
+  export type ProgrammeMilestoneMaxOrderByAggregateInput = {
+    id?: SortOrder
+    programmeId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    dueDate?: SortOrder
+    status?: SortOrder
+    progress?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type ProgrammeMilestoneMinOrderByAggregateInput = {
+    id?: SortOrder
+    programmeId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    dueDate?: SortOrder
+    status?: SortOrder
+    progress?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type ProgrammeMilestoneSumOrderByAggregateInput = {
+    progress?: SortOrder
+  }
+
+  export type EnumProgrammeMilestoneStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProgrammeMilestoneStatus | EnumProgrammeMilestoneStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProgrammeMilestoneStatus[] | ListEnumProgrammeMilestoneStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProgrammeMilestoneStatus[] | ListEnumProgrammeMilestoneStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProgrammeMilestoneStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProgrammeMilestoneStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProgrammeMilestoneStatusFilter<$PrismaModel>
+    _max?: NestedEnumProgrammeMilestoneStatusFilter<$PrismaModel>
+  }
+
+  export type EnumProgrammeAssignmentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProgrammeAssignmentStatus | EnumProgrammeAssignmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProgrammeAssignmentStatus[] | ListEnumProgrammeAssignmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProgrammeAssignmentStatus[] | ListEnumProgrammeAssignmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProgrammeAssignmentStatusFilter<$PrismaModel> | $Enums.ProgrammeAssignmentStatus
+  }
+
+  export type ProgrammeAssignmentProgrammeIdNgoIdCompoundUniqueInput = {
+    programmeId: string
+    ngoId: string
+  }
+
+  export type ProgrammeAssignmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    programmeId?: SortOrder
+    ngoId?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    assignedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProgrammeAssignmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    programmeId?: SortOrder
+    ngoId?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    assignedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProgrammeAssignmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    programmeId?: SortOrder
+    ngoId?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    assignedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumProgrammeAssignmentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProgrammeAssignmentStatus | EnumProgrammeAssignmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProgrammeAssignmentStatus[] | ListEnumProgrammeAssignmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProgrammeAssignmentStatus[] | ListEnumProgrammeAssignmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProgrammeAssignmentStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProgrammeAssignmentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProgrammeAssignmentStatusFilter<$PrismaModel>
+    _max?: NestedEnumProgrammeAssignmentStatusFilter<$PrismaModel>
+  }
+
   export type AuditLogCreateNestedManyWithoutUserInput = {
     create?: XOR<AuditLogCreateWithoutUserInput, AuditLogUncheckedCreateWithoutUserInput> | AuditLogCreateWithoutUserInput[] | AuditLogUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AuditLogCreateOrConnectWithoutUserInput | AuditLogCreateOrConnectWithoutUserInput[]
@@ -26909,6 +31671,13 @@ export namespace Prisma {
     connect?: CampaignApprovalWhereUniqueInput | CampaignApprovalWhereUniqueInput[]
   }
 
+  export type ProgrammeAssignmentCreateNestedManyWithoutNgoInput = {
+    create?: XOR<ProgrammeAssignmentCreateWithoutNgoInput, ProgrammeAssignmentUncheckedCreateWithoutNgoInput> | ProgrammeAssignmentCreateWithoutNgoInput[] | ProgrammeAssignmentUncheckedCreateWithoutNgoInput[]
+    connectOrCreate?: ProgrammeAssignmentCreateOrConnectWithoutNgoInput | ProgrammeAssignmentCreateOrConnectWithoutNgoInput[]
+    createMany?: ProgrammeAssignmentCreateManyNgoInputEnvelope
+    connect?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+  }
+
   export type UserCreateNestedOneWithoutNgoProfileInput = {
     create?: XOR<UserCreateWithoutNgoProfileInput, UserUncheckedCreateWithoutNgoProfileInput>
     connectOrCreate?: UserCreateOrConnectWithoutNgoProfileInput
@@ -26962,6 +31731,13 @@ export namespace Prisma {
     connectOrCreate?: CampaignApprovalCreateOrConnectWithoutNgoInput | CampaignApprovalCreateOrConnectWithoutNgoInput[]
     createMany?: CampaignApprovalCreateManyNgoInputEnvelope
     connect?: CampaignApprovalWhereUniqueInput | CampaignApprovalWhereUniqueInput[]
+  }
+
+  export type ProgrammeAssignmentUncheckedCreateNestedManyWithoutNgoInput = {
+    create?: XOR<ProgrammeAssignmentCreateWithoutNgoInput, ProgrammeAssignmentUncheckedCreateWithoutNgoInput> | ProgrammeAssignmentCreateWithoutNgoInput[] | ProgrammeAssignmentUncheckedCreateWithoutNgoInput[]
+    connectOrCreate?: ProgrammeAssignmentCreateOrConnectWithoutNgoInput | ProgrammeAssignmentCreateOrConnectWithoutNgoInput[]
+    createMany?: ProgrammeAssignmentCreateManyNgoInputEnvelope
+    connect?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
   }
 
   export type EnumNGORegistrationTypeFieldUpdateOperationsInput = {
@@ -27078,6 +31854,20 @@ export namespace Prisma {
     deleteMany?: CampaignApprovalScalarWhereInput | CampaignApprovalScalarWhereInput[]
   }
 
+  export type ProgrammeAssignmentUpdateManyWithoutNgoNestedInput = {
+    create?: XOR<ProgrammeAssignmentCreateWithoutNgoInput, ProgrammeAssignmentUncheckedCreateWithoutNgoInput> | ProgrammeAssignmentCreateWithoutNgoInput[] | ProgrammeAssignmentUncheckedCreateWithoutNgoInput[]
+    connectOrCreate?: ProgrammeAssignmentCreateOrConnectWithoutNgoInput | ProgrammeAssignmentCreateOrConnectWithoutNgoInput[]
+    upsert?: ProgrammeAssignmentUpsertWithWhereUniqueWithoutNgoInput | ProgrammeAssignmentUpsertWithWhereUniqueWithoutNgoInput[]
+    createMany?: ProgrammeAssignmentCreateManyNgoInputEnvelope
+    set?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+    disconnect?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+    delete?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+    connect?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+    update?: ProgrammeAssignmentUpdateWithWhereUniqueWithoutNgoInput | ProgrammeAssignmentUpdateWithWhereUniqueWithoutNgoInput[]
+    updateMany?: ProgrammeAssignmentUpdateManyWithWhereWithoutNgoInput | ProgrammeAssignmentUpdateManyWithWhereWithoutNgoInput[]
+    deleteMany?: ProgrammeAssignmentScalarWhereInput | ProgrammeAssignmentScalarWhereInput[]
+  }
+
   export type UserUpdateOneRequiredWithoutNgoProfileNestedInput = {
     create?: XOR<UserCreateWithoutNgoProfileInput, UserUncheckedCreateWithoutNgoProfileInput>
     connectOrCreate?: UserCreateOrConnectWithoutNgoProfileInput
@@ -27184,6 +31974,20 @@ export namespace Prisma {
     deleteMany?: CampaignApprovalScalarWhereInput | CampaignApprovalScalarWhereInput[]
   }
 
+  export type ProgrammeAssignmentUncheckedUpdateManyWithoutNgoNestedInput = {
+    create?: XOR<ProgrammeAssignmentCreateWithoutNgoInput, ProgrammeAssignmentUncheckedCreateWithoutNgoInput> | ProgrammeAssignmentCreateWithoutNgoInput[] | ProgrammeAssignmentUncheckedCreateWithoutNgoInput[]
+    connectOrCreate?: ProgrammeAssignmentCreateOrConnectWithoutNgoInput | ProgrammeAssignmentCreateOrConnectWithoutNgoInput[]
+    upsert?: ProgrammeAssignmentUpsertWithWhereUniqueWithoutNgoInput | ProgrammeAssignmentUpsertWithWhereUniqueWithoutNgoInput[]
+    createMany?: ProgrammeAssignmentCreateManyNgoInputEnvelope
+    set?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+    disconnect?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+    delete?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+    connect?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+    update?: ProgrammeAssignmentUpdateWithWhereUniqueWithoutNgoInput | ProgrammeAssignmentUpdateWithWhereUniqueWithoutNgoInput[]
+    updateMany?: ProgrammeAssignmentUpdateManyWithWhereWithoutNgoInput | ProgrammeAssignmentUpdateManyWithWhereWithoutNgoInput[]
+    deleteMany?: ProgrammeAssignmentScalarWhereInput | ProgrammeAssignmentScalarWhereInput[]
+  }
+
   export type AddressCreateNestedManyWithoutCompanyInput = {
     create?: XOR<AddressCreateWithoutCompanyInput, AddressUncheckedCreateWithoutCompanyInput> | AddressCreateWithoutCompanyInput[] | AddressUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: AddressCreateOrConnectWithoutCompanyInput | AddressCreateOrConnectWithoutCompanyInput[]
@@ -27239,6 +32043,13 @@ export namespace Prisma {
     connect?: UtilizationReportWhereUniqueInput | UtilizationReportWhereUniqueInput[]
   }
 
+  export type CSRProgrammeCreateNestedManyWithoutCompanyInput = {
+    create?: XOR<CSRProgrammeCreateWithoutCompanyInput, CSRProgrammeUncheckedCreateWithoutCompanyInput> | CSRProgrammeCreateWithoutCompanyInput[] | CSRProgrammeUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: CSRProgrammeCreateOrConnectWithoutCompanyInput | CSRProgrammeCreateOrConnectWithoutCompanyInput[]
+    createMany?: CSRProgrammeCreateManyCompanyInputEnvelope
+    connect?: CSRProgrammeWhereUniqueInput | CSRProgrammeWhereUniqueInput[]
+  }
+
   export type AddressUncheckedCreateNestedManyWithoutCompanyInput = {
     create?: XOR<AddressCreateWithoutCompanyInput, AddressUncheckedCreateWithoutCompanyInput> | AddressCreateWithoutCompanyInput[] | AddressUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: AddressCreateOrConnectWithoutCompanyInput | AddressCreateOrConnectWithoutCompanyInput[]
@@ -27286,6 +32097,13 @@ export namespace Prisma {
     connectOrCreate?: UtilizationReportCreateOrConnectWithoutCompanyInput | UtilizationReportCreateOrConnectWithoutCompanyInput[]
     createMany?: UtilizationReportCreateManyCompanyInputEnvelope
     connect?: UtilizationReportWhereUniqueInput | UtilizationReportWhereUniqueInput[]
+  }
+
+  export type CSRProgrammeUncheckedCreateNestedManyWithoutCompanyInput = {
+    create?: XOR<CSRProgrammeCreateWithoutCompanyInput, CSRProgrammeUncheckedCreateWithoutCompanyInput> | CSRProgrammeCreateWithoutCompanyInput[] | CSRProgrammeUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: CSRProgrammeCreateOrConnectWithoutCompanyInput | CSRProgrammeCreateOrConnectWithoutCompanyInput[]
+    createMany?: CSRProgrammeCreateManyCompanyInputEnvelope
+    connect?: CSRProgrammeWhereUniqueInput | CSRProgrammeWhereUniqueInput[]
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -27402,6 +32220,20 @@ export namespace Prisma {
     deleteMany?: UtilizationReportScalarWhereInput | UtilizationReportScalarWhereInput[]
   }
 
+  export type CSRProgrammeUpdateManyWithoutCompanyNestedInput = {
+    create?: XOR<CSRProgrammeCreateWithoutCompanyInput, CSRProgrammeUncheckedCreateWithoutCompanyInput> | CSRProgrammeCreateWithoutCompanyInput[] | CSRProgrammeUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: CSRProgrammeCreateOrConnectWithoutCompanyInput | CSRProgrammeCreateOrConnectWithoutCompanyInput[]
+    upsert?: CSRProgrammeUpsertWithWhereUniqueWithoutCompanyInput | CSRProgrammeUpsertWithWhereUniqueWithoutCompanyInput[]
+    createMany?: CSRProgrammeCreateManyCompanyInputEnvelope
+    set?: CSRProgrammeWhereUniqueInput | CSRProgrammeWhereUniqueInput[]
+    disconnect?: CSRProgrammeWhereUniqueInput | CSRProgrammeWhereUniqueInput[]
+    delete?: CSRProgrammeWhereUniqueInput | CSRProgrammeWhereUniqueInput[]
+    connect?: CSRProgrammeWhereUniqueInput | CSRProgrammeWhereUniqueInput[]
+    update?: CSRProgrammeUpdateWithWhereUniqueWithoutCompanyInput | CSRProgrammeUpdateWithWhereUniqueWithoutCompanyInput[]
+    updateMany?: CSRProgrammeUpdateManyWithWhereWithoutCompanyInput | CSRProgrammeUpdateManyWithWhereWithoutCompanyInput[]
+    deleteMany?: CSRProgrammeScalarWhereInput | CSRProgrammeScalarWhereInput[]
+  }
+
   export type AddressUncheckedUpdateManyWithoutCompanyNestedInput = {
     create?: XOR<AddressCreateWithoutCompanyInput, AddressUncheckedCreateWithoutCompanyInput> | AddressCreateWithoutCompanyInput[] | AddressUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: AddressCreateOrConnectWithoutCompanyInput | AddressCreateOrConnectWithoutCompanyInput[]
@@ -27498,6 +32330,20 @@ export namespace Prisma {
     update?: UtilizationReportUpdateWithWhereUniqueWithoutCompanyInput | UtilizationReportUpdateWithWhereUniqueWithoutCompanyInput[]
     updateMany?: UtilizationReportUpdateManyWithWhereWithoutCompanyInput | UtilizationReportUpdateManyWithWhereWithoutCompanyInput[]
     deleteMany?: UtilizationReportScalarWhereInput | UtilizationReportScalarWhereInput[]
+  }
+
+  export type CSRProgrammeUncheckedUpdateManyWithoutCompanyNestedInput = {
+    create?: XOR<CSRProgrammeCreateWithoutCompanyInput, CSRProgrammeUncheckedCreateWithoutCompanyInput> | CSRProgrammeCreateWithoutCompanyInput[] | CSRProgrammeUncheckedCreateWithoutCompanyInput[]
+    connectOrCreate?: CSRProgrammeCreateOrConnectWithoutCompanyInput | CSRProgrammeCreateOrConnectWithoutCompanyInput[]
+    upsert?: CSRProgrammeUpsertWithWhereUniqueWithoutCompanyInput | CSRProgrammeUpsertWithWhereUniqueWithoutCompanyInput[]
+    createMany?: CSRProgrammeCreateManyCompanyInputEnvelope
+    set?: CSRProgrammeWhereUniqueInput | CSRProgrammeWhereUniqueInput[]
+    disconnect?: CSRProgrammeWhereUniqueInput | CSRProgrammeWhereUniqueInput[]
+    delete?: CSRProgrammeWhereUniqueInput | CSRProgrammeWhereUniqueInput[]
+    connect?: CSRProgrammeWhereUniqueInput | CSRProgrammeWhereUniqueInput[]
+    update?: CSRProgrammeUpdateWithWhereUniqueWithoutCompanyInput | CSRProgrammeUpdateWithWhereUniqueWithoutCompanyInput[]
+    updateMany?: CSRProgrammeUpdateManyWithWhereWithoutCompanyInput | CSRProgrammeUpdateManyWithWhereWithoutCompanyInput[]
+    deleteMany?: CSRProgrammeScalarWhereInput | CSRProgrammeScalarWhereInput[]
   }
 
   export type AddressCreateNestedManyWithoutDonorInput = {
@@ -28506,6 +33352,158 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAuditLogsInput, UserUpdateWithoutAuditLogsInput>, UserUncheckedUpdateWithoutAuditLogsInput>
   }
 
+  export type CompanyProfileCreateNestedOneWithoutProgrammesInput = {
+    create?: XOR<CompanyProfileCreateWithoutProgrammesInput, CompanyProfileUncheckedCreateWithoutProgrammesInput>
+    connectOrCreate?: CompanyProfileCreateOrConnectWithoutProgrammesInput
+    connect?: CompanyProfileWhereUniqueInput
+  }
+
+  export type ProgrammeMilestoneCreateNestedManyWithoutProgrammeInput = {
+    create?: XOR<ProgrammeMilestoneCreateWithoutProgrammeInput, ProgrammeMilestoneUncheckedCreateWithoutProgrammeInput> | ProgrammeMilestoneCreateWithoutProgrammeInput[] | ProgrammeMilestoneUncheckedCreateWithoutProgrammeInput[]
+    connectOrCreate?: ProgrammeMilestoneCreateOrConnectWithoutProgrammeInput | ProgrammeMilestoneCreateOrConnectWithoutProgrammeInput[]
+    createMany?: ProgrammeMilestoneCreateManyProgrammeInputEnvelope
+    connect?: ProgrammeMilestoneWhereUniqueInput | ProgrammeMilestoneWhereUniqueInput[]
+  }
+
+  export type ProgrammeAssignmentCreateNestedManyWithoutProgrammeInput = {
+    create?: XOR<ProgrammeAssignmentCreateWithoutProgrammeInput, ProgrammeAssignmentUncheckedCreateWithoutProgrammeInput> | ProgrammeAssignmentCreateWithoutProgrammeInput[] | ProgrammeAssignmentUncheckedCreateWithoutProgrammeInput[]
+    connectOrCreate?: ProgrammeAssignmentCreateOrConnectWithoutProgrammeInput | ProgrammeAssignmentCreateOrConnectWithoutProgrammeInput[]
+    createMany?: ProgrammeAssignmentCreateManyProgrammeInputEnvelope
+    connect?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+  }
+
+  export type ProgrammeMilestoneUncheckedCreateNestedManyWithoutProgrammeInput = {
+    create?: XOR<ProgrammeMilestoneCreateWithoutProgrammeInput, ProgrammeMilestoneUncheckedCreateWithoutProgrammeInput> | ProgrammeMilestoneCreateWithoutProgrammeInput[] | ProgrammeMilestoneUncheckedCreateWithoutProgrammeInput[]
+    connectOrCreate?: ProgrammeMilestoneCreateOrConnectWithoutProgrammeInput | ProgrammeMilestoneCreateOrConnectWithoutProgrammeInput[]
+    createMany?: ProgrammeMilestoneCreateManyProgrammeInputEnvelope
+    connect?: ProgrammeMilestoneWhereUniqueInput | ProgrammeMilestoneWhereUniqueInput[]
+  }
+
+  export type ProgrammeAssignmentUncheckedCreateNestedManyWithoutProgrammeInput = {
+    create?: XOR<ProgrammeAssignmentCreateWithoutProgrammeInput, ProgrammeAssignmentUncheckedCreateWithoutProgrammeInput> | ProgrammeAssignmentCreateWithoutProgrammeInput[] | ProgrammeAssignmentUncheckedCreateWithoutProgrammeInput[]
+    connectOrCreate?: ProgrammeAssignmentCreateOrConnectWithoutProgrammeInput | ProgrammeAssignmentCreateOrConnectWithoutProgrammeInput[]
+    createMany?: ProgrammeAssignmentCreateManyProgrammeInputEnvelope
+    connect?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+  }
+
+  export type EnumProgrammeStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ProgrammeStatus
+  }
+
+  export type CompanyProfileUpdateOneRequiredWithoutProgrammesNestedInput = {
+    create?: XOR<CompanyProfileCreateWithoutProgrammesInput, CompanyProfileUncheckedCreateWithoutProgrammesInput>
+    connectOrCreate?: CompanyProfileCreateOrConnectWithoutProgrammesInput
+    upsert?: CompanyProfileUpsertWithoutProgrammesInput
+    connect?: CompanyProfileWhereUniqueInput
+    update?: XOR<XOR<CompanyProfileUpdateToOneWithWhereWithoutProgrammesInput, CompanyProfileUpdateWithoutProgrammesInput>, CompanyProfileUncheckedUpdateWithoutProgrammesInput>
+  }
+
+  export type ProgrammeMilestoneUpdateManyWithoutProgrammeNestedInput = {
+    create?: XOR<ProgrammeMilestoneCreateWithoutProgrammeInput, ProgrammeMilestoneUncheckedCreateWithoutProgrammeInput> | ProgrammeMilestoneCreateWithoutProgrammeInput[] | ProgrammeMilestoneUncheckedCreateWithoutProgrammeInput[]
+    connectOrCreate?: ProgrammeMilestoneCreateOrConnectWithoutProgrammeInput | ProgrammeMilestoneCreateOrConnectWithoutProgrammeInput[]
+    upsert?: ProgrammeMilestoneUpsertWithWhereUniqueWithoutProgrammeInput | ProgrammeMilestoneUpsertWithWhereUniqueWithoutProgrammeInput[]
+    createMany?: ProgrammeMilestoneCreateManyProgrammeInputEnvelope
+    set?: ProgrammeMilestoneWhereUniqueInput | ProgrammeMilestoneWhereUniqueInput[]
+    disconnect?: ProgrammeMilestoneWhereUniqueInput | ProgrammeMilestoneWhereUniqueInput[]
+    delete?: ProgrammeMilestoneWhereUniqueInput | ProgrammeMilestoneWhereUniqueInput[]
+    connect?: ProgrammeMilestoneWhereUniqueInput | ProgrammeMilestoneWhereUniqueInput[]
+    update?: ProgrammeMilestoneUpdateWithWhereUniqueWithoutProgrammeInput | ProgrammeMilestoneUpdateWithWhereUniqueWithoutProgrammeInput[]
+    updateMany?: ProgrammeMilestoneUpdateManyWithWhereWithoutProgrammeInput | ProgrammeMilestoneUpdateManyWithWhereWithoutProgrammeInput[]
+    deleteMany?: ProgrammeMilestoneScalarWhereInput | ProgrammeMilestoneScalarWhereInput[]
+  }
+
+  export type ProgrammeAssignmentUpdateManyWithoutProgrammeNestedInput = {
+    create?: XOR<ProgrammeAssignmentCreateWithoutProgrammeInput, ProgrammeAssignmentUncheckedCreateWithoutProgrammeInput> | ProgrammeAssignmentCreateWithoutProgrammeInput[] | ProgrammeAssignmentUncheckedCreateWithoutProgrammeInput[]
+    connectOrCreate?: ProgrammeAssignmentCreateOrConnectWithoutProgrammeInput | ProgrammeAssignmentCreateOrConnectWithoutProgrammeInput[]
+    upsert?: ProgrammeAssignmentUpsertWithWhereUniqueWithoutProgrammeInput | ProgrammeAssignmentUpsertWithWhereUniqueWithoutProgrammeInput[]
+    createMany?: ProgrammeAssignmentCreateManyProgrammeInputEnvelope
+    set?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+    disconnect?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+    delete?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+    connect?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+    update?: ProgrammeAssignmentUpdateWithWhereUniqueWithoutProgrammeInput | ProgrammeAssignmentUpdateWithWhereUniqueWithoutProgrammeInput[]
+    updateMany?: ProgrammeAssignmentUpdateManyWithWhereWithoutProgrammeInput | ProgrammeAssignmentUpdateManyWithWhereWithoutProgrammeInput[]
+    deleteMany?: ProgrammeAssignmentScalarWhereInput | ProgrammeAssignmentScalarWhereInput[]
+  }
+
+  export type ProgrammeMilestoneUncheckedUpdateManyWithoutProgrammeNestedInput = {
+    create?: XOR<ProgrammeMilestoneCreateWithoutProgrammeInput, ProgrammeMilestoneUncheckedCreateWithoutProgrammeInput> | ProgrammeMilestoneCreateWithoutProgrammeInput[] | ProgrammeMilestoneUncheckedCreateWithoutProgrammeInput[]
+    connectOrCreate?: ProgrammeMilestoneCreateOrConnectWithoutProgrammeInput | ProgrammeMilestoneCreateOrConnectWithoutProgrammeInput[]
+    upsert?: ProgrammeMilestoneUpsertWithWhereUniqueWithoutProgrammeInput | ProgrammeMilestoneUpsertWithWhereUniqueWithoutProgrammeInput[]
+    createMany?: ProgrammeMilestoneCreateManyProgrammeInputEnvelope
+    set?: ProgrammeMilestoneWhereUniqueInput | ProgrammeMilestoneWhereUniqueInput[]
+    disconnect?: ProgrammeMilestoneWhereUniqueInput | ProgrammeMilestoneWhereUniqueInput[]
+    delete?: ProgrammeMilestoneWhereUniqueInput | ProgrammeMilestoneWhereUniqueInput[]
+    connect?: ProgrammeMilestoneWhereUniqueInput | ProgrammeMilestoneWhereUniqueInput[]
+    update?: ProgrammeMilestoneUpdateWithWhereUniqueWithoutProgrammeInput | ProgrammeMilestoneUpdateWithWhereUniqueWithoutProgrammeInput[]
+    updateMany?: ProgrammeMilestoneUpdateManyWithWhereWithoutProgrammeInput | ProgrammeMilestoneUpdateManyWithWhereWithoutProgrammeInput[]
+    deleteMany?: ProgrammeMilestoneScalarWhereInput | ProgrammeMilestoneScalarWhereInput[]
+  }
+
+  export type ProgrammeAssignmentUncheckedUpdateManyWithoutProgrammeNestedInput = {
+    create?: XOR<ProgrammeAssignmentCreateWithoutProgrammeInput, ProgrammeAssignmentUncheckedCreateWithoutProgrammeInput> | ProgrammeAssignmentCreateWithoutProgrammeInput[] | ProgrammeAssignmentUncheckedCreateWithoutProgrammeInput[]
+    connectOrCreate?: ProgrammeAssignmentCreateOrConnectWithoutProgrammeInput | ProgrammeAssignmentCreateOrConnectWithoutProgrammeInput[]
+    upsert?: ProgrammeAssignmentUpsertWithWhereUniqueWithoutProgrammeInput | ProgrammeAssignmentUpsertWithWhereUniqueWithoutProgrammeInput[]
+    createMany?: ProgrammeAssignmentCreateManyProgrammeInputEnvelope
+    set?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+    disconnect?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+    delete?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+    connect?: ProgrammeAssignmentWhereUniqueInput | ProgrammeAssignmentWhereUniqueInput[]
+    update?: ProgrammeAssignmentUpdateWithWhereUniqueWithoutProgrammeInput | ProgrammeAssignmentUpdateWithWhereUniqueWithoutProgrammeInput[]
+    updateMany?: ProgrammeAssignmentUpdateManyWithWhereWithoutProgrammeInput | ProgrammeAssignmentUpdateManyWithWhereWithoutProgrammeInput[]
+    deleteMany?: ProgrammeAssignmentScalarWhereInput | ProgrammeAssignmentScalarWhereInput[]
+  }
+
+  export type CSRProgrammeCreateNestedOneWithoutMilestonesInput = {
+    create?: XOR<CSRProgrammeCreateWithoutMilestonesInput, CSRProgrammeUncheckedCreateWithoutMilestonesInput>
+    connectOrCreate?: CSRProgrammeCreateOrConnectWithoutMilestonesInput
+    connect?: CSRProgrammeWhereUniqueInput
+  }
+
+  export type EnumProgrammeMilestoneStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ProgrammeMilestoneStatus
+  }
+
+  export type CSRProgrammeUpdateOneRequiredWithoutMilestonesNestedInput = {
+    create?: XOR<CSRProgrammeCreateWithoutMilestonesInput, CSRProgrammeUncheckedCreateWithoutMilestonesInput>
+    connectOrCreate?: CSRProgrammeCreateOrConnectWithoutMilestonesInput
+    upsert?: CSRProgrammeUpsertWithoutMilestonesInput
+    connect?: CSRProgrammeWhereUniqueInput
+    update?: XOR<XOR<CSRProgrammeUpdateToOneWithWhereWithoutMilestonesInput, CSRProgrammeUpdateWithoutMilestonesInput>, CSRProgrammeUncheckedUpdateWithoutMilestonesInput>
+  }
+
+  export type CSRProgrammeCreateNestedOneWithoutAssignmentsInput = {
+    create?: XOR<CSRProgrammeCreateWithoutAssignmentsInput, CSRProgrammeUncheckedCreateWithoutAssignmentsInput>
+    connectOrCreate?: CSRProgrammeCreateOrConnectWithoutAssignmentsInput
+    connect?: CSRProgrammeWhereUniqueInput
+  }
+
+  export type NGOProfileCreateNestedOneWithoutProgrammeAssignmentsInput = {
+    create?: XOR<NGOProfileCreateWithoutProgrammeAssignmentsInput, NGOProfileUncheckedCreateWithoutProgrammeAssignmentsInput>
+    connectOrCreate?: NGOProfileCreateOrConnectWithoutProgrammeAssignmentsInput
+    connect?: NGOProfileWhereUniqueInput
+  }
+
+  export type EnumProgrammeAssignmentStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ProgrammeAssignmentStatus
+  }
+
+  export type CSRProgrammeUpdateOneRequiredWithoutAssignmentsNestedInput = {
+    create?: XOR<CSRProgrammeCreateWithoutAssignmentsInput, CSRProgrammeUncheckedCreateWithoutAssignmentsInput>
+    connectOrCreate?: CSRProgrammeCreateOrConnectWithoutAssignmentsInput
+    upsert?: CSRProgrammeUpsertWithoutAssignmentsInput
+    connect?: CSRProgrammeWhereUniqueInput
+    update?: XOR<XOR<CSRProgrammeUpdateToOneWithWhereWithoutAssignmentsInput, CSRProgrammeUpdateWithoutAssignmentsInput>, CSRProgrammeUncheckedUpdateWithoutAssignmentsInput>
+  }
+
+  export type NGOProfileUpdateOneRequiredWithoutProgrammeAssignmentsNestedInput = {
+    create?: XOR<NGOProfileCreateWithoutProgrammeAssignmentsInput, NGOProfileUncheckedCreateWithoutProgrammeAssignmentsInput>
+    connectOrCreate?: NGOProfileCreateOrConnectWithoutProgrammeAssignmentsInput
+    upsert?: NGOProfileUpsertWithoutProgrammeAssignmentsInput
+    connect?: NGOProfileWhereUniqueInput
+    update?: XOR<XOR<NGOProfileUpdateToOneWithWhereWithoutProgrammeAssignmentsInput, NGOProfileUpdateWithoutProgrammeAssignmentsInput>, NGOProfileUncheckedUpdateWithoutProgrammeAssignmentsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -28814,6 +33812,57 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedEnumProgrammeStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProgrammeStatus | EnumProgrammeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProgrammeStatus[] | ListEnumProgrammeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProgrammeStatus[] | ListEnumProgrammeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProgrammeStatusFilter<$PrismaModel> | $Enums.ProgrammeStatus
+  }
+
+  export type NestedEnumProgrammeStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProgrammeStatus | EnumProgrammeStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProgrammeStatus[] | ListEnumProgrammeStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProgrammeStatus[] | ListEnumProgrammeStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProgrammeStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProgrammeStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProgrammeStatusFilter<$PrismaModel>
+    _max?: NestedEnumProgrammeStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumProgrammeMilestoneStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProgrammeMilestoneStatus | EnumProgrammeMilestoneStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProgrammeMilestoneStatus[] | ListEnumProgrammeMilestoneStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProgrammeMilestoneStatus[] | ListEnumProgrammeMilestoneStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProgrammeMilestoneStatusFilter<$PrismaModel> | $Enums.ProgrammeMilestoneStatus
+  }
+
+  export type NestedEnumProgrammeMilestoneStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProgrammeMilestoneStatus | EnumProgrammeMilestoneStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProgrammeMilestoneStatus[] | ListEnumProgrammeMilestoneStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProgrammeMilestoneStatus[] | ListEnumProgrammeMilestoneStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProgrammeMilestoneStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProgrammeMilestoneStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProgrammeMilestoneStatusFilter<$PrismaModel>
+    _max?: NestedEnumProgrammeMilestoneStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumProgrammeAssignmentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProgrammeAssignmentStatus | EnumProgrammeAssignmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProgrammeAssignmentStatus[] | ListEnumProgrammeAssignmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProgrammeAssignmentStatus[] | ListEnumProgrammeAssignmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProgrammeAssignmentStatusFilter<$PrismaModel> | $Enums.ProgrammeAssignmentStatus
+  }
+
+  export type NestedEnumProgrammeAssignmentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProgrammeAssignmentStatus | EnumProgrammeAssignmentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProgrammeAssignmentStatus[] | ListEnumProgrammeAssignmentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProgrammeAssignmentStatus[] | ListEnumProgrammeAssignmentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProgrammeAssignmentStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProgrammeAssignmentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProgrammeAssignmentStatusFilter<$PrismaModel>
+    _max?: NestedEnumProgrammeAssignmentStatusFilter<$PrismaModel>
+  }
+
   export type AuditLogCreateWithoutUserInput = {
     id?: string
     action: string
@@ -28867,6 +33916,7 @@ export namespace Prisma {
     donations?: DonationCreateNestedManyWithoutCompanyInput
     approvals?: CampaignApprovalCreateNestedManyWithoutCompanyInput
     utilizationReports?: UtilizationReportCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileUncheckedCreateWithoutUserInput = {
@@ -28888,6 +33938,7 @@ export namespace Prisma {
     donations?: DonationUncheckedCreateNestedManyWithoutCompanyInput
     approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutCompanyInput
     utilizationReports?: UtilizationReportUncheckedCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileCreateOrConnectWithoutUserInput = {
@@ -28942,6 +33993,7 @@ export namespace Prisma {
     documents?: DocumentCreateNestedManyWithoutNgoInput
     financialReports?: FinancialReportCreateNestedManyWithoutNgoInput
     approvals?: CampaignApprovalCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentCreateNestedManyWithoutNgoInput
   }
 
   export type NGOProfileUncheckedCreateWithoutUserInput = {
@@ -28966,6 +34018,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedCreateNestedManyWithoutNgoInput
     financialReports?: FinancialReportUncheckedCreateNestedManyWithoutNgoInput
     approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedCreateNestedManyWithoutNgoInput
   }
 
   export type NGOProfileCreateOrConnectWithoutUserInput = {
@@ -29063,6 +34116,7 @@ export namespace Prisma {
     donations?: DonationUpdateManyWithoutCompanyNestedInput
     approvals?: CampaignApprovalUpdateManyWithoutCompanyNestedInput
     utilizationReports?: UtilizationReportUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyProfileUncheckedUpdateWithoutUserInput = {
@@ -29084,6 +34138,7 @@ export namespace Prisma {
     donations?: DonationUncheckedUpdateManyWithoutCompanyNestedInput
     approvals?: CampaignApprovalUncheckedUpdateManyWithoutCompanyNestedInput
     utilizationReports?: UtilizationReportUncheckedUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type DonorProfileUpsertWithoutUserInput = {
@@ -29150,6 +34205,7 @@ export namespace Prisma {
     documents?: DocumentUpdateManyWithoutNgoNestedInput
     financialReports?: FinancialReportUpdateManyWithoutNgoNestedInput
     approvals?: CampaignApprovalUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUpdateManyWithoutNgoNestedInput
   }
 
   export type NGOProfileUncheckedUpdateWithoutUserInput = {
@@ -29174,6 +34230,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedUpdateManyWithoutNgoNestedInput
     financialReports?: FinancialReportUncheckedUpdateManyWithoutNgoNestedInput
     approvals?: CampaignApprovalUncheckedUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedUpdateManyWithoutNgoNestedInput
   }
 
   export type InvitationUpsertWithWhereUniqueWithoutCreatorInput = {
@@ -29523,6 +34580,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ProgrammeAssignmentCreateWithoutNgoInput = {
+    id?: string
+    status?: $Enums.ProgrammeAssignmentStatus
+    notes?: string | null
+    assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    programme: CSRProgrammeCreateNestedOneWithoutAssignmentsInput
+  }
+
+  export type ProgrammeAssignmentUncheckedCreateWithoutNgoInput = {
+    id?: string
+    programmeId: string
+    status?: $Enums.ProgrammeAssignmentStatus
+    notes?: string | null
+    assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgrammeAssignmentCreateOrConnectWithoutNgoInput = {
+    where: ProgrammeAssignmentWhereUniqueInput
+    create: XOR<ProgrammeAssignmentCreateWithoutNgoInput, ProgrammeAssignmentUncheckedCreateWithoutNgoInput>
+  }
+
+  export type ProgrammeAssignmentCreateManyNgoInputEnvelope = {
+    data: ProgrammeAssignmentCreateManyNgoInput | ProgrammeAssignmentCreateManyNgoInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserCreateWithoutNgoProfileInput = {
     id?: string
     name: string
@@ -29759,6 +34846,36 @@ export namespace Prisma {
     remarks?: StringNullableFilter<"CampaignApproval"> | string | null
     createdAt?: DateTimeFilter<"CampaignApproval"> | Date | string
     updatedAt?: DateTimeFilter<"CampaignApproval"> | Date | string
+  }
+
+  export type ProgrammeAssignmentUpsertWithWhereUniqueWithoutNgoInput = {
+    where: ProgrammeAssignmentWhereUniqueInput
+    update: XOR<ProgrammeAssignmentUpdateWithoutNgoInput, ProgrammeAssignmentUncheckedUpdateWithoutNgoInput>
+    create: XOR<ProgrammeAssignmentCreateWithoutNgoInput, ProgrammeAssignmentUncheckedCreateWithoutNgoInput>
+  }
+
+  export type ProgrammeAssignmentUpdateWithWhereUniqueWithoutNgoInput = {
+    where: ProgrammeAssignmentWhereUniqueInput
+    data: XOR<ProgrammeAssignmentUpdateWithoutNgoInput, ProgrammeAssignmentUncheckedUpdateWithoutNgoInput>
+  }
+
+  export type ProgrammeAssignmentUpdateManyWithWhereWithoutNgoInput = {
+    where: ProgrammeAssignmentScalarWhereInput
+    data: XOR<ProgrammeAssignmentUpdateManyMutationInput, ProgrammeAssignmentUncheckedUpdateManyWithoutNgoInput>
+  }
+
+  export type ProgrammeAssignmentScalarWhereInput = {
+    AND?: ProgrammeAssignmentScalarWhereInput | ProgrammeAssignmentScalarWhereInput[]
+    OR?: ProgrammeAssignmentScalarWhereInput[]
+    NOT?: ProgrammeAssignmentScalarWhereInput | ProgrammeAssignmentScalarWhereInput[]
+    id?: StringFilter<"ProgrammeAssignment"> | string
+    programmeId?: StringFilter<"ProgrammeAssignment"> | string
+    ngoId?: StringFilter<"ProgrammeAssignment"> | string
+    status?: EnumProgrammeAssignmentStatusFilter<"ProgrammeAssignment"> | $Enums.ProgrammeAssignmentStatus
+    notes?: StringNullableFilter<"ProgrammeAssignment"> | string | null
+    assignedAt?: DateTimeFilter<"ProgrammeAssignment"> | Date | string
+    createdAt?: DateTimeFilter<"ProgrammeAssignment"> | Date | string
+    updatedAt?: DateTimeFilter<"ProgrammeAssignment"> | Date | string
   }
 
   export type UserUpsertWithoutNgoProfileInput = {
@@ -30071,6 +35188,46 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CSRProgrammeCreateWithoutCompanyInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status?: $Enums.ProgrammeStatus
+    budget?: number | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    milestones?: ProgrammeMilestoneCreateNestedManyWithoutProgrammeInput
+    assignments?: ProgrammeAssignmentCreateNestedManyWithoutProgrammeInput
+  }
+
+  export type CSRProgrammeUncheckedCreateWithoutCompanyInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status?: $Enums.ProgrammeStatus
+    budget?: number | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    milestones?: ProgrammeMilestoneUncheckedCreateNestedManyWithoutProgrammeInput
+    assignments?: ProgrammeAssignmentUncheckedCreateNestedManyWithoutProgrammeInput
+  }
+
+  export type CSRProgrammeCreateOrConnectWithoutCompanyInput = {
+    where: CSRProgrammeWhereUniqueInput
+    create: XOR<CSRProgrammeCreateWithoutCompanyInput, CSRProgrammeUncheckedCreateWithoutCompanyInput>
+  }
+
+  export type CSRProgrammeCreateManyCompanyInputEnvelope = {
+    data: CSRProgrammeCreateManyCompanyInput | CSRProgrammeCreateManyCompanyInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AddressUpsertWithWhereUniqueWithoutCompanyInput = {
     where: AddressWhereUniqueInput
     update: XOR<AddressUpdateWithoutCompanyInput, AddressUncheckedUpdateWithoutCompanyInput>
@@ -30255,6 +35412,39 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"UtilizationReport"> | Date | string
     updatedAt?: DateTimeFilter<"UtilizationReport"> | Date | string
     companyId?: StringNullableFilter<"UtilizationReport"> | string | null
+  }
+
+  export type CSRProgrammeUpsertWithWhereUniqueWithoutCompanyInput = {
+    where: CSRProgrammeWhereUniqueInput
+    update: XOR<CSRProgrammeUpdateWithoutCompanyInput, CSRProgrammeUncheckedUpdateWithoutCompanyInput>
+    create: XOR<CSRProgrammeCreateWithoutCompanyInput, CSRProgrammeUncheckedCreateWithoutCompanyInput>
+  }
+
+  export type CSRProgrammeUpdateWithWhereUniqueWithoutCompanyInput = {
+    where: CSRProgrammeWhereUniqueInput
+    data: XOR<CSRProgrammeUpdateWithoutCompanyInput, CSRProgrammeUncheckedUpdateWithoutCompanyInput>
+  }
+
+  export type CSRProgrammeUpdateManyWithWhereWithoutCompanyInput = {
+    where: CSRProgrammeScalarWhereInput
+    data: XOR<CSRProgrammeUpdateManyMutationInput, CSRProgrammeUncheckedUpdateManyWithoutCompanyInput>
+  }
+
+  export type CSRProgrammeScalarWhereInput = {
+    AND?: CSRProgrammeScalarWhereInput | CSRProgrammeScalarWhereInput[]
+    OR?: CSRProgrammeScalarWhereInput[]
+    NOT?: CSRProgrammeScalarWhereInput | CSRProgrammeScalarWhereInput[]
+    id?: StringFilter<"CSRProgramme"> | string
+    companyId?: StringFilter<"CSRProgramme"> | string
+    title?: StringFilter<"CSRProgramme"> | string
+    description?: StringNullableFilter<"CSRProgramme"> | string | null
+    status?: EnumProgrammeStatusFilter<"CSRProgramme"> | $Enums.ProgrammeStatus
+    budget?: FloatNullableFilter<"CSRProgramme"> | number | null
+    startDate?: DateTimeNullableFilter<"CSRProgramme"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"CSRProgramme"> | Date | string | null
+    createdAt?: DateTimeFilter<"CSRProgramme"> | Date | string
+    updatedAt?: DateTimeFilter<"CSRProgramme"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"CSRProgramme"> | Date | string | null
   }
 
   export type AddressCreateWithoutDonorInput = {
@@ -30546,6 +35736,7 @@ export namespace Prisma {
     documents?: DocumentCreateNestedManyWithoutNgoInput
     financialReports?: FinancialReportCreateNestedManyWithoutNgoInput
     approvals?: CampaignApprovalCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentCreateNestedManyWithoutNgoInput
     user: UserCreateNestedOneWithoutNgoProfileInput
   }
 
@@ -30571,6 +35762,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedCreateNestedManyWithoutNgoInput
     financialReports?: FinancialReportUncheckedCreateNestedManyWithoutNgoInput
     approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedCreateNestedManyWithoutNgoInput
   }
 
   export type NGOProfileCreateOrConnectWithoutCampaignsInput = {
@@ -30824,6 +36016,7 @@ export namespace Prisma {
     documents?: DocumentUpdateManyWithoutNgoNestedInput
     financialReports?: FinancialReportUpdateManyWithoutNgoNestedInput
     approvals?: CampaignApprovalUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUpdateManyWithoutNgoNestedInput
     user?: UserUpdateOneRequiredWithoutNgoProfileNestedInput
   }
 
@@ -30849,6 +36042,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedUpdateManyWithoutNgoNestedInput
     financialReports?: FinancialReportUncheckedUpdateManyWithoutNgoNestedInput
     approvals?: CampaignApprovalUncheckedUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedUpdateManyWithoutNgoNestedInput
   }
 
   export type DocumentUpsertWithWhereUniqueWithoutCampaignInput = {
@@ -31075,6 +36269,7 @@ export namespace Prisma {
     documents?: DocumentCreateNestedManyWithoutCompanyInput
     approvals?: CampaignApprovalCreateNestedManyWithoutCompanyInput
     utilizationReports?: UtilizationReportCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileUncheckedCreateWithoutDonationsInput = {
@@ -31096,6 +36291,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedCreateNestedManyWithoutCompanyInput
     approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutCompanyInput
     utilizationReports?: UtilizationReportUncheckedCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileCreateOrConnectWithoutDonationsInput = {
@@ -31225,6 +36421,7 @@ export namespace Prisma {
     documents?: DocumentUpdateManyWithoutCompanyNestedInput
     approvals?: CampaignApprovalUpdateManyWithoutCompanyNestedInput
     utilizationReports?: UtilizationReportUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyProfileUncheckedUpdateWithoutDonationsInput = {
@@ -31246,6 +36443,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedUpdateManyWithoutCompanyNestedInput
     approvals?: CampaignApprovalUncheckedUpdateManyWithoutCompanyNestedInput
     utilizationReports?: UtilizationReportUncheckedUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type DonorProfileUpsertWithoutDonationsInput = {
@@ -31298,6 +36496,7 @@ export namespace Prisma {
     donations?: DonationCreateNestedManyWithoutCompanyInput
     approvals?: CampaignApprovalCreateNestedManyWithoutCompanyInput
     utilizationReports?: UtilizationReportCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileUncheckedCreateWithoutBankDetailsInput = {
@@ -31319,6 +36518,7 @@ export namespace Prisma {
     donations?: DonationUncheckedCreateNestedManyWithoutCompanyInput
     approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutCompanyInput
     utilizationReports?: UtilizationReportUncheckedCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileCreateOrConnectWithoutBankDetailsInput = {
@@ -31347,6 +36547,7 @@ export namespace Prisma {
     documents?: DocumentCreateNestedManyWithoutNgoInput
     financialReports?: FinancialReportCreateNestedManyWithoutNgoInput
     approvals?: CampaignApprovalCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentCreateNestedManyWithoutNgoInput
     user: UserCreateNestedOneWithoutNgoProfileInput
   }
 
@@ -31372,6 +36573,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedCreateNestedManyWithoutNgoInput
     financialReports?: FinancialReportUncheckedCreateNestedManyWithoutNgoInput
     approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedCreateNestedManyWithoutNgoInput
   }
 
   export type NGOProfileCreateOrConnectWithoutBankDetailsInput = {
@@ -31409,6 +36611,7 @@ export namespace Prisma {
     donations?: DonationUpdateManyWithoutCompanyNestedInput
     approvals?: CampaignApprovalUpdateManyWithoutCompanyNestedInput
     utilizationReports?: UtilizationReportUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyProfileUncheckedUpdateWithoutBankDetailsInput = {
@@ -31430,6 +36633,7 @@ export namespace Prisma {
     donations?: DonationUncheckedUpdateManyWithoutCompanyNestedInput
     approvals?: CampaignApprovalUncheckedUpdateManyWithoutCompanyNestedInput
     utilizationReports?: UtilizationReportUncheckedUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type NGOProfileUpsertWithoutBankDetailsInput = {
@@ -31464,6 +36668,7 @@ export namespace Prisma {
     documents?: DocumentUpdateManyWithoutNgoNestedInput
     financialReports?: FinancialReportUpdateManyWithoutNgoNestedInput
     approvals?: CampaignApprovalUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUpdateManyWithoutNgoNestedInput
     user?: UserUpdateOneRequiredWithoutNgoProfileNestedInput
   }
 
@@ -31489,6 +36694,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedUpdateManyWithoutNgoNestedInput
     financialReports?: FinancialReportUncheckedUpdateManyWithoutNgoNestedInput
     approvals?: CampaignApprovalUncheckedUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedUpdateManyWithoutNgoNestedInput
   }
 
   export type CampaignCreateWithoutDocumentsInput = {
@@ -31555,6 +36761,7 @@ export namespace Prisma {
     donations?: DonationCreateNestedManyWithoutCompanyInput
     approvals?: CampaignApprovalCreateNestedManyWithoutCompanyInput
     utilizationReports?: UtilizationReportCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileUncheckedCreateWithoutDocumentsInput = {
@@ -31576,6 +36783,7 @@ export namespace Prisma {
     donations?: DonationUncheckedCreateNestedManyWithoutCompanyInput
     approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutCompanyInput
     utilizationReports?: UtilizationReportUncheckedCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileCreateOrConnectWithoutDocumentsInput = {
@@ -31604,6 +36812,7 @@ export namespace Prisma {
     campaigns?: CampaignCreateNestedManyWithoutNgoInput
     financialReports?: FinancialReportCreateNestedManyWithoutNgoInput
     approvals?: CampaignApprovalCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentCreateNestedManyWithoutNgoInput
     user: UserCreateNestedOneWithoutNgoProfileInput
   }
 
@@ -31629,6 +36838,7 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedCreateNestedManyWithoutNgoInput
     financialReports?: FinancialReportUncheckedCreateNestedManyWithoutNgoInput
     approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedCreateNestedManyWithoutNgoInput
   }
 
   export type NGOProfileCreateOrConnectWithoutDocumentsInput = {
@@ -31717,6 +36927,7 @@ export namespace Prisma {
     donations?: DonationUpdateManyWithoutCompanyNestedInput
     approvals?: CampaignApprovalUpdateManyWithoutCompanyNestedInput
     utilizationReports?: UtilizationReportUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyProfileUncheckedUpdateWithoutDocumentsInput = {
@@ -31738,6 +36949,7 @@ export namespace Prisma {
     donations?: DonationUncheckedUpdateManyWithoutCompanyNestedInput
     approvals?: CampaignApprovalUncheckedUpdateManyWithoutCompanyNestedInput
     utilizationReports?: UtilizationReportUncheckedUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type NGOProfileUpsertWithoutDocumentsInput = {
@@ -31772,6 +36984,7 @@ export namespace Prisma {
     campaigns?: CampaignUpdateManyWithoutNgoNestedInput
     financialReports?: FinancialReportUpdateManyWithoutNgoNestedInput
     approvals?: CampaignApprovalUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUpdateManyWithoutNgoNestedInput
     user?: UserUpdateOneRequiredWithoutNgoProfileNestedInput
   }
 
@@ -31797,6 +37010,7 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedUpdateManyWithoutNgoNestedInput
     financialReports?: FinancialReportUncheckedUpdateManyWithoutNgoNestedInput
     approvals?: CampaignApprovalUncheckedUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedUpdateManyWithoutNgoNestedInput
   }
 
   export type NGOProfileCreateWithoutFinancialReportsInput = {
@@ -31820,6 +37034,7 @@ export namespace Prisma {
     campaigns?: CampaignCreateNestedManyWithoutNgoInput
     documents?: DocumentCreateNestedManyWithoutNgoInput
     approvals?: CampaignApprovalCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentCreateNestedManyWithoutNgoInput
     user: UserCreateNestedOneWithoutNgoProfileInput
   }
 
@@ -31845,6 +37060,7 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedCreateNestedManyWithoutNgoInput
     documents?: DocumentUncheckedCreateNestedManyWithoutNgoInput
     approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedCreateNestedManyWithoutNgoInput
   }
 
   export type NGOProfileCreateOrConnectWithoutFinancialReportsInput = {
@@ -31884,6 +37100,7 @@ export namespace Prisma {
     campaigns?: CampaignUpdateManyWithoutNgoNestedInput
     documents?: DocumentUpdateManyWithoutNgoNestedInput
     approvals?: CampaignApprovalUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUpdateManyWithoutNgoNestedInput
     user?: UserUpdateOneRequiredWithoutNgoProfileNestedInput
   }
 
@@ -31909,6 +37126,7 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedUpdateManyWithoutNgoNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutNgoNestedInput
     approvals?: CampaignApprovalUncheckedUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedUpdateManyWithoutNgoNestedInput
   }
 
   export type CampaignCreateWithoutApprovalsInput = {
@@ -31975,6 +37193,7 @@ export namespace Prisma {
     documents?: DocumentCreateNestedManyWithoutCompanyInput
     donations?: DonationCreateNestedManyWithoutCompanyInput
     utilizationReports?: UtilizationReportCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileUncheckedCreateWithoutApprovalsInput = {
@@ -31996,6 +37215,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedCreateNestedManyWithoutCompanyInput
     donations?: DonationUncheckedCreateNestedManyWithoutCompanyInput
     utilizationReports?: UtilizationReportUncheckedCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileCreateOrConnectWithoutApprovalsInput = {
@@ -32024,6 +37244,7 @@ export namespace Prisma {
     campaigns?: CampaignCreateNestedManyWithoutNgoInput
     documents?: DocumentCreateNestedManyWithoutNgoInput
     financialReports?: FinancialReportCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentCreateNestedManyWithoutNgoInput
     user: UserCreateNestedOneWithoutNgoProfileInput
   }
 
@@ -32049,6 +37270,7 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedCreateNestedManyWithoutNgoInput
     documents?: DocumentUncheckedCreateNestedManyWithoutNgoInput
     financialReports?: FinancialReportUncheckedCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedCreateNestedManyWithoutNgoInput
   }
 
   export type NGOProfileCreateOrConnectWithoutApprovalsInput = {
@@ -32137,6 +37359,7 @@ export namespace Prisma {
     documents?: DocumentUpdateManyWithoutCompanyNestedInput
     donations?: DonationUpdateManyWithoutCompanyNestedInput
     utilizationReports?: UtilizationReportUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyProfileUncheckedUpdateWithoutApprovalsInput = {
@@ -32158,6 +37381,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedUpdateManyWithoutCompanyNestedInput
     donations?: DonationUncheckedUpdateManyWithoutCompanyNestedInput
     utilizationReports?: UtilizationReportUncheckedUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type NGOProfileUpsertWithoutApprovalsInput = {
@@ -32192,6 +37416,7 @@ export namespace Prisma {
     campaigns?: CampaignUpdateManyWithoutNgoNestedInput
     documents?: DocumentUpdateManyWithoutNgoNestedInput
     financialReports?: FinancialReportUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUpdateManyWithoutNgoNestedInput
     user?: UserUpdateOneRequiredWithoutNgoProfileNestedInput
   }
 
@@ -32217,6 +37442,7 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedUpdateManyWithoutNgoNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutNgoNestedInput
     financialReports?: FinancialReportUncheckedUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedUpdateManyWithoutNgoNestedInput
   }
 
   export type CampaignCreateWithoutImpactMetricsInput = {
@@ -32484,6 +37710,7 @@ export namespace Prisma {
     documents?: DocumentCreateNestedManyWithoutCompanyInput
     donations?: DonationCreateNestedManyWithoutCompanyInput
     approvals?: CampaignApprovalCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileUncheckedCreateWithoutUtilizationReportsInput = {
@@ -32505,6 +37732,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedCreateNestedManyWithoutCompanyInput
     donations?: DonationUncheckedCreateNestedManyWithoutCompanyInput
     approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileCreateOrConnectWithoutUtilizationReportsInput = {
@@ -32632,6 +37860,7 @@ export namespace Prisma {
     documents?: DocumentUpdateManyWithoutCompanyNestedInput
     donations?: DonationUpdateManyWithoutCompanyNestedInput
     approvals?: CampaignApprovalUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyProfileUncheckedUpdateWithoutUtilizationReportsInput = {
@@ -32653,6 +37882,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedUpdateManyWithoutCompanyNestedInput
     donations?: DonationUncheckedUpdateManyWithoutCompanyNestedInput
     approvals?: CampaignApprovalUncheckedUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type CampaignCreateWithoutMilestonesInput = {
@@ -32864,6 +38094,7 @@ export namespace Prisma {
     donations?: DonationCreateNestedManyWithoutCompanyInput
     approvals?: CampaignApprovalCreateNestedManyWithoutCompanyInput
     utilizationReports?: UtilizationReportCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileUncheckedCreateWithoutAddressesInput = {
@@ -32885,6 +38116,7 @@ export namespace Prisma {
     donations?: DonationUncheckedCreateNestedManyWithoutCompanyInput
     approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutCompanyInput
     utilizationReports?: UtilizationReportUncheckedCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileCreateOrConnectWithoutAddressesInput = {
@@ -32938,6 +38170,7 @@ export namespace Prisma {
     documents?: DocumentCreateNestedManyWithoutNgoInput
     financialReports?: FinancialReportCreateNestedManyWithoutNgoInput
     approvals?: CampaignApprovalCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentCreateNestedManyWithoutNgoInput
     user: UserCreateNestedOneWithoutNgoProfileInput
   }
 
@@ -32963,6 +38196,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedCreateNestedManyWithoutNgoInput
     financialReports?: FinancialReportUncheckedCreateNestedManyWithoutNgoInput
     approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedCreateNestedManyWithoutNgoInput
   }
 
   export type NGOProfileCreateOrConnectWithoutAddressesInput = {
@@ -33000,6 +38234,7 @@ export namespace Prisma {
     donations?: DonationUpdateManyWithoutCompanyNestedInput
     approvals?: CampaignApprovalUpdateManyWithoutCompanyNestedInput
     utilizationReports?: UtilizationReportUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyProfileUncheckedUpdateWithoutAddressesInput = {
@@ -33021,6 +38256,7 @@ export namespace Prisma {
     donations?: DonationUncheckedUpdateManyWithoutCompanyNestedInput
     approvals?: CampaignApprovalUncheckedUpdateManyWithoutCompanyNestedInput
     utilizationReports?: UtilizationReportUncheckedUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type DonorProfileUpsertWithoutAddressesInput = {
@@ -33086,6 +38322,7 @@ export namespace Prisma {
     documents?: DocumentUpdateManyWithoutNgoNestedInput
     financialReports?: FinancialReportUpdateManyWithoutNgoNestedInput
     approvals?: CampaignApprovalUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUpdateManyWithoutNgoNestedInput
     user?: UserUpdateOneRequiredWithoutNgoProfileNestedInput
   }
 
@@ -33111,6 +38348,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedUpdateManyWithoutNgoNestedInput
     financialReports?: FinancialReportUncheckedUpdateManyWithoutNgoNestedInput
     approvals?: CampaignApprovalUncheckedUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedUpdateManyWithoutNgoNestedInput
   }
 
   export type CampaignCreateWithoutAuditLogsInput = {
@@ -33177,6 +38415,7 @@ export namespace Prisma {
     donations?: DonationCreateNestedManyWithoutCompanyInput
     approvals?: CampaignApprovalCreateNestedManyWithoutCompanyInput
     utilizationReports?: UtilizationReportCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileUncheckedCreateWithoutAuditLogsInput = {
@@ -33198,6 +38437,7 @@ export namespace Prisma {
     donations?: DonationUncheckedCreateNestedManyWithoutCompanyInput
     approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutCompanyInput
     utilizationReports?: UtilizationReportUncheckedCreateNestedManyWithoutCompanyInput
+    programmes?: CSRProgrammeUncheckedCreateNestedManyWithoutCompanyInput
   }
 
   export type CompanyProfileCreateOrConnectWithoutAuditLogsInput = {
@@ -33282,6 +38522,7 @@ export namespace Prisma {
     documents?: DocumentCreateNestedManyWithoutNgoInput
     financialReports?: FinancialReportCreateNestedManyWithoutNgoInput
     approvals?: CampaignApprovalCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentCreateNestedManyWithoutNgoInput
     user: UserCreateNestedOneWithoutNgoProfileInput
   }
 
@@ -33307,6 +38548,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedCreateNestedManyWithoutNgoInput
     financialReports?: FinancialReportUncheckedCreateNestedManyWithoutNgoInput
     approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutNgoInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedCreateNestedManyWithoutNgoInput
   }
 
   export type NGOProfileCreateOrConnectWithoutAuditLogsInput = {
@@ -33432,6 +38674,7 @@ export namespace Prisma {
     donations?: DonationUpdateManyWithoutCompanyNestedInput
     approvals?: CampaignApprovalUpdateManyWithoutCompanyNestedInput
     utilizationReports?: UtilizationReportUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUpdateManyWithoutCompanyNestedInput
   }
 
   export type CompanyProfileUncheckedUpdateWithoutAuditLogsInput = {
@@ -33453,6 +38696,7 @@ export namespace Prisma {
     donations?: DonationUncheckedUpdateManyWithoutCompanyNestedInput
     approvals?: CampaignApprovalUncheckedUpdateManyWithoutCompanyNestedInput
     utilizationReports?: UtilizationReportUncheckedUpdateManyWithoutCompanyNestedInput
+    programmes?: CSRProgrammeUncheckedUpdateManyWithoutCompanyNestedInput
   }
 
   export type DonationUpsertWithoutAuditLogsInput = {
@@ -33555,6 +38799,7 @@ export namespace Prisma {
     documents?: DocumentUpdateManyWithoutNgoNestedInput
     financialReports?: FinancialReportUpdateManyWithoutNgoNestedInput
     approvals?: CampaignApprovalUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUpdateManyWithoutNgoNestedInput
     user?: UserUpdateOneRequiredWithoutNgoProfileNestedInput
   }
 
@@ -33580,6 +38825,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedUpdateManyWithoutNgoNestedInput
     financialReports?: FinancialReportUncheckedUpdateManyWithoutNgoNestedInput
     approvals?: CampaignApprovalUncheckedUpdateManyWithoutNgoNestedInput
+    programmeAssignments?: ProgrammeAssignmentUncheckedUpdateManyWithoutNgoNestedInput
   }
 
   export type UserUpsertWithoutAuditLogsInput = {
@@ -33623,6 +38869,490 @@ export namespace Prisma {
     donorProfile?: DonorProfileUncheckedUpdateOneWithoutUserNestedInput
     ngoProfile?: NGOProfileUncheckedUpdateOneWithoutUserNestedInput
     invitations?: InvitationUncheckedUpdateManyWithoutCreatorNestedInput
+  }
+
+  export type CompanyProfileCreateWithoutProgrammesInput = {
+    id?: string
+    cin: string
+    csrPolicyUrl?: string | null
+    industry: string
+    netWorth?: number | null
+    averageProfit?: number | null
+    csrAnnualBudget?: number | null
+    csrAllocated?: number | null
+    csrSpent?: number | null
+    csrCommittee?: string | null
+    deletedAt?: Date | string | null
+    addresses?: AddressCreateNestedManyWithoutCompanyInput
+    auditLogs?: AuditLogCreateNestedManyWithoutCompanyInput
+    bankDetails?: BankDetailCreateNestedManyWithoutCompanyInput
+    user: UserCreateNestedOneWithoutCompanyProfileInput
+    documents?: DocumentCreateNestedManyWithoutCompanyInput
+    donations?: DonationCreateNestedManyWithoutCompanyInput
+    approvals?: CampaignApprovalCreateNestedManyWithoutCompanyInput
+    utilizationReports?: UtilizationReportCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyProfileUncheckedCreateWithoutProgrammesInput = {
+    id?: string
+    userId: string
+    cin: string
+    csrPolicyUrl?: string | null
+    industry: string
+    netWorth?: number | null
+    averageProfit?: number | null
+    csrAnnualBudget?: number | null
+    csrAllocated?: number | null
+    csrSpent?: number | null
+    csrCommittee?: string | null
+    deletedAt?: Date | string | null
+    addresses?: AddressUncheckedCreateNestedManyWithoutCompanyInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutCompanyInput
+    bankDetails?: BankDetailUncheckedCreateNestedManyWithoutCompanyInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutCompanyInput
+    donations?: DonationUncheckedCreateNestedManyWithoutCompanyInput
+    approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutCompanyInput
+    utilizationReports?: UtilizationReportUncheckedCreateNestedManyWithoutCompanyInput
+  }
+
+  export type CompanyProfileCreateOrConnectWithoutProgrammesInput = {
+    where: CompanyProfileWhereUniqueInput
+    create: XOR<CompanyProfileCreateWithoutProgrammesInput, CompanyProfileUncheckedCreateWithoutProgrammesInput>
+  }
+
+  export type ProgrammeMilestoneCreateWithoutProgrammeInput = {
+    id?: string
+    title: string
+    description?: string | null
+    dueDate?: Date | string | null
+    status?: $Enums.ProgrammeMilestoneStatus
+    progress?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type ProgrammeMilestoneUncheckedCreateWithoutProgrammeInput = {
+    id?: string
+    title: string
+    description?: string | null
+    dueDate?: Date | string | null
+    status?: $Enums.ProgrammeMilestoneStatus
+    progress?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type ProgrammeMilestoneCreateOrConnectWithoutProgrammeInput = {
+    where: ProgrammeMilestoneWhereUniqueInput
+    create: XOR<ProgrammeMilestoneCreateWithoutProgrammeInput, ProgrammeMilestoneUncheckedCreateWithoutProgrammeInput>
+  }
+
+  export type ProgrammeMilestoneCreateManyProgrammeInputEnvelope = {
+    data: ProgrammeMilestoneCreateManyProgrammeInput | ProgrammeMilestoneCreateManyProgrammeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProgrammeAssignmentCreateWithoutProgrammeInput = {
+    id?: string
+    status?: $Enums.ProgrammeAssignmentStatus
+    notes?: string | null
+    assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ngo: NGOProfileCreateNestedOneWithoutProgrammeAssignmentsInput
+  }
+
+  export type ProgrammeAssignmentUncheckedCreateWithoutProgrammeInput = {
+    id?: string
+    ngoId: string
+    status?: $Enums.ProgrammeAssignmentStatus
+    notes?: string | null
+    assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgrammeAssignmentCreateOrConnectWithoutProgrammeInput = {
+    where: ProgrammeAssignmentWhereUniqueInput
+    create: XOR<ProgrammeAssignmentCreateWithoutProgrammeInput, ProgrammeAssignmentUncheckedCreateWithoutProgrammeInput>
+  }
+
+  export type ProgrammeAssignmentCreateManyProgrammeInputEnvelope = {
+    data: ProgrammeAssignmentCreateManyProgrammeInput | ProgrammeAssignmentCreateManyProgrammeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CompanyProfileUpsertWithoutProgrammesInput = {
+    update: XOR<CompanyProfileUpdateWithoutProgrammesInput, CompanyProfileUncheckedUpdateWithoutProgrammesInput>
+    create: XOR<CompanyProfileCreateWithoutProgrammesInput, CompanyProfileUncheckedCreateWithoutProgrammesInput>
+    where?: CompanyProfileWhereInput
+  }
+
+  export type CompanyProfileUpdateToOneWithWhereWithoutProgrammesInput = {
+    where?: CompanyProfileWhereInput
+    data: XOR<CompanyProfileUpdateWithoutProgrammesInput, CompanyProfileUncheckedUpdateWithoutProgrammesInput>
+  }
+
+  export type CompanyProfileUpdateWithoutProgrammesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cin?: StringFieldUpdateOperationsInput | string
+    csrPolicyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: StringFieldUpdateOperationsInput | string
+    netWorth?: NullableFloatFieldUpdateOperationsInput | number | null
+    averageProfit?: NullableFloatFieldUpdateOperationsInput | number | null
+    csrAnnualBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    csrAllocated?: NullableFloatFieldUpdateOperationsInput | number | null
+    csrSpent?: NullableFloatFieldUpdateOperationsInput | number | null
+    csrCommittee?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    addresses?: AddressUpdateManyWithoutCompanyNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutCompanyNestedInput
+    bankDetails?: BankDetailUpdateManyWithoutCompanyNestedInput
+    user?: UserUpdateOneRequiredWithoutCompanyProfileNestedInput
+    documents?: DocumentUpdateManyWithoutCompanyNestedInput
+    donations?: DonationUpdateManyWithoutCompanyNestedInput
+    approvals?: CampaignApprovalUpdateManyWithoutCompanyNestedInput
+    utilizationReports?: UtilizationReportUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type CompanyProfileUncheckedUpdateWithoutProgrammesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    cin?: StringFieldUpdateOperationsInput | string
+    csrPolicyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: StringFieldUpdateOperationsInput | string
+    netWorth?: NullableFloatFieldUpdateOperationsInput | number | null
+    averageProfit?: NullableFloatFieldUpdateOperationsInput | number | null
+    csrAnnualBudget?: NullableFloatFieldUpdateOperationsInput | number | null
+    csrAllocated?: NullableFloatFieldUpdateOperationsInput | number | null
+    csrSpent?: NullableFloatFieldUpdateOperationsInput | number | null
+    csrCommittee?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    addresses?: AddressUncheckedUpdateManyWithoutCompanyNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutCompanyNestedInput
+    bankDetails?: BankDetailUncheckedUpdateManyWithoutCompanyNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutCompanyNestedInput
+    donations?: DonationUncheckedUpdateManyWithoutCompanyNestedInput
+    approvals?: CampaignApprovalUncheckedUpdateManyWithoutCompanyNestedInput
+    utilizationReports?: UtilizationReportUncheckedUpdateManyWithoutCompanyNestedInput
+  }
+
+  export type ProgrammeMilestoneUpsertWithWhereUniqueWithoutProgrammeInput = {
+    where: ProgrammeMilestoneWhereUniqueInput
+    update: XOR<ProgrammeMilestoneUpdateWithoutProgrammeInput, ProgrammeMilestoneUncheckedUpdateWithoutProgrammeInput>
+    create: XOR<ProgrammeMilestoneCreateWithoutProgrammeInput, ProgrammeMilestoneUncheckedCreateWithoutProgrammeInput>
+  }
+
+  export type ProgrammeMilestoneUpdateWithWhereUniqueWithoutProgrammeInput = {
+    where: ProgrammeMilestoneWhereUniqueInput
+    data: XOR<ProgrammeMilestoneUpdateWithoutProgrammeInput, ProgrammeMilestoneUncheckedUpdateWithoutProgrammeInput>
+  }
+
+  export type ProgrammeMilestoneUpdateManyWithWhereWithoutProgrammeInput = {
+    where: ProgrammeMilestoneScalarWhereInput
+    data: XOR<ProgrammeMilestoneUpdateManyMutationInput, ProgrammeMilestoneUncheckedUpdateManyWithoutProgrammeInput>
+  }
+
+  export type ProgrammeMilestoneScalarWhereInput = {
+    AND?: ProgrammeMilestoneScalarWhereInput | ProgrammeMilestoneScalarWhereInput[]
+    OR?: ProgrammeMilestoneScalarWhereInput[]
+    NOT?: ProgrammeMilestoneScalarWhereInput | ProgrammeMilestoneScalarWhereInput[]
+    id?: StringFilter<"ProgrammeMilestone"> | string
+    programmeId?: StringFilter<"ProgrammeMilestone"> | string
+    title?: StringFilter<"ProgrammeMilestone"> | string
+    description?: StringNullableFilter<"ProgrammeMilestone"> | string | null
+    dueDate?: DateTimeNullableFilter<"ProgrammeMilestone"> | Date | string | null
+    status?: EnumProgrammeMilestoneStatusFilter<"ProgrammeMilestone"> | $Enums.ProgrammeMilestoneStatus
+    progress?: IntFilter<"ProgrammeMilestone"> | number
+    createdAt?: DateTimeFilter<"ProgrammeMilestone"> | Date | string
+    updatedAt?: DateTimeFilter<"ProgrammeMilestone"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"ProgrammeMilestone"> | Date | string | null
+  }
+
+  export type ProgrammeAssignmentUpsertWithWhereUniqueWithoutProgrammeInput = {
+    where: ProgrammeAssignmentWhereUniqueInput
+    update: XOR<ProgrammeAssignmentUpdateWithoutProgrammeInput, ProgrammeAssignmentUncheckedUpdateWithoutProgrammeInput>
+    create: XOR<ProgrammeAssignmentCreateWithoutProgrammeInput, ProgrammeAssignmentUncheckedCreateWithoutProgrammeInput>
+  }
+
+  export type ProgrammeAssignmentUpdateWithWhereUniqueWithoutProgrammeInput = {
+    where: ProgrammeAssignmentWhereUniqueInput
+    data: XOR<ProgrammeAssignmentUpdateWithoutProgrammeInput, ProgrammeAssignmentUncheckedUpdateWithoutProgrammeInput>
+  }
+
+  export type ProgrammeAssignmentUpdateManyWithWhereWithoutProgrammeInput = {
+    where: ProgrammeAssignmentScalarWhereInput
+    data: XOR<ProgrammeAssignmentUpdateManyMutationInput, ProgrammeAssignmentUncheckedUpdateManyWithoutProgrammeInput>
+  }
+
+  export type CSRProgrammeCreateWithoutMilestonesInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status?: $Enums.ProgrammeStatus
+    budget?: number | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    company: CompanyProfileCreateNestedOneWithoutProgrammesInput
+    assignments?: ProgrammeAssignmentCreateNestedManyWithoutProgrammeInput
+  }
+
+  export type CSRProgrammeUncheckedCreateWithoutMilestonesInput = {
+    id?: string
+    companyId: string
+    title: string
+    description?: string | null
+    status?: $Enums.ProgrammeStatus
+    budget?: number | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    assignments?: ProgrammeAssignmentUncheckedCreateNestedManyWithoutProgrammeInput
+  }
+
+  export type CSRProgrammeCreateOrConnectWithoutMilestonesInput = {
+    where: CSRProgrammeWhereUniqueInput
+    create: XOR<CSRProgrammeCreateWithoutMilestonesInput, CSRProgrammeUncheckedCreateWithoutMilestonesInput>
+  }
+
+  export type CSRProgrammeUpsertWithoutMilestonesInput = {
+    update: XOR<CSRProgrammeUpdateWithoutMilestonesInput, CSRProgrammeUncheckedUpdateWithoutMilestonesInput>
+    create: XOR<CSRProgrammeCreateWithoutMilestonesInput, CSRProgrammeUncheckedCreateWithoutMilestonesInput>
+    where?: CSRProgrammeWhereInput
+  }
+
+  export type CSRProgrammeUpdateToOneWithWhereWithoutMilestonesInput = {
+    where?: CSRProgrammeWhereInput
+    data: XOR<CSRProgrammeUpdateWithoutMilestonesInput, CSRProgrammeUncheckedUpdateWithoutMilestonesInput>
+  }
+
+  export type CSRProgrammeUpdateWithoutMilestonesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProgrammeStatusFieldUpdateOperationsInput | $Enums.ProgrammeStatus
+    budget?: NullableFloatFieldUpdateOperationsInput | number | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    company?: CompanyProfileUpdateOneRequiredWithoutProgrammesNestedInput
+    assignments?: ProgrammeAssignmentUpdateManyWithoutProgrammeNestedInput
+  }
+
+  export type CSRProgrammeUncheckedUpdateWithoutMilestonesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProgrammeStatusFieldUpdateOperationsInput | $Enums.ProgrammeStatus
+    budget?: NullableFloatFieldUpdateOperationsInput | number | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignments?: ProgrammeAssignmentUncheckedUpdateManyWithoutProgrammeNestedInput
+  }
+
+  export type CSRProgrammeCreateWithoutAssignmentsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status?: $Enums.ProgrammeStatus
+    budget?: number | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    company: CompanyProfileCreateNestedOneWithoutProgrammesInput
+    milestones?: ProgrammeMilestoneCreateNestedManyWithoutProgrammeInput
+  }
+
+  export type CSRProgrammeUncheckedCreateWithoutAssignmentsInput = {
+    id?: string
+    companyId: string
+    title: string
+    description?: string | null
+    status?: $Enums.ProgrammeStatus
+    budget?: number | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+    milestones?: ProgrammeMilestoneUncheckedCreateNestedManyWithoutProgrammeInput
+  }
+
+  export type CSRProgrammeCreateOrConnectWithoutAssignmentsInput = {
+    where: CSRProgrammeWhereUniqueInput
+    create: XOR<CSRProgrammeCreateWithoutAssignmentsInput, CSRProgrammeUncheckedCreateWithoutAssignmentsInput>
+  }
+
+  export type NGOProfileCreateWithoutProgrammeAssignmentsInput = {
+    id?: string
+    registrationType: $Enums.NGORegistrationType
+    registrationNumber: string
+    founderNames: string
+    yearEstablished: number
+    missionStatement: string
+    impactSummary?: string | null
+    website?: string | null
+    twelveARegistered?: boolean
+    eightyGRegistered?: boolean
+    csrEligibility?: boolean
+    deletedAt?: Date | string | null
+    verificationStatus?: string
+    verificationRemarks?: string | null
+    addresses?: AddressCreateNestedManyWithoutNgoInput
+    auditLogs?: AuditLogCreateNestedManyWithoutNgoInput
+    bankDetails?: BankDetailCreateNestedManyWithoutNgoInput
+    campaigns?: CampaignCreateNestedManyWithoutNgoInput
+    documents?: DocumentCreateNestedManyWithoutNgoInput
+    financialReports?: FinancialReportCreateNestedManyWithoutNgoInput
+    approvals?: CampaignApprovalCreateNestedManyWithoutNgoInput
+    user: UserCreateNestedOneWithoutNgoProfileInput
+  }
+
+  export type NGOProfileUncheckedCreateWithoutProgrammeAssignmentsInput = {
+    id?: string
+    userId: string
+    registrationType: $Enums.NGORegistrationType
+    registrationNumber: string
+    founderNames: string
+    yearEstablished: number
+    missionStatement: string
+    impactSummary?: string | null
+    website?: string | null
+    twelveARegistered?: boolean
+    eightyGRegistered?: boolean
+    csrEligibility?: boolean
+    deletedAt?: Date | string | null
+    verificationStatus?: string
+    verificationRemarks?: string | null
+    addresses?: AddressUncheckedCreateNestedManyWithoutNgoInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutNgoInput
+    bankDetails?: BankDetailUncheckedCreateNestedManyWithoutNgoInput
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutNgoInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutNgoInput
+    financialReports?: FinancialReportUncheckedCreateNestedManyWithoutNgoInput
+    approvals?: CampaignApprovalUncheckedCreateNestedManyWithoutNgoInput
+  }
+
+  export type NGOProfileCreateOrConnectWithoutProgrammeAssignmentsInput = {
+    where: NGOProfileWhereUniqueInput
+    create: XOR<NGOProfileCreateWithoutProgrammeAssignmentsInput, NGOProfileUncheckedCreateWithoutProgrammeAssignmentsInput>
+  }
+
+  export type CSRProgrammeUpsertWithoutAssignmentsInput = {
+    update: XOR<CSRProgrammeUpdateWithoutAssignmentsInput, CSRProgrammeUncheckedUpdateWithoutAssignmentsInput>
+    create: XOR<CSRProgrammeCreateWithoutAssignmentsInput, CSRProgrammeUncheckedCreateWithoutAssignmentsInput>
+    where?: CSRProgrammeWhereInput
+  }
+
+  export type CSRProgrammeUpdateToOneWithWhereWithoutAssignmentsInput = {
+    where?: CSRProgrammeWhereInput
+    data: XOR<CSRProgrammeUpdateWithoutAssignmentsInput, CSRProgrammeUncheckedUpdateWithoutAssignmentsInput>
+  }
+
+  export type CSRProgrammeUpdateWithoutAssignmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProgrammeStatusFieldUpdateOperationsInput | $Enums.ProgrammeStatus
+    budget?: NullableFloatFieldUpdateOperationsInput | number | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    company?: CompanyProfileUpdateOneRequiredWithoutProgrammesNestedInput
+    milestones?: ProgrammeMilestoneUpdateManyWithoutProgrammeNestedInput
+  }
+
+  export type CSRProgrammeUncheckedUpdateWithoutAssignmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProgrammeStatusFieldUpdateOperationsInput | $Enums.ProgrammeStatus
+    budget?: NullableFloatFieldUpdateOperationsInput | number | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    milestones?: ProgrammeMilestoneUncheckedUpdateManyWithoutProgrammeNestedInput
+  }
+
+  export type NGOProfileUpsertWithoutProgrammeAssignmentsInput = {
+    update: XOR<NGOProfileUpdateWithoutProgrammeAssignmentsInput, NGOProfileUncheckedUpdateWithoutProgrammeAssignmentsInput>
+    create: XOR<NGOProfileCreateWithoutProgrammeAssignmentsInput, NGOProfileUncheckedCreateWithoutProgrammeAssignmentsInput>
+    where?: NGOProfileWhereInput
+  }
+
+  export type NGOProfileUpdateToOneWithWhereWithoutProgrammeAssignmentsInput = {
+    where?: NGOProfileWhereInput
+    data: XOR<NGOProfileUpdateWithoutProgrammeAssignmentsInput, NGOProfileUncheckedUpdateWithoutProgrammeAssignmentsInput>
+  }
+
+  export type NGOProfileUpdateWithoutProgrammeAssignmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    registrationType?: EnumNGORegistrationTypeFieldUpdateOperationsInput | $Enums.NGORegistrationType
+    registrationNumber?: StringFieldUpdateOperationsInput | string
+    founderNames?: StringFieldUpdateOperationsInput | string
+    yearEstablished?: IntFieldUpdateOperationsInput | number
+    missionStatement?: StringFieldUpdateOperationsInput | string
+    impactSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    twelveARegistered?: BoolFieldUpdateOperationsInput | boolean
+    eightyGRegistered?: BoolFieldUpdateOperationsInput | boolean
+    csrEligibility?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationStatus?: StringFieldUpdateOperationsInput | string
+    verificationRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    addresses?: AddressUpdateManyWithoutNgoNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutNgoNestedInput
+    bankDetails?: BankDetailUpdateManyWithoutNgoNestedInput
+    campaigns?: CampaignUpdateManyWithoutNgoNestedInput
+    documents?: DocumentUpdateManyWithoutNgoNestedInput
+    financialReports?: FinancialReportUpdateManyWithoutNgoNestedInput
+    approvals?: CampaignApprovalUpdateManyWithoutNgoNestedInput
+    user?: UserUpdateOneRequiredWithoutNgoProfileNestedInput
+  }
+
+  export type NGOProfileUncheckedUpdateWithoutProgrammeAssignmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    registrationType?: EnumNGORegistrationTypeFieldUpdateOperationsInput | $Enums.NGORegistrationType
+    registrationNumber?: StringFieldUpdateOperationsInput | string
+    founderNames?: StringFieldUpdateOperationsInput | string
+    yearEstablished?: IntFieldUpdateOperationsInput | number
+    missionStatement?: StringFieldUpdateOperationsInput | string
+    impactSummary?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    twelveARegistered?: BoolFieldUpdateOperationsInput | boolean
+    eightyGRegistered?: BoolFieldUpdateOperationsInput | boolean
+    csrEligibility?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verificationStatus?: StringFieldUpdateOperationsInput | string
+    verificationRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    addresses?: AddressUncheckedUpdateManyWithoutNgoNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutNgoNestedInput
+    bankDetails?: BankDetailUncheckedUpdateManyWithoutNgoNestedInput
+    campaigns?: CampaignUncheckedUpdateManyWithoutNgoNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutNgoNestedInput
+    financialReports?: FinancialReportUncheckedUpdateManyWithoutNgoNestedInput
+    approvals?: CampaignApprovalUncheckedUpdateManyWithoutNgoNestedInput
   }
 
   export type AuditLogCreateManyUserInput = {
@@ -33782,6 +39512,16 @@ export namespace Prisma {
     companyId: string
     status?: string
     remarks?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgrammeAssignmentCreateManyNgoInput = {
+    id?: string
+    programmeId: string
+    status?: $Enums.ProgrammeAssignmentStatus
+    notes?: string | null
+    assignedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -34031,6 +39771,36 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ProgrammeAssignmentUpdateWithoutNgoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumProgrammeAssignmentStatusFieldUpdateOperationsInput | $Enums.ProgrammeAssignmentStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    programme?: CSRProgrammeUpdateOneRequiredWithoutAssignmentsNestedInput
+  }
+
+  export type ProgrammeAssignmentUncheckedUpdateWithoutNgoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programmeId?: StringFieldUpdateOperationsInput | string
+    status?: EnumProgrammeAssignmentStatusFieldUpdateOperationsInput | $Enums.ProgrammeAssignmentStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgrammeAssignmentUncheckedUpdateManyWithoutNgoInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    programmeId?: StringFieldUpdateOperationsInput | string
+    status?: EnumProgrammeAssignmentStatusFieldUpdateOperationsInput | $Enums.ProgrammeAssignmentStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AddressCreateManyCompanyInput = {
     id?: string
     ngoId?: string | null
@@ -34108,6 +39878,19 @@ export namespace Prisma {
     proofUrl: string
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type CSRProgrammeCreateManyCompanyInput = {
+    id?: string
+    title: string
+    description?: string | null
+    status?: $Enums.ProgrammeStatus
+    budget?: number | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type AddressUpdateWithoutCompanyInput = {
@@ -34347,6 +40130,49 @@ export namespace Prisma {
     proofUrl?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CSRProgrammeUpdateWithoutCompanyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProgrammeStatusFieldUpdateOperationsInput | $Enums.ProgrammeStatus
+    budget?: NullableFloatFieldUpdateOperationsInput | number | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    milestones?: ProgrammeMilestoneUpdateManyWithoutProgrammeNestedInput
+    assignments?: ProgrammeAssignmentUpdateManyWithoutProgrammeNestedInput
+  }
+
+  export type CSRProgrammeUncheckedUpdateWithoutCompanyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProgrammeStatusFieldUpdateOperationsInput | $Enums.ProgrammeStatus
+    budget?: NullableFloatFieldUpdateOperationsInput | number | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    milestones?: ProgrammeMilestoneUncheckedUpdateManyWithoutProgrammeNestedInput
+    assignments?: ProgrammeAssignmentUncheckedUpdateManyWithoutProgrammeNestedInput
+  }
+
+  export type CSRProgrammeUncheckedUpdateManyWithoutCompanyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProgrammeStatusFieldUpdateOperationsInput | $Enums.ProgrammeStatus
+    budget?: NullableFloatFieldUpdateOperationsInput | number | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type AddressCreateManyDonorInput = {
@@ -34947,6 +40773,94 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ProgrammeMilestoneCreateManyProgrammeInput = {
+    id?: string
+    title: string
+    description?: string | null
+    dueDate?: Date | string | null
+    status?: $Enums.ProgrammeMilestoneStatus
+    progress?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deletedAt?: Date | string | null
+  }
+
+  export type ProgrammeAssignmentCreateManyProgrammeInput = {
+    id?: string
+    ngoId: string
+    status?: $Enums.ProgrammeAssignmentStatus
+    notes?: string | null
+    assignedAt?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProgrammeMilestoneUpdateWithoutProgrammeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumProgrammeMilestoneStatusFieldUpdateOperationsInput | $Enums.ProgrammeMilestoneStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ProgrammeMilestoneUncheckedUpdateWithoutProgrammeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumProgrammeMilestoneStatusFieldUpdateOperationsInput | $Enums.ProgrammeMilestoneStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ProgrammeMilestoneUncheckedUpdateManyWithoutProgrammeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumProgrammeMilestoneStatusFieldUpdateOperationsInput | $Enums.ProgrammeMilestoneStatus
+    progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ProgrammeAssignmentUpdateWithoutProgrammeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumProgrammeAssignmentStatusFieldUpdateOperationsInput | $Enums.ProgrammeAssignmentStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ngo?: NGOProfileUpdateOneRequiredWithoutProgrammeAssignmentsNestedInput
+  }
+
+  export type ProgrammeAssignmentUncheckedUpdateWithoutProgrammeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ngoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumProgrammeAssignmentStatusFieldUpdateOperationsInput | $Enums.ProgrammeAssignmentStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProgrammeAssignmentUncheckedUpdateManyWithoutProgrammeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ngoId?: StringFieldUpdateOperationsInput | string
+    status?: EnumProgrammeAssignmentStatusFieldUpdateOperationsInput | $Enums.ProgrammeAssignmentStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

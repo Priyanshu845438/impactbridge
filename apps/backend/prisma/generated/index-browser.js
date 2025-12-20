@@ -317,6 +317,44 @@ exports.Prisma.AuditLogScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.CSRProgrammeScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  budget: 'budget',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.ProgrammeMilestoneScalarFieldEnum = {
+  id: 'id',
+  programmeId: 'programmeId',
+  title: 'title',
+  description: 'description',
+  dueDate: 'dueDate',
+  status: 'status',
+  progress: 'progress',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.ProgrammeAssignmentScalarFieldEnum = {
+  id: 'id',
+  programmeId: 'programmeId',
+  ngoId: 'ngoId',
+  status: 'status',
+  notes: 'notes',
+  assignedAt: 'assignedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -380,6 +418,27 @@ exports.DocumentType = exports.$Enums.DocumentType = {
   OTHER: 'OTHER'
 };
 
+exports.ProgrammeStatus = exports.$Enums.ProgrammeStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+  ARCHIVED: 'ARCHIVED'
+};
+
+exports.ProgrammeMilestoneStatus = exports.$Enums.ProgrammeMilestoneStatus = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  BLOCKED: 'BLOCKED'
+};
+
+exports.ProgrammeAssignmentStatus = exports.$Enums.ProgrammeAssignmentStatus = {
+  INVITED: 'INVITED',
+  ACTIVE: 'ACTIVE',
+  REJECTED: 'REJECTED',
+  COMPLETED: 'COMPLETED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Invitation: 'Invitation',
@@ -396,7 +455,10 @@ exports.Prisma.ModelName = {
   UtilizationReport: 'UtilizationReport',
   Milestone: 'Milestone',
   Address: 'Address',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  CSRProgramme: 'CSRProgramme',
+  ProgrammeMilestone: 'ProgrammeMilestone',
+  ProgrammeAssignment: 'ProgrammeAssignment'
 };
 
 /**

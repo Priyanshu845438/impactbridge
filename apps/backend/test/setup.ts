@@ -23,6 +23,24 @@ jest.mock('prisma/generated', () => ({
     HEALTH: 'HEALTH',
     ENVIRONMENT: 'ENVIRONMENT',
   },
+  ProgrammeStatus: {
+    DRAFT: 'DRAFT',
+    ACTIVE: 'ACTIVE',
+    COMPLETED: 'COMPLETED',
+    ARCHIVED: 'ARCHIVED',
+  },
+  ProgrammeMilestoneStatus: {
+    PENDING: 'PENDING',
+    IN_PROGRESS: 'IN_PROGRESS',
+    COMPLETED: 'COMPLETED',
+    BLOCKED: 'BLOCKED',
+  },
+  ProgrammeAssignmentStatus: {
+    INVITED: 'INVITED',
+    ACTIVE: 'ACTIVE',
+    REJECTED: 'REJECTED',
+    COMPLETED: 'COMPLETED',
+  },
 }));
 
 process.env.JWT_SECRET = process.env.JWT_SECRET ?? 'test-secret';

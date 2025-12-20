@@ -231,3 +231,9 @@
 - Refreshed AppModule imports to rely on the new versioned module plus core service modules.
 - Authored e2e specs covering auth success/error scenarios and protected profile access, including Prisma/service mocks for activity logs.
 - Updated legacy bootstrap e2e to reflect the new routing shape; ran `npm run init`, `npm test`, `npm run test:e2e`, and `npm run build` to confirm green state.
+
+## 47. CSR programme foundation established (2025-02-15)
+- Expanded Prisma schema with `CSRProgramme`, `ProgrammeMilestone`, and `ProgrammeAssignment` models plus supporting enums, generated migration `20251220072252_add_csr_programme_foundation`, and regenerated client.
+- Added `src/csr-programme/` module with DTOs and `CSRProgrammeService` covering create/update/list/assign/milestone operations; module exported for future controllers.
+- Updated `AppModule` to register the new module while keeping API surface unchanged.
+- Created unit coverage `test/unit/csr-programme/csr-programme.service.spec.ts` backed by mocked Prisma, adjusted `test/setup.ts` enum stubs, and re-ran `npm run init`, `npm run test -- --runInBand`, `npm run build` successfully.
