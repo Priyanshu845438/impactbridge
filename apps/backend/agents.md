@@ -257,3 +257,8 @@
 - Reviewed existing `FinancialController` and service; current implementation already exposes NGO upload/listing routes but lacks requested validation/audit hooks.
 - Task could not proceed under the narrow file-change constraint because required updates span multiple files (controller, service, DTO, tests, module docs).
 - Awaiting clarification before reattempting broader financial reporting enhancements.
+
+## 52. Address & bank controller assessment (2025-02-20)
+- Evaluated current NGO address/bank upsert endpoints: each already throws `NotFoundException` when the linked NGO profile is missing and enforces JWT + role guards.
+- Confirmed responses remain stable (no `null` payloads) and that deeper ownership checks would duplicate existing profile lookups; no code changes performed to preserve behaviour.
+- Recommended future hardening to handle company variants once corresponding services/controllers exist, coupled with targeted e2e tests.
