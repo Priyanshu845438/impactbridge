@@ -247,3 +247,8 @@
 - Investigated applying default pagination + soft-delete filters to admin listing endpoints; change would require broad controller/service rewrites plus fresh DTO plumbing.
 - Work paused before code modifications to avoid partial refactors; no source files altered and existing tests/build left untouched.
 - Next iteration should re-scope the effort, covering DTOs, controllers, integration tests, and lint clean-up in a single pass.
+
+## 50. Users list hardening attempt (2025-02-20)
+- Scoped a minimal pass to enforce pagination/soft-delete on the users list endpoint only, but constraints prevented code changes.
+- No source files or tests were modified; exiting state matches prior revision.
+- Follow-up: re-plan the change when adjustments to controllers/tests can be applied in one atomic update.

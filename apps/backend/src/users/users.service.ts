@@ -7,7 +7,6 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { comparePassword, hashPassword } from '../auth/utils/password.util';
 import { sanitizeEntity, sanitizeEntities } from '../utils/sanitize.util';
-import { ListQueryOptions } from '../utils/pagination.util';
 import { buildFindManyArgs, mergeWhere } from '../utils/query.util';
 
 @Injectable()
@@ -24,9 +23,14 @@ export class UsersService {
     return this.prisma.user.create({ data });
   }
 
-  findAll(options?: ListQueryOptions<Prisma.UserWhereInput>) {
-    const args = buildFindManyArgs<'User', Prisma.UserWhereInput>(options);
-    return this.prisma.user.findMany(args);
+  async findAll(limit = 25, offset = 0) {
+    const users = await this.prisma.user.findMany({
+      where: { deletedAt: null },
+      skip: offset,
+      take: limit,
+      orderBy: { createdAt: 'desc' },
+    });
+    return sanitizeEntities(users);
   }
 
   findOne(id: string) {
