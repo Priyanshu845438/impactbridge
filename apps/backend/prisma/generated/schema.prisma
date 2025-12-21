@@ -178,6 +178,15 @@ model FinancialReport {
   ngo NGOProfile @relation("NGOFinancialReports", fields: [ngoId], references: [id])
 }
 
+model NotificationIntent {
+  id        String   @id @default(uuid())
+  channel   String
+  recipient Json
+  payload   Json
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+}
+
 model CampaignApproval {
   id         String   @id @default(uuid())
   campaignId String

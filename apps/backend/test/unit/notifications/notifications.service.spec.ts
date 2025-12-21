@@ -5,6 +5,7 @@ import {
   NOTIFICATION_PROVIDER,
   NotificationProvider,
 } from '../../../src/notifications/notification.types';
+import { NotificationRepository } from '../../../src/notifications/notification.repository';
 
 class MockNotificationProvider implements NotificationProvider {
   public lastIntent: NotificationIntent | null = null;
@@ -15,12 +16,18 @@ class MockNotificationProvider implements NotificationProvider {
   }
 }
 
+class MockNotificationRepository {
+  public createIntent = jest.fn();
+}
+
 describe('NotificationsService', () => {
   let service: NotificationsService;
   let provider: MockNotificationProvider;
+  let repository: MockNotificationRepository;
 
   beforeEach(async () => {
     provider = new MockNotificationProvider();
+    repository = new MockNotificationRepository();
 
     const moduleRef = await Test.createTestingModule({
       providers: [
@@ -29,22 +36,37 @@ describe('NotificationsService', () => {
           provide: NOTIFICATION_PROVIDER,
           useValue: provider,
         },
+        {
+          provide: NotificationRepository,
+          useValue: repository,
+        },
       ],
     }).compile();
 
     service = moduleRef.get(NotificationsService);
   });
 
-  it('creates intent with timestamp and delegates to provider', () => {
-    const recipient = { email: 'user@example.com' };
-    const payload = { subject: 'Test', body: 'Hello' };
+  it('persists intent then delegates to provider', async () => {
+    const now = new Date();
+    const storedIntent: NotificationIntent = {
+      id: 'intent-1',
+      channel: 'email',
+      recipient: { email: 'user@example.com' },
+      payload: { body: 'Hello' },
+      status: 'PENDING',
+      createdAt: now,
+    };
 
-    const intent = service.enqueue('email', recipient, payload);
+    repository.createIntent.mockResolvedValue(storedIntent);
 
-    expect(intent.channel).toBe('email');
-    expect(intent.recipient).toEqual(recipient);
-    expect(intent.payload).toEqual(payload);
-    expect(intent.createdAt).toBeInstanceOf(Date);
-    expect(provider.lastIntent).toEqual(intent);
+    const intent = await service.enqueue('email', { email: 'user@example.com' }, { body: 'Hello' });
+
+    expect(repository.createIntent).toHaveBeenCalledWith({
+      channel: 'email',
+      recipient: { email: 'user@example.com' },
+      payload: { body: 'Hello' },
+    });
+    expect(provider.lastIntent).toEqual(storedIntent);
+    expect(intent).toEqual(storedIntent);
   });
 });

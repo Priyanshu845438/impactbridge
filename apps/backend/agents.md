@@ -262,3 +262,8 @@
 - Evaluated current NGO address/bank upsert endpoints: each already throws `NotFoundException` when the linked NGO profile is missing and enforces JWT + role guards.
 - Confirmed responses remain stable (no `null` payloads) and that deeper ownership checks would duplicate existing profile lookups; no code changes performed to preserve behaviour.
 - Recommended future hardening to handle company variants once corresponding services/controllers exist, coupled with targeted e2e tests.
+
+### 53. Notification Intents Persisted
+- Wired NotificationsService to store intents via Prisma repository and keep no-op provider.
+- Added queue contract placeholder for future workers.
+- Created unit tests covering repository persistence and service delegation; build & tests green.

@@ -243,6 +243,15 @@ exports.Prisma.FinancialReportScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.NotificationIntentScalarFieldEnum = {
+  id: 'id',
+  channel: 'channel',
+  recipient: 'recipient',
+  payload: 'payload',
+  status: 'status',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.CampaignApprovalScalarFieldEnum = {
   id: 'id',
   campaignId: 'campaignId',
@@ -365,6 +374,10 @@ exports.Prisma.NullableJsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -450,6 +463,7 @@ exports.Prisma.ModelName = {
   BankDetail: 'BankDetail',
   Document: 'Document',
   FinancialReport: 'FinancialReport',
+  NotificationIntent: 'NotificationIntent',
   CampaignApproval: 'CampaignApproval',
   ImpactMetric: 'ImpactMetric',
   UtilizationReport: 'UtilizationReport',

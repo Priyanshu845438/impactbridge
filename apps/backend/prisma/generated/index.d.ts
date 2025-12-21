@@ -64,6 +64,11 @@ export type Document = $Result.DefaultSelection<Prisma.$DocumentPayload>
  */
 export type FinancialReport = $Result.DefaultSelection<Prisma.$FinancialReportPayload>
 /**
+ * Model NotificationIntent
+ * 
+ */
+export type NotificationIntent = $Result.DefaultSelection<Prisma.$NotificationIntentPayload>
+/**
  * Model CampaignApproval
  * 
  */
@@ -439,6 +444,16 @@ export class PrismaClient<
     * ```
     */
   get financialReport(): Prisma.FinancialReportDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.notificationIntent`: Exposes CRUD operations for the **NotificationIntent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more NotificationIntents
+    * const notificationIntents = await prisma.notificationIntent.findMany()
+    * ```
+    */
+  get notificationIntent(): Prisma.NotificationIntentDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.campaignApproval`: Exposes CRUD operations for the **CampaignApproval** model.
@@ -980,6 +995,7 @@ export namespace Prisma {
     BankDetail: 'BankDetail',
     Document: 'Document',
     FinancialReport: 'FinancialReport',
+    NotificationIntent: 'NotificationIntent',
     CampaignApproval: 'CampaignApproval',
     ImpactMetric: 'ImpactMetric',
     UtilizationReport: 'UtilizationReport',
@@ -1007,7 +1023,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "invitation" | "nGOProfile" | "companyProfile" | "donorProfile" | "campaign" | "donation" | "bankDetail" | "document" | "financialReport" | "campaignApproval" | "impactMetric" | "utilizationReport" | "milestone" | "address" | "auditLog" | "cSRProgramme" | "programmeMilestone" | "programmeAssignment"
+      modelProps: "user" | "invitation" | "nGOProfile" | "companyProfile" | "donorProfile" | "campaign" | "donation" | "bankDetail" | "document" | "financialReport" | "notificationIntent" | "campaignApproval" | "impactMetric" | "utilizationReport" | "milestone" | "address" | "auditLog" | "cSRProgramme" | "programmeMilestone" | "programmeAssignment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1748,6 +1764,80 @@ export namespace Prisma {
           count: {
             args: Prisma.FinancialReportCountArgs<ExtArgs>
             result: $Utils.Optional<FinancialReportCountAggregateOutputType> | number
+          }
+        }
+      }
+      NotificationIntent: {
+        payload: Prisma.$NotificationIntentPayload<ExtArgs>
+        fields: Prisma.NotificationIntentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NotificationIntentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationIntentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NotificationIntentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationIntentPayload>
+          }
+          findFirst: {
+            args: Prisma.NotificationIntentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationIntentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NotificationIntentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationIntentPayload>
+          }
+          findMany: {
+            args: Prisma.NotificationIntentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationIntentPayload>[]
+          }
+          create: {
+            args: Prisma.NotificationIntentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationIntentPayload>
+          }
+          createMany: {
+            args: Prisma.NotificationIntentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NotificationIntentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationIntentPayload>[]
+          }
+          delete: {
+            args: Prisma.NotificationIntentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationIntentPayload>
+          }
+          update: {
+            args: Prisma.NotificationIntentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationIntentPayload>
+          }
+          deleteMany: {
+            args: Prisma.NotificationIntentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NotificationIntentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NotificationIntentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationIntentPayload>[]
+          }
+          upsert: {
+            args: Prisma.NotificationIntentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationIntentPayload>
+          }
+          aggregate: {
+            args: Prisma.NotificationIntentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNotificationIntent>
+          }
+          groupBy: {
+            args: Prisma.NotificationIntentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NotificationIntentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NotificationIntentCountArgs<ExtArgs>
+            result: $Utils.Optional<NotificationIntentCountAggregateOutputType> | number
           }
         }
       }
@@ -2523,6 +2613,7 @@ export namespace Prisma {
     bankDetail?: BankDetailOmit
     document?: DocumentOmit
     financialReport?: FinancialReportOmit
+    notificationIntent?: NotificationIntentOmit
     campaignApproval?: CampaignApprovalOmit
     impactMetric?: ImpactMetricOmit
     utilizationReport?: UtilizationReportOmit
@@ -15445,6 +15536,1006 @@ export namespace Prisma {
 
 
   /**
+   * Model NotificationIntent
+   */
+
+  export type AggregateNotificationIntent = {
+    _count: NotificationIntentCountAggregateOutputType | null
+    _min: NotificationIntentMinAggregateOutputType | null
+    _max: NotificationIntentMaxAggregateOutputType | null
+  }
+
+  export type NotificationIntentMinAggregateOutputType = {
+    id: string | null
+    channel: string | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type NotificationIntentMaxAggregateOutputType = {
+    id: string | null
+    channel: string | null
+    status: string | null
+    createdAt: Date | null
+  }
+
+  export type NotificationIntentCountAggregateOutputType = {
+    id: number
+    channel: number
+    recipient: number
+    payload: number
+    status: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type NotificationIntentMinAggregateInputType = {
+    id?: true
+    channel?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type NotificationIntentMaxAggregateInputType = {
+    id?: true
+    channel?: true
+    status?: true
+    createdAt?: true
+  }
+
+  export type NotificationIntentCountAggregateInputType = {
+    id?: true
+    channel?: true
+    recipient?: true
+    payload?: true
+    status?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type NotificationIntentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NotificationIntent to aggregate.
+     */
+    where?: NotificationIntentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationIntents to fetch.
+     */
+    orderBy?: NotificationIntentOrderByWithRelationInput | NotificationIntentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NotificationIntentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationIntents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationIntents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned NotificationIntents
+    **/
+    _count?: true | NotificationIntentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NotificationIntentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NotificationIntentMaxAggregateInputType
+  }
+
+  export type GetNotificationIntentAggregateType<T extends NotificationIntentAggregateArgs> = {
+        [P in keyof T & keyof AggregateNotificationIntent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNotificationIntent[P]>
+      : GetScalarType<T[P], AggregateNotificationIntent[P]>
+  }
+
+
+
+
+  export type NotificationIntentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationIntentWhereInput
+    orderBy?: NotificationIntentOrderByWithAggregationInput | NotificationIntentOrderByWithAggregationInput[]
+    by: NotificationIntentScalarFieldEnum[] | NotificationIntentScalarFieldEnum
+    having?: NotificationIntentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NotificationIntentCountAggregateInputType | true
+    _min?: NotificationIntentMinAggregateInputType
+    _max?: NotificationIntentMaxAggregateInputType
+  }
+
+  export type NotificationIntentGroupByOutputType = {
+    id: string
+    channel: string
+    recipient: JsonValue
+    payload: JsonValue
+    status: string
+    createdAt: Date
+    _count: NotificationIntentCountAggregateOutputType | null
+    _min: NotificationIntentMinAggregateOutputType | null
+    _max: NotificationIntentMaxAggregateOutputType | null
+  }
+
+  type GetNotificationIntentGroupByPayload<T extends NotificationIntentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NotificationIntentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NotificationIntentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NotificationIntentGroupByOutputType[P]>
+            : GetScalarType<T[P], NotificationIntentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NotificationIntentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    channel?: boolean
+    recipient?: boolean
+    payload?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["notificationIntent"]>
+
+  export type NotificationIntentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    channel?: boolean
+    recipient?: boolean
+    payload?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["notificationIntent"]>
+
+  export type NotificationIntentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    channel?: boolean
+    recipient?: boolean
+    payload?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["notificationIntent"]>
+
+  export type NotificationIntentSelectScalar = {
+    id?: boolean
+    channel?: boolean
+    recipient?: boolean
+    payload?: boolean
+    status?: boolean
+    createdAt?: boolean
+  }
+
+  export type NotificationIntentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "channel" | "recipient" | "payload" | "status" | "createdAt", ExtArgs["result"]["notificationIntent"]>
+
+  export type $NotificationIntentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "NotificationIntent"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      channel: string
+      recipient: Prisma.JsonValue
+      payload: Prisma.JsonValue
+      status: string
+      createdAt: Date
+    }, ExtArgs["result"]["notificationIntent"]>
+    composites: {}
+  }
+
+  type NotificationIntentGetPayload<S extends boolean | null | undefined | NotificationIntentDefaultArgs> = $Result.GetResult<Prisma.$NotificationIntentPayload, S>
+
+  type NotificationIntentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NotificationIntentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NotificationIntentCountAggregateInputType | true
+    }
+
+  export interface NotificationIntentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NotificationIntent'], meta: { name: 'NotificationIntent' } }
+    /**
+     * Find zero or one NotificationIntent that matches the filter.
+     * @param {NotificationIntentFindUniqueArgs} args - Arguments to find a NotificationIntent
+     * @example
+     * // Get one NotificationIntent
+     * const notificationIntent = await prisma.notificationIntent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NotificationIntentFindUniqueArgs>(args: SelectSubset<T, NotificationIntentFindUniqueArgs<ExtArgs>>): Prisma__NotificationIntentClient<$Result.GetResult<Prisma.$NotificationIntentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one NotificationIntent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NotificationIntentFindUniqueOrThrowArgs} args - Arguments to find a NotificationIntent
+     * @example
+     * // Get one NotificationIntent
+     * const notificationIntent = await prisma.notificationIntent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NotificationIntentFindUniqueOrThrowArgs>(args: SelectSubset<T, NotificationIntentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NotificationIntentClient<$Result.GetResult<Prisma.$NotificationIntentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NotificationIntent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationIntentFindFirstArgs} args - Arguments to find a NotificationIntent
+     * @example
+     * // Get one NotificationIntent
+     * const notificationIntent = await prisma.notificationIntent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NotificationIntentFindFirstArgs>(args?: SelectSubset<T, NotificationIntentFindFirstArgs<ExtArgs>>): Prisma__NotificationIntentClient<$Result.GetResult<Prisma.$NotificationIntentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NotificationIntent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationIntentFindFirstOrThrowArgs} args - Arguments to find a NotificationIntent
+     * @example
+     * // Get one NotificationIntent
+     * const notificationIntent = await prisma.notificationIntent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NotificationIntentFindFirstOrThrowArgs>(args?: SelectSubset<T, NotificationIntentFindFirstOrThrowArgs<ExtArgs>>): Prisma__NotificationIntentClient<$Result.GetResult<Prisma.$NotificationIntentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more NotificationIntents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationIntentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all NotificationIntents
+     * const notificationIntents = await prisma.notificationIntent.findMany()
+     * 
+     * // Get first 10 NotificationIntents
+     * const notificationIntents = await prisma.notificationIntent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const notificationIntentWithIdOnly = await prisma.notificationIntent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NotificationIntentFindManyArgs>(args?: SelectSubset<T, NotificationIntentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationIntentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a NotificationIntent.
+     * @param {NotificationIntentCreateArgs} args - Arguments to create a NotificationIntent.
+     * @example
+     * // Create one NotificationIntent
+     * const NotificationIntent = await prisma.notificationIntent.create({
+     *   data: {
+     *     // ... data to create a NotificationIntent
+     *   }
+     * })
+     * 
+     */
+    create<T extends NotificationIntentCreateArgs>(args: SelectSubset<T, NotificationIntentCreateArgs<ExtArgs>>): Prisma__NotificationIntentClient<$Result.GetResult<Prisma.$NotificationIntentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many NotificationIntents.
+     * @param {NotificationIntentCreateManyArgs} args - Arguments to create many NotificationIntents.
+     * @example
+     * // Create many NotificationIntents
+     * const notificationIntent = await prisma.notificationIntent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NotificationIntentCreateManyArgs>(args?: SelectSubset<T, NotificationIntentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many NotificationIntents and returns the data saved in the database.
+     * @param {NotificationIntentCreateManyAndReturnArgs} args - Arguments to create many NotificationIntents.
+     * @example
+     * // Create many NotificationIntents
+     * const notificationIntent = await prisma.notificationIntent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many NotificationIntents and only return the `id`
+     * const notificationIntentWithIdOnly = await prisma.notificationIntent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NotificationIntentCreateManyAndReturnArgs>(args?: SelectSubset<T, NotificationIntentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationIntentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a NotificationIntent.
+     * @param {NotificationIntentDeleteArgs} args - Arguments to delete one NotificationIntent.
+     * @example
+     * // Delete one NotificationIntent
+     * const NotificationIntent = await prisma.notificationIntent.delete({
+     *   where: {
+     *     // ... filter to delete one NotificationIntent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NotificationIntentDeleteArgs>(args: SelectSubset<T, NotificationIntentDeleteArgs<ExtArgs>>): Prisma__NotificationIntentClient<$Result.GetResult<Prisma.$NotificationIntentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one NotificationIntent.
+     * @param {NotificationIntentUpdateArgs} args - Arguments to update one NotificationIntent.
+     * @example
+     * // Update one NotificationIntent
+     * const notificationIntent = await prisma.notificationIntent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NotificationIntentUpdateArgs>(args: SelectSubset<T, NotificationIntentUpdateArgs<ExtArgs>>): Prisma__NotificationIntentClient<$Result.GetResult<Prisma.$NotificationIntentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more NotificationIntents.
+     * @param {NotificationIntentDeleteManyArgs} args - Arguments to filter NotificationIntents to delete.
+     * @example
+     * // Delete a few NotificationIntents
+     * const { count } = await prisma.notificationIntent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NotificationIntentDeleteManyArgs>(args?: SelectSubset<T, NotificationIntentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NotificationIntents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationIntentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many NotificationIntents
+     * const notificationIntent = await prisma.notificationIntent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NotificationIntentUpdateManyArgs>(args: SelectSubset<T, NotificationIntentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NotificationIntents and returns the data updated in the database.
+     * @param {NotificationIntentUpdateManyAndReturnArgs} args - Arguments to update many NotificationIntents.
+     * @example
+     * // Update many NotificationIntents
+     * const notificationIntent = await prisma.notificationIntent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more NotificationIntents and only return the `id`
+     * const notificationIntentWithIdOnly = await prisma.notificationIntent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NotificationIntentUpdateManyAndReturnArgs>(args: SelectSubset<T, NotificationIntentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationIntentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one NotificationIntent.
+     * @param {NotificationIntentUpsertArgs} args - Arguments to update or create a NotificationIntent.
+     * @example
+     * // Update or create a NotificationIntent
+     * const notificationIntent = await prisma.notificationIntent.upsert({
+     *   create: {
+     *     // ... data to create a NotificationIntent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the NotificationIntent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NotificationIntentUpsertArgs>(args: SelectSubset<T, NotificationIntentUpsertArgs<ExtArgs>>): Prisma__NotificationIntentClient<$Result.GetResult<Prisma.$NotificationIntentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of NotificationIntents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationIntentCountArgs} args - Arguments to filter NotificationIntents to count.
+     * @example
+     * // Count the number of NotificationIntents
+     * const count = await prisma.notificationIntent.count({
+     *   where: {
+     *     // ... the filter for the NotificationIntents we want to count
+     *   }
+     * })
+    **/
+    count<T extends NotificationIntentCountArgs>(
+      args?: Subset<T, NotificationIntentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NotificationIntentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a NotificationIntent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationIntentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NotificationIntentAggregateArgs>(args: Subset<T, NotificationIntentAggregateArgs>): Prisma.PrismaPromise<GetNotificationIntentAggregateType<T>>
+
+    /**
+     * Group by NotificationIntent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationIntentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NotificationIntentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NotificationIntentGroupByArgs['orderBy'] }
+        : { orderBy?: NotificationIntentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NotificationIntentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificationIntentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the NotificationIntent model
+   */
+  readonly fields: NotificationIntentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for NotificationIntent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NotificationIntentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the NotificationIntent model
+   */
+  interface NotificationIntentFieldRefs {
+    readonly id: FieldRef<"NotificationIntent", 'String'>
+    readonly channel: FieldRef<"NotificationIntent", 'String'>
+    readonly recipient: FieldRef<"NotificationIntent", 'Json'>
+    readonly payload: FieldRef<"NotificationIntent", 'Json'>
+    readonly status: FieldRef<"NotificationIntent", 'String'>
+    readonly createdAt: FieldRef<"NotificationIntent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * NotificationIntent findUnique
+   */
+  export type NotificationIntentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationIntent
+     */
+    select?: NotificationIntentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationIntent
+     */
+    omit?: NotificationIntentOmit<ExtArgs> | null
+    /**
+     * Filter, which NotificationIntent to fetch.
+     */
+    where: NotificationIntentWhereUniqueInput
+  }
+
+  /**
+   * NotificationIntent findUniqueOrThrow
+   */
+  export type NotificationIntentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationIntent
+     */
+    select?: NotificationIntentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationIntent
+     */
+    omit?: NotificationIntentOmit<ExtArgs> | null
+    /**
+     * Filter, which NotificationIntent to fetch.
+     */
+    where: NotificationIntentWhereUniqueInput
+  }
+
+  /**
+   * NotificationIntent findFirst
+   */
+  export type NotificationIntentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationIntent
+     */
+    select?: NotificationIntentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationIntent
+     */
+    omit?: NotificationIntentOmit<ExtArgs> | null
+    /**
+     * Filter, which NotificationIntent to fetch.
+     */
+    where?: NotificationIntentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationIntents to fetch.
+     */
+    orderBy?: NotificationIntentOrderByWithRelationInput | NotificationIntentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NotificationIntents.
+     */
+    cursor?: NotificationIntentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationIntents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationIntents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NotificationIntents.
+     */
+    distinct?: NotificationIntentScalarFieldEnum | NotificationIntentScalarFieldEnum[]
+  }
+
+  /**
+   * NotificationIntent findFirstOrThrow
+   */
+  export type NotificationIntentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationIntent
+     */
+    select?: NotificationIntentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationIntent
+     */
+    omit?: NotificationIntentOmit<ExtArgs> | null
+    /**
+     * Filter, which NotificationIntent to fetch.
+     */
+    where?: NotificationIntentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationIntents to fetch.
+     */
+    orderBy?: NotificationIntentOrderByWithRelationInput | NotificationIntentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NotificationIntents.
+     */
+    cursor?: NotificationIntentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationIntents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationIntents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NotificationIntents.
+     */
+    distinct?: NotificationIntentScalarFieldEnum | NotificationIntentScalarFieldEnum[]
+  }
+
+  /**
+   * NotificationIntent findMany
+   */
+  export type NotificationIntentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationIntent
+     */
+    select?: NotificationIntentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationIntent
+     */
+    omit?: NotificationIntentOmit<ExtArgs> | null
+    /**
+     * Filter, which NotificationIntents to fetch.
+     */
+    where?: NotificationIntentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationIntents to fetch.
+     */
+    orderBy?: NotificationIntentOrderByWithRelationInput | NotificationIntentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing NotificationIntents.
+     */
+    cursor?: NotificationIntentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationIntents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationIntents.
+     */
+    skip?: number
+    distinct?: NotificationIntentScalarFieldEnum | NotificationIntentScalarFieldEnum[]
+  }
+
+  /**
+   * NotificationIntent create
+   */
+  export type NotificationIntentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationIntent
+     */
+    select?: NotificationIntentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationIntent
+     */
+    omit?: NotificationIntentOmit<ExtArgs> | null
+    /**
+     * The data needed to create a NotificationIntent.
+     */
+    data: XOR<NotificationIntentCreateInput, NotificationIntentUncheckedCreateInput>
+  }
+
+  /**
+   * NotificationIntent createMany
+   */
+  export type NotificationIntentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many NotificationIntents.
+     */
+    data: NotificationIntentCreateManyInput | NotificationIntentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NotificationIntent createManyAndReturn
+   */
+  export type NotificationIntentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationIntent
+     */
+    select?: NotificationIntentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationIntent
+     */
+    omit?: NotificationIntentOmit<ExtArgs> | null
+    /**
+     * The data used to create many NotificationIntents.
+     */
+    data: NotificationIntentCreateManyInput | NotificationIntentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NotificationIntent update
+   */
+  export type NotificationIntentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationIntent
+     */
+    select?: NotificationIntentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationIntent
+     */
+    omit?: NotificationIntentOmit<ExtArgs> | null
+    /**
+     * The data needed to update a NotificationIntent.
+     */
+    data: XOR<NotificationIntentUpdateInput, NotificationIntentUncheckedUpdateInput>
+    /**
+     * Choose, which NotificationIntent to update.
+     */
+    where: NotificationIntentWhereUniqueInput
+  }
+
+  /**
+   * NotificationIntent updateMany
+   */
+  export type NotificationIntentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update NotificationIntents.
+     */
+    data: XOR<NotificationIntentUpdateManyMutationInput, NotificationIntentUncheckedUpdateManyInput>
+    /**
+     * Filter which NotificationIntents to update
+     */
+    where?: NotificationIntentWhereInput
+    /**
+     * Limit how many NotificationIntents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * NotificationIntent updateManyAndReturn
+   */
+  export type NotificationIntentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationIntent
+     */
+    select?: NotificationIntentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationIntent
+     */
+    omit?: NotificationIntentOmit<ExtArgs> | null
+    /**
+     * The data used to update NotificationIntents.
+     */
+    data: XOR<NotificationIntentUpdateManyMutationInput, NotificationIntentUncheckedUpdateManyInput>
+    /**
+     * Filter which NotificationIntents to update
+     */
+    where?: NotificationIntentWhereInput
+    /**
+     * Limit how many NotificationIntents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * NotificationIntent upsert
+   */
+  export type NotificationIntentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationIntent
+     */
+    select?: NotificationIntentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationIntent
+     */
+    omit?: NotificationIntentOmit<ExtArgs> | null
+    /**
+     * The filter to search for the NotificationIntent to update in case it exists.
+     */
+    where: NotificationIntentWhereUniqueInput
+    /**
+     * In case the NotificationIntent found by the `where` argument doesn't exist, create a new NotificationIntent with this data.
+     */
+    create: XOR<NotificationIntentCreateInput, NotificationIntentUncheckedCreateInput>
+    /**
+     * In case the NotificationIntent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NotificationIntentUpdateInput, NotificationIntentUncheckedUpdateInput>
+  }
+
+  /**
+   * NotificationIntent delete
+   */
+  export type NotificationIntentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationIntent
+     */
+    select?: NotificationIntentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationIntent
+     */
+    omit?: NotificationIntentOmit<ExtArgs> | null
+    /**
+     * Filter which NotificationIntent to delete.
+     */
+    where: NotificationIntentWhereUniqueInput
+  }
+
+  /**
+   * NotificationIntent deleteMany
+   */
+  export type NotificationIntentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NotificationIntents to delete
+     */
+    where?: NotificationIntentWhereInput
+    /**
+     * Limit how many NotificationIntents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * NotificationIntent without action
+   */
+  export type NotificationIntentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationIntent
+     */
+    select?: NotificationIntentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationIntent
+     */
+    omit?: NotificationIntentOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model CampaignApproval
    */
 
@@ -26270,6 +27361,18 @@ export namespace Prisma {
   export type FinancialReportScalarFieldEnum = (typeof FinancialReportScalarFieldEnum)[keyof typeof FinancialReportScalarFieldEnum]
 
 
+  export const NotificationIntentScalarFieldEnum: {
+    id: 'id',
+    channel: 'channel',
+    recipient: 'recipient',
+    payload: 'payload',
+    status: 'status',
+    createdAt: 'createdAt'
+  };
+
+  export type NotificationIntentScalarFieldEnum = (typeof NotificationIntentScalarFieldEnum)[keyof typeof NotificationIntentScalarFieldEnum]
+
+
   export const CampaignApprovalScalarFieldEnum: {
     id: 'id',
     campaignId: 'campaignId',
@@ -26423,6 +27526,13 @@ export namespace Prisma {
   };
 
   export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const QueryMode: {
@@ -27509,6 +28619,63 @@ export namespace Prisma {
     year?: IntWithAggregatesFilter<"FinancialReport"> | number
     reportUrl?: StringWithAggregatesFilter<"FinancialReport"> | string
     createdAt?: DateTimeWithAggregatesFilter<"FinancialReport"> | Date | string
+  }
+
+  export type NotificationIntentWhereInput = {
+    AND?: NotificationIntentWhereInput | NotificationIntentWhereInput[]
+    OR?: NotificationIntentWhereInput[]
+    NOT?: NotificationIntentWhereInput | NotificationIntentWhereInput[]
+    id?: StringFilter<"NotificationIntent"> | string
+    channel?: StringFilter<"NotificationIntent"> | string
+    recipient?: JsonFilter<"NotificationIntent">
+    payload?: JsonFilter<"NotificationIntent">
+    status?: StringFilter<"NotificationIntent"> | string
+    createdAt?: DateTimeFilter<"NotificationIntent"> | Date | string
+  }
+
+  export type NotificationIntentOrderByWithRelationInput = {
+    id?: SortOrder
+    channel?: SortOrder
+    recipient?: SortOrder
+    payload?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NotificationIntentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: NotificationIntentWhereInput | NotificationIntentWhereInput[]
+    OR?: NotificationIntentWhereInput[]
+    NOT?: NotificationIntentWhereInput | NotificationIntentWhereInput[]
+    channel?: StringFilter<"NotificationIntent"> | string
+    recipient?: JsonFilter<"NotificationIntent">
+    payload?: JsonFilter<"NotificationIntent">
+    status?: StringFilter<"NotificationIntent"> | string
+    createdAt?: DateTimeFilter<"NotificationIntent"> | Date | string
+  }, "id">
+
+  export type NotificationIntentOrderByWithAggregationInput = {
+    id?: SortOrder
+    channel?: SortOrder
+    recipient?: SortOrder
+    payload?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    _count?: NotificationIntentCountOrderByAggregateInput
+    _max?: NotificationIntentMaxOrderByAggregateInput
+    _min?: NotificationIntentMinOrderByAggregateInput
+  }
+
+  export type NotificationIntentScalarWhereWithAggregatesInput = {
+    AND?: NotificationIntentScalarWhereWithAggregatesInput | NotificationIntentScalarWhereWithAggregatesInput[]
+    OR?: NotificationIntentScalarWhereWithAggregatesInput[]
+    NOT?: NotificationIntentScalarWhereWithAggregatesInput | NotificationIntentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"NotificationIntent"> | string
+    channel?: StringWithAggregatesFilter<"NotificationIntent"> | string
+    recipient?: JsonWithAggregatesFilter<"NotificationIntent">
+    payload?: JsonWithAggregatesFilter<"NotificationIntent">
+    status?: StringWithAggregatesFilter<"NotificationIntent"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"NotificationIntent"> | Date | string
   }
 
   export type CampaignApprovalWhereInput = {
@@ -29237,6 +30404,69 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type NotificationIntentCreateInput = {
+    id?: string
+    channel: string
+    recipient: JsonNullValueInput | InputJsonValue
+    payload: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type NotificationIntentUncheckedCreateInput = {
+    id?: string
+    channel: string
+    recipient: JsonNullValueInput | InputJsonValue
+    payload: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type NotificationIntentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channel?: StringFieldUpdateOperationsInput | string
+    recipient?: JsonNullValueInput | InputJsonValue
+    payload?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationIntentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channel?: StringFieldUpdateOperationsInput | string
+    recipient?: JsonNullValueInput | InputJsonValue
+    payload?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationIntentCreateManyInput = {
+    id?: string
+    channel: string
+    recipient: JsonNullValueInput | InputJsonValue
+    payload: JsonNullValueInput | InputJsonValue
+    status?: string
+    createdAt?: Date | string
+  }
+
+  export type NotificationIntentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channel?: StringFieldUpdateOperationsInput | string
+    recipient?: JsonNullValueInput | InputJsonValue
+    payload?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationIntentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channel?: StringFieldUpdateOperationsInput | string
+    recipient?: JsonNullValueInput | InputJsonValue
+    payload?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CampaignApprovalCreateInput = {
     id?: string
     status?: string
@@ -30934,6 +32164,78 @@ export namespace Prisma {
 
   export type FinancialReportSumOrderByAggregateInput = {
     year?: SortOrder
+  }
+  export type JsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NotificationIntentCountOrderByAggregateInput = {
+    id?: SortOrder
+    channel?: SortOrder
+    recipient?: SortOrder
+    payload?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NotificationIntentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    channel?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NotificationIntentMinOrderByAggregateInput = {
+    id?: SortOrder
+    channel?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+  }
+  export type JsonWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedJsonFilter<$PrismaModel>
+    _max?: NestedJsonFilter<$PrismaModel>
   }
 
   export type CompanyProfileScalarRelationFilter = {
@@ -33796,6 +35098,29 @@ export namespace Prisma {
     | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
 
   export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+  export type NestedJsonFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
     path?: string[]
     mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>

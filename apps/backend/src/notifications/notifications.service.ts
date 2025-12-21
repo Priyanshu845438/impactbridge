@@ -2,31 +2,34 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
   NotificationChannel,
   NotificationIntent,
+  NotificationIntentCreate,
   NotificationPayload,
   NotificationRecipient,
   NOTIFICATION_PROVIDER,
 } from './notification.types';
 import type { NotificationProvider } from './notification.types';
+import { NotificationRepository } from './notification.repository';
 
 @Injectable()
 export class NotificationsService {
   constructor(
+    private readonly repository: NotificationRepository,
     @Inject(NOTIFICATION_PROVIDER)
     private readonly provider: NotificationProvider,
   ) {}
 
-  enqueue(
+  async enqueue(
     channel: NotificationChannel,
     recipient: NotificationRecipient,
     payload: NotificationPayload,
-  ): NotificationIntent {
-    const intent: NotificationIntent = {
+  ): Promise<NotificationIntent> {
+    const data: NotificationIntentCreate = {
       channel,
       recipient,
       payload,
-      createdAt: new Date(),
     };
 
+    const intent = await this.repository.createIntent(data);
     void this.provider.send(intent);
     return intent;
   }

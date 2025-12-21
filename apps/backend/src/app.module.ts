@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { V1Module } from './v1/v1.module';
 import { CSRProgrammeModule } from './csr-programme/csr-programme.module';
 import { ApprovalsModule } from './approvals/approvals.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ApprovalsModule } from './approvals/approvals.module';
     V1Module,
     CSRProgrammeModule,
     ApprovalsModule,
+    NotificationsModule,
   ],
 })
 export class AppModule {}

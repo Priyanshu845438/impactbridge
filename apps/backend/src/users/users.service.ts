@@ -8,6 +8,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { comparePassword, hashPassword } from '../auth/utils/password.util';
 import { sanitizeEntity, sanitizeEntities } from '../utils/sanitize.util';
 import { buildFindManyArgs, mergeWhere } from '../utils/query.util';
+import type { ListQueryOptions } from '../utils/pagination.util';
 
 @Injectable()
 export class UsersService {

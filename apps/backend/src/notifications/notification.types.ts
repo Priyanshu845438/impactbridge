@@ -1,5 +1,7 @@
 export type NotificationChannel = 'email' | 'sms';
 
+export type NotificationIntentStatus = 'PENDING' | 'SENT' | 'FAILED';
+
 export interface NotificationRecipient {
   email?: string;
   phone?: string;
@@ -12,10 +14,15 @@ export interface NotificationPayload {
   metadata?: Record<string, unknown>;
 }
 
-export interface NotificationIntent {
+export interface NotificationIntentCreate {
   channel: NotificationChannel;
   recipient: NotificationRecipient;
   payload: NotificationPayload;
+}
+
+export interface NotificationIntent extends NotificationIntentCreate {
+  id: string;
+  status: NotificationIntentStatus;
   createdAt: Date;
 }
 
