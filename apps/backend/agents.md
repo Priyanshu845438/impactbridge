@@ -252,3 +252,8 @@
 - Scoped a minimal pass to enforce pagination/soft-delete on the users list endpoint only, but constraints prevented code changes.
 - No source files or tests were modified; exiting state matches prior revision.
 - Follow-up: re-plan the change when adjustments to controllers/tests can be applied in one atomic update.
+
+## 51. Financial reporting controller review (2025-02-20)
+- Reviewed existing `FinancialController` and service; current implementation already exposes NGO upload/listing routes but lacks requested validation/audit hooks.
+- Task could not proceed under the narrow file-change constraint because required updates span multiple files (controller, service, DTO, tests, module docs).
+- Awaiting clarification before reattempting broader financial reporting enhancements.
