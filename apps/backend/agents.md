@@ -267,3 +267,10 @@
 - Wired NotificationsService to store intents via Prisma repository and keep no-op provider.
 - Added queue contract placeholder for future workers.
 - Created unit tests covering repository persistence and service delegation; build & tests green.
+
+
+## 54. Audit Logging Hooks Pending
+
+- Attempted to extend ActivityLogService and wire audit hooks for approvals, CSR programmes, and financial reports; work was rolled back to prevent partial changes.
+- No code committed for this iteration; backlog item remains open for future pass.
+
