@@ -17,21 +17,51 @@ export interface AuditLogContext {
 export class ActivityLogService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async log(context: AuditLogContext) {
-    const details: Record<string, unknown> = {
-      entity: context.entity,
-      entityId: context.entityId,
-      before: context.before ?? null,
-      after: context.after ?? null,
-      actorRole: context.actorRole ?? null,
-      metadata: context.metadata ?? null,
-    };
+  async log(actorId: string | null, action: string, metadata?: Record<string, unknown> | null): Promise<void>;
+  async log(context: AuditLogContext): Promise<void>;
+  async log(
+    arg1: string | null | AuditLogContext,
+    arg2?: string,
+    arg3?: Record<string, unknown> | null,
+  ): Promise<void> {
+    if (typeof arg1 === 'object' && arg1 !== null && 'action' in arg1) {
+      const context = arg1 as AuditLogContext;
+      await this.persistLog({
+        actorId: context.actorId ?? null,
+        action: context.action,
+        details: {
+          entity: context.entity,
+          entityId: context.entityId,
+          before: context.before ?? null,
+          after: context.after ?? null,
+          actorRole: context.actorRole ?? null,
+          metadata: context.metadata ?? null,
+        },
+      });
+      return;
+    }
 
+    const actorId = (arg1 as string | null) ?? null;
+    const action = arg2 ?? 'UNKNOWN_ACTION';
+    const metadata = arg3 ?? null;
+
+    await this.persistLog({
+      actorId,
+      action,
+      details: metadata ?? null,
+    });
+  }
+
+  private async persistLog(params: {
+    actorId: string | null;
+    action: string;
+    details: Record<string, unknown> | null;
+  }) {
     await this.prisma.auditLog.create({
       data: {
-        userId: context.actorId ?? undefined,
-        action: context.action,
-        details: details as unknown as Prisma.InputJsonValue,
+        userId: params.actorId ?? undefined,
+        action: params.action,
+        details: params.details as unknown as Prisma.InputJsonValue,
       },
     });
   }

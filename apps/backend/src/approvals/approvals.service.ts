@@ -14,12 +14,13 @@ type ApprovalEntity = Awaited<
   ReturnType<ApprovalsService['getApprovalOrThrow']>
 >;
 
-type ApprovalTransition =
-  | 'APPROVAL_APPROVED'
-  | 'APPROVAL_REJECTED'
-  | 'APPROVAL_REVOKED'
-  | 'APPROVAL_REQUESTED'
-  | 'APPROVAL_RESET';
+type ApprovalForLog = {
+  id: string;
+  ngoId: string;
+  companyId: string;
+  campaignId: string;
+  status: ApprovalStatus;
+};
 
 const ApprovalErrors = {
   notFound: 'Approval request not found',
@@ -61,15 +62,24 @@ export class ApprovalsService {
     return approval;
   }
 
-  private async logTransition(
-    approvalId: string,
-    action: ApprovalTransition,
-    actorId: string | null,
-    metadata?: Record<string, unknown>,
+  private async logStatusChange(
+    actorId: string,
+    action: string,
+    approval: ApprovalForLog,
+    previousStatus: ApprovalStatus,
   ) {
-    await this.activityLog.log(actorId, action, {
-      approvalId,
-      ...metadata,
+    await this.activityLog.log({
+      actorId,
+      action,
+      entity: 'CampaignApproval',
+      entityId: approval.id,
+      before: { status: previousStatus },
+      after: { status: approval.status },
+      metadata: {
+        targetNgoId: approval.ngoId,
+        campaignId: approval.campaignId,
+        companyId: approval.companyId,
+      },
     });
   }
 
@@ -124,10 +134,12 @@ export class ApprovalsService {
         data: { status: 'PENDING', remarks: null },
       });
 
-      await this.logTransition(reset.id, 'APPROVAL_RESET', actorId, {
-        campaignId,
-        companyProfileId,
-      });
+      await this.logStatusChange(
+        actorId,
+        'NGO_APPROVAL_RESET',
+        reset as ApprovalForLog,
+        existing.status as ApprovalStatus,
+      );
 
       return reset;
     }
@@ -142,11 +154,12 @@ export class ApprovalsService {
       },
     });
 
-    await this.logTransition(created.id, 'APPROVAL_REQUESTED', actorId, {
-      campaignId,
-      companyProfileId,
-      remarks: remarks ?? null,
-    });
+    await this.logStatusChange(
+      actorId,
+      'NGO_APPROVAL_REQUESTED',
+      created as ApprovalForLog,
+      'PENDING',
+    );
 
     return created;
   }
@@ -161,18 +174,21 @@ export class ApprovalsService {
       throw new BadRequestException('Status must be APPROVED');
     }
 
+    const before = await this.getApprovalOrThrow(campaignId, companyProfileId);
     const updated = await this.transition(
       campaignId,
       companyProfileId,
       'APPROVED',
       dto.remarks,
+      before,
     );
 
-    await this.logTransition(updated.id, 'APPROVAL_APPROVED', actorId, {
-      campaignId,
-      companyProfileId,
-      remarks: dto.remarks ?? null,
-    });
+    await this.logStatusChange(
+      actorId,
+      'NGO_APPROVAL_APPROVED',
+      updated as ApprovalForLog,
+      before.status as ApprovalStatus,
+    );
 
     return updated;
   }
@@ -187,18 +203,21 @@ export class ApprovalsService {
       throw new BadRequestException('Status must be REJECTED');
     }
 
+    const before = await this.getApprovalOrThrow(campaignId, companyProfileId);
     const updated = await this.transition(
       campaignId,
       companyProfileId,
       'REJECTED',
       dto.remarks,
+      before,
     );
 
-    await this.logTransition(updated.id, 'APPROVAL_REJECTED', actorId, {
-      campaignId,
-      companyProfileId,
-      remarks: dto.remarks ?? null,
-    });
+    await this.logStatusChange(
+      actorId,
+      'NGO_APPROVAL_REJECTED',
+      updated as ApprovalForLog,
+      before.status as ApprovalStatus,
+    );
 
     return updated;
   }
@@ -227,11 +246,12 @@ export class ApprovalsService {
       data: { status: 'REVOKED', remarks: remarks ?? approval.remarks },
     });
 
-    await this.logTransition(updated.id, 'APPROVAL_REVOKED', actorId, {
-      campaignId,
-      companyProfileId,
-      remarks: remarks ?? approval.remarks ?? null,
-    });
+    await this.logStatusChange(
+      actorId,
+      'NGO_APPROVAL_REVOKED',
+      updated as ApprovalForLog,
+      approval.status as ApprovalStatus,
+    );
 
     return updated;
   }
@@ -241,11 +261,11 @@ export class ApprovalsService {
     companyProfileId: string,
     target: ApprovalStatus,
     remarks?: string,
+    existing?: ApprovalEntity,
   ) {
-    const approval = await this.getApprovalOrThrow(
-      campaignId,
-      companyProfileId,
-    );
+    const approval =
+      existing ??
+      (await this.getApprovalOrThrow(campaignId, companyProfileId));
 
     if (approval.status === target) {
       if (remarks !== undefined && remarks !== approval.remarks) {

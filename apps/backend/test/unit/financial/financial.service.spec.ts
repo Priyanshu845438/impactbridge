@@ -14,6 +14,7 @@ const report = {
 describe('FinancialService', () => {
   let prisma: jest.Mocked<PrismaService>;
   let service: FinancialService;
+  const activityLog = { log: jest.fn() } as any;
 
   beforeEach(() => {
     prisma = {
@@ -26,7 +27,8 @@ describe('FinancialService', () => {
       },
     } as unknown as jest.Mocked<PrismaService>;
 
-    service = new FinancialService(prisma);
+    activityLog.log.mockReset();
+    service = new FinancialService(prisma, activityLog);
   });
 
   describe('uploadReport', () => {
@@ -34,11 +36,15 @@ describe('FinancialService', () => {
       prisma.nGOProfile.findUnique.mockResolvedValue({ id: 'ngo-1' } as any);
       prisma.financialReport.create.mockResolvedValue(report as any);
 
-      const result = await service.uploadReport('ngo-1', {
-        period: 'Q1',
-        year: 2024,
-        reportUrl: 'https://example.com/report.pdf',
-      });
+      const result = await service.uploadReport(
+        'ngo-1',
+        {
+          period: 'Q1',
+          year: 2024,
+          reportUrl: 'https://example.com/report.pdf',
+        },
+        'actor-1',
+      );
 
       expect(result).toEqual(report);
       expect(prisma.financialReport.create).toHaveBeenCalledWith({
@@ -49,17 +55,33 @@ describe('FinancialService', () => {
           reportUrl: 'https://example.com/report.pdf',
         },
       });
+      expect(activityLog.log).toHaveBeenCalledWith({
+        actorId: 'actor-1',
+        action: 'FINANCIAL_REPORT_CREATED',
+        entity: 'FinancialReport',
+        entityId: 'report-1',
+        after: { status: 'CREATED' },
+        metadata: {
+          ngoId: 'ngo-1',
+          year: 2024,
+          period: 'Q1',
+        },
+      });
     });
 
     it('throws when NGO missing', async () => {
       prisma.nGOProfile.findUnique.mockResolvedValue(null);
 
       await expect(
-        service.uploadReport('ngo-1', {
-          period: 'Q1',
-          year: 2024,
-          reportUrl: 'https://example.com/report.pdf',
-        }),
+        service.uploadReport(
+          'ngo-1',
+          {
+            period: 'Q1',
+            year: 2024,
+            reportUrl: 'https://example.com/report.pdf',
+          },
+          'actor-1',
+        ),
       ).rejects.toBeInstanceOf(NotFoundException);
     });
   });

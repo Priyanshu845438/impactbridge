@@ -82,9 +82,11 @@ describe('ApprovalsService workflow', () => {
         },
       });
       expect(activityLog.log).toHaveBeenCalledWith(
-        'ngo-user',
-        'APPROVAL_REQUESTED',
-        expect.any(Object),
+        expect.objectContaining({
+          actorId: 'ngo-user',
+          action: 'NGO_APPROVAL_REQUESTED',
+          entity: 'CampaignApproval',
+        }),
       );
     });
 
@@ -128,9 +130,10 @@ describe('ApprovalsService workflow', () => {
 
       expect(result.status).toBe('PENDING');
       expect(activityLog.log).toHaveBeenCalledWith(
-        'ngo-user',
-        'APPROVAL_RESET',
-        expect.any(Object),
+        expect.objectContaining({
+          actorId: 'ngo-user',
+          action: 'NGO_APPROVAL_RESET',
+        }),
       );
     });
   });
@@ -160,9 +163,11 @@ describe('ApprovalsService workflow', () => {
 
       expect(result.status).toBe('APPROVED');
       expect(activityLog.log).toHaveBeenCalledWith(
-        'company-user',
-        'APPROVAL_APPROVED',
-        expect.any(Object),
+        expect.objectContaining({
+          actorId: 'company-user',
+          action: 'NGO_APPROVAL_APPROVED',
+          entityId: 'approval-1',
+        }),
       );
     });
 
@@ -221,9 +226,10 @@ describe('ApprovalsService workflow', () => {
 
       expect(result.status).toBe('REJECTED');
       expect(activityLog.log).toHaveBeenCalledWith(
-        'company-user',
-        'APPROVAL_REJECTED',
-        expect.any(Object),
+        expect.objectContaining({
+          actorId: 'company-user',
+          action: 'NGO_APPROVAL_REJECTED',
+        }),
       );
     });
 
@@ -262,9 +268,10 @@ describe('ApprovalsService workflow', () => {
 
       expect(result.status).toBe('REVOKED');
       expect(activityLog.log).toHaveBeenCalledWith(
-        'company-user',
-        'APPROVAL_REVOKED',
-        expect.any(Object),
+        expect.objectContaining({
+          actorId: 'company-user',
+          action: 'NGO_APPROVAL_REVOKED',
+        }),
       );
     });
 

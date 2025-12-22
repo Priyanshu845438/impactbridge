@@ -198,6 +198,12 @@
 - Added Jest unit coverage ensuring `enqueue()` composes intents and delegates to the provider while keeping the implementation side-effect free.
 - Updated technical docs, project status checklist, and AGENTS log to capture the new infrastructure.
 
+## 42. Activity logging for approvals and financial reports
+
+- Extended `ApprovalsService` to emit structured activity log entries for request, reset, approve, reject, and revoke transitions using `ActivityLogService` with before/after snapshots.
+- Injected `ActivityLogService` into `FinancialService` so NGO report uploads now record `FINANCIAL_REPORT_CREATED` events with NGO/year metadata.
+- Added unit assertions ensuring log calls occur with expected metadata, updated financial upload signature, and reran init/test/build to confirm stability.
+
 ## 42. Migration & API governance documentation
 
 - Authored `docs/MIGRATION_PLAYBOOK.md` covering apply/rollback flows for local, staging, and production databases plus rollback checklists.
@@ -274,3 +280,6 @@
 - Attempted to extend ActivityLogService and wire audit hooks for approvals, CSR programmes, and financial reports; work was rolled back to prevent partial changes.
 - No code committed for this iteration; backlog item remains open for future pass.
 
+## 52. Audit Logging (Service Layer) Attempt (2025-02-21)
+- Started scaffolding a dedicated AuditLog model/service but hit schema conflicts with existing ActivityLog usage patterns.
+- Reverted all changes (schema, migrations, code) to keep the repository clean; audit logging remains unsolved.

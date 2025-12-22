@@ -27,7 +27,7 @@ export class FinancialController {
     if (!profile) {
       throw new Error('NGO profile not found');
     }
-    return this.financialService.uploadReport(profile.id, dto);
+    return this.financialService.uploadReport(profile.id, dto, user.sub);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
