@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CSRBudgetDto } from './dto/csr-budget.dto';
 import { CSRSummaryRequestDto } from './dto/csr-summary.dto';
+import { sanitizeEntity } from '../utils/sanitize.util';
 
 @Injectable()
 export class CSRService {
@@ -10,7 +11,7 @@ export class CSRService {
   async upsertCSRBudget(companyProfileId: string, dto: CSRBudgetDto) {
     await this.ensureCompanyProfile(companyProfileId);
 
-    return this.prisma.companyProfile.update({
+    const company = await this.prisma.companyProfile.update({
       where: { id: companyProfileId },
       data: {
         csrAnnualBudget: dto.annualBudget,
@@ -18,6 +19,8 @@ export class CSRService {
         ...(dto.spent !== undefined ? { csrSpent: dto.spent } : {}),
       },
     });
+
+    return sanitizeEntity(company)!;
   }
 
   async updateSpent(companyProfileId: string, amount: number) {
@@ -25,12 +28,14 @@ export class CSRService {
 
     const nextSpent = (profile.csrSpent ?? 0) + amount;
 
-    return this.prisma.companyProfile.update({
+    const updated = await this.prisma.companyProfile.update({
       where: { id: companyProfileId },
       data: {
         csrSpent: nextSpent,
       },
     });
+
+    return sanitizeEntity(updated)!;
   }
 
   async getCSRStatus(companyProfileId: string) {
@@ -57,7 +62,7 @@ export class CSRService {
       throw new NotFoundException('Company profile not found');
     }
 
-    return profile;
+    return sanitizeEntity(profile)!;
   }
 
   async generateSummary({ companyId, financialYear }: CSRSummaryRequestDto) {
@@ -190,6 +195,6 @@ export class CSRService {
       throw new NotFoundException('Company profile not found');
     }
 
-    return profile;
+    return sanitizeEntity(profile)!;
   }
 }

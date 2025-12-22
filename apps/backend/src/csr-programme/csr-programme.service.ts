@@ -15,6 +15,7 @@ import { UpdateProgrammeDto } from './dto/update-programme.dto';
 import { AssignNgoDto } from './dto/assign-ngo.dto';
 import { CreateMilestoneDto } from './dto/create-milestone.dto';
 import { UpdateMilestoneDto } from './dto/update-milestone.dto';
+import { sanitizeEntity, sanitizeEntities } from '../utils/sanitize.util';
 
 @Injectable()
 export class CSRProgrammeService {
@@ -23,7 +24,7 @@ export class CSRProgrammeService {
   async create(companyId: string, dto: CreateProgrammeDto) {
     await this.ensureCompany(companyId);
 
-    return this.prisma.cSRProgramme.create({
+    const programme = await this.prisma.cSRProgramme.create({
       data: {
         companyId,
         title: dto.title,
@@ -38,6 +39,8 @@ export class CSRProgrammeService {
         assignments: true,
       },
     });
+
+    return sanitizeEntity(programme)!;
   }
 
   async update(id: string, companyId: string, dto: UpdateProgrammeDto) {
@@ -53,7 +56,7 @@ export class CSRProgrammeService {
       endDate: dto.endDate ? new Date(dto.endDate) : programme.endDate,
     };
 
-    return this.prisma.cSRProgramme.update({
+    const updated = await this.prisma.cSRProgramme.update({
       where: { id },
       data,
       include: {
@@ -61,12 +64,14 @@ export class CSRProgrammeService {
         assignments: true,
       },
     });
+
+    return sanitizeEntity(updated)!;
   }
 
   async listByCompany(companyId: string) {
     await this.ensureCompany(companyId);
 
-    return this.prisma.cSRProgramme.findMany({
+    const programmes = await this.prisma.cSRProgramme.findMany({
       where: { companyId, deletedAt: null },
       include: {
         milestones: true,
@@ -86,13 +91,15 @@ export class CSRProgrammeService {
       },
       orderBy: { createdAt: 'desc' },
     });
+
+    return sanitizeEntities(programmes);
   }
 
   async assignNgo(programmeId: string, companyId: string, dto: AssignNgoDto) {
     await this.ensureProgrammeOwnership(programmeId, companyId);
     await this.ensureNgo(dto.ngoId);
 
-    return this.prisma.programmeAssignment.upsert({
+    const assignment = await this.prisma.programmeAssignment.upsert({
       where: {
         programmeId_ngoId: {
           programmeId,
@@ -122,6 +129,8 @@ export class CSRProgrammeService {
         },
       },
     });
+
+    return sanitizeEntity(assignment)!;
   }
 
   async createMilestone(
@@ -131,7 +140,7 @@ export class CSRProgrammeService {
   ) {
     await this.ensureProgrammeOwnership(programmeId, companyId);
 
-    return this.prisma.programmeMilestone.create({
+    const milestone = await this.prisma.programmeMilestone.create({
       data: {
         programmeId,
         title: dto.title,
@@ -141,6 +150,8 @@ export class CSRProgrammeService {
         progress: dto.progress ?? 0,
       },
     });
+
+    return sanitizeEntity(milestone)!;
   }
 
   async updateMilestone(
@@ -163,7 +174,7 @@ export class CSRProgrammeService {
       );
     }
 
-    return this.prisma.programmeMilestone.update({
+    const updated = await this.prisma.programmeMilestone.update({
       where: { id: milestoneId },
       data: {
         title: dto.title ?? milestone.title,
@@ -176,6 +187,8 @@ export class CSRProgrammeService {
         progress: dto.progress ?? milestone.progress,
       },
     });
+
+    return sanitizeEntity(updated)!;
   }
 
   private async ensureCompany(companyId: string) {

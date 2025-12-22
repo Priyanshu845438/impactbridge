@@ -1,3 +1,5 @@
+import { Buffer } from 'node:buffer';
+
 export interface PaginationOptions {
   /** Number of items to return */
   limit?: number;
@@ -5,7 +7,7 @@ export interface PaginationOptions {
   offset?: number;
   /** One-based page index. Used only when limit is present. */
   page?: number;
-  /** Optional cursor identifier (future friendly, not yet in use). */
+  /** Optional cursor identifier (base64 encoded payload or raw id). */
   cursor?: string;
   /** Field name to apply cursor against. Defaults to `id`. */
   cursorField?: string;
@@ -16,17 +18,67 @@ export interface PaginationMeta {
   offset?: number;
   page?: number;
   cursor?: string;
+  cursorField?: string;
+  cursorValue?: string;
 }
 
 export interface PaginationResult {
   skip?: number;
   take?: number;
   cursor?: Record<string, string>;
+  cursorRaw?: CursorPayload | null;
   meta: PaginationMeta;
 }
 
 export const DEFAULT_LIMIT = 25;
 export const MAX_LIMIT = 100;
+
+export interface CursorPayload {
+  field: string;
+  value: string;
+}
+
+const decodeBase64 = (value: string): string | null => {
+  try {
+    return Buffer.from(value, 'base64url').toString('utf8');
+  } catch (error) {
+    try {
+      return Buffer.from(value, 'base64').toString('utf8');
+    } catch (innerError) {
+      return null;
+    }
+  }
+};
+
+export const encodeCursor = (payload: CursorPayload): string => {
+  const serialised = JSON.stringify(payload);
+  return Buffer.from(serialised, 'utf8').toString('base64url');
+};
+
+export const decodeCursor = (
+  cursor: string,
+  fallbackField = 'id',
+): CursorPayload | null => {
+  if (!cursor) {
+    return null;
+  }
+
+  const decoded = decodeBase64(cursor);
+  if (!decoded) {
+    return { field: fallbackField, value: cursor };
+  }
+
+  try {
+    const parsed = JSON.parse(decoded);
+    if (typeof parsed?.field === 'string' && typeof parsed?.value === 'string') {
+      return { field: parsed.field, value: parsed.value };
+    }
+  } catch (error) {
+    // swallow and fallback below
+  }
+
+  return { field: fallbackField, value: cursor };
+};
 
 const coercePositiveInteger = (value?: number): number | undefined => {
   if (value === undefined || value === null) {
@@ -81,9 +133,24 @@ export function resolvePagination(
   }
 
   if (options.cursor) {
-    const cursorField = options.cursorField ?? 'id';
-    result.cursor = { [cursorField]: options.cursor };
+    const decoded = decodeCursor(options.cursor, options.cursorField);
+    const cursorField = decoded?.field ?? options.cursorField ?? 'id';
+    const cursorValue = decoded?.value ?? options.cursor;
+
+    result.cursor = { [cursorField]: cursorValue };
+    result.cursorRaw = decoded;
     meta.cursor = options.cursor;
+    meta.cursorField = cursorField;
+    meta.cursorValue = cursorValue;
+
+    if (result.take === undefined) {
+      result.take = DEFAULT_LIMIT;
+      meta.limit = DEFAULT_LIMIT;
+    }
+
+    if (result.skip === undefined) {
+      result.skip = 1;
+    }
   }
 
   return result;

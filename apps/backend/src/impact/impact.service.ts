@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateImpactMetricDto } from './dto/create-impact-metric.dto';
+import { sanitizeEntity, sanitizeEntities } from '../utils/sanitize.util';
 
 @Injectable()
 export class ImpactService {
@@ -30,7 +31,7 @@ export class ImpactService {
       }
     }
 
-    return this.prisma.impactMetric.create({
+    const metric = await this.prisma.impactMetric.create({
       data: {
         campaignId,
         milestoneId: dto.milestoneId,
@@ -39,19 +40,25 @@ export class ImpactService {
         unit: dto.unit,
       },
     });
+
+    return sanitizeEntity(metric)!;
   }
 
-  getMetricsForCampaign(campaignId: string) {
-    return this.prisma.impactMetric.findMany({
+  async getMetricsForCampaign(campaignId: string) {
+    const metrics = await this.prisma.impactMetric.findMany({
       where: { campaignId },
       orderBy: { createdAt: 'desc' },
     });
+
+    return sanitizeEntities(metrics);
   }
 
-  getMetricsForMilestone(milestoneId: string) {
-    return this.prisma.impactMetric.findMany({
+  async getMetricsForMilestone(milestoneId: string) {
+    const metrics = await this.prisma.impactMetric.findMany({
       where: { milestoneId },
       orderBy: { createdAt: 'desc' },
     });
+
+    return sanitizeEntities(metrics);
   }
 }

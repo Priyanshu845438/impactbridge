@@ -7,6 +7,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { CampaignCategory } from 'prisma/generated';
 import { ActivityLogService } from '../activity/activity-log.service';
+import { sanitizeEntity, sanitizeEntities } from '../utils/sanitize.util';
 
 @Injectable()
 export class CampaignsService {
@@ -52,7 +53,7 @@ export class CampaignsService {
   }
 
   async getPublicCampaigns() {
-    return this.prisma.campaign.findMany({
+    const campaigns = await this.prisma.campaign.findMany({
       where: {
         status: 'PUBLIC',
       },
@@ -69,10 +70,12 @@ export class CampaignsService {
       },
       orderBy: { startDate: 'desc' },
     });
+
+    return sanitizeEntities(campaigns);
   }
 
   async getCampaignById(id: string) {
-    return this.prisma.campaign.findFirst({
+    const campaign = await this.prisma.campaign.findFirst({
       where: {
         id,
         status: 'PUBLIC',
@@ -90,6 +93,8 @@ export class CampaignsService {
         donations: true,
       },
     });
+
+    return sanitizeEntity(campaign);
   }
 
   async getPublicLink(id: string) {
@@ -104,7 +109,7 @@ export class CampaignsService {
   }
 
   async getPublicCampaignForDonation(id: string) {
-    return this.prisma.campaign.findFirst({
+    const campaign = await this.prisma.campaign.findFirst({
       where: { id, status: 'PUBLIC' },
       include: {
         ngo: {
@@ -116,5 +121,7 @@ export class CampaignsService {
         },
       },
     });
+
+    return sanitizeEntity(campaign);
   }
 }

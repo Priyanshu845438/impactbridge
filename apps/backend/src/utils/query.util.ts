@@ -1,6 +1,7 @@
 import type { Prisma } from 'prisma/generated';
 import { resolvePagination, withSoftDelete } from './pagination.util';
 import type { ListQueryOptions } from './pagination.util';
+import { encodeCursor } from './pagination.util';
 
 export const buildFindManyArgs = <
   TModel extends keyof Prisma.TypeMap['model'],
@@ -34,9 +35,37 @@ export const buildFindManyArgs = <
 
   if (pagination.cursor) {
     args.cursor = pagination.cursor as any;
+    if (pagination.skip === undefined) {
+      args.skip = 1 as any;
+    }
   }
 
   return args;
+};
+
+export const buildCursorMeta = (
+  pagination: ReturnType<typeof resolvePagination>,
+  records: Array<{ [key: string]: unknown }> = [],
+): { nextCursor?: string } => {
+  if (!pagination.cursor || !pagination.cursorRaw) {
+    return {};
+  }
+
+  if (!records.length) {
+    return {};
+  }
+
+  const last = records[records.length - 1];
+  const field = pagination.cursorRaw.field;
+  const value = last?.[field];
+
+  if (value === undefined || value === null) {
+    return {};
+  }
+
+  return {
+    nextCursor: encodeCursor({ field, value: String(value) }),
+  };
 };
 
 export const mergeWhere = <

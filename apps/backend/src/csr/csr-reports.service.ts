@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { sanitizeEntity } from '../utils/sanitize.util';
 
 @Injectable()
 export class CSRReportsService {
@@ -20,7 +21,7 @@ export class CSRReportsService {
       throw new NotFoundException('NGO profile not found');
     }
 
-    return ngo;
+    return sanitizeEntity(ngo);
   }
 
   async getCompanyCompliance(userId: string) {
@@ -38,6 +39,6 @@ export class CSRReportsService {
       throw new NotFoundException('Company profile not found');
     }
 
-    return company;
+    return sanitizeEntity(company);
   }
 }

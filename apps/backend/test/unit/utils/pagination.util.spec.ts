@@ -3,6 +3,8 @@ import {
   withSoftDelete,
   DEFAULT_LIMIT,
   MAX_LIMIT,
+  encodeCursor,
+  decodeCursor,
 } from '../../../src/utils/pagination.util';
 
 describe('resolvePagination', () => {
@@ -48,12 +50,37 @@ describe('resolvePagination', () => {
   });
 
   it('includes cursor metadata when provided', () => {
-    const result = resolvePagination({ cursor: 'cursor-id' });
+    const encoded = encodeCursor({ field: 'createdAt', value: 'cursor-value' });
+    const result = resolvePagination({ cursor: encoded });
 
-    expect(result).toMatchObject({
-      cursor: { id: 'cursor-id' },
-      meta: { cursor: 'cursor-id' },
-    });
+    expect(result.cursor).toEqual({ createdAt: 'cursor-value' });
+    expect(result.meta.cursor).toBe(encoded);
+    expect(result.meta.cursorField).toBe('createdAt');
+    expect(result.meta.cursorValue).toBe('cursor-value');
+  });
+
+  it('falls back when cursor not encoded', () => {
+    const result = resolvePagination({ cursor: 'raw-id', cursorField: 'id' });
+
+    expect(result.cursor).toEqual({ id: 'raw-id' });
+    expect(result.meta.cursorValue).toBe('raw-id');
+    expect(result.meta.limit).toBe(DEFAULT_LIMIT);
+    expect(result.take).toBe(DEFAULT_LIMIT);
+  });
+
+  it('decodes base64url and base64', () => {
+    const payload = { field: 'id', value: '123' };
+    const base64 = Buffer.from(JSON.stringify(payload), 'utf8').toString('base64');
+    const base64url = Buffer.from(JSON.stringify(payload), 'utf8').toString(
+      'base64url',
+    );
+
+    expect(decodeCursor(base64)).toEqual(payload);
+    expect(decodeCursor(base64url)).toEqual(payload);
+  });
+
+  it('returns null when decode fails completely', () => {
+    expect(decodeCursor('', 'id')).toBeNull();
   });
 });
 

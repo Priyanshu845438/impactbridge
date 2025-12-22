@@ -4,6 +4,7 @@ import { CreateDonationDto } from './dto/create-donation.dto';
 import { CreatePublicDonationDto } from '../campaigns/dto/create-public-donation.dto';
 import { ActivityLogService } from '../activity/activity-log.service';
 import { CSRService } from '../csr/csr.service';
+import { sanitizeEntities } from '../utils/sanitize.util';
 
 @Injectable()
 export class DonationsService {
@@ -73,7 +74,7 @@ export class DonationsService {
   }
 
   async getMyDonations(userId: string) {
-    return this.prisma.donation.findMany({
+    const donations = await this.prisma.donation.findMany({
       where: {
         OR: [{ donor: { userId } }, { company: { userId } }],
       },
@@ -82,6 +83,8 @@ export class DonationsService {
       },
       orderBy: { donationDate: 'desc' },
     });
+
+    return sanitizeEntities(donations);
   }
 
   async getNGOCampaignDonations(userId: string) {
@@ -90,7 +93,7 @@ export class DonationsService {
     });
     if (!profile) return [];
 
-    return this.prisma.donation.findMany({
+    const donations = await this.prisma.donation.findMany({
       where: {
         campaign: { ngoId: profile.id },
       },
@@ -105,10 +108,12 @@ export class DonationsService {
       },
       orderBy: { donationDate: 'desc' },
     });
+
+    return sanitizeEntities(donations);
   }
 
   async getAllDonations() {
-    return this.prisma.donation.findMany({
+    const donations = await this.prisma.donation.findMany({
       include: {
         campaign: true,
         donor: {
@@ -120,6 +125,8 @@ export class DonationsService {
       },
       orderBy: { donationDate: 'desc' },
     });
+
+    return sanitizeEntities(donations);
   }
 
   async createPublicDonation(campaignId: string, dto: CreatePublicDonationDto) {

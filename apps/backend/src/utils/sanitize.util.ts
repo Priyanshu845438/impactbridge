@@ -18,6 +18,36 @@ type SensitiveKey = (typeof SENSITIVE_KEYS)[number];
 
 type WithoutSensitive<T> = Omit<T, SensitiveKey>;
 
+const isPlainObject = (value: unknown): value is Record<string, unknown> => {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+};
+
+const sanitizeValue = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return value.map((item) => sanitizeValue(item));
+  }
+
+  if (isPlainObject(value)) {
+    const sanitized: Record<string, unknown> = {};
+    for (const [key, nestedValue] of Object.entries(value)) {
+      if (SENSITIVE_KEYS.includes(key as SensitiveKey)) {
+        continue;
+      }
+
+      sanitized[key] = sanitizeValue(nestedValue);
+    }
+
+    return sanitized;
+  }
+
+  return value;
+};
+
 export function sanitizeEntity<T extends SanitizableEntity>(
   entity: T | null | undefined,
 ): WithoutSensitive<T> | null {
@@ -25,18 +55,7 @@ export function sanitizeEntity<T extends SanitizableEntity>(
     return null;
   }
 
-  const clone: Record<string, unknown> = {};
-  const entries = Object.entries(entity);
-
-  for (const [key, value] of entries) {
-    if (SENSITIVE_KEYS.includes(key as SensitiveKey)) {
-      continue;
-    }
-
-    clone[key] = value;
-  }
-
-  return clone as WithoutSensitive<T>;
+  return sanitizeValue(entity) as WithoutSensitive<T>;
 }
 
 export function sanitizeEntities<T extends SanitizableEntity>(

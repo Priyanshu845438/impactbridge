@@ -83,6 +83,7 @@
 - Notification service (email/SMS) and reviewer dashboards.
 - Automated integration tests.
 - Pagination helpers & soft-delete filters wired into shared query utilities (controllers still default to full lists).
+- Cursor pagination can now be toggled per service using the shared helper; controllers remain offset-based until endpoints are versioned.
 
 
 ## Utilization Reporting

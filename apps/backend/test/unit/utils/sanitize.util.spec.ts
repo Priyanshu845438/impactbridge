@@ -27,6 +27,46 @@ describe('sanitizeEntity', () => {
     expect(sanitizeEntity(null)).toBeNull();
     expect(sanitizeEntity(undefined)).toBeNull();
   });
+
+  it('sanitizes nested objects and arrays recursively', () => {
+    const input = {
+      id: 'user-1',
+      password: 'secret',
+      profile: {
+        about: 'NGO',
+        refreshToken: 'nested',
+      },
+      campaigns: [
+        {
+          id: 'campaign-1',
+          accessToken: 'token',
+          donors: [
+            {
+              id: 'donor-1',
+              verificationToken: 'verif',
+            },
+          ],
+        },
+      ],
+    };
+
+    expect(sanitizeEntity(input)).toEqual({
+      id: 'user-1',
+      profile: {
+        about: 'NGO',
+      },
+      campaigns: [
+        {
+          id: 'campaign-1',
+          donors: [
+            {
+              id: 'donor-1',
+            },
+          ],
+        },
+      ],
+    });
+  });
 });
 
 describe('sanitizeEntities', () => {

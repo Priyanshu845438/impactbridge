@@ -7,8 +7,13 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { comparePassword, hashPassword } from '../auth/utils/password.util';
 import { sanitizeEntity, sanitizeEntities } from '../utils/sanitize.util';
-import { buildFindManyArgs, mergeWhere } from '../utils/query.util';
+import {
+  buildFindManyArgs,
+  mergeWhere,
+  buildCursorMeta,
+} from '../utils/query.util';
 import type { ListQueryOptions } from '../utils/pagination.util';
+import { resolvePagination } from '../utils/pagination.util';
 
 @Injectable()
 export class UsersService {
@@ -107,8 +112,13 @@ export class UsersService {
   async getNGOsWithCampaigns(
     options?: ListQueryOptions<Prisma.UserWhereInput>,
   ) {
+    const pagination = resolvePagination(options);
     const args = buildFindManyArgs<'User', Prisma.UserWhereInput>({
       ...options,
+      limit: pagination.meta.limit,
+      offset: pagination.meta.offset,
+      cursor: pagination.meta.cursorValue,
+      cursorField: pagination.meta.cursorField,
       where: mergeWhere(options?.where, {
         role: Role.NGO,
       }) as Prisma.UserWhereInput,
@@ -117,9 +127,18 @@ export class UsersService {
     const ngos = await this.prisma.user.findMany({
       ...args,
       include: { campaigns: true } as any,
+      orderBy: options?.orderBy ?? { createdAt: 'desc' },
     });
 
-    return sanitizeEntities(ngos);
+    const cursorMeta = buildCursorMeta(pagination, ngos);
+
+    return {
+      data: sanitizeEntities(ngos),
+      meta: {
+        ...pagination.meta,
+        ...cursorMeta,
+      },
+    };
   }
 
   async getCompaniesWithDonations(
@@ -196,10 +215,10 @@ export class UsersService {
 
     return ngos.map((ngo) => {
       const { user, ...rest } = ngo;
-      return {
+      return sanitizeEntity({
         ...rest,
         user: sanitizeEntity(user),
-      };
+      })!;
     });
   }
 
@@ -223,10 +242,10 @@ export class UsersService {
 
     return companies.map((company) => {
       const { user, ...rest } = company;
-      return {
+      return sanitizeEntity({
         ...rest,
         user: sanitizeEntity(user),
-      };
+      })!;
     });
   }
 
@@ -248,10 +267,10 @@ export class UsersService {
 
     return donors.map((donor) => {
       const { user, ...rest } = donor;
-      return {
+      return sanitizeEntity({
         ...rest,
         user: sanitizeEntity(user),
-      };
+      })!;
     });
   }
 }

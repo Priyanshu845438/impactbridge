@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UtilizationReportDto } from './dto/utilization-report.dto';
+import { sanitizeEntity, sanitizeEntities } from '../utils/sanitize.util';
 
 @Injectable()
 export class UtilizationService {
@@ -30,7 +31,7 @@ export class UtilizationService {
       }
     }
 
-    return this.prisma.utilizationReport.create({
+    const report = await this.prisma.utilizationReport.create({
       data: {
         campaignId,
         milestoneId: dto.milestoneId,
@@ -39,24 +40,30 @@ export class UtilizationService {
         proofUrl: dto.proofUrl,
       },
     });
+
+    return sanitizeEntity(report)!;
   }
 
-  listReportsForCampaign(campaignId: string) {
-    return this.prisma.utilizationReport.findMany({
+  async listReportsForCampaign(campaignId: string) {
+    const reports = await this.prisma.utilizationReport.findMany({
       where: { campaignId },
       orderBy: { createdAt: 'desc' },
     });
+
+    return sanitizeEntities(reports);
   }
 
-  listReportsForMilestone(milestoneId: string) {
-    return this.prisma.utilizationReport.findMany({
+  async listReportsForMilestone(milestoneId: string) {
+    const reports = await this.prisma.utilizationReport.findMany({
       where: { milestoneId },
       orderBy: { createdAt: 'desc' },
     });
+
+    return sanitizeEntities(reports);
   }
 
-  adminAllReports() {
-    return this.prisma.utilizationReport.findMany({
+  async adminAllReports() {
+    const reports = await this.prisma.utilizationReport.findMany({
       include: {
         campaign: {
           include: {
@@ -71,5 +78,7 @@ export class UtilizationService {
       },
       orderBy: { createdAt: 'desc' },
     });
+
+    return sanitizeEntities(reports);
   }
 }
