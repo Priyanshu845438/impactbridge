@@ -106,3 +106,4 @@ Recent regression checks:
 - `components/overlays/error-boundary.tsx` wraps dashboard content to surface fallback messaging.
 - `components/overlays/fallback-panel.tsx` provides a neutral retry/back UI for fetch failures or 5xx states.
 - Unit test coverage in `lib/hooks/__tests__/error-boundary.test.tsx` verifies fallback rendering.
+- Performance budgets live under `metrics/` with a Next.js metrics hook (warning-only). Baseline details: `docs/PERFORMANCE_BASELINE.md`.

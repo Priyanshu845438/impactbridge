@@ -10,7 +10,10 @@ const config = createJestConfig({
   transformIgnorePatterns: ['node_modules/(?!(ky)/)'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-  testMatch: ['<rootDir>/__tests__/**/*.test.{ts,tsx}'],
+  testMatch: [
+    '<rootDir>/__tests__/**/*.test.{ts,tsx}',
+    '<rootDir>/metrics/__tests__/**/*.test.{ts,tsx}',
+  ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
