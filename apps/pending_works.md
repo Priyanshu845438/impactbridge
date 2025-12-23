@@ -1,81 +1,76 @@
-# ImpactBridge Pending Work & Recommendations (Audit: 2025-02-14)
+# ImpactBridge Pending Work & Recommendations (Audit: 2025-02-22)
 
 ## Backend
 
 ### High-Priority Gaps
-- Auth + Users controllers not yet wired to services despite readiness plan; no public API surface.
-- CSR Programme service implemented, but controllers/routes/tests missing; frontend blocked from live data.
-- Approval workflow controller lacks revoke endpoint, error handling uses generic Error instead of Nest exceptions; needs audit logging & comments.
-- Pagination helper integrated but list endpoints still default to full fetch; soft delete not enforced (hard deletes remain).
-- Notification service no-op: no queue/store, no persistence of intents; integrate with future job framework.
-- Financial reporting service lacks controller exposure, audit trail, and DTO validation for upload metadata.
-- Address/Bank controllers rely on `usersService.getNGOProfileByUserId` returning `null`; no explicit NotFound exception.
-- No API validation for `companyId` in approval flow (ensuring company belongs to campaign or allowed partner).
-- Guards/Decorators exist, but no integration tests verifying RBAC across modules.
-- Prisma seed/migration pipeline for new schema not documented beyond playbook; no staging migration plan.
+- CSR Programme service exists but lacks public controllers/routes/tests; frontend remains blocked from live CSR data.
+- Financial reporting APIs still not exposed; upload/list endpoints, DTO validation, and audit hooks pending.
+- Address/Bank profile controllers need hardened error handling and ownership checks for both NGO and company variants.
+- Pagination + soft-delete defaults only applied to `/users` list; other aggregates (NGO/company/donor listings, approvals, programmes) still fetch entire tables and can surface soft-deleted rows.
+- Notification pipeline now persists intents but still lacks dispatch queue integration, status transitions, and retry handling.
+- Activity/Audit logging depends on manual service calls; approvals/programme/financial flows need consistent hooks + reporting endpoints.
+- RBAC coverage limited to unit specs; no end-to-end tests confirming guard stack across auth, approvals, CSR programmes, financial reporting.
+- Background job infrastructure remains design-only; no worker or scheduler to process notification intents or compliance reminders.
 
-### Medium-Priority Work
-- Implement soft-delete (`deletedAt`) across user/profile entities with query helper defaults and tests.
-- Extend pagination helper to support cursor-based strategy for large data sets.
-- Build auditing hooks for key service transitions (approvals, programme updates, assignments).
-- Add event logging/notifications integration points (e.g., call NotificationsService enqueue when approvals change).
-- Ensure services sanitize sensitive nested data consistently (e.g., `getNGOsWithCampaigns` includes nested campaigns without sanitisation).
-- Expand unit tests: ApprovalsService edge cases, FinancialService failure modes, NotificationsService fallback scenarios.
-- Provide Postman collection coverage for new services (approvals, CSR programmes, addresses/banks) once API exposed.
-- Document RBAC matrix per endpoint (currently only controller-level notes).
+- Extend pagination helper adoption (cursor + offset) to heavy listings such as campaigns, donations, NGOs with campaigns, company reports.
+- Implement soft-delete enforcement + restore flows for major entities (programmes, approvals, campaigns) with regression tests.
+- Wire notification intents into domain events (approvals transitions, financial submissions) once dispatch contract finalised.
+- Harden FinancialService (validation, error paths) and introduce integration tests for success/failure scenarios.
+- Produce Postman collections / automated scripts for newly exposed `/api/v1` auth, users, approvals once live; extend to CSR/financial later.
+- Document RBAC matrix per endpoint, including guard combinations and expected roles, to guide frontend integration.
+- Finalise Prisma seeding (separate demo/test seeds) and automate dry-run checks in CI.
 
 ### Low-Priority Enhancements
-- Introduce config-driven rate limiting and request logging middleware ahead of production traffic.
-- Migrate shared enums/DTOs to dedicated package for frontend/back-end alignment.
-- Add data consistency checks (e.g., triggers to ensure NGO profile exists before approval request).
-- Provide CLI or scripts for generating mock data for demos/testing.
-- Review assumed enums (`NGORegistrationType.OTHER` default) and add constant definitions for compliance categories.
+- Add config-driven rate limiting, structured logging, and tracing middleware before production launch.
+- Publish shared DTO/enums package to keep frontend/back-end contracts aligned.
+- Provide admin scripts/CLI for demo data resets and smoke testing.
+- Review defaults (e.g., `NGORegistrationType.OTHER`) and capture regulatory mappings in constants + docs.
+- Introduce data quality checks (e.g., ensuring NGO/Company profiles auto-create successfully) with health endpoint.
 
 ## Frontend
 
 ### High-Priority Gaps
-- Entire dashboard still mock-only: no API wiring for NGO/company dashboards, programmes, vendors, audits, compliance, budget planner, impact stories, etc.
-- API client scaffold exists but not used; `AuthProvider` still depends on legacy `ky` client; duplication needs consolidation.
-- No route guards/middleware enforcing auth at server level (client-only guard).
-- Missing React Query integration for data fetching; need service hooks for future API calls.
-- Form submission actions (login/register) using mock endpoints; integration with backend auth pending.
-- Storybook/percy not fully enabled: Percy disabled due to missing system deps; re-enable after dependencies installed.
-- Tests cover only subsets (impact stories, budget planner, vendor/audit/engagement); major dashboards & tables lack coverage (NGO finance, company programmes, etc.).
-- Accessibility testing not automated; no axe/pa11y integration despite complex UI.
+- Entire dashboard still powered by mocks; no API wiring to new `/api/v1` endpoints (auth, users, approvals) or backend models (CSR, donations, compliance).
+- API client scaffold unused; legacy `ky` usage persists in auth context leading to duplicate HTTP layers.
+- Server-side route guards/middleware absent; authentication enforced only via client context.
+- React Query (or similar) data layer not adopted; no caching/retry/invalidations prepared for integration phase.
+- Auth flows (login/register/forgot) still call mock handlers; need connection to real backend plus error handling states.
+- Storybook visual regression remains disabled (Percy deps missing); no automated approval for UI changes.
+- RTL coverage limited to select dashboards; significant modules (NGO financials, compliance center, approvals) lack tests.
+- Accessibility tooling (axe, eslint rules) not integrated; risk of regressions as UI expands.
 
-### Medium-Priority Work
-- Replace local storage token persistence with secure storage (httpOnly cookie) once backend supports it.
-- Implement server-driven navigation: fetch nav items based on role from backend.
-- Add skeleton loading states tied to API query progress (currently manual toggles).
-- Expand analytics widget tests to cover interactions (simulator slider, CTA states).
-- Build integrations for Postman collection parity (use same endpoints in Storybook mocks).
-- Document performance budgets and track via Next.js metrics.
-- Implement error boundaries and fallback UIs for failed fetches.
-- Create consistent API layer using React Query + typed responses from shared package.
+- Transition auth storage to secure cookies/session once backend issues tokens for browser use.
+- Build server-provided navigation + feature flags to keep roles in sync with backend RBAC.
+- Implement loading/error states driven by query status instead of manual placeholders.
+- Extend analytics widget tests and add coverage for NGO/company KPI dashboards.
+- Align Storybook mocks with eventual backend responses to ease integration.
+- Capture performance budgets (TTI/LCP) and monitor via Next.js telemetry.
+- Introduce error boundaries and fallback UIs for failed API calls.
+- Establish shared typed API client + React Query hooks referencing backend DTO package.
 
 ### Low-Priority Enhancements
-- Add RTL tests for mobile/responsive behaviours (drawer toggles, filters) across modules.
-- Integrate linting for accessibility (eslint-plugin-jsx-a11y rules) with targeted overrides.
-- Add Figma/Design token documentation to align with future design system.
-- Provide UI toggles for enabling/disabling experimental features (feature flags).
-- Automate Storybook build in CI once Percy ready, even if snapshots disabled.
+- Expand RTL suites to capture responsive states (drawer, filters, charts) and cross-role scenarios.
+- Enable `eslint-plugin-jsx-a11y` and automated axe scans as part of CI.
+- Document design tokens + Figma linkage for shared styling vocabulary.
+- Add feature-flag UI toggles to surface backend-controlled experiments.
+- Re-enable Storybook build in CI once visual regression tooling stabilises.
 
 ## Suggested New Features
 
 ### Backend
-- Webhook ingestion endpoints for external compliance or donor systems.
-- Audit log query API with filtering & CSV export.
-- Background job scheduling for periodic compliance reminders.
-- Analytics aggregation service feeding dashboards with cached metrics.
-- Real-time notifications channel (websocket) for approvals/status updates.
-- Data retention policies & purge jobs for GDPR compliance.
+- Webhook ingestion endpoints for compliance, donation, and external partner integrations.
+- Audit log query API (filterable, exportable) backed by ActivityLog entries.
+- Background job scheduler for notification dispatch, compliance reminders, data hygiene.
+- Analytics aggregation service to precompute KPI dashboards and reduce query load.
+- Real-time notification channel (WebSocket/SSE) for approvals, programme changes.
+- Data retention & purge tooling for regulatory compliance (GDPR, CSR mandates).
 
 ### Frontend
-- Admin control center for feature flags and system status.
-- In-app guided tours/onboarding checklists per role.
-- Downloadable CSR report builders using new backend endpoints.
-- Offline mode for data entry with sync (especially NGO field usage).
-- Real-time collaboration cues (presence indicators, comment threads).
+- Admin control centre for feature flags, system status, and release toggles.
+- In-app guided tours/onboarding checklists tailored per role.
+- Downloadable CSR/impact reports fed by upcoming backend analytics endpoints.
+- Offline-ready data capture with sync for field operators (NGO staff).
+- Real-time collaboration cues (presence, comments) to support joint campaign planning.
 
 ---
 

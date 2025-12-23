@@ -345,3 +345,8 @@
 - Added unit suites ensuring nested entities drop sensitive keys before returning responses (users, CSR, campaigns, utilisation).
 - Verified npm test/build pipelines to confirm zero regressions.
 
+
+## 58. Prisma Seed & Migration Playbook
+- Authored `docs/PRISMA_SEED_AND_MIGRATION.md` describing seed strategy across local/test/demo environments.
+- Documented staging vs production migration flow, rollback expectations, and failure handling checklist.
+- Included reference commands only (no schema/runtime changes) and kept build/tests intact.

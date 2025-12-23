@@ -1,41 +1,42 @@
 # ImpactBridge Apps Progress Log
 
-## 1. Pre-Integration Readiness & Auth Contract (2025-02-14)
+## Backend Summary
 
-- Authored "API Integration Readiness" checklist outlining frontend/backend modules ready for wiring, high-risk areas (approvals, financial reporting exposure, notification providers), and recommended integration order.
-- Documented auth token contract (JWT bearer, Authorization header, 1-day expiry with 60s renewal buffer) and environment placeholders (`NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_API_AUTH_HEADER`, `NEXT_PUBLIC_AUTH_EXPIRY_BUFFER_SECONDS`).
-- Added backend `.env` guidance (JWT secret, rotation cadence) and confirmed no runtime code changes were introduced.
-- Verified `npm run init` / `npm run build` for both backend and frontend to maintain green builds.
+1. Pre-Integration Readiness & Auth Contract (2025-02-14)
+   - Authored readiness checklist covering frontend/backend modules, high-risk areas, and integration order.
+   - Documented JWT token contract plus frontend/back-end env placeholders; confirmed no runtime changes by running `npm run init` / `npm run build` for both apps.
 
-## 2. API readiness & auth contract documentation (2025-02-14)
+2. API Readiness & Auth Documentation (2025-02-14)
+   - Added backend `API_INTEGRATION_READINESS.md`, `AUTH_TOKEN_CONTRACT.md`, and frontend readiness note.
+   - Executed backend/front-end init + build to ensure clean state with new docs/env placeholders.
 
-- Drafted backend `API_INTEGRATION_READINESS.md` and `AUTH_TOKEN_CONTRACT.md`, plus frontend counterpart readiness note.
-- Added frontend env placeholders (`NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_API_AUTH_HEADER`, `NEXT_PUBLIC_AUTH_EXPIRY_BUFFER_SECONDS`) for future wiring.
-- Captured JWT contract (Bearer header, 24h expiry, 60s buffer) and backend JWT secret expectations.
-- Executed `npm run init && npm run build` for backend and frontend to ensure clean state.
+3. Frontend API Client Scaffold (2025-02-14)
+   - Implemented fetch wrapper (`frontend/lib/api/client.ts`) and Jest coverage while leaving UI untouched.
+   - Updated frontend docs and re-ran unit tests/build (only expected Next warning).
 
-## 3. Frontend API Client Scaffold (2025-02-14)
-- Added lightweight fetch wrapper (`frontend/lib/api/client.ts`) returning typed responses and normalized errors while remaining unused by UI.
-- Wrote Jest coverage (`frontend/__tests__/api-client.test.ts`) for success, no-content, and error flows.
-- Updated frontend docs (`docs/API_CLIENT_SCAFFOLD.md`, `docs/FRONTEND_SETUP.md`, progress log) and reran `npm run test -- --runInBand`, `npm run build` (Next warning only).
+4. Backend Controller Plan & Integration Sign-Off (2025-02-14)
+   - Drafted controller exposure plan, RBAC map, and pre-integration sign-off checklist under `backend/docs`.
+   - No runtime changes; builds remain green per prior init/build runs.
 
-## 4. Backend Controller Plan & Integration Sign-Off (2025-02-14)
-- Documented `backend/docs/CONTROLLER_EXPOSURE_PLAN.md` detailing service↔controller mapping, `/api/v1` routing, RBAC guard stack, and read-only rollout sequencing.
-- Added `backend/docs/PRE_INTEGRATION_SIGN_OFF.md` final checklist summarizing frontend/back-end readiness, env/auth alignment, risks, and first API target (`POST /auth/login`, `POST /auth/register`).
-- Builds remain green (previous `npm run init` / `npm run build` confirmations stand); no runtime code changes introduced.
+5. Backend v1 Auth & User APIs Exposed (2025-02-15)
+   - Added versioned controllers under `backend/src/v1` for `/api/v1/auth` and `/api/v1/users/me`, plus e2e coverage.
+   - Verified via `npm run init`, `npm test`, `npm run test:e2e`, `npm run build`.
 
-## 5. Backend v1 auth & user APIs exposed (2025-02-15)
-- Wired versioned controllers under `backend/src/v1` exposing `/api/v1/auth` (login/register) and `/api/v1/users/me` (GET/PATCH) atop existing services.
-- Added integration specs to validate JWT-protected access and Prisma mock behaviour, including activity log stubbing.
-- Ensured `npm run init`, `npm test`, `npm run test:e2e`, and `npm run build` all pass post-change.
+6. CSR Programme API Attempt Blocked (2025-02-15)
+   - Logged missing CSR Programme foundations instead of shipping placeholder controllers.
 
-## 6. CSR programme API attempt blocked (2025-02-15)
-- Investigated adding `/api/v1/programmes` endpoints but found no CSR Programme service, DTOs, or Prisma models in the backend codebase.
-- Recorded the gap instead of shipping placeholder controllers to avoid breaking future integrations.
-- Awaiting foundational service layer before exposing routes; no code changes committed for this task.
+7. Backend CSR Programme Foundation (2025-02-15)
+   - Added Prisma models, migration, DTOs, and service skeleton with unit tests; no controllers yet.
 
-## 7. Backend CSR programme foundation added (2025-02-15)
-- Added Prisma models (`CSRProgramme`, `ProgrammeMilestone`, `ProgrammeAssignment`) plus enums and migration `20251220072252_add_csr_programme_foundation`, keeping schema in sync.
-- Scaffoled `backend/src/csr-programme/` module with DTOs (`Create/UpdateProgramme`, `AssignNgo`, milestone DTOs) and service methods for create/update/list/assign/milestones; registered module in `AppModule` without exposing controllers yet.
-- Wrote unit coverage (`backend/test/unit/csr-programme/csr-programme.service.spec.ts`) with Prisma mocks and expanded `test/setup.ts` enum stubs to match new schema artefacts.
-- Confirmed `npm run init`, `npm run test -- --runInBand`, and `npm run build` pass after introducing the foundation.
+8. Notifications Persistence (2025-02-19)
+   - Persisted notification intents via new Prisma model and repository while keeping delivery no-op; added unit coverage and updated docs.
+9. Sensitive Data Sanitisation (2025-02-22)
+   - Extended sanitiser to nested relations, patched services, added regression tests, and confirmed test/build pipelines remain green.
+10. Prisma Seed & Migration Playbook (2025-02-22)
+   - Documented seed strategy across environments, clarified staging→production migration process, rollback policy, and failure handling commands.
+
+
+## Frontend Summary
+
+- Refer to apps/frontend/agents.md for exhaustive frontend progress log (155 entries covering dashboard build-out, UX polish, docs, and RTL coverage).
+- Frontend middleware guard added (see frontend/agents.md entry 100).

@@ -61,6 +61,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
         setUnreadNotifications(3);
         localStorage.setItem("impactbridge:notifications:unread", "3");
       }
+      document.cookie = `impactbridge-session=${encodeURIComponent(jwt)}; Path=/; SameSite=Lax`;
+      document.cookie = `impactbridge-role=${encodeURIComponent(authUser.role)}; Path=/; SameSite=Lax`;
     }
   };
 
@@ -76,6 +78,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
       localStorage.removeItem("impactbridge:token");
       localStorage.removeItem("impactbridge:user");
       localStorage.removeItem("impactbridge:notifications:unread");
+      document.cookie = "impactbridge-session=; Path=/; Max-Age=0";
+      document.cookie = "impactbridge-role=; Path=/; Max-Age=0";
     }
   };
 
@@ -137,10 +141,14 @@ export function AuthProvider({ children }: PropsWithChildren) {
         setApiClientToken(storedToken);
         setTokenState(storedToken);
         setUserState(parsedUser);
+        document.cookie = `impactbridge-session=${encodeURIComponent(storedToken)}; Path=/; SameSite=Lax`;
+        document.cookie = `impactbridge-role=${encodeURIComponent(parsedUser.role)}; Path=/; SameSite=Lax`;
       } catch (error) {
         localStorage.removeItem("impactbridge:token");
         localStorage.removeItem("impactbridge:user");
         localStorage.removeItem("impactbridge:notifications:unread");
+        document.cookie = "impactbridge-session=; Path=/; Max-Age=0";
+        document.cookie = "impactbridge-role=; Path=/; Max-Age=0";
       }
     } else {
       router.replace("/login");
