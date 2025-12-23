@@ -196,7 +196,7 @@ function ComplianceList({ rows, onSelect }: { rows: ComplianceRow[]; onSelect: (
   return (
     <div className="space-y-4">
       <div className="hidden text-sm lg:block">
-        <table className="w-full text-left">
+        <table className="w-full text-left" aria-label="Compliance table">
           <thead className="text-xs uppercase tracking-[0.2em] text-slate-400">
             <tr className="border-b border-slate-100 dark:border-slate-800">
               <th className="px-4 py-3 font-medium">NGO</th>

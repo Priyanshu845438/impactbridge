@@ -13,6 +13,7 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - React Query integration skeleton in place (app-wide provider, shared client factory, placeholder hook + tests) with no UI changes.
 - Dashboard-level error boundary + fetch fallback UI added; runtime errors now render graceful messaging without impacting navigation.
 - Accessibility automation baseline added with report-only `jest-axe` checks (login, dashboard layout shell, compliance table) using targeted mocks and shared helper.
+- Added RTL coverage for NGO finance overview, company CSR programmes directory/detail, and company compliance dashboard to lock core interactions (filters, search, skeletons, empty states) before real data wiring.
 - Added NGO finance overview page
 - Added NGO invoices & billing page
 - Added NGO payout request workspace

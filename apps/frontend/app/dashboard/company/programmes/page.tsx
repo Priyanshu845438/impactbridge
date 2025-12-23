@@ -48,7 +48,7 @@ export default function CompanyProgrammeDirectoryPage() {
   );
 
   const filteredProgrammes = useMemo(() => {
-    const search = debouncedQuery.trim().toLowerCase();
+    const search = debouncedQuery?.trim().toLowerCase() ?? "";
 
     return programmes.filter((programme) => {
       const matchesCategory = filters.category === "All" || programme.category === filters.category;
@@ -153,7 +153,11 @@ function ProgrammeSkeletonGrid() {
   return (
     <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
       {Array.from({ length: 6 }).map((_, index) => (
-        <Card key={index} className="space-y-4 rounded-4xl border border-slate-200 bg-white/70 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+        <Card
+          key={index}
+          data-testid="programme-skeleton-card"
+          className="space-y-4 rounded-4xl border border-slate-200 bg-white/70 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/50"
+        >
           <Skeleton className="h-36 w-full rounded-3xl" />
           <div className="space-y-3">
             <Skeleton className="h-4 w-3/5" />

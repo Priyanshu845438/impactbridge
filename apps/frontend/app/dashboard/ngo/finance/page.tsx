@@ -353,7 +353,7 @@ function TransactionTable({
   return (
     <div className="space-y-4">
       <div className="hidden rounded-3xl border border-slate-200 dark:border-slate-800 lg:block">
-        <Table>
+        <Table aria-label="Transactions table">
           <TableHeader>
             <TableRow className="text-xs uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
               <TableHead>Date</TableHead>

@@ -619,3 +619,8 @@
 - Introduced `jest-axe` helper (`test/a11y-utils.ts`) and report-only specs for login, dashboard shell, and company compliance table with targeted mocks.
 - Added ambient typings for `jest-axe`, documented the workflow, and updated setup/progress logs to track the new checks.
 - npm run init, npm run test -- --runInBand, and npm run build all succeed (Next module warning expected).
+
+## 104. Frontend Dashboard Coverage Expansion (mock-only).
+
+- Added RTL suites for NGO finance overview, company CSR programmes directory/detail, and company compliance dashboard to validate filters, search, skeletons, and empty states (mock data only).
+- Documented the new coverage in `docs/PROGRESS_REPORT.md` and `docs/FRONTEND_SETUP.md`; commands `npm run init`, `npm run test -- --runInBand`, and `npm run build` remain green (Next module warning still expected).

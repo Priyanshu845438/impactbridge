@@ -71,6 +71,10 @@ No components consume the hook yet; it is staged for future API wiring.
 - Jest + Testing Library for unit/integration tests
 - Example query hook has a dedicated test under
   `lib/hooks/__tests__/use-example-query.test.tsx`
+- Dashboard RTL coverage (mock data only):
+  - `__tests__/dashboard-ngo-finance.test.tsx` – ensures summary cards render, filters adjust rows, and empty state messaging appears.
+  - `__tests__/dashboard-company-programmes.test.tsx` – exercises programme search/status filters, skeletons, and detail routing fallback.
+  - `__tests__/dashboard-company-compliance.test.tsx` – verifies status filters, search narrowing, and empty-state reset CTA.
 
 Run tests with:
 
@@ -91,6 +95,10 @@ npm run build  # Next production build (App Router)
 
 Known warnings: Next will emit `[MODULE_TYPELESS_PACKAGE_JSON]` until we set
 `"type": "module"` in `package.json`. This is tracked separately.
+
+Recent regression checks:
+- `npm run test -- --runInBand`
+- `npm run build`
 
 ## Error Handling
 
