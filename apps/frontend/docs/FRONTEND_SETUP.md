@@ -75,6 +75,7 @@ No components consume the hook yet; it is staged for future API wiring.
   - `__tests__/dashboard-ngo-finance.test.tsx` – ensures summary cards render, filters adjust rows, and empty state messaging appears.
   - `__tests__/dashboard-company-programmes.test.tsx` – exercises programme search/status filters, skeletons, and detail routing fallback.
   - `__tests__/dashboard-company-compliance.test.tsx` – verifies status filters, search narrowing, and empty-state reset CTA.
+- Navigation contract mapper tests live in `lib/__tests__/nav-menu-contract.test.ts`, ensuring server-driven nav payloads merge roles, preserve ordering, and gracefully ignore unknown icons.
 
 Run tests with:
 

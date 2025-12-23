@@ -1,6 +1,6 @@
 # ImpactBridge Frontend Progress Report
 
-_Last updated: 2025-12-17 11:05 UTC_
+_Last updated: 2025-12-18 08:20 UTC_
 
 ## Overview
 
@@ -14,6 +14,7 @@ The ImpactBridge frontend remains a polished Next.js 14 App Router experience wi
 - Dashboard-level error boundary + fetch fallback UI added; runtime errors now render graceful messaging without impacting navigation.
 - Accessibility automation baseline added with report-only `jest-axe` checks (login, dashboard layout shell, compliance table) using targeted mocks and shared helper.
 - Added RTL coverage for NGO finance overview, company CSR programmes directory/detail, and company compliance dashboard to lock core interactions (filters, search, skeletons, empty states) before real data wiring.
+- Documented server-driven navigation contract and mapping utility; added Jest coverage to validate role merging, ordering, and icon handling ahead of backend wiring.
 - Added NGO finance overview page
 - Added NGO invoices & billing page
 - Added NGO payout request workspace

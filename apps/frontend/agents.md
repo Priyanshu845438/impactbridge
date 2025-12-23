@@ -624,3 +624,10 @@
 
 - Added RTL suites for NGO finance overview, company CSR programmes directory/detail, and company compliance dashboard to validate filters, search, skeletons, and empty states (mock data only).
 - Documented the new coverage in `docs/PROGRESS_REPORT.md` and `docs/FRONTEND_SETUP.md`; commands `npm run init`, `npm run test -- --runInBand`, and `npm run build` remain green (Next module warning still expected).
+
+
+## 105. Server-Driven Navigation Contract.
+
+- Documented backend nav payload shape and icon tokens (docs/NAVIGATION_SERVER_CONTRACT.md).
+- Added `mapServerNavigation` mapper + Jest coverage to merge roles/order while keeping current UI static.
+- Updated setup/progress docs; init/test/build remain green (known Next module warning persists).
