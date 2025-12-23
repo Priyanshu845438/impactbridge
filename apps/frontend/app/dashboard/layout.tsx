@@ -40,6 +40,7 @@ import { ProfileDrawer } from "@/components/dashboard/profile-drawer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { GlobalSearchSpotlight } from "@/components/overlays/global-search";
+import { ErrorBoundary } from "@/components/overlays/error-boundary";
 import { CommandHints } from "@/components/ui/command-hints";
 
 interface NotificationItemProps {
@@ -711,14 +712,16 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
               </section>
             }
           >
-            <section
-              className={cn(
-                "rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition-opacity duration-200 sm:p-6 lg:p-8 dark:border-slate-800 dark:bg-slate-950",
-                contentOpacityClass,
-              )}
-            >
-              <div className="space-y-8">{children}</div>
-            </section>
+            <ErrorBoundary>
+              <section
+                className={cn(
+                  "rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition-opacity duration-200 sm:p-6 lg:p-8 dark:border-slate-800 dark:bg-slate-950",
+                  contentOpacityClass,
+                )}
+              >
+                <div className="space-y-8">{children}</div>
+              </section>
+            </ErrorBoundary>
           </Suspense>
         </main>
       </div>

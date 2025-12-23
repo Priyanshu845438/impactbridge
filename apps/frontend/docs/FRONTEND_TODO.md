@@ -176,3 +176,7 @@ Update this file as features ship or priorities shift.
 - Reverted the impact stories page to the last passing commit after a malformed memoization edit introduced syntax errors.
 - [ ] Expand RTL suite for company partner drawers and impact story filters once API wiring is complete.
 - Extend RTL coverage to remaining company modules (e.g., partner insights, compliance deadlines) after latest vendor/audit/engagement tests added in `vendor-audit-engagement.test.tsx`.
+
+- React Query integration skeleton established; add real queries once backend endpoints are ready.
+- Hook real fetch error states into boundary once APIs wired.
+

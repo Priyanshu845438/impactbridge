@@ -606,3 +606,16 @@
 - Created reusable query client factory plus placeholder useExampleQuery hook returning mock data (unused yet).
 - Added Jest hook test ensuring provider/hook return the expected mock payload.
 - npm run init, npm run test -- --runInBand, and npm run build remain green (Next module-type warning expected).
+
+## 102. Error Boundary & Fetch Fallbacks.
+
+- Added reusable dashboard ErrorBoundary rendering fallback panel for runtime errors.
+- Created neutral fetch-failure fallback UI with retry/back controls; integrated in dashboard layout.
+- Added Jest coverage to ensure boundary returns children vs fallback when errors occur.
+- npm run init, npm run test -- --runInBand, and npm run build remain green (Next module warning expected).
+
+## 103. Accessibility Automation Baseline (report-only).
+
+- Introduced `jest-axe` helper (`test/a11y-utils.ts`) and report-only specs for login, dashboard shell, and company compliance table with targeted mocks.
+- Added ambient typings for `jest-axe`, documented the workflow, and updated setup/progress logs to track the new checks.
+- npm run init, npm run test -- --runInBand, and npm run build all succeed (Next module warning expected).

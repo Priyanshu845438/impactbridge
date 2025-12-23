@@ -1,15 +1,18 @@
 # ImpactBridge Frontend Progress Report
 
-_Last updated: 2025-12-17 08:42 UTC_
+_Last updated: 2025-12-17 11:05 UTC_
 
 ## Overview
 
-The ImpactBridge frontend remains a polished Next.js 14 App Router experience with role-aware dashboards, rich documentation, and production-ready styling. The latest milestone extends the tooling stack with Storybook + Percy snapshot scaffolding to guard against UI regressions.
+The ImpactBridge frontend remains a polished Next.js 14 App Router experience with role-aware dashboards, rich documentation, and production-ready styling. The latest milestone extends the tooling stack with Storybook + Percy snapshot scaffolding to guard against UI regressions, React Query integration, error boundaries, and automated accessibility checks.
 
 ---
 
 ## Completed Work (new)
 
+- React Query integration skeleton in place (app-wide provider, shared client factory, placeholder hook + tests) with no UI changes.
+- Dashboard-level error boundary + fetch fallback UI added; runtime errors now render graceful messaging without impacting navigation.
+- Accessibility automation baseline added with report-only `jest-axe` checks (login, dashboard layout shell, compliance table) using targeted mocks and shared helper.
 - Added NGO finance overview page
 - Added NGO invoices & billing page
 - Added NGO payout request workspace

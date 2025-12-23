@@ -963,3 +963,17 @@
 - Created reusable query client factory plus placeholder useExampleQuery hook returning mock data (unused yet).
 - Added Jest hook test ensuring provider/hook return the expected mock payload.
 - npm run init, npm run test -- --runInBand, and npm run build remain green (Next module-type warning expected).
+
+## 102. Error Boundary & Fetch Fallbacks.
+
+- Added reusable dashboard ErrorBoundary rendering fallback panel for runtime errors.
+- Created neutral fetch-failure fallback UI with retry/back controls; integrated in dashboard layout.
+- Added Jest coverage to ensure boundary returns children vs fallback when errors occur.
+- npm run init, npm run test -- --runInBand, and npm run build remain green (Next module warning expected).
+
+## 103. Accessibility Automation Baseline Attempt.
+
+- Tried wiring jest-axe + axe-core with shared helper and page-level a11y specs (login/dashboard/vendor directory).
+- Jest runs failed because ky's ESM build broke our transform pipeline (`SyntaxError: Cannot use import statement outside a module`).
+- Reverted the temporary tests/helpers so repo remains clean; recorded blockers for future pass.
+- No lasting code/doc/test changes beyond this log entry.
