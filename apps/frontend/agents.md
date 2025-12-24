@@ -543,3 +543,8 @@
 
 - Audited shared RBAC helpers (`types/rbac.ts`), middleware cookies, and AuthProvider session sync to scope next fixes.
 - Confirmed enumeration overlap with new shared `api-contracts` package before making edits; deferred implementation until follow-up task.
+
+## 108. RBAC Helper Enhancements (prep work).
+
+- Added `coerceUserRole` and `resolveRoleRedirect` utilities within `types/rbac.ts` to centralize future middleware/AuthProvider logic.
+- No behavioural changes yet—helpers verified locally pending broader RBAC wiring.

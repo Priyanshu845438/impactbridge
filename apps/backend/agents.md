@@ -326,3 +326,8 @@
 - Standardised every controller on the global `/api` prefix with URI-based versioning (`v1`) via Nest's `enableVersioning`, swapping `@Controller('api/v1/...')` strings for `{ path, version: '1' }` metadata.
 - Updated App bootstrap to set the global prefix and default version; adjusted controllers (approval, users, campaigns, admin routes) to rely on framework-managed version segments.
 - Added integration coverage ensuring versioned routes respond while unversioned `/` now returns 404; refreshed technical docs with v2 rollout rules and ran npm run init/build/tests.
+
+## 62. Integration Test Planning (CSR ↔ Approvals ↔ Finance)
+
+- Reviewed existing e2e/integration scaffolding (`test/v1`, `test/integration`) plus CSR, approvals, and financial controllers to scope cross-module test coverage.
+- Deferred implementation until deterministic test fixtures are defined for company/NGO/programme relationships.

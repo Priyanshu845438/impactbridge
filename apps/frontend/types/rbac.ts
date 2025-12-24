@@ -11,6 +11,22 @@ export function isUserRole(value: unknown): value is UserRole {
   return typeof value === 'string' && (USER_ROLES as readonly string[]).includes(value);
 }
 
+export function coerceUserRole(value: unknown): UserRole | undefined {
+  return isUserRole(value) ? value : undefined;
+}
+
+export function resolveRoleRedirect(pathname: string, role: UserRole | undefined) {
+  if (!role) {
+    return null;
+  }
+
+  if (matchRoleAccess(pathname, role)) {
+    return null;
+  }
+
+  return getRoleHome(role);
+}
+
 export type RoleAccessMap = Record<UserRole, RegExp[]>;
 
 export const DASHBOARD_ROLE_PREFIX: Record<UserRole, string> = {
