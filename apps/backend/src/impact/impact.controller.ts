@@ -8,7 +8,7 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { AuthUser } from '../auth/types/auth-user.type';
 import { CreateImpactMetricDto } from './dto/create-impact-metric.dto';
 
-@Controller('impact')
+@Controller({ path: 'impact', version: '1' })
 export class ImpactController {
   constructor(private readonly impactService: ImpactService) {}
 

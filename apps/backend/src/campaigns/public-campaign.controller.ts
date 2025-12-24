@@ -3,7 +3,7 @@ import { CampaignsService } from './campaigns.service';
 import { DonationsService } from '../donations/donations.service';
 import { CreatePublicDonationDto } from './dto/create-public-donation.dto';
 
-@Controller('public/campaigns')
+@Controller({ path: 'public/campaigns', version: '1' })
 export class PublicCampaignController {
   constructor(
     private readonly campaignsService: CampaignsService,

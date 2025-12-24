@@ -16,7 +16,7 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UsersService } from '../users/users.service';
 import type { AuthUser } from '../auth/types/auth-user.type';
 
-@Controller('address')
+@Controller({ path: 'address', version: '1' })
 export class AddressController {
   constructor(
     private readonly addressService: AddressService,

@@ -320,3 +320,9 @@
 - Updated surviving docs to cover current modules (audit logging, RBAC registries, rate limiting, request logging) and aligned guidance across QA and business handbooks.
 - Regenerated Postman collection programmatically, enumerating 51 requests grouped by domain with sample payloads and shared variables (`base_url`, `auth_token`, `campaignId`, etc.) ready for import.
 - Re-ran `npm run init` and `npm run build` to confirm repository health after documentation overhaul.
+
+## 61. API versioning enforcement
+
+- Standardised every controller on the global `/api` prefix with URI-based versioning (`v1`) via Nest's `enableVersioning`, swapping `@Controller('api/v1/...')` strings for `{ path, version: '1' }` metadata.
+- Updated App bootstrap to set the global prefix and default version; adjusted controllers (approval, users, campaigns, admin routes) to rely on framework-managed version segments.
+- Added integration coverage ensuring versioned routes respond while unversioned `/` now returns 404; refreshed technical docs with v2 rollout rules and ran npm run init/build/tests.

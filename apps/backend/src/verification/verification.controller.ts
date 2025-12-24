@@ -6,7 +6,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '../user/user-role.enum';
 import { VerifyNGODto } from './dto/verify-ngo.dto';
 
-@Controller('admin/verification')
+@Controller({ path: 'admin/verification', version: '1' })
 export class VerificationController {
   constructor(private readonly verificationService: VerificationService) {}
 

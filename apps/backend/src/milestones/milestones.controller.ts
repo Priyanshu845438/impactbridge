@@ -17,7 +17,7 @@ import type { AuthUser } from '../auth/types/auth-user.type';
 import { CreateMilestoneDto } from './dto/create-milestone.dto';
 import { UpdateMilestoneStatusDto } from './dto/update-milestone-status.dto';
 
-@Controller('milestones')
+@Controller({ path: 'milestones', version: '1' })
 export class MilestonesController {
   constructor(private readonly milestonesService: MilestonesService) {}
 

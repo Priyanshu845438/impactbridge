@@ -15,7 +15,7 @@ import type { AuthUser } from '../auth/types/auth-user.type';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UsersService } from '../users/users.service';
 
-@Controller('documents')
+@Controller({ path: 'documents', version: '1' })
 export class DocumentsController {
   constructor(
     private readonly documentsService: DocumentsService,

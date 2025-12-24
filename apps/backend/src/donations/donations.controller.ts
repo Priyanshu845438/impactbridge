@@ -8,7 +8,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '../user/user-role.enum';
 import type { AuthUser } from '../auth/types/auth-user.type';
 
-@Controller('donations')
+@Controller({ path: 'donations', version: '1' })
 export class DonationsController {
   constructor(private readonly donationsService: DonationsService) {}
 

@@ -8,6 +8,8 @@ import { CSRProgrammeModule } from './csr-programme/csr-programme.module';
 import { ApprovalsModule } from './approvals/approvals.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { CommonModule } from './common/common.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -21,5 +23,7 @@ import { CommonModule } from './common/common.module';
     NotificationsModule,
     CommonModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

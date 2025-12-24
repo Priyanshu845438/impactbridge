@@ -9,7 +9,7 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { AuthUser } from '../auth/types/auth-user.type';
 import { AcceptInviteDto } from './dto/accept-invite.dto';
 
-@Controller()
+@Controller({ path: '', version: '1' })
 export class InvitationsController {
   constructor(private readonly invitationsService: InvitationsService) {}
 

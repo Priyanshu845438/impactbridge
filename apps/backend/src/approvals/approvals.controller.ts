@@ -9,7 +9,7 @@ import type { AuthUser } from '../auth/types/auth-user.type';
 import { ApproveProjectDto } from './dto/approve-project.dto';
 import { RequestApprovalDto } from './dto/request-approval.dto';
 
-@Controller('api/v1/approvals')
+@Controller({ path: 'approvals', version: '1' })
 export class ApprovalsController {
   constructor(private readonly approvalsService: ApprovalsService) {}
 

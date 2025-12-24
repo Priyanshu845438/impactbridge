@@ -9,7 +9,7 @@ import type { AuthUser } from '../auth/types/auth-user.type';
 import { CSRBudgetDto } from './dto/csr-budget.dto';
 import { CSRSummaryRequestDto } from './dto/csr-summary.dto';
 
-@Controller('csr')
+@Controller({ path: 'csr', version: '1' })
 export class CSRController {
   constructor(private readonly csrService: CSRService) {}
 

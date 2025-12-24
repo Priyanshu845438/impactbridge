@@ -8,7 +8,7 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { AuthUser } from '../auth/types/auth-user.type';
 import { UtilizationReportDto } from './dto/utilization-report.dto';
 
-@Controller('utilization')
+@Controller({ path: 'utilization', version: '1' })
 export class UtilizationController {
   constructor(private readonly utilizationService: UtilizationService) {}
 

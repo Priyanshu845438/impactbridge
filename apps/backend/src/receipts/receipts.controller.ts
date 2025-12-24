@@ -6,7 +6,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '../user/user-role.enum';
 
-@Controller('receipts')
+@Controller({ path: 'receipts', version: '1' })
 export class ReceiptsController {
   constructor(private readonly receiptsService: ReceiptsService) {}
 

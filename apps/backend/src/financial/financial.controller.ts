@@ -9,7 +9,7 @@ import type { AuthUser } from '../auth/types/auth-user.type';
 import { FinancialReportDto } from './dto/financial-report.dto';
 import { UsersService } from '../users/users.service';
 
-@Controller('financial')
+@Controller({ path: 'financial', version: '1' })
 export class FinancialController {
   constructor(
     private readonly financialService: FinancialService,

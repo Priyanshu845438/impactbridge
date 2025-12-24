@@ -76,10 +76,16 @@
   - `API_TESTING_GUIDE.md` – Postman instructions.
   - `FRONTEND_BUSINESS_GUIDE.md` – role-based business flows.
   - `MIGRATION_PLAYBOOK.md` – operational checklist for applying and rolling back Prisma migrations across local, staging, and production environments.
-  - `API_VERSIONING_GUIDE.md` – versioning strategy, deprecation workflow, and shared DTO/type alignment guidelines.
+- `API_VERSIONING_GUIDE.md` – versioning strategy, deprecation workflow, and shared DTO/type alignment guidelines.
   - `BACKGROUND_JOBS_PLAN.md` – comparison of BullMQ vs cron workers and boundaries for async workloads (notifications, reports, compliance reminders).
-  - `OBSERVABILITY_PLAN.md` – structured logging, request tracing, and error correlation blueprint (pino + request IDs + Sentry) ready for future implementation.
+- `OBSERVABILITY_PLAN.md` – structured logging, request tracing, and error correlation blueprint (pino + request IDs + Sentry) ready for future implementation.
 - Postman collection auto-injects tokens, captures IDs (`campaignId`, `donationId`, `milestoneId`).
+
+### Versioning Policy
+
+- All HTTP routes are exposed under the `/api/v1/**` namespace; unversioned paths respond with `404`.
+- Future breaking changes must ship under `/api/v2/**` while `/api/v1/**` stays available until consumers migrate (Sunset header + deprecation notes in docs/Postman collection).
+- Non-breaking enhancements (fields, optional params) remain within `/api/v1/**` without bumping the version number.
 
 ## Pending Roadmap
 

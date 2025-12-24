@@ -8,7 +8,7 @@ import { UserRole } from '../user/user-role.enum';
 import type { AuthUser } from '../auth/types/auth-user.type';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
-@Controller('campaigns')
+@Controller({ path: 'campaigns', version: '1' })
 export class CampaignsController {
   constructor(private readonly campaignsService: CampaignsService) {}
 
