@@ -9,7 +9,9 @@ This guide explains how to validate every production-ready API using the bundled
 ## 1. Authentication & Invitations
 
 ### 1.1 Register User
+
 - **POST** `{{base_url}}/auth/register`
+
 ```json
 {
   "name": "Alice NGO",
@@ -20,27 +22,35 @@ This guide explains how to validate every production-ready API using the bundled
 ```
 
 ### 1.2 Login User
+
 - **POST** `{{base_url}}/auth/login`
+
 ```json
 {
   "email": "ngo@example.com",
   "password": "password123"
 }
 ```
+
 - Test stores `accessToken` in `{{token}}`.
 
 ### 1.3 Invite Reviewer/Auditor (SUPER_ADMIN)
+
 - **POST** `{{base_url}}/admin/invite`
+
 ```json
 {
   "email": "reviewer@example.com",
   "role": "REVIEWER"
 }
 ```
+
 - Test script captures `{{invitationToken}}`.
 
 ### 1.4 Accept Invitation
+
 - **POST** `{{base_url}}/auth/accept-invite`
+
 ```json
 {
   "token": "{{invitationToken}}",
@@ -53,8 +63,10 @@ This guide explains how to validate every production-ready API using the bundled
 ## 2. NGO Self-Service & Milestones (NGO token required)
 
 ### 2.1 Profile
+
 - `GET {{base_url}}/users/me`
 - `PATCH {{base_url}}/users/me`
+
 ```json
 {
   "name": "ImpactBridge Foundation",
@@ -64,7 +76,9 @@ This guide explains how to validate every production-ready API using the bundled
 ```
 
 ### 2.2 Change Password
+
 - `POST {{base_url}}/users/change-password`
+
 ```json
 {
   "oldPassword": "password123",
@@ -73,12 +87,15 @@ This guide explains how to validate every production-ready API using the bundled
 ```
 
 ### 2.3 Compliance Modules
+
 - Address: `POST {{base_url}}/address/ngo`
 - Bank: `POST {{base_url}}/bank/ngo`
 - Documents: `POST {{base_url}}/documents/ngo`
 
 ### 2.4 Campaign Creation
+
 - `POST {{base_url}}/campaigns`
+
 ```json
 {
   "title": "Clean Water Drive",
@@ -90,7 +107,9 @@ This guide explains how to validate every production-ready API using the bundled
 ```
 
 ### 2.5 Milestones
+
 1. **Create** – `POST {{base_url}}/milestones/{{campaignId}}`
+
 ```json
 {
   "title": "Procure Filters",
@@ -99,25 +118,31 @@ This guide explains how to validate every production-ready API using the bundled
   "budget": 150000
 }
 ```
+
 2. **Update Status** – `PATCH {{base_url}}/milestones/status/{{milestoneId}}`
+
 ```json
 {
   "status": "IN_PROGRESS",
   "progressPercent": 40
 }
 ```
+
 3. **List** – `GET {{base_url}}/milestones/{{campaignId}}`
 
 ### 2.6 Impact Metrics
+
 - `POST {{base_url}}/impact/{{campaignId}}`
 - `GET {{base_url}}/impact/campaign/{{campaignId}}`
 - `GET {{base_url}}/impact/milestone/{{milestoneId}}`
 
 ### 2.7 Donations & Receipts
+
 - `POST {{base_url}}/receipts`
 - `GET {{base_url}}/donations/ngo`
 
 ### 2.8 Utilization Reports
+
 - Submit: `POST {{base_url}}/utilization/{{campaignId}}`
 - Campaign view: `GET {{base_url}}/utilization/campaign/{{campaignId}}`
 - Milestone view: `GET {{base_url}}/utilization/milestone/{{milestoneId}}`
@@ -126,6 +151,7 @@ This guide explains how to validate every production-ready API using the bundled
 ---
 
 ## 3. Company CSR Management
+
 - Budget: `POST /csr/company/budget`, `GET /csr/company/status`
 - Manual spend: `POST /csr/company/spent`
 - Donation: `POST /donations/{{campaignId}}`
@@ -135,8 +161,10 @@ This guide explains how to validate every production-ready API using the bundled
 ---
 
 ## 4. Donation Flows
+
 - Public browse: `GET /campaigns/public`, `GET /campaigns/public/{{campaignId}}`
 - Anonymous donate: `POST /public/campaigns/{{campaignId}}/donate`
+
 ```json
 {
   "amount": 2000,
@@ -144,12 +172,14 @@ This guide explains how to validate every production-ready API using the bundled
   "email": "guest@example.com"
 }
 ```
+
 - Personal history: `GET /donations/me`
 - Admin ledger: `GET /donations/admin/all`
 
 ---
 
 ## 5. Admin & Compliance
+
 - NGO verification: `POST /admin/verification/ngos/{{ngoProfileId}}/(approve|reject|pending)`
 - **Registries (new tests)**: `GET /users/admin/ngos?page=1&limit=10`, `GET /users/admin/companies`, `GET /users/admin/donors`
 - **Compliance flows**: `GET/POST /address/ngo`, `GET/POST /bank/ngo`
@@ -159,6 +189,7 @@ This guide explains how to validate every production-ready API using the bundled
 ---
 
 ## 6. Negative Scenarios
+
 - Missing JWT → `401`
 - Wrong role → `403`
 - Invalid payload → `400` with validation details
@@ -168,13 +199,16 @@ This guide explains how to validate every production-ready API using the bundled
 ---
 
 ## 7. CSR Annual Summary
+
 - **POST** `{{base_url}}/csr/summary`
+
 ```json
 {
   "companyId": "<companyProfileId>",
   "financialYear": "2024-2025"
 }
 ```
+
 - Response includes company metadata, CSR obligation/spend/utilization, project breakdown, beneficiaries, admin notes.
 
 Run the Postman collection runner to automate these flows. Reset or seed the database as required to keep IDs valid for chained requests.

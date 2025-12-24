@@ -7,6 +7,7 @@ This handbook explains how each user role experiences the platform, the key API 
 ## 1. Roles & Journeys
 
 ### SUPER_ADMIN
+
 - **What they do:** Invite new users (reviewers/auditors), verify NGO applications, monitor analytics and donation ledgers.
 - **Key APIs:**
   - `/admin/invite` → issue invite links (auto populates Postman token).
@@ -16,6 +17,7 @@ This handbook explains how each user role experiences the platform, the key API 
 - **UI Hints:** Provide queue of NGO submissions, quick approve/reject buttons, and analytics dashboards.
 
 ### NGO
+
 1. **Sign-up/Login** → `/auth/register` + `/auth/login`.
 2. **Compliance Setup:**
    - `/users/me` (GET/PATCH) for profile.
@@ -31,22 +33,26 @@ This handbook explains how each user role experiences the platform, the key API 
    - `POST /receipts` to upload acknowledgement URLs.
 
 ### COMPANY
+
 1. **Login** as company.
 2. **CSR Budgeting:** `POST /csr/company/budget`, `GET /csr/company/status`, `POST /csr/company/spent`.
 3. **Donations:** `POST /donations/:campaignId` (auto-logs CSR spend), `GET /donations/me`.
 4. **Milestone Visibility:** `GET /milestones/:campaignId` if approval is granted (future workflow).
 
 ### DONOR
+
 - **Authenticated donors:** donate via `/donations/:campaignId`, track via `/donations/me`.
 - **Anonymous donors:** `/public/campaigns/:campaignId/donate` with name/email for receipt emails (future notification service).
 
 ### REVIEWER / AUDITOR (Invited Roles)
+
 - Accounts are provisioned via `/admin/invite` → `/auth/accept-invite`.
 - Read-only dashboards are planned (currently no dedicated endpoints beyond core admin views).
 
 ---
 
 ## 2. Current Feature Coverage
+
 - **Auth & Invitations** ✔
 - **NGO Compliance** (address, bank, documents) ✔
 - **NGO Verification Workflow** ✔
@@ -68,26 +74,31 @@ Legend: ✔ Delivered | 🔄 Planned/In progress
 ## 3. UX Considerations by Module
 
 ### Campaign Milestones
+
 - Each milestone includes **title**, **description**, **target date**, **budget**, **status**, and **progress percent**.
 - Use a timeline or progress bar to visualize `pending → in progress → completed`.
 - Only the owning NGO can create/update milestones; companies/admins have read-only access.
 - Companies should only see milestones for campaigns they are approved to fund (approval workflow forthcoming).
 
 ### CSR Budget Dashboard
+
 - Display `annualBudget`, `allocated`, `spent`, `remaining` from `/csr/company/status`.
 - Combine with donation history to show how spend accrues over time.
 
 ### Verification Queue
+
 - Show NGO submissions with compliance data (documents, address, bank status) so admins can approve quickly.
 - After approval, notify the NGO (future email hook) and unlock campaign creation.
 
 ### Donation Receipts
+
 - After successful donation, provide NGOs a form to upload receipt URLs via `/receipts`.
 - Donors should be able to download/view receipt links.
 
 ---
 
 ## 4. Operational Notes for Frontend Teams
+
 - Always attach `Authorization: Bearer <token>` header (Postman script handles this automatically).
 - Use the Postman collection as a reference for required payloads.
 - Handle errors gracefully:
@@ -100,6 +111,7 @@ Legend: ✔ Delivered | 🔄 Planned/In progress
 ---
 
 ## 5. Roadmap Impact on Frontends
+
 - **Company–NGO approvals** will introduce new screens for requesting approvals and showing status before donations.
 - **NGO financial reporting** will require upload forms + admin viewers for quarterly/annual disclosures (service layer in place; APIs coming soon).
 - **CSR compliance exports** will add download flows for CSR-2 summaries powered by upcoming reporting endpoints.
@@ -108,15 +120,17 @@ Legend: ✔ Delivered | 🔄 Planned/In progress
 
 Keep this document handy alongside `PROJECT_FULL_STATUS.md` to align design and development teams on what’s live versus upcoming.
 
-
 ### Utilization Reports
+
 NGOs provide detailed fund usage reports to maintain transparency:
+
 - Submit reports via `POST /utilization/:campaignId` including amount used, description, proof URL, and optional milestone reference.
 - NGO, company, and SUPER_ADMIN roles can view campaign-level reports (`GET /utilization/campaign/:id`).
 - All roles (including donors) can view milestone-level reports (`GET /utilization/milestone/:id`) to track outcomes per phase.
 - SUPER_ADMIN has an aggregate ledger via `/utilization/admin/all`.
 
 ### CSR Annual Summary
+
 - Frontend should collect `companyId` and `financialYear`, then call `POST /csr/summary`.
 - Display obligation, spent, utilized, unspent amounts plus project breakdown (impact + utilization).
 - Offer export/download options for CSR-2 compliance reports.

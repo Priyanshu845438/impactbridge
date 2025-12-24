@@ -6,11 +6,11 @@ This guide defines how we seed data across environments and how migrations are p
 
 ## Seeding Strategy
 
-| Environment | Purpose | Seed Contents | Example Command |
-| --- | --- | --- | --- |
-| Local Development | Provide developers a realistic dataset for feature work. | Core reference data (roles, feature toggles), small sample entities per module, optional mock users for manual testing. | `npx prisma db seed --schema prisma/schema.prisma`
-| Automated Tests | Ensure deterministic unit/integration tests. | Minimal fixtures scoped to the test suites (baseline users, auth tokens, NGO/company profiles). Idempotent and quick to apply. | `npx prisma db seed --schema prisma/schema.prisma --preview-feature`
-| Demo / Mock | Power demos without exposing real data. | Synthetic NGOs, companies, campaigns, donation snapshots flagged as demo-only. | `ENV=demo npx prisma db seed --schema prisma/schema.prisma`
+| Environment       | Purpose                                                  | Seed Contents                                                                                                                  | Example Command                                                      |
+| ----------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------- |
+| Local Development | Provide developers a realistic dataset for feature work. | Core reference data (roles, feature toggles), small sample entities per module, optional mock users for manual testing.        | `npx prisma db seed --schema prisma/schema.prisma`                   |
+| Automated Tests   | Ensure deterministic unit/integration tests.             | Minimal fixtures scoped to the test suites (baseline users, auth tokens, NGO/company profiles). Idempotent and quick to apply. | `npx prisma db seed --schema prisma/schema.prisma --preview-feature` |
+| Demo / Mock       | Power demos without exposing real data.                  | Synthetic NGOs, companies, campaigns, donation snapshots flagged as demo-only.                                                 | `ENV=demo npx prisma db seed --schema prisma/schema.prisma`          |
 
 ### Seed Implementation Guidelines
 
