@@ -60,12 +60,7 @@ export class ApprovalsController {
     @Param('campaignId') campaignId: string,
     @Body('remarks') remarks?: string,
   ) {
-    return this.approvalsService.revoke(
-      campaignId,
-      user.sub,
-      user.sub,
-      remarks,
-    );
+    return this.approvalsService.revoke(campaignId, user.sub, user.sub, remarks);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

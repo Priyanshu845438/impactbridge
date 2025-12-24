@@ -1,11 +1,12 @@
 import { IsEnum, IsOptional, IsString, MaxLength } from 'class-validator';
+import { ApprovalDecisionStatus } from './approval-status.enum';
 
 export class ApproveProjectDto {
   @IsOptional()
-  @IsEnum(['APPROVED', 'REJECTED'], {
+  @IsEnum(ApprovalDecisionStatus, {
     message: 'status must be APPROVED or REJECTED',
   })
-  status?: 'APPROVED' | 'REJECTED';
+  status?: ApprovalDecisionStatus;
 
   @IsOptional()
   @IsString()

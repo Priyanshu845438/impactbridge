@@ -350,3 +350,13 @@
 - Authored `docs/PRISMA_SEED_AND_MIGRATION.md` describing seed strategy across local/test/demo environments.
 - Documented staging vs production migration flow, rollback expectations, and failure handling checklist.
 - Included reference commands only (no schema/runtime changes) and kept build/tests intact.
+
+## 59. DTO Validation Hardening
+- Added explicit UUID/format checks across approval, CSR programme, and CSR summary DTOs; introduced enum wrapper for decision status.
+- Created focused DTO validation specs to exercise invalid companyId/ngoId/status/financialYear cases (fail early via ValidationPipe).
+- npm run init, targeted jest DTO tests, and npm run build all pass (no controller/service behaviour changes).
+
+## 60. Approval Comments & Audit Metadata
+- Enforced mandatory reviewer comments for reject/revoke transitions while allowing optional context on approve.
+- Extended ActivityLog metadata to capture reviewer comment alongside before/after status snapshots for compliance traceability.
+- Updated unit specs (approvals service) and reran npm run init, targeted jest, and npm run build to confirm the workflow passes with new requirements.

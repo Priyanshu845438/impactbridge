@@ -213,7 +213,7 @@ describe('ApprovalsService workflow', () => {
       } as any);
     });
 
-    it('updates record to REJECTED', async () => {
+    it('updates record to REJECTED when comment provided', async () => {
       const result = await service.reject(
         'campaign-1',
         'company-1',
@@ -229,8 +229,20 @@ describe('ApprovalsService workflow', () => {
         expect.objectContaining({
           actorId: 'company-user',
           action: 'NGO_APPROVAL_REJECTED',
+          metadata: expect.objectContaining({ comment: 'not aligned' }),
         }),
       );
+    });
+
+    it('requires a comment when rejecting', async () => {
+      await expect(
+        service.reject(
+          'campaign-1',
+          'company-1',
+          { status: 'REJECTED', remarks: '  ' },
+          'company-user',
+        ),
+      ).rejects.toBeInstanceOf(BadRequestException);
     });
 
     it('rejects wrong status', async () => {
@@ -258,7 +270,7 @@ describe('ApprovalsService workflow', () => {
       } as any);
     });
 
-    it('revokes approved entry', async () => {
+    it('revokes approved entry with comment', async () => {
       const result = await service.revoke(
         'campaign-1',
         'company-1',
@@ -271,6 +283,7 @@ describe('ApprovalsService workflow', () => {
         expect.objectContaining({
           actorId: 'company-user',
           action: 'NGO_APPROVAL_REVOKED',
+          metadata: expect.objectContaining({ comment: 'issue found' }),
         }),
       );
     });
@@ -282,8 +295,24 @@ describe('ApprovalsService workflow', () => {
       } as any);
 
       await expect(
-        service.revoke('campaign-1', 'company-1', 'company-user'),
+        service.revoke(
+          'campaign-1',
+          'company-1',
+          'company-user',
+          'insufficient documentation',
+        ),
       ).rejects.toBeInstanceOf(ForbiddenException);
+    });
+
+    it('requires a comment to revoke', async () => {
+      prisma.campaignApproval.findUnique.mockResolvedValueOnce({
+        ...baseApproval,
+        status: 'APPROVED',
+      } as any);
+
+      await expect(
+        service.revoke('campaign-1', 'company-1', 'company-user', '   '),
+      ).rejects.toBeInstanceOf(BadRequestException);
     });
   });
 });

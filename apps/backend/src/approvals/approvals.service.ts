@@ -67,6 +67,7 @@ export class ApprovalsService {
     action: string,
     approval: ApprovalForLog,
     previousStatus: ApprovalStatus,
+    comment?: string | null,
   ) {
     await this.activityLog.log({
       actorId,
@@ -74,13 +75,32 @@ export class ApprovalsService {
       entity: 'CampaignApproval',
       entityId: approval.id,
       before: { status: previousStatus },
-      after: { status: approval.status },
+      after: {
+        status: approval.status,
+        comment: comment ?? null,
+      },
       metadata: {
         targetNgoId: approval.ngoId,
         campaignId: approval.campaignId,
         companyId: approval.companyId,
+        comment: comment ?? null,
       },
     });
+  }
+
+  private normalizeComment(input?: string | null) {
+    if (input === undefined || input === null) {
+      return null;
+    }
+
+    const trimmed = input.trim();
+    return trimmed.length > 0 ? trimmed : null;
+  }
+
+  private ensureCommentProvided(comment: string | null, errorMessage: string) {
+    if (!comment) {
+      throw new BadRequestException(errorMessage);
+    }
   }
 
   async requestApproval(
@@ -175,11 +195,13 @@ export class ApprovalsService {
     }
 
     const before = await this.getApprovalOrThrow(campaignId, companyProfileId);
+    const comment = this.normalizeComment(dto.remarks);
+
     const updated = await this.transition(
       campaignId,
       companyProfileId,
       'APPROVED',
-      dto.remarks,
+      comment,
       before,
     );
 
@@ -188,6 +210,7 @@ export class ApprovalsService {
       'NGO_APPROVAL_APPROVED',
       updated as ApprovalForLog,
       before.status as ApprovalStatus,
+      comment,
     );
 
     return updated;
@@ -203,12 +226,15 @@ export class ApprovalsService {
       throw new BadRequestException('Status must be REJECTED');
     }
 
+    const comment = this.normalizeComment(dto.remarks);
+    this.ensureCommentProvided(comment, 'Comment is required to reject an approval');
+
     const before = await this.getApprovalOrThrow(campaignId, companyProfileId);
     const updated = await this.transition(
       campaignId,
       companyProfileId,
       'REJECTED',
-      dto.remarks,
+      comment,
       before,
     );
 
@@ -217,6 +243,7 @@ export class ApprovalsService {
       'NGO_APPROVAL_REJECTED',
       updated as ApprovalForLog,
       before.status as ApprovalStatus,
+      comment,
     );
 
     return updated;
@@ -228,10 +255,10 @@ export class ApprovalsService {
     actorId: string,
     remarks?: string,
   ) {
-    const approval = await this.getApprovalOrThrow(
-      campaignId,
-      companyProfileId,
-    );
+    const comment = this.normalizeComment(remarks);
+    this.ensureCommentProvided(comment, 'Comment is required to revoke an approval');
+
+    const approval = await this.getApprovalOrThrow(campaignId, companyProfileId);
 
     if (approval.status === 'REVOKED') {
       return approval;
@@ -243,7 +270,7 @@ export class ApprovalsService {
 
     const updated = await this.prisma.campaignApproval.update({
       where: this.buildUniqueKey(campaignId, companyProfileId),
-      data: { status: 'REVOKED', remarks: remarks ?? approval.remarks },
+      data: { status: 'REVOKED', remarks: comment ?? approval.remarks },
     });
 
     await this.logStatusChange(
@@ -251,6 +278,7 @@ export class ApprovalsService {
       'NGO_APPROVAL_REVOKED',
       updated as ApprovalForLog,
       approval.status as ApprovalStatus,
+      comment,
     );
 
     return updated;
@@ -260,7 +288,7 @@ export class ApprovalsService {
     campaignId: string,
     companyProfileId: string,
     target: ApprovalStatus,
-    remarks?: string,
+    remarks?: string | null,
     existing?: ApprovalEntity,
   ) {
     const approval =
