@@ -538,3 +538,8 @@
 - Added Next metrics hook with warning-only budgets for /dashboard, /dashboard/company, /dashboard/admin.
 - Documented baselines in docs/PERFORMANCE_BASELINE.md and added unit coverage for budget checks.
 - npm run init, npm run test -- --runInBand, and npm run build stay green (module-typeless warning persists).
+
+## 107. RBAC Alignment Review (no code changes).
+
+- Audited shared RBAC helpers (`types/rbac.ts`), middleware cookies, and AuthProvider session sync to scope next fixes.
+- Confirmed enumeration overlap with new shared `api-contracts` package before making edits; deferred implementation until follow-up task.

@@ -1,43 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-
-const PUBLIC_PATHS: RegExp[] = [
-  /^\/login(\/.*)?$/,
-  /^\/register(\/.*)?$/,
-  /^\/forgot-password(\/.*)?$/,
-  /^\/reset-password(\/.*)?$/,
-  /^\/api\/mock(\/.*)?$/,
-];
-
-const DASHBOARD_ROLE_PREFIX: Record<string, string> = {
-  SUPER_ADMIN: "/dashboard/admin",
-  NGO: "/dashboard/ngo",
-  COMPANY: "/dashboard/company",
-  DONOR: "/dashboard/donor",
-};
-
-const DASHBOARD_ACCESS: Record<string, RegExp[]> = {
-  SUPER_ADMIN: [/^\/dashboard(\/.*)?$/],
-  NGO: [/^\/dashboard\/ngo(\/.*)?$/],
-  COMPANY: [/^\/dashboard\/company(\/.*)?$/],
-  DONOR: [/^\/dashboard\/donor(\/.*)?$/],
-};
-
-function isPublicPath(pathname: string) {
-  return PUBLIC_PATHS.some((pattern) => pattern.test(pathname));
-}
-
-function matchRoleAccess(pathname: string, role: string | undefined) {
-  if (!role) {
-    return false;
-  }
-
-  const patterns = DASHBOARD_ACCESS[role];
-  if (!patterns) {
-    return false;
-  }
-
-  return patterns.some((pattern) => pattern.test(pathname));
-}
+import {
+  DASHBOARD_ROLE_PREFIX,
+  getRoleHome,
+  isPublicPath,
+  isUserRole,
+  matchRoleAccess,
+  type UserRole,
+} from "@/types/rbac";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -55,8 +24,10 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  if (!matchRoleAccess(pathname, role)) {
-    const safeRedirect = DASHBOARD_ROLE_PREFIX[role] ?? "/dashboard";
+  if (!matchRoleAccess(pathname, isUserRole(role) ? role : undefined)) {
+    const safeRedirect = isUserRole(role)
+      ? getRoleHome(role)
+      : DASHBOARD_ROLE_PREFIX.SUPER_ADMIN;
     const redirectUrl = new URL(safeRedirect, request.url);
     return NextResponse.redirect(redirectUrl);
   }

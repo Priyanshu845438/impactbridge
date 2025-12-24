@@ -8,8 +8,9 @@ import {
   PropsWithChildren,
   useEffect,
 } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { setApiClientToken } from "@/lib/api-client";
+import { getRoleHome, isUserRole, matchRoleAccess } from "@/types/rbac";
 
 export interface AuthUser {
   id: string;
@@ -39,6 +40,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUserState] = useState<AuthUser | null>(userStore);
   const [unreadNotifications, setUnreadNotifications] = useState<number>(unreadStore);
   const router = useRouter();
+  const pathname = usePathname();
 
   const login = (jwt: string, authUser: AuthUser) => {
     tokenStore = jwt;
@@ -168,6 +170,16 @@ export function AuthProvider({ children }: PropsWithChildren) {
     }),
     [token, user, unreadNotifications],
   );
+
+  useEffect(() => {
+    if (!user?.role || !pathname) {
+      return;
+    }
+
+    if (!matchRoleAccess(pathname, user.role)) {
+      router.replace(getRoleHome(user.role));
+    }
+  }, [pathname, router, user?.role]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
