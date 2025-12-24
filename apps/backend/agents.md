@@ -360,3 +360,8 @@
 - Enforced mandatory reviewer comments for reject/revoke transitions while allowing optional context on approve.
 - Extended ActivityLog metadata to capture reviewer comment alongside before/after status snapshots for compliance traceability.
 - Updated unit specs (approvals service) and reran npm run init, targeted jest, and npm run build to confirm the workflow passes with new requirements.
+
+## 61. Rate Limiting & Request Logging Baseline
+- Added `CommonModule` wired into `AppModule`, configuring global throttling with configurable TTL/limit and structured request logging middleware.
+- Introduced `RequestLoggerMiddleware` attaching request IDs and emitting environment-aware logs, plus global ThrottlerGuard for conservative rate limiting defaults.
+- Created integration spec validating headers and middleware activation; executed npm run init, targeted Jest suite, and npm run build to verify stability.
