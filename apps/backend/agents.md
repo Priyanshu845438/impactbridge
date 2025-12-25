@@ -331,3 +331,9 @@
 
 - Reviewed existing e2e/integration scaffolding (`test/v1`, `test/integration`) plus CSR, approvals, and financial controllers to scope cross-module test coverage.
 - Deferred implementation until deterministic test fixtures are defined for company/NGO/programme relationships.
+
+## 63. Analytics Aggregation Service (internal).
+
+- Added `AnalyticsAggregationService` providing donation totals, CSR programme counts, and approval status breakdowns via Prisma group/aggregate queries.
+- Introduced unit coverage (`test/unit/analytics/analytics-aggregation.service.spec.ts`) validating filters and status tallies with mocked Prisma responses.
+- No controllers or routes exposed; ran npm run init, targeted jest run, and npm run build to confirm stability.
