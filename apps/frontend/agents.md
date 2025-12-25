@@ -559,3 +559,9 @@
 
 - Authored `docs/DASHBOARD_API_INTEGRATION_PLAN.md` detailing phased rollouts for NGO, company, and admin dashboards (endpoints, states, flag gating).
 - Documentation-only update; no runtime changes. Ran npm run init and npm run build to confirm stability.
+
+## 111. Analytics Contracts & Adapters (frontend prep).
+
+- Added typed analytics payload contracts and API→UI adapters (`lib/analytics/contracts.ts`, `lib/analytics/adapters.ts`) covering admin, company, and NGO dashboards without touching existing components.
+- Added unit tests (`__tests__/analytics-adapters.test.ts`) verifying adapters map backend payloads to current mock-driven props.
+- Ran npm run init, focused jest suite, and npm run build (Next config warning unchanged).
