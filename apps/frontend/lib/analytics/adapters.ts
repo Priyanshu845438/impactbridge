@@ -4,11 +4,30 @@ import type {
   NgoAnalyticsPayload,
 } from './contracts';
 
+type AdminDonationSummary = {
+  label: string;
+  amount: number;
+  trend?: number[];
+  delta?: number;
+};
+
+type AdminStatusSummary = {
+  label: string;
+  value: number;
+};
+
+type AdminActivityItem = {
+  id: string;
+  title: string;
+  description: string;
+  timestamp: string;
+};
+
 type AdminUiModel = {
-  donationStats: Array<{ label: string; amount: number; trend?: number[]; delta?: number }>;
-  programmeStatus: Array<{ label: string; value: number }>;
-  approvalStatus: Array<{ label: string; value: number }>;
-  activity: Array<{ id: string; title: string; description: string; timestamp: string }>;
+  donationStats: AdminDonationSummary[];
+  programmeStatus: AdminStatusSummary[];
+  approvalStatus: AdminStatusSummary[];
+  activity: AdminActivityItem[];
 };
 
 type CompanyUiModel = {

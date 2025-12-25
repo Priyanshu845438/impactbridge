@@ -1,42 +1,74 @@
 "use client";
 
 import React from "react";
+import type { LucideIcon } from "lucide-react";
 import { Clock3, ShieldCheck, HandshakeIcon, FileSignature, Star } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-const ACTIVITY = [
+export type ActivityFeedItem = {
+  id: string;
+  title: string;
+  description: string;
+  timestamp: string;
+  icon?: LucideIcon;
+};
+
+type ActivityFeedProps = React.ComponentPropsWithoutRef<"section"> & {
+  items?: ActivityFeedItem[];
+  icon?: LucideIcon;
+};
+
+const FALLBACK_ACTIVITY: Array<ActivityFeedItem & { icon: LucideIcon }> = [
   {
+    id: "fallback-ngo-verified",
     icon: ShieldCheck,
     title: "Hope for Tomorrow Foundation verified",
     description: "Compliance documents reviewed and approved",
-    time: "45m ago",
+    timestamp: "45m ago",
   },
   {
+    id: "fallback-csr-funded",
     icon: HandshakeIcon,
     title: "Reliance CSR funded Green Earth",
     description: "₹12L tranche recorded via CSR-2 workflow",
-    time: "2h ago",
+    timestamp: "2h ago",
   },
   {
+    id: "fallback-report-submitted",
     icon: FileSignature,
     title: "NGO quarterly report submitted",
     description: "Swasthya Seva Trust uploaded Q4 outcomes",
-    time: "5h ago",
+    timestamp: "5h ago",
   },
   {
+    id: "fallback-donor-feedback",
     icon: Star,
     title: "Donor feedback received",
     description: "Corporate donor rated Clean Waters campaign ⭐⭐⭐⭐",
-    time: "1d ago",
+    timestamp: "1d ago",
   },
 ];
 
-export const ActivityFeed = React.memo(function ActivityFeed({ className }: { className?: string }) {
+export const ActivityFeed = React.memo(function ActivityFeed({
+  className,
+  items,
+  icon,
+  ...rest
+}: ActivityFeedProps) {
+  const { ["aria-labelledby"]: ariaLabelledBy, ...sectionProps } = rest as Record<string, unknown>;
+  const headingId = typeof ariaLabelledBy === "string" && ariaLabelledBy.length > 0 ? ariaLabelledBy : "recent-activity-heading";
+
+  const mergedItems = items?.length
+    ? items.map((item) => ({
+        ...item,
+        icon: item.icon ?? icon ?? HandshakeIcon,
+      }))
+    : FALLBACK_ACTIVITY;
   return (
-    <section className={cn("space-y-4", className)} aria-labelledby="recent-activity-heading">
+    <section {...(sectionProps as React.ComponentPropsWithoutRef<"section">)} className={cn("space-y-4", className)} aria-labelledby={headingId}>
       <div className="flex items-center justify-between">
-        <h2 id="recent-activity-heading" className="text-heading-3 text-slate-700">
+        <h2 id={headingId} className="text-heading-3 text-slate-700">
           Recent activity
         </h2>
         <span className="text-xs font-medium uppercase tracking-[0.28em] text-slate-400">Live feed</span>
@@ -45,11 +77,11 @@ export const ActivityFeed = React.memo(function ActivityFeed({ className }: { cl
       <div className="relative rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-sm" role="list">
         <div className="absolute left-9 top-10 bottom-10 hidden w-px bg-slate-200 md:block" />
         <ul className="space-y-6 md:space-y-0">
-          {ACTIVITY.map(({ icon: Icon, title, description, time }) => (
+          {mergedItems.map(({ icon: Icon, title, description, timestamp, id }) => (
             <li
-              key={`${title}-${time}`}
+              key={id}
               className="relative flex flex-col gap-3 md:flex-row md:gap-4"
-              aria-label={`${title}. ${description}. ${time}`}
+              aria-label={`${title}. ${description}. ${timestamp}`}
             >
               <div className="flex items-start gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 shadow-sm">
@@ -63,7 +95,7 @@ export const ActivityFeed = React.memo(function ActivityFeed({ className }: { cl
               <div className="md:flex md:w-32 md:justify-end">
                 <div className="flex items-center gap-1 text-xs uppercase tracking-[0.2em] text-slate-400">
                   <Clock3 className="h-3.5 w-3.5" />
-                  {time}
+                  {timestamp}
                 </div>
               </div>
             </li>

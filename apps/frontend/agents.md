@@ -571,3 +571,10 @@
 - Scaffolded React Query hook (`lib/hooks/use-admin-analytics.ts`) and API helper (`lib/api/analytics.ts`) plus DTO adapter updates to begin feature-flagged admin analytics integration.
 - Added initial Jest harness (`lib/hooks/__tests__/use-admin-analytics.test.tsx`, `__tests__/dashboard-admin-analytics.test.tsx`) with ky mocked, but dashboard component wiring still pending so new specs currently fail.
 - Admin dashboard UI untouched; follow-up task must consume the hook, finish flag gating, and rerun npm run init / test / build for a clean pass.
+- No production behaviour changed; existing mock dashboards still drive UI while analytics wiring remains TODO.
+
+## 113. Admin analytics integration (frontend).
+
+- Completed feature-flagged wiring in `app/dashboard/admin/page.tsx`, merging live donation/programme/approval metrics and activity feed when `API_DASHBOARD` is on while retaining mock fallback, loading, error, and empty states.
+- Extended `ActivityFeed` to accept injected items, refined ky mock, and stabilised React Query tests covering flag on/off, loading, and error flows.
+- Updated analytics adapters, hook tests, and dashboard RTL spec; ran `npm run init`, `npm run test -- --runInBand`, and `npm run build` (Next warning unchanged) with all checks passing.

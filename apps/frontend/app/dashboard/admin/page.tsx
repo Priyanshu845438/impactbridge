@@ -2,6 +2,7 @@
 "use client";
 
 import { memo, useEffect, useMemo, useState } from "react";
+import type { LucideIcon } from "lucide-react";
 
 import {
   ArrowDownRight,
@@ -20,15 +21,19 @@ import {
 
 import { QuickActionCard } from "@/components/dashboard/quick-action-card";
 import { SectionHeader } from "@/components/dashboard/section-header";
-import { ActivityFeed } from "@/components/dashboard/activity-feed";
+import { ActivityFeed, type ActivityFeedItem } from "@/components/dashboard/activity-feed";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { useAuth } from "@/providers/auth-context";
 import { toast } from "sonner";
 import { SkeletonCard, SkeletonStat, SkeletonActivityItem } from "@/components/ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
 import { Bar, BarChart, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { ImpactTrendChart } from "@/components/charts/impact-trend-chart";
 import { DashboardOnboarding } from "@/components/onboarding/dashboard-onboarding";
+import { getFeatureFlags } from "@/lib/feature-flags";
+import { useAdminAnalytics } from "@/lib/hooks/use-admin-analytics";
+import { formatINR } from "@/lib/formatters";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -68,6 +73,46 @@ export default function AdminDashboard() {
   const lastLoginSeries = useMemo(() => generateSeries(8, 3, 14), []);
   const csrSubmissions = useMemo(() => createCSRSubmissionsData(30), []);
   const activityTrend = useMemo(() => createActivityData(activitySeries.slice(-12)), [activitySeries]);
+
+  const featureFlags = useMemo(() => getFeatureFlags(), []);
+  const analyticsEnabled = featureFlags.API_DASHBOARD;
+
+  const {
+    data: analytics,
+    isLoading: analyticsLoading,
+    isError: analyticsError,
+  } = useAdminAnalytics({ enabled: analyticsEnabled });
+
+  const donationStats = analytics?.donationStats ?? [];
+  const programmeStatus = analytics?.programmeStatus ?? [];
+  const approvalStatus = analytics?.approvalStatus ?? [];
+  const totalDonationsStat = donationStats.find((stat) => stat.label.toLowerCase().includes("total"));
+  const todayDonationsStat = donationStats.find((stat) => stat.label.toLowerCase().includes("today"));
+  const last7DaysDonationsStat = donationStats.find((stat) => stat.label.toLowerCase().includes("7"));
+  const last30DaysDonationsStat = donationStats.find((stat) => stat.label.toLowerCase().includes("30"));
+  const activeProgrammes = getStatusCount(programmeStatus, "active");
+  const pendingProgrammes = getStatusCount(programmeStatus, "pending");
+  const approvedProgrammes = getStatusCount(programmeStatus, "approved");
+  const pendingApprovals = getStatusCount(approvalStatus, "pending");
+  const approvedApprovals = getStatusCount(approvalStatus, "approved");
+  const revokedApprovals = getStatusCount(approvalStatus, "revoked");
+
+  const analyticsActivityItems = useMemo<ActivityFeedItem[] | undefined>(() => {
+    if (!analytics?.activity?.length) {
+      return undefined;
+    }
+    return analytics.activity.map((item) => ({
+      id: item.id,
+      title: item.title,
+      description: item.description,
+      timestamp: formatActivityTimestamp(item.timestamp),
+      icon: pickActivityIcon(item.title, item.description),
+    }));
+  }, [analytics]);
+
+  const analyticsReady = analyticsEnabled && Boolean(analytics);
+  const analyticsEmpty = analyticsEnabled && !analyticsLoading && !analyticsError && !analyticsActivityItems && !donationStats.length && !programmeStatus.length && !approvalStatus.length;
+  const showSkeleton = loading || (analyticsEnabled && analyticsLoading && !analytics);
 
   const quickActions = useMemo(
     () =>
