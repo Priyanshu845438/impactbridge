@@ -565,3 +565,9 @@
 - Added typed analytics payload contracts and API→UI adapters (`lib/analytics/contracts.ts`, `lib/analytics/adapters.ts`) covering admin, company, and NGO dashboards without touching existing components.
 - Added unit tests (`__tests__/analytics-adapters.test.ts`) verifying adapters map backend payloads to current mock-driven props.
 - Ran npm run init, focused jest suite, and npm run build (Next config warning unchanged).
+
+## 112. Admin analytics wiring (in progress).
+
+- Scaffolded React Query hook (`lib/hooks/use-admin-analytics.ts`) and API helper (`lib/api/analytics.ts`) plus DTO adapter updates to begin feature-flagged admin analytics integration.
+- Added initial Jest harness (`lib/hooks/__tests__/use-admin-analytics.test.tsx`, `__tests__/dashboard-admin-analytics.test.tsx`) with ky mocked, but dashboard component wiring still pending so new specs currently fail.
+- Admin dashboard UI untouched; follow-up task must consume the hook, finish flag gating, and rerun npm run init / test / build for a clean pass.
