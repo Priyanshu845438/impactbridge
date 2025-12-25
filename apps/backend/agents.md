@@ -337,3 +337,9 @@
 - Added `AnalyticsAggregationService` providing donation totals, CSR programme counts, and approval status breakdowns via Prisma group/aggregate queries.
 - Introduced unit coverage (`test/unit/analytics/analytics-aggregation.service.spec.ts`) validating filters and status tallies with mocked Prisma responses.
 - No controllers or routes exposed; ran npm run init, targeted jest run, and npm run build to confirm stability.
+
+## 64. Admin Analytics API (read-only).
+
+- Wired v1 analytics controller/module under `/api/v1/admin/analytics/overview`, mapping aggregation outputs into DTOs with Swagger docs and SUPER_ADMIN guard.
+- Added integration spec seeding Prisma with sample donations/programmes/approvals to validate admin access and non-admin rejection.
+- Extended aggregation service to include day/week/month donation windows; documented the contract in `docs/ANALYTICS_API_GUIDE.md` and updated docs index. Full test/build suite remains green.

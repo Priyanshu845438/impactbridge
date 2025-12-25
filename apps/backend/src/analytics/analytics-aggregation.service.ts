@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, ProgrammeStatus } from 'prisma/generated';
+
+type DonationDateFilter = Prisma.DateTimeFilter<'Donation'>;
 import { PrismaService } from '../prisma/prisma.service';
 
 export interface DonationAggregationFilter {
@@ -32,9 +34,56 @@ export class AnalyticsAggregationService {
       _count: { _all: true },
     });
 
+    const baseDateFilter = this.normalizeDonationDateFilter(where.donationDate);
+    const todayRange: DonationDateFilter = { gte: this.startOfDay(new Date()) };
+    const last7Range: DonationDateFilter = { gte: this.daysAgo(7) };
+    const last30Range: DonationDateFilter = { gte: this.daysAgo(30) };
+
+    const today = await this.prisma.donation.aggregate({
+      where: {
+        ...where,
+        donationDate: this.mergeDonationDateFilters(baseDateFilter, todayRange),
+      },
+      _sum: { amount: true },
+      _count: { _all: true },
+    });
+
+    const last7Days = await this.prisma.donation.aggregate({
+      where: {
+        ...where,
+        donationDate: this.mergeDonationDateFilters(baseDateFilter, last7Range),
+      },
+      _sum: { amount: true },
+      _count: { _all: true },
+    });
+
+    const last30Days = await this.prisma.donation.aggregate({
+      where: {
+        ...where,
+        donationDate: this.mergeDonationDateFilters(
+          baseDateFilter,
+          last30Range,
+        ),
+      },
+      _sum: { amount: true },
+      _count: { _all: true },
+    });
+
     return {
       totalAmount: aggregate._sum.amount ?? 0,
       totalCount: aggregate._count._all ?? 0,
+      today: {
+        totalAmount: today._sum.amount ?? 0,
+        totalCount: today._count._all ?? 0,
+      },
+      last7Days: {
+        totalAmount: last7Days._sum.amount ?? 0,
+        totalCount: last7Days._count._all ?? 0,
+      },
+      last30Days: {
+        totalAmount: last30Days._sum.amount ?? 0,
+        totalCount: last30Days._count._all ?? 0,
+      },
     };
   }
 
@@ -47,13 +96,12 @@ export class AnalyticsAggregationService {
       _count: { _all: true },
     });
 
-    const byStatus = Object.values(ProgrammeStatus).reduce<Record<string, number>>(
-      (acc, status) => {
-        acc[status] = 0;
-        return acc;
-      },
-      {},
-    );
+    const byStatus = Object.values(ProgrammeStatus).reduce<
+      Record<string, number>
+    >((acc, status) => {
+      acc[status] = 0;
+      return acc;
+    }, {});
 
     let total = 0;
     for (const row of grouped) {
@@ -95,7 +143,9 @@ export class AnalyticsAggregationService {
     };
   }
 
-  private buildDonationWhere(filter: DonationAggregationFilter): Prisma.DonationWhereInput {
+  private buildDonationWhere(
+    filter: DonationAggregationFilter,
+  ): Prisma.DonationWhereInput {
     const where: Prisma.DonationWhereInput = {
       deletedAt: null,
     };
@@ -122,7 +172,9 @@ export class AnalyticsAggregationService {
     return where;
   }
 
-  private buildProgrammeWhere(filter: ProgrammeAggregationFilter): Prisma.CSRProgrammeWhereInput {
+  private buildProgrammeWhere(
+    filter: ProgrammeAggregationFilter,
+  ): Prisma.CSRProgrammeWhereInput {
     const where: Prisma.CSRProgrammeWhereInput = {};
 
     if (filter.companyId) {
@@ -134,5 +186,41 @@ export class AnalyticsAggregationService {
     }
 
     return where;
+  }
+
+  private startOfDay(date: Date): Date {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
+
+  private daysAgo(days: number): Date {
+    const d = this.startOfDay(new Date());
+    d.setDate(d.getDate() - days);
+    return d;
+  }
+
+  private normalizeDonationDateFilter(
+    base: Prisma.DonationWhereInput['donationDate'],
+  ): DonationDateFilter | undefined {
+    if (!base) {
+      return undefined;
+    }
+
+    if (base instanceof Date || typeof base === 'string') {
+      return { equals: base };
+    }
+
+    return base as DonationDateFilter;
+  }
+
+  private mergeDonationDateFilters(
+    base: DonationDateFilter | undefined,
+    extra: DonationDateFilter,
+  ): DonationDateFilter {
+    return {
+      ...(base ?? {}),
+      ...extra,
+    };
   }
 }

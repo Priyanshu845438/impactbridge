@@ -9,4 +9,5 @@
 | Seeding & migrations | Environment seeding plus migration promotion | `PRISMA_SEED_AND_MIGRATION.md`                 |
 | Observability        | Logging + monitoring rollout plan            | `OBSERVABILITY_PLAN.md`                        |
 | QA                   | Comprehensive Postman & manual testing steps | `API_TESTING_GUIDE.md`                         |
+| Analytics API        | Admin analytics endpoints & usage            | `ANALYTICS_API_GUIDE.md`                       |
 | Postman collection   | Importable requests with examples            | `postman/impactbridge.postman_collection.json` |

@@ -24,14 +24,18 @@ describe('AnalyticsAggregationService', () => {
 
   describe('getDonationTotals', () => {
     it('returns zero totals when no data', async () => {
-      prisma.donation.aggregate.mockResolvedValue({
-        _sum: { amount: null },
-        _count: { _all: 0 },
-      });
+    prisma.donation.aggregate
+      .mockResolvedValueOnce({ _sum: { amount: null }, _count: { _all: 0 } })
+      .mockResolvedValueOnce({ _sum: { amount: null }, _count: { _all: 0 } })
+      .mockResolvedValueOnce({ _sum: { amount: null }, _count: { _all: 0 } })
+      .mockResolvedValueOnce({ _sum: { amount: null }, _count: { _all: 0 } });
 
       await expect(service.getDonationTotals()).resolves.toEqual({
         totalAmount: 0,
         totalCount: 0,
+        today: { totalAmount: 0, totalCount: 0 },
+        last7Days: { totalAmount: 0, totalCount: 0 },
+        last30Days: { totalAmount: 0, totalCount: 0 },
       });
 
       expect(prisma.donation.aggregate).toHaveBeenCalledWith({
