@@ -548,3 +548,9 @@
 
 - Added `coerceUserRole` and `resolveRoleRedirect` utilities within `types/rbac.ts` to centralize future middleware/AuthProvider logic.
 - No behavioural changes yet—helpers verified locally pending broader RBAC wiring.
+
+## 109. Feature Flag Foundation.
+
+- Introduced `lib/feature-flags.ts` parsing env driven flags (defaults off) for API dashboards, real-time notifications, and server navigation.
+- Added Jest coverage ensuring tolerant parsing and list helper; no runtime usage yet so mock behaviour unchanged.
+- `npm run init`, targeted jest run, and `npm run build` remain green (Next config warnings unchanged).
