@@ -33,6 +33,7 @@ import { ImpactTrendChart } from "@/components/charts/impact-trend-chart";
 import { DashboardOnboarding } from "@/components/onboarding/dashboard-onboarding";
 import { getFeatureFlags } from "@/lib/feature-flags";
 import { useAdminAnalytics } from "@/lib/hooks/use-admin-analytics";
+import { getStatusCount } from "@/lib/analytics/utils";
 import { formatINR } from "@/lib/formatters";
 
 export default function AdminDashboard() {
@@ -74,8 +75,7 @@ export default function AdminDashboard() {
   const csrSubmissions = useMemo(() => createCSRSubmissionsData(30), []);
   const activityTrend = useMemo(() => createActivityData(activitySeries.slice(-12)), [activitySeries]);
 
-  const featureFlags = useMemo(() => getFeatureFlags(), []);
-  const analyticsEnabled = featureFlags.API_DASHBOARD;
+  const analyticsEnabled = useMemo(() => getFeatureFlags().API_DASHBOARD, []);
 
   const {
     data: analytics,

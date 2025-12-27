@@ -851,3 +851,8 @@
 - Replaced invalid `ProgrammeStatus.PENDING` usage with safe status normalization and blocking-status helper in `CSRProgrammeService`, so unknown values fall back without crashes.
 - Trimmed unsupported Next.js experimental config keys and enabled `images.unoptimized` for local development, keeping UI behaviour unchanged.
 - Added `API_AUTH` feature flag (default off) to align upcoming auth wiring with backend readiness; `npm run init` succeeded, `npm run build` still fails on pre-existing admin dashboard lint warnings.
+
+## 107. Admin dashboard runtime fixes in progress.
+
+- Added shared `getStatusCount` helper for analytics summaries and began refactoring admin dashboard to remove render-phase state writes.
+- Tests currently failing because skeleton fallback assertions need updating; paused work with no release impact until copy expectations are revisited.

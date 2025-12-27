@@ -60,7 +60,7 @@ export default function LoginPage() {
       setError(null);
 
       const response = await apiClient
-        .post("auth/login", { json: values })
+        .post("api/v1/auth/login", { json: values })
         .json<{
           accessToken: string;
           user: {

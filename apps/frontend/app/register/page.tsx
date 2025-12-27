@@ -75,7 +75,7 @@ export default function RegisterPage() {
     try {
       setLoading(true);
       setError(null);
-      await apiClient.post("auth/register", {
+      await apiClient.post("api/v1/auth/register", {
         json: {
           name: values.name,
           email: values.email,
