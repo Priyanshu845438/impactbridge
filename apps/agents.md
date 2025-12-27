@@ -839,3 +839,9 @@
 - Added `packages/api-contracts` publishing type-only enums and DTO interfaces for auth, approvals, CSR programmes, financial reports, and user profiles.
 - Configured standalone TypeScript build outputting declarations to `dist/`; documented migration plan for backend/frontend adoption in README.
 - No existing apps reference the package yet; backend/frontend builds remain unchanged.
+
+## 105. Login/Signup API integration planning checkpoint.
+
+- Investigated backend v1 auth endpoints, shared DTO availability, and current frontend login/register flows.
+- Confirmed UI still posts directly via `apiClient` without feature-flagged API routing; no code changes applied pending flag/contract clarification.
+- Ready to proceed with React Query wiring once `API_AUTH` flag + shared response contract decisions are finalised.
