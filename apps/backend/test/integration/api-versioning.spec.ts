@@ -20,7 +20,9 @@ describe('API versioning enforcement', () => {
   });
 
   it('does not expose apis without id parameter', async () => {
-    const res = await request(app.getHttpServer()).get('/api/v1/campaigns/public');
+    const res = await request(app.getHttpServer()).get(
+      '/api/v1/campaigns/public',
+    );
     expect(res.status).toBe(404);
   });
 

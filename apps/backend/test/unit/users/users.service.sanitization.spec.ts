@@ -62,12 +62,8 @@ describe('UsersService sanitisation', () => {
           email: 'ngo@example.com',
           password: 'hash',
         },
-        documents: [
-          { id: 'doc-1', verificationToken: 'code' },
-        ],
-        bankDetails: [
-          { id: 'bank-1', accessToken: 'secret' },
-        ],
+        documents: [{ id: 'doc-1', verificationToken: 'code' }],
+        bankDetails: [{ id: 'bank-1', accessToken: 'secret' }],
         addresses: [],
       },
     ] as any);

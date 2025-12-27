@@ -21,7 +21,8 @@ const toRecipient = (value: Prisma.JsonValue): NotificationRecipient =>
 const toPayload = (value: Prisma.JsonValue): NotificationPayload =>
   value as unknown as NotificationPayload;
 
-const toChannel = (value: string): NotificationChannel => value as NotificationChannel;
+const toChannel = (value: string): NotificationChannel =>
+  value as NotificationChannel;
 
 const toStatus = (value: string): NotificationIntentStatus =>
   value as NotificationIntentStatus;

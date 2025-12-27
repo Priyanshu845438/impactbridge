@@ -227,7 +227,10 @@ export class ApprovalsService {
     }
 
     const comment = this.normalizeComment(dto.remarks);
-    this.ensureCommentProvided(comment, 'Comment is required to reject an approval');
+    this.ensureCommentProvided(
+      comment,
+      'Comment is required to reject an approval',
+    );
 
     const before = await this.getApprovalOrThrow(campaignId, companyProfileId);
     const updated = await this.transition(
@@ -256,9 +259,15 @@ export class ApprovalsService {
     remarks?: string,
   ) {
     const comment = this.normalizeComment(remarks);
-    this.ensureCommentProvided(comment, 'Comment is required to revoke an approval');
+    this.ensureCommentProvided(
+      comment,
+      'Comment is required to revoke an approval',
+    );
 
-    const approval = await this.getApprovalOrThrow(campaignId, companyProfileId);
+    const approval = await this.getApprovalOrThrow(
+      campaignId,
+      companyProfileId,
+    );
 
     if (approval.status === 'REVOKED') {
       return approval;
@@ -292,8 +301,7 @@ export class ApprovalsService {
     existing?: ApprovalEntity,
   ) {
     const approval =
-      existing ??
-      (await this.getApprovalOrThrow(campaignId, companyProfileId));
+      existing ?? (await this.getApprovalOrThrow(campaignId, companyProfileId));
 
     if (approval.status === target) {
       if (remarks !== undefined && remarks !== approval.remarks) {

@@ -59,7 +59,11 @@ describe('NotificationsService', () => {
 
     repository.createIntent.mockResolvedValue(storedIntent);
 
-    const intent = await service.enqueue('email', { email: 'user@example.com' }, { body: 'Hello' });
+    const intent = await service.enqueue(
+      'email',
+      { email: 'user@example.com' },
+      { body: 'Hello' },
+    );
 
     expect(repository.createIntent).toHaveBeenCalledWith({
       channel: 'email',

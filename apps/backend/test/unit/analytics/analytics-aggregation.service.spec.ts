@@ -24,11 +24,11 @@ describe('AnalyticsAggregationService', () => {
 
   describe('getDonationTotals', () => {
     it('returns zero totals when no data', async () => {
-    prisma.donation.aggregate
-      .mockResolvedValueOnce({ _sum: { amount: null }, _count: { _all: 0 } })
-      .mockResolvedValueOnce({ _sum: { amount: null }, _count: { _all: 0 } })
-      .mockResolvedValueOnce({ _sum: { amount: null }, _count: { _all: 0 } })
-      .mockResolvedValueOnce({ _sum: { amount: null }, _count: { _all: 0 } });
+      prisma.donation.aggregate
+        .mockResolvedValueOnce({ _sum: { amount: null }, _count: { _all: 0 } })
+        .mockResolvedValueOnce({ _sum: { amount: null }, _count: { _all: 0 } })
+        .mockResolvedValueOnce({ _sum: { amount: null }, _count: { _all: 0 } })
+        .mockResolvedValueOnce({ _sum: { amount: null }, _count: { _all: 0 } });
 
       await expect(service.getDonationTotals()).resolves.toEqual({
         totalAmount: 0,
@@ -122,7 +122,9 @@ describe('AnalyticsAggregationService', () => {
         { status: 'PENDING', _count: { _all: 1 } },
       ]);
 
-      const result = await service.getApprovalStatusBreakdown({ ngoId: 'ngo-1' });
+      const result = await service.getApprovalStatusBreakdown({
+        ngoId: 'ngo-1',
+      });
 
       expect(prisma.campaignApproval.groupBy).toHaveBeenCalledWith({
         where: { companyId: undefined, ngoId: 'ngo-1' },

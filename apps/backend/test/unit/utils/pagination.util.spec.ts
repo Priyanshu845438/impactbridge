@@ -70,7 +70,9 @@ describe('resolvePagination', () => {
 
   it('decodes base64url and base64', () => {
     const payload = { field: 'id', value: '123' };
-    const base64 = Buffer.from(JSON.stringify(payload), 'utf8').toString('base64');
+    const base64 = Buffer.from(JSON.stringify(payload), 'utf8').toString(
+      'base64',
+    );
     const base64url = Buffer.from(JSON.stringify(payload), 'utf8').toString(
       'base64url',
     );

@@ -70,7 +70,10 @@ export const decodeCursor = (
 
   try {
     const parsed = JSON.parse(decoded);
-    if (typeof parsed?.field === 'string' && typeof parsed?.value === 'string') {
+    if (
+      typeof parsed?.field === 'string' &&
+      typeof parsed?.value === 'string'
+    ) {
       return { field: parsed.field, value: parsed.value };
     }
   } catch (error) {

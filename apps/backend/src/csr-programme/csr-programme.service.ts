@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -99,6 +100,8 @@ export class CSRProgrammeService {
     await this.ensureProgrammeOwnership(programmeId, companyId);
     await this.ensureNgo(dto.ngoId);
 
+    await this.ensureNgoAvailable(dto.ngoId, companyId);
+
     const assignment = await this.prisma.programmeAssignment.upsert({
       where: {
         programmeId_ngoId: {
@@ -139,6 +142,8 @@ export class CSRProgrammeService {
     dto: CreateMilestoneDto,
   ) {
     await this.ensureProgrammeOwnership(programmeId, companyId);
+
+    await this.ensureMilestoneUniqueness(programmeId, dto.title);
 
     const milestone = await this.prisma.programmeMilestone.create({
       data: {
@@ -229,6 +234,45 @@ export class CSRProgrammeService {
 
     if (!ngo) {
       throw new NotFoundException('NGO profile not found');
+    }
+  }
+
+  private async ensureNgoAvailable(ngoId: string, companyId: string) {
+    const existingAssignment = await this.prisma.programmeAssignment.findFirst({
+      where: {
+        ngoId,
+        programme: {
+          companyId,
+          status: {
+            in: [ProgrammeStatus.ACTIVE, ProgrammeStatus.PENDING],
+          },
+        },
+        status: ProgrammeAssignmentStatus.ACTIVE,
+      },
+    });
+
+    if (existingAssignment) {
+      throw new BadRequestException(
+        'NGO is already assigned to an active programme for this company',
+      );
+    }
+  }
+
+  private async ensureMilestoneUniqueness(programmeId: string, title: string) {
+    const duplicate = await this.prisma.programmeMilestone.findFirst({
+      where: {
+        programmeId,
+        title: {
+          equals: title,
+          mode: 'insensitive',
+        },
+      },
+    });
+
+    if (duplicate) {
+      throw new BadRequestException(
+        'A milestone with this title already exists for the programme',
+      );
     }
   }
 }

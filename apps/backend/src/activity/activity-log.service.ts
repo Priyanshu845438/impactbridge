@@ -17,7 +17,11 @@ export interface AuditLogContext {
 export class ActivityLogService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async log(actorId: string | null, action: string, metadata?: Record<string, unknown> | null): Promise<void>;
+  async log(
+    actorId: string | null,
+    action: string,
+    metadata?: Record<string, unknown> | null,
+  ): Promise<void>;
   async log(context: AuditLogContext): Promise<void>;
   async log(
     arg1: string | null | AuditLogContext,
@@ -25,7 +29,7 @@ export class ActivityLogService {
     arg3?: Record<string, unknown> | null,
   ): Promise<void> {
     if (typeof arg1 === 'object' && arg1 !== null && 'action' in arg1) {
-      const context = arg1 as AuditLogContext;
+      const context = arg1;
       await this.persistLog({
         actorId: context.actorId ?? null,
         action: context.action,
@@ -41,7 +45,7 @@ export class ActivityLogService {
       return;
     }
 
-    const actorId = (arg1 as string | null) ?? null;
+    const actorId = arg1 ?? null;
     const action = arg2 ?? 'UNKNOWN_ACTION';
     const metadata = arg3 ?? null;
 

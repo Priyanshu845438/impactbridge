@@ -343,3 +343,8 @@
 - Wired v1 analytics controller/module under `/api/v1/admin/analytics/overview`, mapping aggregation outputs into DTOs with Swagger docs and SUPER_ADMIN guard.
 - Added integration spec seeding Prisma with sample donations/programmes/approvals to validate admin access and non-admin rejection.
 - Extended aggregation service to include day/week/month donation windows; documented the contract in `docs/ANALYTICS_API_GUIDE.md` and updated docs index. Full test/build suite remains green.
+
+## 65. CSR programme hardening prep
+
+- Reviewed existing CSR programme service/DTO coverage and confirmed controllers/tests pending before proceeding with hardening.
+- Left codebase unchanged beyond earlier guard additions; ready to continue end-to-end hardening flow as next step.
