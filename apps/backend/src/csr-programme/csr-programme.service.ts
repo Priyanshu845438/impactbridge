@@ -20,6 +20,10 @@ import { sanitizeEntity, sanitizeEntities } from '../utils/sanitize.util';
 
 @Injectable()
 export class CSRProgrammeService {
+  private readonly programmeStatusValues: ProgrammeStatus[] = Object.values(
+    ProgrammeStatus,
+  ) as ProgrammeStatus[];
+
   constructor(private readonly prisma: PrismaService) {}
 
   async create(companyId: string, dto: CreateProgrammeDto) {
@@ -30,7 +34,10 @@ export class CSRProgrammeService {
         companyId,
         title: dto.title,
         description: dto.description,
-        status: dto.status ?? ProgrammeStatus.DRAFT,
+        status: this.normalizeProgrammeStatus(
+          dto.status,
+          ProgrammeStatus.DRAFT,
+        ),
         budget: dto.budget,
         startDate: dto.startDate ? new Date(dto.startDate) : undefined,
         endDate: dto.endDate ? new Date(dto.endDate) : undefined,
@@ -51,7 +58,10 @@ export class CSRProgrammeService {
       title: dto.title ?? programme.title,
       description:
         dto.description !== undefined ? dto.description : programme.description,
-      status: dto.status ?? programme.status,
+      status: this.normalizeProgrammeStatus(
+        dto.status ?? programme.status,
+        programme.status,
+      ),
       budget: dto.budget ?? programme.budget,
       startDate: dto.startDate ? new Date(dto.startDate) : programme.startDate,
       endDate: dto.endDate ? new Date(dto.endDate) : programme.endDate,
@@ -238,13 +248,19 @@ export class CSRProgrammeService {
   }
 
   private async ensureNgoAvailable(ngoId: string, companyId: string) {
+    const blockingStatuses = this.getBlockingProgrammeStatuses();
+    const statusFilter =
+      blockingStatuses.length > 0
+        ? blockingStatuses
+        : [ProgrammeStatus.ACTIVE];
+
     const existingAssignment = await this.prisma.programmeAssignment.findFirst({
       where: {
         ngoId,
         programme: {
           companyId,
           status: {
-            in: [ProgrammeStatus.ACTIVE, ProgrammeStatus.PENDING],
+            in: statusFilter,
           },
         },
         status: ProgrammeAssignmentStatus.ACTIVE,
@@ -274,5 +290,29 @@ export class CSRProgrammeService {
         'A milestone with this title already exists for the programme',
       );
     }
+  }
+
+  private normalizeProgrammeStatus(
+    status: ProgrammeStatus | string | null | undefined,
+    fallback: ProgrammeStatus,
+  ): ProgrammeStatus {
+    if (typeof status !== 'string') {
+      return fallback;
+    }
+
+    if (this.programmeStatusValues.includes(status as ProgrammeStatus)) {
+      return status as ProgrammeStatus;
+    }
+
+    return fallback;
+  }
+
+  private getBlockingProgrammeStatuses(): ProgrammeStatus[] {
+    const preferred = ['ACTIVE', 'PENDING', 'DRAFT'] as const;
+    return preferred
+      .map((value) =>
+        (ProgrammeStatus as Record<string, ProgrammeStatus | undefined>)[value],
+      )
+      .filter((value): value is ProgrammeStatus => Boolean(value));
   }
 }

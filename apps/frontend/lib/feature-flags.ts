@@ -2,6 +2,7 @@ const DEFAULT_FLAGS = {
   API_DASHBOARD: false,
   REALTIME_NOTIFICATIONS: false,
   SERVER_NAVIGATION: false,
+  API_AUTH: false,
 } as const;
 
 export type FeatureFlagKey = keyof typeof DEFAULT_FLAGS;
@@ -21,6 +22,7 @@ export function getFeatureFlags(env: Record<string, string | undefined> = proces
     REALTIME_NOTIFICATIONS:
       parseFlag(env.NEXT_PUBLIC_FLAG_REALTIME_NOTIFICATIONS) ?? DEFAULT_FLAGS.REALTIME_NOTIFICATIONS,
     SERVER_NAVIGATION: parseFlag(env.NEXT_PUBLIC_FLAG_SERVER_NAVIGATION) ?? DEFAULT_FLAGS.SERVER_NAVIGATION,
+    API_AUTH: parseFlag(env.NEXT_PUBLIC_FLAG_API_AUTH) ?? DEFAULT_FLAGS.API_AUTH,
   };
 }
 
@@ -40,4 +42,5 @@ export const FEATURE_FLAG_DESCRIPTORS: Record<FeatureFlagKey, string> = {
   API_DASHBOARD: 'Enable API-backed dashboards (disables mock data).',
   REALTIME_NOTIFICATIONS: 'Enable websocket-driven notifications.',
   SERVER_NAVIGATION: 'Enable server-driven navigation menus.',
+  API_AUTH: 'Route login & register flows through backend auth endpoints.',
 };

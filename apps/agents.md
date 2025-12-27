@@ -845,3 +845,9 @@
 - Investigated backend v1 auth endpoints, shared DTO availability, and current frontend login/register flows.
 - Confirmed UI still posts directly via `apiClient` without feature-flagged API routing; no code changes applied pending flag/contract clarification.
 - Ready to proceed with React Query wiring once `API_AUTH` flag + shared response contract decisions are finalised.
+
+## 106. CSR status fallback + frontend config cleanup.
+
+- Replaced invalid `ProgrammeStatus.PENDING` usage with safe status normalization and blocking-status helper in `CSRProgrammeService`, so unknown values fall back without crashes.
+- Trimmed unsupported Next.js experimental config keys and enabled `images.unoptimized` for local development, keeping UI behaviour unchanged.
+- Added `API_AUTH` feature flag (default off) to align upcoming auth wiring with backend readiness; `npm run init` succeeded, `npm run build` still fails on pre-existing admin dashboard lint warnings.

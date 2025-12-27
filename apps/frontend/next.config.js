@@ -1,12 +1,8 @@
-const metricsCollector = require("./metrics/performance-report");
-
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
-  experimental: {
-    captureMetrics: true,
-  },
-  hooks: {
-    metrics: metricsCollector,
+  output: 'standalone',
+  images: {
+    unoptimized: true,
   },
 };
 
