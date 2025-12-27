@@ -1,0 +1,18 @@
+{
+  "name": "@impactbridge/api-contracts",
+  "version": "0.1.0",
+  "description": "Shared enum and DTO type definitions for ImpactBridge services",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
