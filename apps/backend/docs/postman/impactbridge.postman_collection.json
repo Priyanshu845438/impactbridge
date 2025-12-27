@@ -1,1318 +1,97 @@
 {
   "info": {
-    "name": "ImpactBridge Backend",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "_postman_id": "impactbridge-backend-collection",
+    "name": "ImpactBridge Backend API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Minimal Postman collection for ImpactBridge API v1"
   },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api/v1"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    }
+  ],
   "item": [
     {
-      "name": "address",
+      "name": "Auth",
       "item": [
         {
-          "name": "POST address/ngo",
+          "name": "Register",
           "request": {
             "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
+                "key": "Content-Type",
+                "value": "application/json"
               }
             ],
-            "url": {
-              "raw": "{{base_url}}/address/ngo",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "address",
-                "ngo"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "admin",
-      "item": [
-        {
-          "name": "GET admin/analytics",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/admin/analytics",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "admin",
-                "analytics"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET admin/csr/ngos/:id",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/admin/csr/ngos/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "admin",
-                "csr",
-                "ngos",
-                ":id"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET admin/csr/companies/:id",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/admin/csr/companies/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "admin",
-                "csr",
-                "companies",
-                ":id"
-              ]
-            }
-          }
-        },
-        {
-          "name": "POST admin/verification/ngos/:id/approve",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/admin/verification/ngos/:id/approve",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "admin",
-                "verification",
-                "ngos",
-                ":id",
-                "approve"
-              ]
-            }
-          }
-        },
-        {
-          "name": "POST admin/verification/ngos/:id/reject",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/admin/verification/ngos/:id/reject",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "admin",
-                "verification",
-                "ngos",
-                ":id",
-                "reject"
-              ]
-            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"comment\": \"Compliance gap\"\n}"
-            }
-          }
-        },
-        {
-          "name": "POST admin/verification/ngos/:id/pending",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/admin/verification/ngos/:id/pending",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "admin",
-                "verification",
-                "ngos",
-                ":id",
-                "pending"
-              ]
+              "raw": "{\n  \"name\": \"Sample Admin\",\n  \"email\": \"admin@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"SUPER_ADMIN\"\n}"
             },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"comment\": \"Additional documents requested\"\n}"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "api",
-      "item": [
-        {
-          "name": "POST api/v1/approvals/:campaignId/request",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
             "url": {
-              "raw": "{{base_url}}/api/v1/approvals/:campaignId/request",
+              "raw": "{{baseUrl}}/auth/register",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
-                "api",
-                "v1",
-                "approvals",
-                ":campaignId",
-                "request"
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"campaignId\": \"{{campaignId}}\"\n}"
-            }
-          }
-        },
-        {
-          "name": "POST api/v1/approvals/:campaignId/approve",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/v1/approvals/:campaignId/approve",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "approvals",
-                ":campaignId",
-                "approve"
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"comment\": \"Looks good\"\n}"
-            }
-          }
-        },
-        {
-          "name": "POST api/v1/approvals/:campaignId/reject",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/v1/approvals/:campaignId/reject",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "approvals",
-                ":campaignId",
-                "reject"
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"comment\": \"Insufficient compliance evidence\"\n}"
-            }
-          }
-        },
-        {
-          "name": "POST api/v1/approvals/:campaignId/revoke",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/v1/approvals/:campaignId/revoke",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "approvals",
-                ":campaignId",
-                "revoke"
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"comment\": \"Budget utilization inconsistent\"\n}"
-            }
-          }
-        },
-        {
-          "name": "GET api/v1/approvals/company/pending",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/v1/approvals/company/pending",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "approvals",
-                "company",
-                "pending"
-              ]
-            }
-          }
-        },
-        {
-          "name": "POST api/v1/auth/register",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/v1/auth/register",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "v1",
                 "auth",
                 "register"
               ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"New NGO user\",\n  \"email\": \"ngo@example.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"NGO\"\n}"
             }
           }
         },
         {
-          "name": "POST api/v1/auth/login",
+          "name": "Login",
           "request": {
             "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
+                "key": "Content-Type",
+                "value": "application/json"
               }
             ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"password123\"\n}"
+            },
             "url": {
-              "raw": "{{base_url}}/api/v1/auth/login",
+              "raw": "{{baseUrl}}/auth/login",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
-                "api",
-                "v1",
                 "auth",
                 "login"
               ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"ngo@example.com\",\n  \"password\": \"Password123!\"\n}"
-            }
-          }
-        },
-        {
-          "name": "PATCH api/v1/users/me",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/v1/users/me",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "users",
-                "me"
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Updated Org\",\n  \"phone\": \"+911234567890\"\n}"
             }
           }
         }
       ]
     },
     {
-      "name": "bank",
+      "name": "Users",
       "item": [
         {
-          "name": "POST bank/ngo",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/bank/ngo",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "bank",
-                "ngo"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "campaigns",
-      "item": [
-        {
-          "name": "POST campaigns",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/campaigns",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "campaigns"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET campaigns/public",
+          "name": "Get Current User",
           "request": {
             "method": "GET",
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
+                "value": "Bearer {{accessToken}}"
               }
             ],
             "url": {
-              "raw": "{{base_url}}/campaigns/public",
+              "raw": "{{baseUrl}}/users/me",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
-                "campaigns",
-                "public"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET campaigns/public/:id",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/campaigns/public/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "campaigns",
-                "public",
-                ":id"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "csr",
-      "item": [
-        {
-          "name": "POST csr/company/budget",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/csr/company/budget",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "csr",
-                "company",
-                "budget"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET csr/company/status",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/csr/company/status",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "csr",
-                "company",
-                "status"
-              ]
-            }
-          }
-        },
-        {
-          "name": "POST csr/company/spent",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/csr/company/spent",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "csr",
-                "company",
-                "spent"
-              ]
-            }
-          }
-        },
-        {
-          "name": "POST csr/summary",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/csr/summary",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "csr",
-                "summary"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "documents",
-      "item": [
-        {
-          "name": "POST documents/ngo",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/documents/ngo",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "documents",
-                "ngo"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "donations",
-      "item": [
-        {
-          "name": "POST donations/:campaignId",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/donations/:campaignId",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "donations",
-                ":campaignId"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET donations/me",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/donations/me",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "donations",
-                "me"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET donations/ngo",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/donations/ngo",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "donations",
-                "ngo"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET donations/admin/all",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/donations/admin/all",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "donations",
-                "admin",
-                "all"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "financial",
-      "item": [
-        {
-          "name": "POST financial/ngo/upload",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/financial/ngo/upload",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "financial",
-                "ngo",
-                "upload"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET financial/ngo/my-reports",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/financial/ngo/my-reports",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "financial",
-                "ngo",
-                "my-reports"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET financial/admin/ngo/:id",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/financial/admin/ngo/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "financial",
-                "admin",
-                "ngo",
-                ":id"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET financial/admin/all",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/financial/admin/all",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "financial",
-                "admin",
-                "all"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "impact",
-      "item": [
-        {
-          "name": "POST impact/:campaignId",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/impact/:campaignId",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "impact",
-                ":campaignId"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET impact/campaign/:campaignId",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/impact/campaign/:campaignId",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "impact",
-                "campaign",
-                ":campaignId"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET impact/milestone/:milestoneId",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/impact/milestone/:milestoneId",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "impact",
-                "milestone",
-                ":milestoneId"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "milestones",
-      "item": [
-        {
-          "name": "POST milestones/:campaignId",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/milestones/:campaignId",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "milestones",
-                ":campaignId"
-              ]
-            }
-          }
-        },
-        {
-          "name": "PATCH milestones/status/:milestoneId",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/milestones/status/:milestoneId",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "milestones",
-                "status",
-                ":milestoneId"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET milestones/:campaignId",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/milestones/:campaignId",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "milestones",
-                ":campaignId"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "public",
-      "item": [
-        {
-          "name": "GET public/campaigns/:id",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/public/campaigns/:id",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "public",
-                "campaigns",
-                ":id"
-              ]
-            }
-          }
-        },
-        {
-          "name": "POST public/campaigns/:id/donate",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/public/campaigns/:id/donate",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "public",
-                "campaigns",
-                ":id",
-                "donate"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "receipts",
-      "item": [
-        {
-          "name": "POST receipts",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/receipts",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "receipts"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "root",
-      "item": [
-        {
-          "name": "GET ",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": []
-            }
-          }
-        },
-        {
-          "name": "POST auth/accept-invite",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/auth/accept-invite",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "auth",
-                "accept-invite"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "utilization",
-      "item": [
-        {
-          "name": "POST utilization/:campaignId",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/utilization/:campaignId",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "utilization",
-                ":campaignId"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET utilization/campaign/:campaignId",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/utilization/campaign/:campaignId",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "utilization",
-                "campaign",
-                ":campaignId"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET utilization/milestone/:milestoneId",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/utilization/milestone/:milestoneId",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "utilization",
-                "milestone",
-                ":milestoneId"
-              ]
-            }
-          }
-        },
-        {
-          "name": "GET utilization/admin/all",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/utilization/admin/all",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "utilization",
-                "admin",
-                "all"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "v1",
-      "item": [
-        {
-          "name": "GET v1/users/me",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/v1/users/me",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "v1",
                 "users",
                 "me"
               ]
@@ -1320,57 +99,82 @@
           }
         },
         {
-          "name": "PATCH v1/users/me",
+          "name": "Get Users (Admin)",
           "request": {
-            "method": "PATCH",
+            "method": "GET",
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer {{auth_token}}",
-                "type": "text",
-                "disabled": false
+                "value": "Bearer {{accessToken}}"
               }
             ],
             "url": {
-              "raw": "{{base_url}}/v1/users/me",
+              "raw": "{{baseUrl}}/users",
               "host": [
-                "{{base_url}}"
+                "{{baseUrl}}"
               ],
               "path": [
-                "v1",
-                "users",
-                "me"
+                "users"
               ]
             }
           }
         }
       ]
-    }
-  ],
-  "variable": [
-    {
-      "key": "base_url",
-      "value": "http://localhost:3000"
     },
     {
-      "key": "auth_token",
-      "value": ""
+      "name": "Approvals",
+      "item": [
+        {
+          "name": "List Pending Approvals",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/approvals/company/{companyId}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "approvals",
+                "company",
+                "{companyId}"
+              ]
+            }
+          }
+        }
+      ]
     },
     {
-      "key": "ngoProfileId",
-      "value": ""
-    },
-    {
-      "key": "campaignId",
-      "value": ""
-    },
-    {
-      "key": "donationId",
-      "value": ""
-    },
-    {
-      "key": "milestoneId",
-      "value": ""
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Get Donation Metrics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/donations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "analytics",
+                "donations"
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }
