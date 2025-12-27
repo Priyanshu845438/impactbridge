@@ -4,9 +4,10 @@ import { ApprovalsController } from './approvals.controller';
 import { PrismaModule } from '../prisma/prisma.module';
 import { UsersModule } from '../users/users.module';
 import { ActivityLogModule } from '../activity/activity-log.module';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
-  imports: [PrismaModule, UsersModule, ActivityLogModule],
+  imports: [PrismaModule, UsersModule, ActivityLogModule, NotificationsModule],
   providers: [ApprovalsService],
   controllers: [ApprovalsController],
   exports: [ApprovalsService],

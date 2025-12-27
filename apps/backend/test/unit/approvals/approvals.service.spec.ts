@@ -18,14 +18,24 @@ const baseApproval = {
   createdAt: NOW,
   updatedAt: NOW,
   campaign: { id: 'campaign-1', ngoId: 'ngo-1', title: 'Campaign' },
-  company: { id: 'company-1', userId: 'company-user', deletedAt: null },
-  ngo: { id: 'ngo-1', userId: 'ngo-user' },
+  company: {
+    id: 'company-1',
+    userId: 'company-user',
+    deletedAt: null,
+    user: { id: 'company-user', name: 'Company', email: 'company@example.com' },
+  },
+  ngo: {
+    id: 'ngo-1',
+    userId: 'ngo-user',
+    user: { id: 'ngo-user', name: 'NGO', email: 'ngo@example.com' },
+  },
 };
 
 describe('ApprovalsService workflow', () => {
   let prisma: jest.Mocked<PrismaService>;
   let service: ApprovalsService;
   const activityLog = { log: jest.fn() } as any;
+  const notifications = { enqueue: jest.fn() } as any;
 
   beforeEach(() => {
     prisma = {
@@ -39,8 +49,9 @@ describe('ApprovalsService workflow', () => {
       },
     } as unknown as jest.Mocked<PrismaService>;
 
-    service = new ApprovalsService(prisma, activityLog);
+    service = new ApprovalsService(prisma, activityLog, notifications);
     activityLog.log.mockReset();
+    notifications.enqueue.mockReset();
   });
 
   describe('requestApproval', () => {
@@ -56,7 +67,9 @@ describe('ApprovalsService workflow', () => {
     });
 
     it('creates approval when valid', async () => {
-      prisma.campaignApproval.findUnique.mockResolvedValue(null);
+      prisma.campaignApproval.findUnique
+        .mockResolvedValueOnce(null as any)
+        .mockResolvedValueOnce(baseApproval as any);
       prisma.campaignApproval.create.mockResolvedValue({
         ...baseApproval,
         campaign: undefined,
@@ -110,10 +123,15 @@ describe('ApprovalsService workflow', () => {
     });
 
     it('resets rejected approval back to pending', async () => {
-      prisma.campaignApproval.findUnique.mockResolvedValue({
+      prisma.campaignApproval.findUnique.mockResolvedValueOnce({
         ...baseApproval,
         status: 'REJECTED',
         remarks: 'previous issue',
+      } as any);
+      prisma.campaignApproval.findUnique.mockResolvedValueOnce({
+        ...baseApproval,
+        status: 'PENDING',
+        remarks: null,
       } as any);
       prisma.campaignApproval.update.mockResolvedValue({
         ...baseApproval,
@@ -135,14 +153,30 @@ describe('ApprovalsService workflow', () => {
           action: 'NGO_APPROVAL_RESET',
         }),
       );
+      expect(notifications.enqueue).toHaveBeenCalledWith(
+        'email',
+        { email: 'company@example.com', name: 'Company' },
+        expect.objectContaining({
+          metadata: expect.objectContaining({
+            event: 'NGO_APPROVAL_RESET',
+            previousStatus: 'REJECTED',
+          }),
+        }),
+      );
     });
   });
 
   describe('approve', () => {
     beforeEach(() => {
-      prisma.campaignApproval.findUnique.mockResolvedValue({
-        ...baseApproval,
-      } as any);
+      prisma.campaignApproval.findUnique
+        .mockResolvedValueOnce({
+          ...baseApproval,
+        } as any)
+        .mockResolvedValueOnce({
+          ...baseApproval,
+          status: 'APPROVED',
+          remarks: 'looks good',
+        } as any);
       prisma.campaignApproval.update.mockResolvedValue({
         ...baseApproval,
         status: 'APPROVED',
@@ -169,6 +203,16 @@ describe('ApprovalsService workflow', () => {
           entityId: 'approval-1',
         }),
       );
+      expect(notifications.enqueue).toHaveBeenCalledWith(
+        'email',
+        { email: 'company@example.com', name: 'Company' },
+        expect.objectContaining({
+          metadata: expect.objectContaining({
+            event: 'NGO_APPROVAL_APPROVED',
+            comment: 'looks good',
+          }),
+        }),
+      );
     });
 
     it('rejects incorrect status input', async () => {
@@ -185,7 +229,9 @@ describe('ApprovalsService workflow', () => {
     });
 
     it('requires pending state', async () => {
-      prisma.campaignApproval.findUnique.mockResolvedValueOnce({
+      prisma.campaignApproval.findUnique.mockReset();
+      prisma.campaignApproval.update.mockReset();
+      prisma.campaignApproval.findUnique.mockResolvedValue({
         ...baseApproval,
         status: 'REJECTED',
       } as any);
@@ -198,14 +244,22 @@ describe('ApprovalsService workflow', () => {
           'company-user',
         ),
       ).rejects.toBeInstanceOf(ForbiddenException);
+      expect(notifications.enqueue).not.toHaveBeenCalled();
+      expect(prisma.campaignApproval.update).not.toHaveBeenCalled();
     });
   });
 
   describe('reject', () => {
     beforeEach(() => {
-      prisma.campaignApproval.findUnique.mockResolvedValue({
-        ...baseApproval,
-      } as any);
+      prisma.campaignApproval.findUnique
+        .mockResolvedValueOnce({
+          ...baseApproval,
+        } as any)
+        .mockResolvedValueOnce({
+          ...baseApproval,
+          status: 'REJECTED',
+          remarks: 'not aligned',
+        } as any);
       prisma.campaignApproval.update.mockResolvedValue({
         ...baseApproval,
         status: 'REJECTED',
@@ -230,6 +284,16 @@ describe('ApprovalsService workflow', () => {
           actorId: 'company-user',
           action: 'NGO_APPROVAL_REJECTED',
           metadata: expect.objectContaining({ comment: 'not aligned' }),
+        }),
+      );
+      expect(notifications.enqueue).toHaveBeenCalledWith(
+        'email',
+        { email: 'company@example.com', name: 'Company' },
+        expect.objectContaining({
+          metadata: expect.objectContaining({
+            event: 'NGO_APPROVAL_REJECTED',
+            comment: 'not aligned',
+          }),
         }),
       );
     });
@@ -259,10 +323,16 @@ describe('ApprovalsService workflow', () => {
 
   describe('revoke', () => {
     beforeEach(() => {
-      prisma.campaignApproval.findUnique.mockResolvedValue({
-        ...baseApproval,
-        status: 'APPROVED',
-      } as any);
+      prisma.campaignApproval.findUnique
+        .mockResolvedValueOnce({
+          ...baseApproval,
+          status: 'APPROVED',
+        } as any)
+        .mockResolvedValueOnce({
+          ...baseApproval,
+          status: 'REVOKED',
+          remarks: 'issue found',
+        } as any);
       prisma.campaignApproval.update.mockResolvedValue({
         ...baseApproval,
         status: 'REVOKED',
@@ -286,10 +356,22 @@ describe('ApprovalsService workflow', () => {
           metadata: expect.objectContaining({ comment: 'issue found' }),
         }),
       );
+      expect(notifications.enqueue).toHaveBeenCalledWith(
+        'email',
+        { email: 'company@example.com', name: 'Company' },
+        expect.objectContaining({
+          metadata: expect.objectContaining({
+            event: 'NGO_APPROVAL_REVOKED',
+            comment: 'issue found',
+          }),
+        }),
+      );
     });
 
     it('throws when not approved', async () => {
-      prisma.campaignApproval.findUnique.mockResolvedValueOnce({
+      prisma.campaignApproval.findUnique.mockReset();
+      prisma.campaignApproval.update.mockReset();
+      prisma.campaignApproval.findUnique.mockResolvedValue({
         ...baseApproval,
         status: 'PENDING',
       } as any);
@@ -302,6 +384,8 @@ describe('ApprovalsService workflow', () => {
           'insufficient documentation',
         ),
       ).rejects.toBeInstanceOf(ForbiddenException);
+      expect(notifications.enqueue).not.toHaveBeenCalled();
+      expect(prisma.campaignApproval.update).not.toHaveBeenCalled();
     });
 
     it('requires a comment to revoke', async () => {

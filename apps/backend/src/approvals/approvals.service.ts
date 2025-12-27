@@ -7,6 +7,8 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { ApproveProjectDto } from './dto/approve-project.dto';
 import { ActivityLogService } from '../activity/activity-log.service';
+import { NotificationsService } from '../notifications/notifications.service';
+import { NotificationChannel } from '../notifications/notification.types';
 
 export type ApprovalStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'REVOKED';
 
@@ -22,6 +24,13 @@ type ApprovalForLog = {
   status: ApprovalStatus;
 };
 
+type NotificationEvent =
+  | 'NGO_APPROVAL_REQUESTED'
+  | 'NGO_APPROVAL_RESET'
+  | 'NGO_APPROVAL_APPROVED'
+  | 'NGO_APPROVAL_REJECTED'
+  | 'NGO_APPROVAL_REVOKED';
+
 const ApprovalErrors = {
   notFound: 'Approval request not found',
   notPending: 'Only pending requests can transition',
@@ -33,7 +42,59 @@ export class ApprovalsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly activityLog: ActivityLogService,
+    private readonly notifications: NotificationsService,
   ) {}
+
+  private async enqueueNotification(
+    event: NotificationEvent,
+    approval: ApprovalEntity,
+    actorId: string,
+    extras?: Record<string, unknown>,
+  ) {
+    const { channel, recipient } = this.resolveRecipient(approval);
+
+    await this.notifications.enqueue(channel, recipient, {
+      subject: `Campaign approval ${event.replace(/_/g, ' ').toLowerCase()}`,
+      body: `Approval event ${event}`,
+      metadata: {
+        event,
+        approvalId: approval.id,
+        campaignId: approval.campaignId,
+        companyId: approval.companyId,
+        ngoId: approval.ngoId,
+        actorId,
+        status: approval.status,
+        ...extras,
+      },
+    });
+  }
+
+  private resolveRecipient(approval: ApprovalEntity): {
+    channel: NotificationChannel;
+    recipient: { email?: string; name?: string };
+  } {
+    const companyEmail = approval.company?.user?.email ?? undefined;
+    const companyName = approval.company?.user?.name ?? undefined;
+
+    if (companyEmail) {
+      return {
+        channel: 'email',
+        recipient: { email: companyEmail, name: companyName },
+      };
+    }
+
+    const ngoEmail = approval.ngo?.user?.email ?? undefined;
+    const ngoName = approval.ngo?.user?.name ?? undefined;
+
+    if (ngoEmail) {
+      return {
+        channel: 'email',
+        recipient: { email: ngoEmail, name: ngoName },
+      };
+    }
+
+    return { channel: 'email', recipient: {} };
+  }
 
   private buildUniqueKey(campaignId: string, companyId: string) {
     return {
@@ -46,8 +107,21 @@ export class ApprovalsService {
       where: this.buildUniqueKey(campaignId, companyId),
       include: {
         campaign: { select: { id: true, ngoId: true, title: true } },
-        company: { select: { id: true, userId: true, deletedAt: true } },
-        ngo: { select: { id: true, userId: true } },
+        company: {
+          select: {
+            id: true,
+            userId: true,
+            deletedAt: true,
+            user: { select: { id: true, name: true, email: true } },
+          },
+        },
+        ngo: {
+          select: {
+            id: true,
+            userId: true,
+            user: { select: { id: true, name: true, email: true } },
+          },
+        },
       },
     });
 
@@ -161,6 +235,17 @@ export class ApprovalsService {
         existing.status as ApprovalStatus,
       );
 
+      const hydrated = await this.getApprovalOrThrow(
+        campaignId,
+        companyProfileId,
+      );
+      await this.enqueueNotification(
+        'NGO_APPROVAL_RESET',
+        hydrated,
+        actorId,
+        { previousStatus: existing.status },
+      );
+
       return reset;
     }
 
@@ -180,6 +265,14 @@ export class ApprovalsService {
       created as ApprovalForLog,
       'PENDING',
     );
+
+    const hydrated = await this.getApprovalOrThrow(
+      campaignId,
+      companyProfileId,
+    );
+    await this.enqueueNotification('NGO_APPROVAL_REQUESTED', hydrated, actorId, {
+      remarks: remarks ?? null,
+    });
 
     return created;
   }
@@ -212,6 +305,14 @@ export class ApprovalsService {
       before.status as ApprovalStatus,
       comment,
     );
+
+    const hydrated = await this.getApprovalOrThrow(
+      campaignId,
+      companyProfileId,
+    );
+    await this.enqueueNotification('NGO_APPROVAL_APPROVED', hydrated, actorId, {
+      comment,
+    });
 
     return updated;
   }
@@ -248,6 +349,14 @@ export class ApprovalsService {
       before.status as ApprovalStatus,
       comment,
     );
+
+    const hydrated = await this.getApprovalOrThrow(
+      campaignId,
+      companyProfileId,
+    );
+    await this.enqueueNotification('NGO_APPROVAL_REJECTED', hydrated, actorId, {
+      comment,
+    });
 
     return updated;
   }
@@ -289,6 +398,14 @@ export class ApprovalsService {
       approval.status as ApprovalStatus,
       comment,
     );
+
+    const hydrated = await this.getApprovalOrThrow(
+      campaignId,
+      companyProfileId,
+    );
+    await this.enqueueNotification('NGO_APPROVAL_REVOKED', hydrated, actorId, {
+      comment,
+    });
 
     return updated;
   }

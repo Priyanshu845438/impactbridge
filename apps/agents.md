@@ -279,6 +279,13 @@
 - Confirmed responses remain stable (no `null` payloads) and that deeper ownership checks would duplicate existing profile lookups; no code changes performed to preserve behaviour.
 - Recommended future hardening to handle company variants once corresponding services/controllers exist, coupled with targeted e2e tests.
 
+## 54. Approval notifications & intent coverage
+
+- Injected `NotificationsService` into `ApprovalsService`, subscribing the module to `NotificationsModule` and enriching approval lookups with user contact details.
+- Enqueued notification intents for request, reset, approve, reject, and revoke transitions with contextual metadata while preserving existing activity logs.
+- Expanded unit tests to mock the notifications dependency, assert enqueue payloads, and verify no-op behaviour on forbidden transitions; all suites (`npm run test -- --runInBand test/unit/approvals/approvals.service.spec.ts`) pass.
+- Ran `npm run init` (noop guard) and `npm run build` to confirm the backend compiles cleanly without affecting other modules or controllers.
+
 ## 54. Notification Intents Persisted
 
 - Wired NotificationsService to store intents via Prisma repository and keep no-op provider.
