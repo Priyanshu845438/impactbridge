@@ -578,3 +578,9 @@
 - Completed feature-flagged wiring in `app/dashboard/admin/page.tsx`, merging live donation/programme/approval metrics and activity feed when `API_DASHBOARD` is on while retaining mock fallback, loading, error, and empty states.
 - Extended `ActivityFeed` to accept injected items, refined ky mock, and stabilised React Query tests covering flag on/off, loading, and error flows.
 - Updated analytics adapters, hook tests, and dashboard RTL spec; ran `npm run init`, `npm run test -- --runInBand`, and `npm run build` (Next warning unchanged) with all checks passing.
+
+## 114. CSR programme API integration (blocked).
+
+- Investigated company CSR programme pages and backend surface; confirmed frontend remains mock-driven and backend exposes only `CSRProgrammeService` without HTTP controllers under `/api/v1/company/programmes` or similar routes.
+- Unable to wire React Query or write integration tests without real endpoints—task paused pending backend API availability.
+- No code changes made; build/tests untouched; once backend routes exist we can proceed with feature-flagged wiring and documentation updates.
