@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { FinancialReportDto } from './dto/financial-report.dto';
 import { ActivityLogService } from '../activity/activity-log.service';
@@ -20,6 +20,8 @@ export class FinancialService {
     actorId: string | null,
   ) {
     await this.ensureNGOProfile(ngoProfileId);
+
+    await this.ensureUniquePeriod(ngoProfileId, dto.period, dto.year);
 
     const report = await this.prisma.financialReport.create({
       data: {
@@ -58,6 +60,21 @@ export class FinancialService {
       },
       orderBy: { createdAt: 'desc' },
     });
+  }
+
+  async ensureUniquePeriod(ngoProfileId: string, period: FinancialReportDto['period'], year: number) {
+    const existing = await this.prisma.financialReport.findFirst({
+      where: {
+        ngoId: ngoProfileId,
+        period,
+        year,
+      },
+      select: { id: true },
+    });
+
+    if (existing) {
+      throw new ConflictException('Report already submitted for this period and year');
+    }
   }
 
   async getReportsForYear(year: number) {

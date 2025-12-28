@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  ForbiddenException,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { FinancialService } from './financial.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -25,8 +33,9 @@ export class FinancialController {
   ) {
     const profile = await this.usersService.getNGOProfileByUserId(user.sub);
     if (!profile) {
-      throw new Error('NGO profile not found');
+      throw new ForbiddenException('NGO profile not found for user');
     }
+
     return this.financialService.uploadReport(profile.id, dto, user.sub);
   }
 
@@ -36,7 +45,7 @@ export class FinancialController {
   async getMyReports(@CurrentUser() user: AuthUser) {
     const profile = await this.usersService.getNGOProfileByUserId(user.sub);
     if (!profile) {
-      throw new Error('NGO profile not found');
+      throw new ForbiddenException('NGO profile not found for user');
     }
     return this.financialService.getReportsForNGO(profile.id);
   }

@@ -24,9 +24,11 @@ describe('CSRProgrammeService sanitisation', () => {
         }),
       },
       programmeAssignment: {
+        findFirst: jest.fn().mockResolvedValue(null),
         upsert: jest.fn(),
       },
       programmeMilestone: {
+        findFirst: jest.fn().mockResolvedValue(null),
         create: jest.fn(),
         update: jest.fn(),
       },

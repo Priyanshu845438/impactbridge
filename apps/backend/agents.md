@@ -1,8 +1,36 @@
 # Backend Progress Snapshot
 
-- **2024-10-20** — Base NestJS application + Prisma integration completed.
-- **2024-11-30** — Auth module hardened (bcrypt utilities, JWT issuance, guards, DTO validation).
-- **2024-12-20** — Prisma schema expanded for government compliance; migrations applied.
-- **2025-01-15** — CSR programme APIs + analytics aggregation service implemented.
-- **2025-01-24** — Analytics controller delivered with SUPER_ADMIN-only endpoints and integration tests.
-- **2025-01-27** — Approval service now enqueues notification intents on all transitions (request/reset/approve/reject/revoke) with updated unit coverage.
+1. Core Platform Foundation
+- Established NestJS application skeleton with Prisma integration for data access.
+- Seeded initial modules (auth, users) to enable iterative feature development.
+- Configured shared configuration and environment bootstrap for consistency.
+
+2. Authentication & Security Hardening
+- Added bcrypt utilities, JWT issuance, and guard stack to secure protected routes.
+- Introduced DTO validation across auth endpoints to ensure payload safety.
+- Delivered reusable decorators/guards for role-based access control.
+
+3. Regulatory Data Model Expansion
+- Extended Prisma schema with government-aligned NGO/company/donor profiles.
+- Migrated documents, banking, campaigns, and audit log relations.
+- Preserved existing data contract while enabling CSR compliance reporting.
+
+4. CSR Programme & Analytics Services
+- Implemented CSR programme APIs with sanitised outputs and RBAC enforcement.
+- Delivered analytics aggregation service powering donation/programme/approval metrics.
+- Ensured Prisma queries avoid N+1 via targeted includes and grouping.
+
+5. Admin Analytics Delivery
+- Exposed analytics controller with SUPER_ADMIN guard and DTO responses.
+- Added integration tests validating role-based access and payload structure.
+- Wired aggregation service into controller without altering consumer contracts.
+
+6. Approval Workflow Notifications
+- Integrated notification intents into approval state transitions (request/reset/approve/reject/revoke).
+- Expanded unit tests to confirm enqueue behaviour for each transition pathway.
+- Maintained separation between intent creation and downstream delivery providers.
+
+7. Financial Reporting Hardening
+- Enforced NGO ownership checks and period/year uniqueness for financial reports.
+- Replaced generic errors with precise NestJS exceptions and audit logging.
+- Added unit + e2e coverage for duplicate rejection, RBAC enforcement, and admin reads.

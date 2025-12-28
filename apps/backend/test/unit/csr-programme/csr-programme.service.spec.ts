@@ -52,6 +52,7 @@ describe('CSRProgrammeService', () => {
         }),
       },
       programmeAssignment: {
+        findFirst: jest.fn().mockResolvedValue(null),
         upsert: jest.fn().mockResolvedValue({
           id: 'assignment-1',
           programmeId: 'programme-1',
@@ -65,6 +66,7 @@ describe('CSRProgrammeService', () => {
         }),
       },
       programmeMilestone: {
+        findFirst: jest.fn().mockResolvedValue(null),
         create: jest.fn().mockResolvedValue({
           id: 'milestone-1',
           programmeId: 'programme-1',

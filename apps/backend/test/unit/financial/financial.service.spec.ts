@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { FinancialService } from '../../../src/financial/financial.service';
 import { PrismaService } from '../../../src/prisma/prisma.service';
 
@@ -24,6 +24,7 @@ describe('FinancialService', () => {
       financialReport: {
         create: jest.fn(),
         findMany: jest.fn(),
+        findFirst: jest.fn(),
       },
     } as unknown as jest.Mocked<PrismaService>;
 
@@ -34,6 +35,7 @@ describe('FinancialService', () => {
   describe('uploadReport', () => {
     it('creates report when NGO exists', async () => {
       prisma.nGOProfile.findUnique.mockResolvedValue({ id: 'ngo-1' } as any);
+      prisma.financialReport.findFirst.mockResolvedValue(null as any);
       prisma.financialReport.create.mockResolvedValue(report as any);
 
       const result = await service.uploadReport(
@@ -84,6 +86,25 @@ describe('FinancialService', () => {
         ),
       ).rejects.toBeInstanceOf(NotFoundException);
     });
+
+    it('rejects duplicate period/year combinations', async () => {
+      prisma.nGOProfile.findUnique.mockResolvedValue({ id: 'ngo-1' } as any);
+      prisma.financialReport.findFirst.mockResolvedValue({ id: 'existing-report' } as any);
+
+      await expect(
+        service.uploadReport(
+          'ngo-1',
+          {
+            period: 'Q1',
+            year: 2024,
+            reportUrl: 'https://example.com/report.pdf',
+          },
+          'actor-1',
+        ),
+      ).rejects.toBeInstanceOf(ConflictException);
+
+      expect(prisma.financialReport.create).not.toHaveBeenCalled();
+    });
   });
 
   describe('getReportsForNGO', () => {
@@ -111,6 +132,12 @@ describe('FinancialService', () => {
         where: { ngoId: 'ngo-1', year: 2024 },
         orderBy: { createdAt: 'desc' },
       });
+    });
+
+    it('throws when NGO profile missing', async () => {
+      prisma.nGOProfile.findUnique.mockResolvedValueOnce(null as any);
+
+      await expect(service.getReportsForNGO('missing-ngo')).rejects.toBeInstanceOf(NotFoundException);
     });
   });
 
