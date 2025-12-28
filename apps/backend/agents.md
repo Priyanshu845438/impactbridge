@@ -34,3 +34,7 @@
 - Enforced NGO ownership checks and period/year uniqueness for financial reports.
 - Replaced generic errors with precise NestJS exceptions and audit logging.
 - Added unit + e2e coverage for duplicate rejection, RBAC enforcement, and admin reads.
+
+8. Users Pagination Preparation
+- Confirmed controller entry point for `/users` listings is pending to apply limit/offset defaults.
+- Documented need for controller creation before enforcing soft-delete aware pagination.
