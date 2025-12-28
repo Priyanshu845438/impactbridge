@@ -8,11 +8,13 @@ jest.mock('@/lib/api/analytics');
 
 const mockedFetch = analyticsApi as jest.Mocked<typeof analyticsApi>;
 
-function createWrapper() {
+function createWrapper(): React.ComponentType<{ children: React.ReactNode }> {
   const client = new QueryClient();
-  return ({ children }: { children: React.ReactNode }) => (
+  const QueryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     <QueryClientProvider client={client}>{children}</QueryClientProvider>
   );
+  QueryProvider.displayName = 'QueryProviderWrapper';
+  return QueryProvider;
 }
 
 const payload = {
@@ -81,4 +83,3 @@ describe('useAdminAnalytics', () => {
     expect(mockedFetch.fetchAdminAnalytics).not.toHaveBeenCalled();
   });
 });
-

@@ -28,3 +28,7 @@
 6. NGO Financial Reporting Gap Identified
 - Audited NGO dashboard routes and confirmed only mock finance/compliance views exist with no financial report list or upload screens.
 - Recorded dependency on product decision to supply target UI or specs before backend wiring can proceed.
+
+7. NGO Financial Reports UI Implemented
+- Added mock-driven reports list and upload pages under `/dashboard/ngo/finance/reports` with loading, empty, and error placeholders.
+- Added RTL coverage ensuring list renders correctly and upload flow resets after simulated submission.
