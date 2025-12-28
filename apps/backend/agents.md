@@ -38,3 +38,7 @@
 8. Users Pagination Preparation
 - Confirmed controller entry point for `/users` listings is pending to apply limit/offset defaults.
 - Documented need for controller creation before enforcing soft-delete aware pagination.
+
+9. Users Controller Pagination Defaults
+- Added versioned `/users` controller applying default limit/offset query parsing and delegating to service.
+- Ensured empty array fallback when service reports no records, preserving soft-delete friendly responses.
