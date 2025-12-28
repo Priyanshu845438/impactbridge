@@ -24,6 +24,7 @@
 | CSR Programmes | `/api/v1/csr/programmes` | CRUD endpoints for company programmes | JWT (COMPANY) |
 | Approvals | `/api/v1/approvals/...` | Request/approve/reject/revoke campaign approvals | JWT (NGO/COMPANY) + Roles |
 | Analytics | `/api/v1/analytics/...` | Admin metrics endpoints | JWT + Role(SUPER_ADMIN) |
+| Financial | `/api/v1/financial/ngo/upload` | POST | Upload NGO report (409 on duplicate) | JWT + Role(NGO) |
 
 Refer to controller source files for full parameter shapes. Every request body is defined via DTOs under `src/**/dto`.
 

@@ -175,6 +175,92 @@
           }
         }
       ]
+    },
+    {
+      "name": "Financial",
+      "item": [
+        {
+          "name": "Upload NGO Report (409 on duplicate)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"period\": \"Q1\",\n  \"year\": 2024,\n  \"reportUrl\": \"https://cdn.example.com/report.pdf\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/financial/ngo/upload",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "financial",
+                "ngo",
+                "upload"
+              ]
+            },
+            "description": "Uploads a financial report for the authenticated NGO. Returns 409 Conflict when the period/year already exists."
+          }
+        },
+        {
+          "name": "List My NGO Reports",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/financial/ngo/my-reports",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "financial",
+                "ngo",
+                "my-reports"
+              ]
+            },
+            "description": "Lists reports for the current NGO user."
+          }
+        },
+        {
+          "name": "Admin \u2013 List NGO Reports",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/financial/admin/ngo/{{ngoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "financial",
+                "admin",
+                "ngo",
+                "{{ngoId}}"
+              ]
+            },
+            "description": "SUPER_ADMIN only. Lists reports for the specified NGO."
+          }
+        }
+      ]
     }
   ]
 }

@@ -24,3 +24,7 @@
 - Reviewed company CSR programme list/detail screens to catalogue mock data dependencies.
 - Confirmed React Query + feature flag strategy needed once backend endpoints are wired.
 - Flagged absence of concrete approval UI, blocking current API integration work.
+
+6. NGO Financial Reporting Gap Identified
+- Audited NGO dashboard routes and confirmed only mock finance/compliance views exist with no financial report list or upload screens.
+- Recorded dependency on product decision to supply target UI or specs before backend wiring can proceed.
