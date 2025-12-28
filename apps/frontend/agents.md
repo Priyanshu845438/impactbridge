@@ -1,7 +1,26 @@
 # Frontend Progress Snapshot
 
-- **2024-10-25** — Next.js App Router scaffold with mock auth flows and shared design system utilities.
-- **2024-11-18** — RBAC middleware + shared role helpers ensuring consistent route protection.
-- **2024-12-10** — Feature flag utilities (`API_DASHBOARD`, `API_CSR_PROGRAMMES`, `API_AUTH`) introduced with env-based gating.
-- **2025-01-12** — Admin analytics dashboard wired to adapters and React Query with flag-controlled API fallback.
-- **2025-01-20** — CSR programme list/detail prepared for backend integration with stable mock fallback.
+1. App Router & Mock Auth Baseline
+- Scaffolded Next.js App Router structure with mock authentication flows for early UX prototyping.
+- Introduced shared UI primitives (buttons, cards, tabs) to stabilise visual language across pages.
+- Ensured initial routing guards align with planned role-based access patterns.
+
+2. RBAC Middleware & Role Helpers
+- Implemented middleware to enforce route-level RBAC using shared `UserRole` enums.
+- Added reusable helpers to keep server and client role checks in sync.
+- Verified protected routes redirect unauthorised users consistently.
+
+3. Feature Flag Infrastructure
+- Added environment-driven feature flag utilities covering dashboards, CSR programmes, and auth flows.
+- Documented flag descriptors for consistent usage across teams.
+- Defaulted all new API-backed experiences to off to preserve mock behaviour.
+
+4. Admin Analytics API Preparation
+- Created analytics contracts and adapters to map backend payloads into existing dashboard props.
+- Introduced React Query hook scaffolding for admin analytics with flag-controlled execution.
+- Added unit tests ensuring adapters handle core data shapes without regressing mocks.
+
+5. CSR Programme Integration Readiness
+- Reviewed company CSR programme list/detail screens to catalogue mock data dependencies.
+- Confirmed React Query + feature flag strategy needed once backend endpoints are wired.
+- Flagged absence of concrete approval UI, blocking current API integration work.
