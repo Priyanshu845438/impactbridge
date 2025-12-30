@@ -35,22 +35,6 @@
 - Replaced generic errors with precise NestJS exceptions and audit logging.
 - Added unit + e2e coverage for duplicate rejection, RBAC enforcement, and admin reads.
 
-8. Users Pagination Preparation
-- Confirmed controller entry point for `/users` listings is pending to apply limit/offset defaults.
-- Documented need for controller creation before enforcing soft-delete aware pagination.
-
-9. Users Controller Pagination Defaults
-- Added versioned `/users` controller applying default limit/offset query parsing and delegating to service.
-- Ensured empty array fallback when service reports no records, preserving soft-delete friendly responses.
-
-10. Users Service Pagination & Soft-Delete
-- Updated `findAll` to honour controller-supplied limit/offset and enforce `deletedAt` null filter.
-- Retained existing ordering and sanitisation while ensuring soft-deleted records never surface.
-
-11. Users List Null-Safe Behaviour
-- Ensured controller + service `findAll` paths coerce falsy responses to empty arrays for list requests.
-- Keeps list endpoint resilient while leaving single-user flows untouched.
-
-12. Users List Pagination Tests
-- Added e2e coverage verifying default 25-item pagination and exclusion of soft-deleted records from `/api/v1/users`.
-- Mocked Prisma `findMany` in tests to assert filters and pagination arguments while returning sanitised payloads.
+8. RBAC Coverage Pending
+- RBAC integration tests for controllers (auth, users, approvals, financial) planned but awaiting implementation.
+- No code changes yet; documentation reflects outstanding task.
