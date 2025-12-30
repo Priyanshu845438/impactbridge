@@ -24,6 +24,16 @@ export class CSRProgrammeService {
     ProgrammeStatus,
   ) as ProgrammeStatus[];
 
+  private readonly allowedStatusTransitions: Record<
+    ProgrammeStatus,
+    ProgrammeStatus[]
+  > = {
+    [ProgrammeStatus.DRAFT]: [ProgrammeStatus.ACTIVE],
+    [ProgrammeStatus.ACTIVE]: [ProgrammeStatus.COMPLETED],
+    [ProgrammeStatus.COMPLETED]: [ProgrammeStatus.ARCHIVED],
+    [ProgrammeStatus.ARCHIVED]: [],
+  };
+
   constructor(private readonly prisma: PrismaService) {}
 
   async create(companyId: string, dto: CreateProgrammeDto) {
@@ -66,6 +76,9 @@ export class CSRProgrammeService {
       startDate: dto.startDate ? new Date(dto.startDate) : programme.startDate,
       endDate: dto.endDate ? new Date(dto.endDate) : programme.endDate,
     };
+
+    const nextStatus = data.status as ProgrammeStatus;
+    this.assertStatusTransition(programme.status, nextStatus);
 
     const updated = await this.prisma.cSRProgramme.update({
       where: { id },
@@ -110,7 +123,7 @@ export class CSRProgrammeService {
     await this.ensureProgrammeOwnership(programmeId, companyId);
     await this.ensureNgo(dto.ngoId);
 
-    await this.ensureNgoAvailable(dto.ngoId, companyId);
+    await this.ensureNgoAvailable(dto.ngoId, companyId, programmeId);
 
     const assignment = await this.prisma.programmeAssignment.upsert({
       where: {
@@ -144,6 +157,76 @@ export class CSRProgrammeService {
     });
 
     return sanitizeEntity(assignment)!;
+  }
+
+  async unassignNgo(
+    programmeId: string,
+    companyId: string,
+    ngoId: string,
+    finalStatus: ProgrammeAssignmentStatus = ProgrammeAssignmentStatus.REJECTED,
+    notes?: string,
+  ) {
+    if (
+      finalStatus !== ProgrammeAssignmentStatus.REJECTED &&
+      finalStatus !== ProgrammeAssignmentStatus.COMPLETED
+    ) {
+      throw new BadRequestException('Unsupported final status for unassignment');
+    }
+
+    await this.ensureProgrammeOwnership(programmeId, companyId);
+
+    const assignment = await this.prisma.programmeAssignment.findUnique({
+      where: {
+        programmeId_ngoId: { programmeId, ngoId },
+      },
+      include: {
+        programme: { select: { companyId: true } },
+        ngo: {
+          select: {
+            id: true,
+            missionStatement: true,
+            user: { select: { id: true, name: true, email: true } },
+          },
+        },
+      },
+    });
+
+    if (!assignment) {
+      throw new NotFoundException('Assignment not found');
+    }
+
+    if (assignment.programme.companyId !== companyId) {
+      throw new ForbiddenException('Assignment belongs to another company');
+    }
+
+    if (
+      assignment.status !== ProgrammeAssignmentStatus.INVITED &&
+      assignment.status !== ProgrammeAssignmentStatus.ACTIVE
+    ) {
+      throw new BadRequestException('Assignment is already closed');
+    }
+
+    const updated = await this.prisma.programmeAssignment.update({
+      where: {
+        programmeId_ngoId: { programmeId, ngoId },
+      },
+      data: {
+        status: finalStatus,
+        notes: notes ?? assignment.notes,
+        updatedAt: new Date(),
+      },
+      include: {
+        ngo: {
+          select: {
+            id: true,
+            missionStatement: true,
+            user: { select: { id: true, name: true, email: true } },
+          },
+        },
+      },
+    });
+
+    return sanitizeEntity(updated)!;
   }
 
   async createMilestone(
@@ -206,6 +289,50 @@ export class CSRProgrammeService {
     return sanitizeEntity(updated)!;
   }
 
+  async getMilestones(programmeId: string, companyId: string) {
+    await this.ensureProgrammeOwnership(programmeId, companyId);
+
+    const milestones = await this.prisma.programmeMilestone.findMany({
+      where: { programmeId, deletedAt: null },
+      orderBy: [
+        { dueDate: 'asc' },
+        { createdAt: 'asc' },
+      ],
+    });
+
+    return sanitizeEntities(milestones);
+  }
+
+  async transitionStatus(
+    programmeId: string,
+    companyId: string,
+    requestedStatus: ProgrammeStatus | string | null | undefined,
+  ) {
+    const programme = await this.ensureProgrammeOwnership(programmeId, companyId);
+
+    const nextStatus = this.normalizeProgrammeStatus(
+      requestedStatus,
+      programme.status,
+    );
+
+    this.assertStatusTransition(programme.status, nextStatus);
+
+    if (nextStatus === programme.status) {
+      return sanitizeEntity(programme)!;
+    }
+
+    const updated = await this.prisma.cSRProgramme.update({
+      where: { id: programmeId },
+      data: { status: nextStatus },
+      include: {
+        milestones: true,
+        assignments: true,
+      },
+    });
+
+    return sanitizeEntity(updated)!;
+  }
+
   private async ensureCompany(companyId: string) {
     const company = await this.prisma.companyProfile.findUnique({
       where: { id: companyId },
@@ -247,7 +374,11 @@ export class CSRProgrammeService {
     }
   }
 
-  private async ensureNgoAvailable(ngoId: string, companyId: string) {
+  private async ensureNgoAvailable(
+    ngoId: string,
+    companyId: string,
+    programmeId?: string,
+  ) {
     const blockingStatuses = this.getBlockingProgrammeStatuses();
     const statusFilter =
       blockingStatuses.length > 0
@@ -267,7 +398,10 @@ export class CSRProgrammeService {
       },
     });
 
-    if (existingAssignment) {
+    if (
+      existingAssignment &&
+      existingAssignment.programmeId !== programmeId
+    ) {
       throw new BadRequestException(
         'NGO is already assigned to an active programme for this company',
       );
@@ -300,8 +434,23 @@ export class CSRProgrammeService {
       return fallback;
     }
 
-    if (this.programmeStatusValues.includes(status as ProgrammeStatus)) {
-      return status as ProgrammeStatus;
+    const normalized = status.toUpperCase();
+
+    const aliasMap: Record<string, ProgrammeStatus> = {
+      SUBMITTED: ProgrammeStatus.DRAFT,
+      APPROVED: ProgrammeStatus.ACTIVE,
+    };
+
+    if (aliasMap[normalized]) {
+      return aliasMap[normalized];
+    }
+
+    const matched = this.programmeStatusValues.find(
+      (value) => value === normalized,
+    );
+
+    if (matched) {
+      return matched;
     }
 
     return fallback;
@@ -314,5 +463,21 @@ export class CSRProgrammeService {
         (ProgrammeStatus as Record<string, ProgrammeStatus | undefined>)[value],
       )
       .filter((value): value is ProgrammeStatus => Boolean(value));
+  }
+
+  private assertStatusTransition(
+    current: ProgrammeStatus,
+    next: ProgrammeStatus,
+  ) {
+    if (current === next) {
+      return;
+    }
+
+    const allowed = this.allowedStatusTransitions[current] ?? [];
+    if (!allowed.includes(next)) {
+      throw new BadRequestException(
+        `Cannot transition programme from ${current} to ${next}`,
+      );
+    }
   }
 }

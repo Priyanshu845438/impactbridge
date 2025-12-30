@@ -50,3 +50,7 @@
 11. CSR Programme Task Deferred
 - Re-confirmed current backend state without applying code changes to ensure no unintended regressions.
 - Ran npm init/test/build to validate the baseline; awaiting clarified implementation scope before proceeding.
+
+12. CSR Programme Workflow Enhancements
+- Added NGO unassignment handling, milestone retrieval, and status transition enforcement within CSRProgrammeService.
+- Introduced comprehensive in-memory integration specs plus expanded unit coverage to validate assignments, milestones, and lifecycle rules.

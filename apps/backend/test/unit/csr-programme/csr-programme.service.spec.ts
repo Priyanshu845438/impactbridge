@@ -1,4 +1,8 @@
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CSRProgrammeService } from '../../../src/csr-programme/csr-programme.service';
 import { PrismaService } from '../../../src/prisma/prisma.service';
 import {
@@ -53,11 +57,34 @@ describe('CSRProgrammeService', () => {
       },
       programmeAssignment: {
         findFirst: jest.fn().mockResolvedValue(null),
+        findUnique: jest.fn().mockResolvedValue({
+          programmeId: 'programme-1',
+          status: ProgrammeAssignmentStatus.ACTIVE,
+          notes: 'Existing notes',
+          programme: { companyId: 'company-1' },
+          ngo: {
+            id: 'ngo-1',
+            missionStatement: 'Mission',
+            user: { id: 'user-1', name: 'NGO', email: 'ngo@example.com' },
+          },
+        }),
         upsert: jest.fn().mockResolvedValue({
           id: 'assignment-1',
           programmeId: 'programme-1',
           ngoId: 'ngo-1',
           status: ProgrammeAssignmentStatus.ACTIVE,
+          ngo: {
+            id: 'ngo-1',
+            missionStatement: 'Mission',
+            user: { id: 'user-1', name: 'NGO', email: 'ngo@example.com' },
+          },
+        }),
+        update: jest.fn().mockResolvedValue({
+          id: 'assignment-1',
+          programmeId: 'programme-1',
+          ngoId: 'ngo-1',
+          status: ProgrammeAssignmentStatus.REJECTED,
+          notes: 'Existing notes',
           ngo: {
             id: 'ngo-1',
             missionStatement: 'Mission',
@@ -90,6 +117,15 @@ describe('CSRProgrammeService', () => {
           status: ProgrammeMilestoneStatus.IN_PROGRESS,
           progress: 25,
         }),
+        findMany: jest.fn().mockResolvedValue([
+          {
+            id: 'milestone-1',
+            programmeId: 'programme-1',
+            title: 'Kickoff',
+            status: ProgrammeMilestoneStatus.PENDING,
+            progress: 0,
+          },
+        ]),
       },
     } as unknown as jest.Mocked<PrismaService>;
 
@@ -175,6 +211,37 @@ describe('CSRProgrammeService', () => {
     });
   });
 
+  describe('unassignNgo', () => {
+    it('updates assignment status when unassigning', async () => {
+      const result = await service.unassignNgo(
+        'programme-1',
+        'company-1',
+        'ngo-1',
+        ProgrammeAssignmentStatus.REJECTED,
+      );
+
+      expect(result.status).toBe(ProgrammeAssignmentStatus.REJECTED);
+      expect(prisma.programmeAssignment.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: {
+            programmeId_ngoId: { programmeId: 'programme-1', ngoId: 'ngo-1' },
+          },
+        }),
+      );
+    });
+
+    it('rejects unsupported terminal status', async () => {
+      await expect(
+        service.unassignNgo(
+          'programme-1',
+          'company-1',
+          'ngo-1',
+          ProgrammeAssignmentStatus.ACTIVE,
+        ),
+      ).rejects.toBeInstanceOf(BadRequestException);
+    });
+  });
+
   describe('createMilestone', () => {
     it('creates milestone', async () => {
       const milestone = await service.createMilestone(
@@ -224,6 +291,78 @@ describe('CSRProgrammeService', () => {
           title: 'Invalid',
         }),
       ).rejects.toBeInstanceOf(ForbiddenException);
+    });
+  });
+
+  describe('getMilestones', () => {
+    it('returns milestones ordered', async () => {
+      const milestones = await service.getMilestones('programme-1', 'company-1');
+
+      expect(milestones).toHaveLength(1);
+      expect(prisma.programmeMilestone.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { programmeId: 'programme-1', deletedAt: null },
+        }),
+      );
+    });
+  });
+
+  describe('transitionStatus', () => {
+    it('moves from draft to active', async () => {
+      prisma.cSRProgramme.findUnique.mockResolvedValueOnce({
+        ...programme,
+        status: ProgrammeStatus.DRAFT,
+        companyId: 'company-1',
+      });
+
+      prisma.cSRProgramme.update.mockResolvedValueOnce({
+        ...programme,
+        status: ProgrammeStatus.ACTIVE,
+        milestones: [],
+        assignments: [],
+      });
+
+      const result = await service.transitionStatus(
+        'programme-1',
+        'company-1',
+        ProgrammeStatus.ACTIVE,
+      );
+
+      expect(result.status).toBe(ProgrammeStatus.ACTIVE);
+      expect(prisma.cSRProgramme.update).toHaveBeenCalled();
+    });
+
+    it('rejects invalid transition', async () => {
+      prisma.cSRProgramme.findUnique.mockResolvedValueOnce({
+        ...programme,
+        status: ProgrammeStatus.DRAFT,
+        companyId: 'company-1',
+      });
+
+      await expect(
+        service.transitionStatus(
+          'programme-1',
+          'company-1',
+          ProgrammeStatus.COMPLETED,
+        ),
+      ).rejects.toBeInstanceOf(BadRequestException);
+    });
+
+    it('maps approved alias to active', async () => {
+      prisma.cSRProgramme.findUnique.mockResolvedValueOnce({
+        ...programme,
+        status: ProgrammeStatus.ACTIVE,
+        companyId: 'company-1',
+      });
+
+      const result = await service.transitionStatus(
+        'programme-1',
+        'company-1',
+        'approved',
+      );
+
+      expect(result.status).toBe(ProgrammeStatus.ACTIVE);
+      expect(prisma.cSRProgramme.update).not.toHaveBeenCalled();
     });
   });
 });
