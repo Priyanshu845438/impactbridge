@@ -30,10 +30,13 @@ export class UsersService {
   }
 
   async findAll(limit = 25, offset = 0) {
+    const take = Number.isFinite(Number(limit)) && Number(limit) > 0 ? Number(limit) : 25;
+    const skip = Number.isFinite(Number(offset)) && Number(offset) >= 0 ? Number(offset) : 0;
+
     const users = await this.prisma.user.findMany({
       where: { deletedAt: null },
-      skip: offset,
-      take: limit,
+      skip,
+      take,
       orderBy: { createdAt: 'desc' },
     });
     return sanitizeEntities(users);

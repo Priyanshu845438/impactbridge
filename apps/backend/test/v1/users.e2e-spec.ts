@@ -9,6 +9,7 @@ const prismaService = {
   user: {
     findUnique: jest.fn(),
     update: jest.fn(),
+    findMany: jest.fn(),
   },
   auditLog: {
     create: jest.fn(),
@@ -37,7 +38,7 @@ describe('V1 User Controller (integration)', () => {
     id: 'user-123',
     name: 'Existing User',
     email: 'existing@example.com',
-    role: 'NGO',
+    role: 'SUPER_ADMIN',
     password: '$2a$12$abcdefghijklmnopqrstuv',
   };
 
@@ -50,6 +51,7 @@ describe('V1 User Controller (integration)', () => {
       ...user,
       ...data,
     }));
+    prismaService.user.findMany.mockResolvedValue([]);
     prismaService.auditLog.create.mockResolvedValue({
       id: 'audit-1',
       userId: user.id,
@@ -100,6 +102,71 @@ describe('V1 User Controller (integration)', () => {
         .expect(({ body }) => {
           expect(body.name).toBe('Updated Name');
         });
+    });
+  });
+
+  describe('GET /api/v1/users', () => {
+    it('applies default pagination of 25 when no params provided', async () => {
+      const seeded = Array.from({ length: 30 }, (_, index) => ({
+        id: `user-${index + 1}`,
+        name: `User ${index + 1}`,
+        email: `user${index + 1}@example.com`,
+        role: 'NGO',
+        password: '$2a$12$abcdefghijklmnopqrstuv',
+        deletedAt: null,
+      }));
+
+      prismaService.user.findMany.mockImplementationOnce(({ where, skip = 0, take }) => {
+        expect(where).toEqual(expect.objectContaining({ deletedAt: null }));
+        expect(skip).toBe(0);
+        expect(take).toBe(25);
+        return seeded.slice(skip, skip + take);
+      });
+
+      const { body } = await request(app.getHttpServer())
+        .get('/api/v1/users')
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200);
+
+      expect(Array.isArray(body)).toBe(true);
+      expect(body).toHaveLength(25);
+    });
+
+    it('excludes soft-deleted users from results', async () => {
+      const deletedUser = {
+        id: 'user-deleted',
+        name: 'Deleted User',
+        email: 'deleted@example.com',
+        role: 'NGO',
+        password: '$2a$12$abcdefghijklmnopqrstuv',
+        deletedAt: new Date().toISOString(),
+      };
+
+      const activeUsers = Array.from({ length: 10 }, (_, index) => ({
+        id: `active-${index + 1}`,
+        name: `Active ${index + 1}`,
+        email: `active${index + 1}@example.com`,
+        role: 'NGO',
+        password: '$2a$12$abcdefghijklmnopqrstuv',
+        deletedAt: null,
+      }));
+
+      prismaService.user.findMany.mockImplementationOnce(({ where, skip = 0, take }) => {
+        expect(where).toEqual(expect.objectContaining({ deletedAt: null }));
+        const nonDeleted = [...activeUsers];
+        expect(nonDeleted.some((user) => user.id === deletedUser.id)).toBe(false);
+        const end = typeof take === 'number' ? skip + take : undefined;
+        return nonDeleted.slice(skip, end);
+      });
+
+      const { body } = await request(app.getHttpServer())
+        .get('/api/v1/users')
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200);
+
+      expect(Array.isArray(body)).toBe(true);
+      expect(body.find((entry: { id: string }) => entry.id === deletedUser.id)).toBeUndefined();
+      expect(body).toHaveLength(activeUsers.length);
     });
   });
 });
