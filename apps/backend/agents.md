@@ -42,3 +42,7 @@
 9. Documentation Audit Completed
 - Reviewed API, architecture, operations references, and Postman collection for accuracy against live backend behaviours.
 - Confirmed guidance already reflects current features, so no content edits were required.
+
+10. CSR Programme Gap Analysis
+- Inspected existing CSR programme service, DTOs, and Prisma models; noted absence of controller wiring in v1 module.
+- Confirmed available unit tests cover service-only logic, with integration tests and CRUD endpoints pending implementation.
