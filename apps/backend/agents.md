@@ -38,3 +38,7 @@
 8. RBAC Coverage Pending
 - RBAC integration tests for controllers (auth, users, approvals, financial) planned but awaiting implementation.
 - No code changes yet; documentation reflects outstanding task.
+
+9. Documentation Audit Completed
+- Reviewed API, architecture, operations references, and Postman collection for accuracy against live backend behaviours.
+- Confirmed guidance already reflects current features, so no content edits were required.
