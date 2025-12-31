@@ -13,20 +13,34 @@ describe('RBAC integration (controllers only)', () => {
   let app: INestApplication;
 
   const authService = {
-    login: jest.fn().mockResolvedValue({ accessToken: 'token', user: { id: 'user-login' } }),
+    login: jest
+      .fn()
+      .mockResolvedValue({ accessToken: 'token', user: { id: 'user-login' } }),
   } satisfies Partial<AuthService> as AuthService;
 
   const usersService = {
-    findById: jest.fn().mockResolvedValue({ id: 'user-123', email: 'user@example.com', role: 'NGO' }),
+    findById: jest.fn().mockResolvedValue({
+      id: 'user-123',
+      email: 'user@example.com',
+      role: 'NGO',
+    }),
     update: jest.fn().mockResolvedValue({ id: 'user-123', name: 'Updated' }),
     getNGOProfileByUserId: jest.fn().mockResolvedValue({ id: 'ngo-profile' }),
   } satisfies Partial<UsersService> as UsersService;
 
   const approvalsService = {
-    approve: jest.fn().mockResolvedValue({ id: 'approval-1', status: 'APPROVED' }),
-    reject: jest.fn().mockResolvedValue({ id: 'approval-1', status: 'REJECTED' }),
-    revoke: jest.fn().mockResolvedValue({ id: 'approval-1', status: 'REVOKED' }),
-    requestApproval: jest.fn().mockResolvedValue({ id: 'approval-1', status: 'PENDING' }),
+    approve: jest
+      .fn()
+      .mockResolvedValue({ id: 'approval-1', status: 'APPROVED' }),
+    reject: jest
+      .fn()
+      .mockResolvedValue({ id: 'approval-1', status: 'REJECTED' }),
+    revoke: jest
+      .fn()
+      .mockResolvedValue({ id: 'approval-1', status: 'REVOKED' }),
+    requestApproval: jest
+      .fn()
+      .mockResolvedValue({ id: 'approval-1', status: 'PENDING' }),
   } satisfies Partial<ApprovalsService> as ApprovalsService;
 
   const financialService = {
@@ -142,7 +156,11 @@ describe('RBAC integration (controllers only)', () => {
       const response = await request(app.getHttpServer())
         .post('/api/v1/financial/ngo/upload')
         .set('Authorization', `Bearer ${tokens.ngo}`)
-        .send({ reportType: 'AUDITED', fiscalYear: '2024-2025', url: 'https://example.com/report.pdf' });
+        .send({
+          reportType: 'AUDITED',
+          fiscalYear: '2024-2025',
+          url: 'https://example.com/report.pdf',
+        });
 
       expect(response.status).toBe(201);
       expect(financialService.uploadReport).toHaveBeenCalled();
@@ -152,7 +170,11 @@ describe('RBAC integration (controllers only)', () => {
       const response = await request(app.getHttpServer())
         .post('/api/v1/financial/ngo/upload')
         .set('Authorization', `Bearer ${tokens.company}`)
-        .send({ reportType: 'AUDITED', fiscalYear: '2024-2025', url: 'https://example.com/report.pdf' });
+        .send({
+          reportType: 'AUDITED',
+          fiscalYear: '2024-2025',
+          url: 'https://example.com/report.pdf',
+        });
 
       expect(response.status).toBe(403);
     });

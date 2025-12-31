@@ -32,3 +32,8 @@
 7. NGO Financial Reports UI Implemented
 - Added mock-driven reports list and upload pages under `/dashboard/ngo/finance/reports` with loading, empty, and error placeholders.
 - Added RTL coverage ensuring list renders correctly and upload flow resets after simulated submission.
+
+8. Stability Cleanup Pending
+- Evaluated admin dashboard analytics lint violations blocking builds.
+- Deferred intrusive fixes to avoid disturbing mock analytics behaviour before API wiring lands.
+- Noted dependency on upcoming analytics refactor for final lint resolution.

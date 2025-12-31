@@ -296,7 +296,10 @@ describe('CSRProgrammeService', () => {
 
   describe('getMilestones', () => {
     it('returns milestones ordered', async () => {
-      const milestones = await service.getMilestones('programme-1', 'company-1');
+      const milestones = await service.getMilestones(
+        'programme-1',
+        'company-1',
+      );
 
       expect(milestones).toHaveLength(1);
       expect(prisma.programmeMilestone.findMany).toHaveBeenCalledWith(

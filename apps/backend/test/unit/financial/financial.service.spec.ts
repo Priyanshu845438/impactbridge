@@ -89,7 +89,9 @@ describe('FinancialService', () => {
 
     it('rejects duplicate period/year combinations', async () => {
       prisma.nGOProfile.findUnique.mockResolvedValue({ id: 'ngo-1' } as any);
-      prisma.financialReport.findFirst.mockResolvedValue({ id: 'existing-report' } as any);
+      prisma.financialReport.findFirst.mockResolvedValue({
+        id: 'existing-report',
+      } as any);
 
       await expect(
         service.uploadReport(
@@ -137,7 +139,9 @@ describe('FinancialService', () => {
     it('throws when NGO profile missing', async () => {
       prisma.nGOProfile.findUnique.mockResolvedValueOnce(null as any);
 
-      await expect(service.getReportsForNGO('missing-ngo')).rejects.toBeInstanceOf(NotFoundException);
+      await expect(
+        service.getReportsForNGO('missing-ngo'),
+      ).rejects.toBeInstanceOf(NotFoundException);
     });
   });
 

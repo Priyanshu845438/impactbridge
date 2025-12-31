@@ -116,12 +116,14 @@ describe('V1 User Controller (integration)', () => {
         deletedAt: null,
       }));
 
-      prismaService.user.findMany.mockImplementationOnce(({ where, skip = 0, take }) => {
-        expect(where).toEqual(expect.objectContaining({ deletedAt: null }));
-        expect(skip).toBe(0);
-        expect(take).toBe(25);
-        return seeded.slice(skip, skip + take);
-      });
+      prismaService.user.findMany.mockImplementationOnce(
+        ({ where, skip = 0, take }) => {
+          expect(where).toEqual(expect.objectContaining({ deletedAt: null }));
+          expect(skip).toBe(0);
+          expect(take).toBe(25);
+          return seeded.slice(skip, skip + take);
+        },
+      );
 
       const { body } = await request(app.getHttpServer())
         .get('/api/v1/users')
@@ -151,13 +153,17 @@ describe('V1 User Controller (integration)', () => {
         deletedAt: null,
       }));
 
-      prismaService.user.findMany.mockImplementationOnce(({ where, skip = 0, take }) => {
-        expect(where).toEqual(expect.objectContaining({ deletedAt: null }));
-        const nonDeleted = [...activeUsers];
-        expect(nonDeleted.some((user) => user.id === deletedUser.id)).toBe(false);
-        const end = typeof take === 'number' ? skip + take : undefined;
-        return nonDeleted.slice(skip, end);
-      });
+      prismaService.user.findMany.mockImplementationOnce(
+        ({ where, skip = 0, take }) => {
+          expect(where).toEqual(expect.objectContaining({ deletedAt: null }));
+          const nonDeleted = [...activeUsers];
+          expect(nonDeleted.some((user) => user.id === deletedUser.id)).toBe(
+            false,
+          );
+          const end = typeof take === 'number' ? skip + take : undefined;
+          return nonDeleted.slice(skip, end);
+        },
+      );
 
       const { body } = await request(app.getHttpServer())
         .get('/api/v1/users')
@@ -165,7 +171,9 @@ describe('V1 User Controller (integration)', () => {
         .expect(200);
 
       expect(Array.isArray(body)).toBe(true);
-      expect(body.find((entry: { id: string }) => entry.id === deletedUser.id)).toBeUndefined();
+      expect(
+        body.find((entry: { id: string }) => entry.id === deletedUser.id),
+      ).toBeUndefined();
       expect(body).toHaveLength(activeUsers.length);
     });
   });

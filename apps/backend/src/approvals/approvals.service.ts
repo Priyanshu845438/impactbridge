@@ -239,12 +239,9 @@ export class ApprovalsService {
         campaignId,
         companyProfileId,
       );
-      await this.enqueueNotification(
-        'NGO_APPROVAL_RESET',
-        hydrated,
-        actorId,
-        { previousStatus: existing.status },
-      );
+      await this.enqueueNotification('NGO_APPROVAL_RESET', hydrated, actorId, {
+        previousStatus: existing.status,
+      });
 
       return reset;
     }
@@ -270,9 +267,14 @@ export class ApprovalsService {
       campaignId,
       companyProfileId,
     );
-    await this.enqueueNotification('NGO_APPROVAL_REQUESTED', hydrated, actorId, {
-      remarks: remarks ?? null,
-    });
+    await this.enqueueNotification(
+      'NGO_APPROVAL_REQUESTED',
+      hydrated,
+      actorId,
+      {
+        remarks: remarks ?? null,
+      },
+    );
 
     return created;
   }

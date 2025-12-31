@@ -170,7 +170,9 @@ export class CSRProgrammeService {
       finalStatus !== ProgrammeAssignmentStatus.REJECTED &&
       finalStatus !== ProgrammeAssignmentStatus.COMPLETED
     ) {
-      throw new BadRequestException('Unsupported final status for unassignment');
+      throw new BadRequestException(
+        'Unsupported final status for unassignment',
+      );
     }
 
     await this.ensureProgrammeOwnership(programmeId, companyId);
@@ -294,10 +296,7 @@ export class CSRProgrammeService {
 
     const milestones = await this.prisma.programmeMilestone.findMany({
       where: { programmeId, deletedAt: null },
-      orderBy: [
-        { dueDate: 'asc' },
-        { createdAt: 'asc' },
-      ],
+      orderBy: [{ dueDate: 'asc' }, { createdAt: 'asc' }],
     });
 
     return sanitizeEntities(milestones);
@@ -308,7 +307,10 @@ export class CSRProgrammeService {
     companyId: string,
     requestedStatus: ProgrammeStatus | string | null | undefined,
   ) {
-    const programme = await this.ensureProgrammeOwnership(programmeId, companyId);
+    const programme = await this.ensureProgrammeOwnership(
+      programmeId,
+      companyId,
+    );
 
     const nextStatus = this.normalizeProgrammeStatus(
       requestedStatus,
@@ -381,9 +383,7 @@ export class CSRProgrammeService {
   ) {
     const blockingStatuses = this.getBlockingProgrammeStatuses();
     const statusFilter =
-      blockingStatuses.length > 0
-        ? blockingStatuses
-        : [ProgrammeStatus.ACTIVE];
+      blockingStatuses.length > 0 ? blockingStatuses : [ProgrammeStatus.ACTIVE];
 
     const existingAssignment = await this.prisma.programmeAssignment.findFirst({
       where: {
@@ -398,10 +398,7 @@ export class CSRProgrammeService {
       },
     });
 
-    if (
-      existingAssignment &&
-      existingAssignment.programmeId !== programmeId
-    ) {
+    if (existingAssignment && existingAssignment.programmeId !== programmeId) {
       throw new BadRequestException(
         'NGO is already assigned to an active programme for this company',
       );
@@ -459,8 +456,11 @@ export class CSRProgrammeService {
   private getBlockingProgrammeStatuses(): ProgrammeStatus[] {
     const preferred = ['ACTIVE', 'PENDING', 'DRAFT'] as const;
     return preferred
-      .map((value) =>
-        (ProgrammeStatus as Record<string, ProgrammeStatus | undefined>)[value],
+      .map(
+        (value) =>
+          (ProgrammeStatus as Record<string, ProgrammeStatus | undefined>)[
+            value
+          ],
       )
       .filter((value): value is ProgrammeStatus => Boolean(value));
   }
