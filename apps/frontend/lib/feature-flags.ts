@@ -3,6 +3,7 @@ const DEFAULT_FLAGS = {
   REALTIME_NOTIFICATIONS: false,
   SERVER_NAVIGATION: false,
   API_AUTH: false,
+  API_PROGRAMME: false,
 } as const;
 
 export type FeatureFlagKey = keyof typeof DEFAULT_FLAGS;
@@ -23,6 +24,7 @@ export function getFeatureFlags(env: Record<string, string | undefined> = proces
       parseFlag(env.NEXT_PUBLIC_FLAG_REALTIME_NOTIFICATIONS) ?? DEFAULT_FLAGS.REALTIME_NOTIFICATIONS,
     SERVER_NAVIGATION: parseFlag(env.NEXT_PUBLIC_FLAG_SERVER_NAVIGATION) ?? DEFAULT_FLAGS.SERVER_NAVIGATION,
     API_AUTH: parseFlag(env.NEXT_PUBLIC_FLAG_API_AUTH) ?? DEFAULT_FLAGS.API_AUTH,
+    API_PROGRAMME: parseFlag(env.NEXT_PUBLIC_FLAG_API_PROGRAMME) ?? DEFAULT_FLAGS.API_PROGRAMME,
   };
 }
 
@@ -43,4 +45,5 @@ export const FEATURE_FLAG_DESCRIPTORS: Record<FeatureFlagKey, string> = {
   REALTIME_NOTIFICATIONS: 'Enable websocket-driven notifications.',
   SERVER_NAVIGATION: 'Enable server-driven navigation menus.',
   API_AUTH: 'Route login & register flows through backend auth endpoints.',
+  API_PROGRAMME: 'Enable CSR Programme API integration for company dashboards.',
 };

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Filter, Search as SearchIcon, SlidersHorizontal, Tags } from "lucide-react";
+import { AlertTriangle, Filter, Search as SearchIcon, SlidersHorizontal, Tags } from "lucide-react";
 
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 
-import { programmes, Programme } from "./mock-data";
+import { getFeatureFlags } from "@/lib/feature-flags";
+import { useCompanyProgrammes } from "@/lib/hooks/use-company-programmes";
+import type { ProgrammeListItemDto } from "api-contracts";
+import { programmes as mockProgrammes, Programme } from "./mock-data";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface FilterState {
   category: string;
@@ -35,6 +39,12 @@ export default function CompanyProgrammeDirectoryPage() {
     query: "",
   });
   const [isLoading] = useState(false);
+  const { API_PROGRAMME } = useMemo(() => getFeatureFlags(), []);
+  const {
+    data: apiProgrammes,
+    isLoading: isApiLoading,
+    isError: isApiError,
+  } = useCompanyProgrammes({ enabled: API_PROGRAMME });
 
   const debouncedQuery = useDebouncedValue(filters.query, 200);
 
@@ -49,8 +59,9 @@ export default function CompanyProgrammeDirectoryPage() {
 
   const filteredProgrammes = useMemo(() => {
     const search = debouncedQuery?.trim().toLowerCase() ?? "";
+    const sourceProgrammes = API_PROGRAMME && !isApiError ? apiProgrammes ?? [] : mockProgrammes;
 
-    return programmes.filter((programme) => {
+    return sourceProgrammes.filter((programme) => {
       const matchesCategory = filters.category === "All" || programme.category === filters.category;
       const matchesStatus = filters.status === "All" || programme.status === filters.status;
       const matchesRegion = filters.region === "All" || programme.region === filters.region;
@@ -63,7 +74,7 @@ export default function CompanyProgrammeDirectoryPage() {
 
       return matchesCategory && matchesStatus && matchesRegion && matchesSearch;
     });
-  }, [debouncedQuery, filters.category, filters.region, filters.status]);
+  }, [API_PROGRAMME, apiProgrammes, debouncedQuery, filters.category, filters.region, filters.status, isApiError]);
 
   const handleFilterChange = <K extends keyof FilterState>(key: K, value: FilterState[K]) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -138,8 +149,10 @@ export default function CompanyProgrammeDirectoryPage() {
         </Button>
       </div>
 
-      {isLoading ? (
+      {API_PROGRAMME && isApiLoading ? (
         <ProgrammeSkeletonGrid />
+      ) : API_PROGRAMME && isApiError ? (
+        <ErrorBanner />
       ) : filteredProgrammes.length === 0 ? (
         <EmptyState query={debouncedQuery} />
       ) : (
@@ -176,7 +189,9 @@ function ProgrammeSkeletonGrid() {
   );
 }
 
-function ProgrammeGrid({ programmes }: { programmes: Programme[] }) {
+type ProgrammeListItem = Programme | ProgrammeListItemDto;
+
+function ProgrammeGrid({ programmes }: { programmes: ProgrammeListItem[] }) {
   return (
     <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
       {programmes.map((programme) => (
@@ -186,51 +201,60 @@ function ProgrammeGrid({ programmes }: { programmes: Programme[] }) {
   );
 }
 
-function ProgrammeCard({ programme }: { programme: Programme }) {
-  const badgeTone =
-    programme.status === "Active" ? "bg-emerald-500/10 text-emerald-600" : programme.status === "Completed" ? "bg-slate-500/10 text-slate-600" : "bg-amber-500/10 text-amber-600";
+function ErrorBanner() {
+  return (
+    <Alert variant="destructive" className="rounded-3xl border border-rose-200 bg-rose-50 text-rose-700">
+    <div className="flex items-start gap-3">
+      <span className="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-rose-100 text-rose-600">
+        <AlertTriangle className="h-3.5 w-3.5" />
+      </span>
+      <div className="space-y-1">
+        <AlertTitle className="text-sm font-semibold">Programme data unavailable</AlertTitle>
+        <AlertDescription className="text-xs leading-5 text-rose-600/90">
+          We couldn&apos;t load CSR programmes from the API right now. You can continue browsing the mock catalogue or try again later.
+        </AlertDescription>
+      </div>
+    </div>
+  </Alert>
+  );
+}
+
+function ProgrammeCard({ programme }: { programme: ProgrammeListItem }) {
+  const badgeTone = normaliseStatusTone(programme.status);
+  const bannerUrl = getProgrammeBanner(programme);
+  const { ngoName, category, region, highlights } = normaliseProgrammeMeta(programme);
+  const { title, description } = normaliseProgrammeCopy(programme);
 
   return (
     <Card className="flex h-full flex-col overflow-hidden rounded-4xl border border-slate-200 bg-white/90 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900/70">
       <div className="relative h-40 w-full bg-slate-200">
-        <Image
-          src={programme.bannerUrl}
-          alt={programme.name}
-          width={720}
-          height={320}
-          className="h-full w-full object-cover"
-        />
+        <Image src={bannerUrl} alt={title} width={720} height={320} className="h-full w-full object-cover" />
         <Badge className={`absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-semibold ${badgeTone}`}>
-          {programme.status}
+          {normaliseStatusLabel(programme.status)}
         </Badge>
       </div>
       <div className="flex flex-1 flex-col gap-4 p-5">
         <div className="space-y-2">
-          <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">{programme.name}</h3>
-          <p className="text-sm text-slate-600 dark:text-slate-300">{programme.summary}</p>
+          <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">{title}</h3>
+          <p className="text-sm text-slate-600 dark:text-slate-300">{description}</p>
         </div>
         <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-xs font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-            {programme.ngo.name
-              .split(" ")
-              .map((word) => word[0])
-              .join("")
-              .slice(0, 2)
-              .toUpperCase()}
+            {deriveInitials(ngoName)}
           </span>
-          <span>{programme.ngo.name}</span>
+          <span>{ngoName}</span>
         </div>
         <div className="flex flex-wrap gap-2 text-xs text-slate-500 dark:text-slate-400">
           <Badge variant="outline" className="gap-1 border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300">
             <Tags className="h-3 w-3" />
-            {programme.category}
+            {category}
           </Badge>
           <Badge variant="outline" className="border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300">
-            {programme.region}
+            {region}
           </Badge>
-          {programme.sdgs.map((goal) => (
-            <Badge key={goal} variant="soft" className="bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-              {goal}
+          {highlights.map((highlight) => (
+            <Badge key={highlight} variant="soft" className="bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+              {highlight}
             </Badge>
           ))}
         </div>

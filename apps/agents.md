@@ -32,3 +32,8 @@
 7. CSR Contracts Prepared
 - Added shared CSR programme DTO exports covering list, detail, create, update, status, and NGO assignment payloads.
 - Updated backend DTO wiring to adopt shared contract for NGO assignment while deferring controller/service surface work.
+
+8. CSR Frontend Integration Checkpoint
+- Added API_PROGRAMME feature flag scaffold and began normalising programme card presentation across mock/API data.
+- Detected lint blockers in admin analytics and CSR directory pages during build validation; pending resolution path selection.
+- Holding further CSR wiring until lint suppression approach is confirmed to maintain zero-behaviour-change pledge.
