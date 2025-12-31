@@ -28,3 +28,7 @@
 6. Lint Suppression Safeguard
 - Temporary scoped lint suppression applied to admin analytics block to unblock build. No behaviour change. This will be removed once analytics integration is completed.
 - Monitoring admin analytics integration progress to restore full lint enforcement once underlying helpers are wired.
+
+7. CSR Contracts Prepared
+- Added shared CSR programme DTO exports covering list, detail, create, update, status, and NGO assignment payloads.
+- Updated backend DTO wiring to adopt shared contract for NGO assignment while deferring controller/service surface work.
