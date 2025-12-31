@@ -27,9 +27,25 @@ interface FilterState {
   query: string;
 }
 
-const statusOptions: Array<FilterState["status"] | "All"> = ["All", "Active", "Completed", "Upcoming"];
+const statusOptions: Array<FilterState["status"] | "All"> = ["All", "Active", "Completed", "Upcoming", "Draft", "Submitted", "Approved"];
 const categoryOptions = ["All", "Education", "Healthcare", "Environment", "Livelihood", "Infrastructure", "Agriculture"];
 const regionOptions = ["All", "Maharashtra", "Uttarakhand", "Tamil Nadu", "Gujarat", "Rajasthan", "Madhya Pradesh"];
+
+type ProgrammeSource = Programme | ProgrammeListItemDto;
+
+interface ProgrammeCardData {
+  id: string;
+  title: string;
+  description: string;
+  statusLabel: string;
+  badgeToneClass: string;
+  category: string;
+  region: string;
+  ngoName: string;
+  highlights: string[];
+  bannerUrl: string;
+  searchHaystack: string;
+}
 
 export default function CompanyProgrammeDirectoryPage() {
   const [filters, setFilters] = useState<FilterState>({
@@ -38,7 +54,6 @@ export default function CompanyProgrammeDirectoryPage() {
     region: "All",
     query: "",
   });
-  const [isLoading] = useState(false);
   const { API_PROGRAMME } = useMemo(() => getFeatureFlags(), []);
   const {
     data: apiProgrammes,
@@ -59,18 +74,14 @@ export default function CompanyProgrammeDirectoryPage() {
 
   const filteredProgrammes = useMemo(() => {
     const search = debouncedQuery?.trim().toLowerCase() ?? "";
-    const sourceProgrammes = API_PROGRAMME && !isApiError ? apiProgrammes ?? [] : mockProgrammes;
+    const sourceProgrammes: ProgrammeSource[] = API_PROGRAMME && !isApiError ? apiProgrammes ?? [] : mockProgrammes;
+    const normalised = sourceProgrammes.map(toProgrammeCardData);
 
-    return sourceProgrammes.filter((programme) => {
+    return normalised.filter((programme) => {
       const matchesCategory = filters.category === "All" || programme.category === filters.category;
-      const matchesStatus = filters.status === "All" || programme.status === filters.status;
+      const matchesStatus = filters.status === "All" || programme.statusLabel === filters.status;
       const matchesRegion = filters.region === "All" || programme.region === filters.region;
-      const matchesSearch =
-        search.length === 0 ||
-        [programme.name, programme.ngo.name, programme.category, programme.sdgs.join(" ")]
-          .join(" ")
-          .toLowerCase()
-          .includes(search);
+      const matchesSearch = search.length === 0 || programme.searchHaystack.includes(search);
 
       return matchesCategory && matchesStatus && matchesRegion && matchesSearch;
     });
@@ -189,9 +200,7 @@ function ProgrammeSkeletonGrid() {
   );
 }
 
-type ProgrammeListItem = Programme | ProgrammeListItemDto;
-
-function ProgrammeGrid({ programmes }: { programmes: ProgrammeListItem[] }) {
+function ProgrammeGrid({ programmes }: { programmes: ProgrammeCardData[] }) {
   return (
     <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
       {programmes.map((programme) => (
@@ -219,18 +228,15 @@ function ErrorBanner() {
   );
 }
 
-function ProgrammeCard({ programme }: { programme: ProgrammeListItem }) {
-  const badgeTone = normaliseStatusTone(programme.status);
-  const bannerUrl = getProgrammeBanner(programme);
-  const { ngoName, category, region, highlights } = normaliseProgrammeMeta(programme);
-  const { title, description } = normaliseProgrammeCopy(programme);
+function ProgrammeCard({ programme }: { programme: ProgrammeCardData }) {
+  const { statusLabel, badgeToneClass, bannerUrl, title, description, ngoName, category, region, highlights } = programme;
 
   return (
     <Card className="flex h-full flex-col overflow-hidden rounded-4xl border border-slate-200 bg-white/90 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900/70">
       <div className="relative h-40 w-full bg-slate-200">
         <Image src={bannerUrl} alt={title} width={720} height={320} className="h-full w-full object-cover" />
-        <Badge className={`absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-semibold ${badgeTone}`}>
-          {normaliseStatusLabel(programme.status)}
+        <Badge className={`absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-semibold ${badgeToneClass}`}>
+          {statusLabel}
         </Badge>
       </div>
       <div className="flex flex-1 flex-col gap-4 p-5">
@@ -284,3 +290,94 @@ function EmptyState({ query }: { query: string }) {
     </Card>
   );
 }
+
+function toProgrammeCardData(programme: ProgrammeSource): ProgrammeCardData {
+  if (isMockProgramme(programme)) {
+    const statusLabel = programme.status;
+    const badgeToneClass = normaliseStatusTone(statusLabel);
+    const searchHaystack = [programme.name, programme.summary, programme.ngo.name, programme.category, programme.region, programme.sdgs.join(" ")]
+      .join(" ")
+      .toLowerCase();
+
+    return {
+      id: programme.id,
+      title: programme.name,
+      description: programme.summary,
+      statusLabel,
+      badgeToneClass,
+      category: programme.category,
+      region: programme.region,
+      ngoName: programme.ngo.name,
+      highlights: programme.sdgs,
+      bannerUrl: programme.bannerUrl,
+      searchHaystack,
+    };
+  }
+
+  const statusLabel = PROGRAMME_STATUS_LABELS[programme.status] ?? programme.status;
+  const badgeToneClass = normaliseStatusTone(statusLabel);
+  const ngoName = programme.assignments?.[0]?.ngo?.name ?? "Partner NGO";
+  const highlights = programme.milestones?.map((milestone) => milestone.title) ?? [];
+  const description = programme.description ?? "Programme overview coming soon.";
+  const category = programme.assignments?.[0]?.ngo?.missionStatement ? "Impact" : "General";
+  const region = programme.assignments?.[0]?.ngo?.missionStatement ? "Pan India" : "Multiple regions";
+  const bannerUrl = inferProgrammeBanner(programme, ngoName);
+  const searchHaystack = [programme.title, description, ngoName, category, region, highlights.join(" ")].join(" ").toLowerCase();
+
+  return {
+    id: programme.id,
+    title: programme.title,
+    description,
+    statusLabel,
+    badgeToneClass,
+    category,
+    region,
+    ngoName,
+    highlights,
+    bannerUrl,
+    searchHaystack,
+  };
+}
+
+function inferProgrammeBanner(programme: ProgrammeListItemDto, ngoName: string) {
+  const base = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80";
+  const mission = programme.assignments?.[0]?.ngo?.missionStatement;
+  if (!mission) return base;
+  const encoded = encodeURIComponent(mission.replace(/\s+/g, " "));
+  return `https://source.unsplash.com/featured/720x320/?csr,impact,${encoded}`;
+}
+
+function normaliseStatusTone(status: string) {
+  switch (status.toLowerCase()) {
+    case "active":
+      return "bg-emerald-500/10 text-emerald-600";
+    case "completed":
+      return "bg-slate-500/10 text-slate-600";
+    case "upcoming":
+    case "draft":
+    case "submitted":
+      return "bg-amber-500/10 text-amber-600";
+    default:
+      return "bg-slate-500/10 text-slate-600";
+  }
+}
+
+function deriveInitials(name: string) {
+  if (!name?.trim()) return "NG";
+  const parts = name.trim().split(/\s+/).slice(0, 2);
+  const initials = parts.map((part) => part[0] ?? "").join("").toUpperCase();
+  return initials || "NG";
+}
+
+function isMockProgramme(programme: ProgrammeSource): programme is Programme {
+  return (programme as Programme).summary !== undefined;
+}
+
+const PROGRAMME_STATUS_LABELS: Record<string, string> = {
+  DRAFT: "Draft",
+  SUBMITTED: "Submitted",
+  APPROVED: "Approved",
+  ACTIVE: "Active",
+  COMPLETED: "Completed",
+  ARCHIVED: "Archived",
+};

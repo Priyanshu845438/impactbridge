@@ -1,7 +1,7 @@
 "use client";
 
 import { notFound, useParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -26,8 +26,10 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { programmes } from "../mock-data";
+import { programmes, Programme } from "../mock-data";
 import { cn } from "@/lib/utils";
+import { getFeatureFlags } from "@/lib/feature-flags";
+import { useProgrammeDetail } from "@/lib/hooks/use-company-programmes";
 
 const statusTone: Record<string, string> = {
   Active: "bg-emerald-500/10 text-emerald-600",
@@ -37,10 +39,21 @@ const statusTone: Record<string, string> = {
 
 export default function ProgrammeDetailPage() {
   const params = useParams<{ id: string }>();
-  const [isLoading] = useState(false);
-  const [hasError] = useState(false);
+  const { API_PROGRAMME } = useMemo(() => getFeatureFlags(), []);
 
-  const programme = useMemo(() => programmes.find((item) => item.id === params.id), [params.id]);
+  const {
+    data: apiProgramme,
+    isLoading: isApiLoading,
+    isError: isApiError,
+  } = useProgrammeDetail({ id: params.id, enabled: API_PROGRAMME });
+
+  const programme = useMemo(() => {
+    if (API_PROGRAMME && !isApiError && apiProgramme) {
+      return adaptProgrammeDetail(apiProgramme);
+    }
+
+    return programmes.find((item) => item.id === params.id);
+  }, [API_PROGRAMME, apiProgramme, isApiError, params.id]);
 
   const relatedProgrammes = useMemo(() => {
     if (!programme) return [];
@@ -63,9 +76,12 @@ export default function ProgrammeDetailPage() {
     ];
   }, [programme]);
 
-  if (!programme) {
+  if (!programme && !isApiLoading) {
     return notFound();
   }
+
+  const isLoading = API_PROGRAMME && isApiLoading;
+  const hasError = API_PROGRAMME && isApiError && !apiProgramme;
 
   return (
     <div className="space-y-8 pb-16">
@@ -86,7 +102,7 @@ export default function ProgrammeDetailPage() {
   );
 }
 
-function HeaderSection({ programme }: { programme: (typeof programmes)[number] }) {
+function HeaderSection({ programme }: { programme: Programme }) {
   return (
     <header className="flex flex-col gap-4 rounded-4xl border border-slate-200 bg-white/90 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70 lg:flex-row lg:items-center lg:justify-between">
       <div className="space-y-3">
@@ -107,7 +123,7 @@ function HeaderSection({ programme }: { programme: (typeof programmes)[number] }
   );
 }
 
-function HeroSection({ programme }: { programme: (typeof programmes)[number] }) {
+function HeroSection({ programme }: { programme: Programme }) {
   return (
     <section className="overflow-hidden rounded-4xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
       <div className="relative h-60 w-full">
@@ -152,13 +168,7 @@ function StatPill({
   );
 }
 
-function MainContent({
-  programme,
-  relatedProgrammes,
-}: {
-  programme: (typeof programmes)[number];
-  relatedProgrammes: typeof programmes;
-}) {
+function MainContent({ programme, relatedProgrammes }: { programme: Programme; relatedProgrammes: Programme[] }) {
   return (
     <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
       <Card className="space-y-6 rounded-4xl border border-slate-200 bg-white/90 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">

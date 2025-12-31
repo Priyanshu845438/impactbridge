@@ -37,3 +37,8 @@
 - Added API_PROGRAMME feature flag scaffold and began normalising programme card presentation across mock/API data.
 - Detected lint blockers in admin analytics and CSR directory pages during build validation; pending resolution path selection.
 - Holding further CSR wiring until lint suppression approach is confirmed to maintain zero-behaviour-change pledge.
+
+9. CSR Validation Blocked
+- Attempted end-to-end CSR build/test cycle but frontend lint still fails on unused analytics/programme helpers.
+- Backend build currently broken after switching to local api-contracts path; TypeScript can’t resolve generated exports.
+- Further validation paused until lint suppression path and api-contracts resolution strategy are finalised.
