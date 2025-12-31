@@ -54,3 +54,7 @@
 12. CSR Programme Workflow Enhancements
 - Added NGO unassignment handling, milestone retrieval, and status transition enforcement within CSRProgrammeService.
 - Introduced comprehensive in-memory integration specs plus expanded unit coverage to validate assignments, milestones, and lifecycle rules.
+
+13. CSR Programme Frontend Coordination
+- Reassessed CSR programme backend readiness to align with upcoming frontend hook integration requirements.
+- Deferred further changes until controllers and contracts are confirmed, keeping current APIs stable for dependent teams.
