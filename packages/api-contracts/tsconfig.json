@@ -3,7 +3,6 @@
     "composite": true,
     "declaration": true,
     "declarationMap": false,
-    "emitDeclarationOnly": true,
     "outDir": "dist",
     "rootDir": "src",
     "module": "ESNext",

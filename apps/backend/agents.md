@@ -62,3 +62,9 @@
 14. CSR Programme DTO Audit
 - Reviewed shared CSR programme DTO usage across backend and frontend; found no duplicate runtime types to consolidate yet.
 - Attempted build verification but frontend lint errors in admin dashboard (pre-existing) prevented completing the shared alignment task.
+- Awaiting lint cleanup or feature-flag guidance before unifying DTO imports across apps.
+
+15. api-contracts Import Resolution
+- Rebuilt shared `@impactbridge/api-contracts` package with compiled JS and type outputs for backend consumption.
+- Updated backend path aliases and csr-programme DTO import to consume the published namespace cleanly.
+- Verified `npm run build` and `npm run test` succeed with zero behavioural changes.

@@ -17,8 +17,8 @@
     "baseUrl": "./",
     "paths": {
       "prisma/generated": ["prisma/generated"],
-      "api-contracts": ["../../packages/api-contracts/src"],
-      "api-contracts/*": ["../../packages/api-contracts/src/*"]
+      "@impactbridge/api-contracts": ["../../packages/api-contracts/dist/index.js"],
+      "@impactbridge/api-contracts/*": ["../../packages/api-contracts/dist/*"]
     },
 
     "incremental": true,
