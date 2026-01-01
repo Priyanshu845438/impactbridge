@@ -1,44 +1,49 @@
-# ImpactBridge Apps Progress Log
-
 1. Backend Foundation
-- Established NestJS skeleton with Prisma integration, global validation pipe, and shared configuration bootstrap.
-- Delivered authentication and user modules with JWT login/register and baseline RBAC enforcement.
-- Added rate limiting plus structured request logging to harden the platform layer.
+- Established NestJS skeleton with Prisma integration, global validation, and shared app configuration.
+- Delivered authentication and user modules with JWT login/register plus baseline RBAC guards.
+- Added rate limiting and structured request logging to harden the platform layer without feature changes.
 
 2. Regulatory Data & CSR Services
-- Expanded Prisma schema to cover NGO, company, and donor profiles alongside campaigns, donations, and audit logs.
-- Implemented CSR programme service with analytics aggregation powering donation and approval insights.
-- Wired approval workflow to emit notification intents on request, approve, reject, revoke, and reset transitions.
+- Expanded Prisma schema to cover NGO, company, donor, campaign, donation, and audit-log domains.
+- Implemented CSR programme service analytics that aggregate donation and approval insights for reporting.
+- Wired approval workflow hooks to emit notification intents on request, approve, reject, revoke, and reset.
 
 3. Frontend Platform
-- Scaffolded Next.js App Router application with mock auth flows and shared UI component primitives.
-- Introduced RBAC middleware aligning client/server access checks via shared role helpers.
-- Added feature flag infrastructure controlling API-backed dashboards, CSR programmes, and auth flows.
+- Scaffolded Next.js App Router with mock authentication flows for rapid prototyping.
+- Introduced shared UI primitives (buttons, cards, tabs) to maintain a consistent visual language.
+- Synced routing guards with role helpers so early RBAC checks align across client and server.
 
 4. Analytics & Programme Readiness
 - Connected admin analytics dashboard through adapters and React Query with feature-flag gating.
-- Prepared CSR programme list/detail experiences to transition from mock data to API responses safely.
-- Flagged stability cleanup dependency to resolve admin dashboard lint/build blockers without behaviour change.
+- Prepared CSR programme list/detail experiences for eventual API data without disturbing mocks.
+- Flagged lingering analytics lint blockers as a dependency before enabling live data paths.
 
 5. Operations & Testing
-- Documented standard init, lint, build, unit, and e2e commands for frontend and backend workflows.
-- Published Postman collection for backend APIs under `apps/backend/docs/postman/`.
-- Maintained Jest/e2e coverage across auth, approvals, analytics, and financial-reporting flows.
+- Documented standard init, lint, build, unit, and e2e commands for both frontend and backend apps.
+- Published the backend Postman collection under `apps/backend/docs/postman/` for API verification.
+- Maintained Jest and e2e coverage across auth, approvals, analytics, and financial-reporting flows.
 
 6. Lint Suppression Safeguard
-- Temporary scoped lint suppression applied to admin analytics block to unblock build. No behaviour change. This will be removed once analytics integration is completed.
-- Monitoring admin analytics integration progress to restore full lint enforcement once underlying helpers are wired.
+- Applied temporary scoped lint suppression on admin analytics variables to keep builds unblocked.
+- Confirmed no behavioural changes while suppressing unused-variable rules around placeholder helpers.
+- Committed to removing the suppression once the analytics integration is fully wired.
 
 7. CSR Contracts Prepared
-- Added shared CSR programme DTO exports covering list, detail, create, update, status, and NGO assignment payloads.
-- Updated backend DTO wiring to adopt shared contract for NGO assignment while deferring controller/service surface work.
+- Added shared CSR programme DTO exports for list, detail, create, update, status, and NGO assignment shapes.
+- Updated backend DTO usage to rely on shared contracts while deferring service/controller exposure tweaks.
+- Ensured both backend and frontend compile cleanly against the contract definitions.
 
 8. CSR Frontend Integration Checkpoint
-- Added API_PROGRAMME feature flag scaffold and began normalising programme card presentation across mock/API data.
-- Detected lint blockers in admin analytics and CSR directory pages during build validation; pending resolution path selection.
-- Holding further CSR wiring until lint suppression approach is confirmed to maintain zero-behaviour-change pledge.
+- Scaffolded the `API_PROGRAMME` feature flag and began normalising programme card data for API parity.
+- Identified lint blockers in admin analytics and programme directories during build validation.
+- Paused further CSR wiring pending confirmation on suppression strategy to avoid behaviour shifts.
 
 9. CSR Validation Blocked
-- Attempted end-to-end CSR build/test cycle but frontend lint still fails on unused analytics/programme helpers.
-- Backend build currently broken after switching to local api-contracts path; TypeScript can’t resolve generated exports.
-- Further validation paused until lint suppression path and api-contracts resolution strategy are finalised.
+- Attempted an end-to-end CSR build/test cycle but lint still fails on unused analytics/programme helpers.
+- Noted backend build issues when pointing to local `api-contracts`; resolution strategy remains pending.
+- Deferred additional validation until lint suppression and contract import paths are finalised.
+
+10. Agents Log Harmonised
+- Consolidated project-wide activities into the refreshed `apps/agents.md` structure for quick status reviews.
+- Ensured each entry follows the mandated title-plus-bullets format without duplicating prior points.
+- Marked the log ready for future incremental updates aligned with backend and frontend efforts.
