@@ -68,3 +68,8 @@
 - Rebuilt shared `@impactbridge/api-contracts` package with compiled JS and type outputs for backend consumption.
 - Updated backend path aliases and csr-programme DTO import to consume the published namespace cleanly.
 - Verified `npm run build` and `npm run test` succeed with zero behavioural changes.
+
+16. CSR Programme Controller Pending
+- Reviewed controller wiring requirements and confirmed service lacks a dedicated fetch-by-id path today.
+- Paused controller scaffolding to avoid introducing list-filter workarounds that would change current semantics.
+- Ready to proceed once a service-level detail method is added and response contracts are confirmed.
