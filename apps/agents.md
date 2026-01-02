@@ -47,3 +47,8 @@
 - Consolidated project-wide activities into the refreshed `apps/agents.md` structure for quick status reviews.
 - Ensured each entry follows the mandated title-plus-bullets format without duplicating prior points.
 - Marked the log ready for future incremental updates aligned with backend and frontend efforts.
+
+11. CSR Contracts Revalidated
+- Confirmed existing CSR programme response DTOs in `@impactbridge/api-contracts` already cover list/detail/assignment use cases.
+- Re-ran the package build to verify shared contracts compile cleanly without modifications.
+- Ready to proceed with backend service alignment using the established contract shapes.
