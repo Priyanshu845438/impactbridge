@@ -129,6 +129,10 @@ export class CSRProgrammeService {
     return sanitized.map((programme) => toProgrammeListItemDto(programme));
   }
 
+  async getByIdForCompany(companyId: string, programmeId: string) {
+    return this.ensureProgrammeOwnership(programmeId, companyId);
+  }
+
   async assignNgo(programmeId: string, companyId: string, dto: AssignNgoDto) {
     await this.ensureProgrammeOwnership(programmeId, companyId);
     await this.ensureNgo(dto.ngoId);
