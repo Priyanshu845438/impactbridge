@@ -78,3 +78,7 @@
 - Added mapper helpers so CSRProgrammeService returns shared DTO contracts for create, update, list, assignment, and status flows.
 - Ensured sanitisation still strips sensitive fields while preserving previous field values and formats.
 - Verified npm init/test/build all pass, confirming behaviour is unchanged while responses now match `@impactbridge/api-contracts`.
+
+18. CSR Controller Wiring Blocked
+- Attempted to scaffold CSR programme controller but service lacks the unscoped list/detail/create signatures the routes require.
+- Paused changes to avoid altering service behaviour without confirmation on company-scoped method usage or new APIs.
