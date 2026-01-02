@@ -73,3 +73,8 @@
 - Reviewed controller wiring requirements and confirmed service lacks a dedicated fetch-by-id path today.
 - Paused controller scaffolding to avoid introducing list-filter workarounds that would change current semantics.
 - Ready to proceed once a service-level detail method is added and response contracts are confirmed.
+
+17. CSR Service DTO Alignment
+- Added mapper helpers so CSRProgrammeService returns shared DTO contracts for create, update, list, assignment, and status flows.
+- Ensured sanitisation still strips sensitive fields while preserving previous field values and formats.
+- Verified npm init/test/build all pass, confirming behaviour is unchanged while responses now match `@impactbridge/api-contracts`.

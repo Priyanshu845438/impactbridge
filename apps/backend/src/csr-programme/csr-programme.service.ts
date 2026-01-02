@@ -17,6 +17,13 @@ import { AssignNgoDto } from './dto/assign-ngo.dto';
 import { CreateMilestoneDto } from './dto/create-milestone.dto';
 import { UpdateMilestoneDto } from './dto/update-milestone.dto';
 import { sanitizeEntity, sanitizeEntities } from '../utils/sanitize.util';
+import {
+  toProgrammeAssignmentDto,
+  toProgrammeCreateResponseDto,
+  toProgrammeListItemDto,
+  toProgrammeStatusTransitionDto,
+  toProgrammeUpdateResponseDto,
+} from './mappers/programme.mapper';
 
 @Injectable()
 export class CSRProgrammeService {
@@ -58,7 +65,8 @@ export class CSRProgrammeService {
       },
     });
 
-    return sanitizeEntity(programme)!;
+    const sanitized = sanitizeEntity(programme)!;
+    return toProgrammeCreateResponseDto(sanitized);
   }
 
   async update(id: string, companyId: string, dto: UpdateProgrammeDto) {
@@ -89,7 +97,8 @@ export class CSRProgrammeService {
       },
     });
 
-    return sanitizeEntity(updated)!;
+    const sanitized = sanitizeEntity(updated)!;
+    return toProgrammeUpdateResponseDto(sanitized);
   }
 
   async listByCompany(companyId: string) {
@@ -116,7 +125,8 @@ export class CSRProgrammeService {
       orderBy: { createdAt: 'desc' },
     });
 
-    return sanitizeEntities(programmes);
+    const sanitized = sanitizeEntities(programmes);
+    return sanitized.map((programme) => toProgrammeListItemDto(programme));
   }
 
   async assignNgo(programmeId: string, companyId: string, dto: AssignNgoDto) {
@@ -156,7 +166,8 @@ export class CSRProgrammeService {
       },
     });
 
-    return sanitizeEntity(assignment)!;
+    const sanitized = sanitizeEntity(assignment)!;
+    return toProgrammeAssignmentDto(sanitized);
   }
 
   async unassignNgo(
@@ -228,7 +239,8 @@ export class CSRProgrammeService {
       },
     });
 
-    return sanitizeEntity(updated)!;
+    const sanitized = sanitizeEntity(updated)!;
+    return toProgrammeAssignmentDto(sanitized);
   }
 
   async createMilestone(
@@ -320,7 +332,8 @@ export class CSRProgrammeService {
     this.assertStatusTransition(programme.status, nextStatus);
 
     if (nextStatus === programme.status) {
-      return sanitizeEntity(programme)!;
+      const sanitized = sanitizeEntity(programme)!;
+      return toProgrammeStatusTransitionDto(sanitized);
     }
 
     const updated = await this.prisma.cSRProgramme.update({
@@ -332,7 +345,8 @@ export class CSRProgrammeService {
       },
     });
 
-    return sanitizeEntity(updated)!;
+    const sanitized = sanitizeEntity(updated)!;
+    return toProgrammeStatusTransitionDto(sanitized);
   }
 
   private async ensureCompany(companyId: string) {

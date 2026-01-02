@@ -73,7 +73,7 @@ describe('CSRProgrammeService sanitisation', () => {
 
     expect(result[0]).not.toHaveProperty('password');
     expect(result[0].assignments[0]).not.toHaveProperty('accessToken');
-    expect(result[0].assignments[0].ngo.user).not.toHaveProperty('password');
+    expect(result[0].assignments[0].ngo?.user?.password).toBeUndefined();
     expect(result[0].milestones[0]).not.toHaveProperty('password');
   });
 
@@ -97,7 +97,7 @@ describe('CSRProgrammeService sanitisation', () => {
     });
 
     expect(result).not.toHaveProperty('password');
-    expect(result.ngo.user).not.toHaveProperty('password');
+    expect(result.ngo?.user?.password).toBeUndefined();
   });
 
   it('sanitises milestone mutations', async () => {

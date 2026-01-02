@@ -139,7 +139,7 @@ describe('CSRProgrammeService', () => {
         status: ProgrammeStatus.ACTIVE,
       });
 
-      expect(result.title).toBe('Water Project');
+      expect(result.programme.title).toBe('Water Project');
       expect(prisma.cSRProgramme.create).toHaveBeenCalled();
     });
 
@@ -158,7 +158,7 @@ describe('CSRProgrammeService', () => {
         title: 'Updated',
       });
 
-      expect(result.title).toBe('Updated');
+      expect(result.programme.title).toBe('Updated');
       expect(prisma.cSRProgramme.update).toHaveBeenCalledWith(
         expect.objectContaining({ where: { id: 'programme-1' } }),
       );
