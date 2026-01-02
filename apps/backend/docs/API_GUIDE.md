@@ -21,7 +21,7 @@
 | Users | `/api/v1/users/:id` | PATCH | Update arbitrary user | JWT + Role(SUPER_ADMIN) |
 | Users | `/api/v1/users/:id` | DELETE | Delete user | JWT + Role(SUPER_ADMIN) |
 | Users | `/api/v1/users/me/change-password` | POST | Change password | JWT |
-| CSR Programmes | `/api/v1/csr/programmes` | CRUD endpoints for company programmes | JWT (COMPANY) |
+| CSR Programmes | `/api/v1/companies/{companyId}/csr-programmes` | CRUD endpoints for company programmes | JWT + Role(COMPANY) |
 | Approvals | `/api/v1/approvals/...` | Request/approve/reject/revoke campaign approvals | JWT (NGO/COMPANY) + Roles |
 | Analytics | `/api/v1/analytics/...` | Admin metrics endpoints | JWT + Role(SUPER_ADMIN) |
 | Financial | `/api/v1/financial/ngo/upload` | POST | Upload NGO report (409 on duplicate) | JWT + Role(NGO) |
@@ -42,3 +42,11 @@ Refer to controller source files for full parameter shapes. Every request body i
 
 ## Changelog Reference
 - See `docs/CHANGELOG.md` for recent endpoint additions/changes.
+
+### CSR Programmes
+- `GET /api/v1/companies/{companyId}/csr-programmes` — list programmes for a company
+- `GET /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — show a single programme
+- `POST /api/v1/companies/{companyId}/csr-programmes` — create programme
+- `PATCH /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — update programme
+- `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/assign-ngo` — assign NGO
+- `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/status` — transition status

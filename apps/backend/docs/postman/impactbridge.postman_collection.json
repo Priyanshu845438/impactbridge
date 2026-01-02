@@ -261,6 +261,161 @@
           }
         }
       ]
+    },
+    {
+      "name": "CSR Programmes",
+      "item": [
+        {
+          "name": "List Company Programmes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/companies/{{companyId}}/csr-programmes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "companies",
+                "{{companyId}}",
+                "csr-programmes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Programme Detail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/companies/{{companyId}}/csr-programmes/{{programmeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "companies",
+                "{{companyId}}",
+                "csr-programmes",
+                "{{programmeId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Programme",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Water Access\",\n  \"description\": \"Provide safe drinking water\",\n  \"status\": \"ACTIVE\",\n  \"budget\": 100000,\n  \"startDate\": \"2025-03-01\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/companies/{{companyId}}/csr-programmes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "companies",
+                "{{companyId}}",
+                "csr-programmes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Programme",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Title\",\n  \"status\": \"COMPLETED\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/companies/{{companyId}}/csr-programmes/{{programmeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "companies",
+                "{{companyId}}",
+                "csr-programmes",
+                "{{programmeId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Assign NGO",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ngoId\": \"{{ngoId}}\",\n  \"notes\": \"Strategic partner\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/companies/{{companyId}}/csr-programmes/{{programmeId}}/assign-ngo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "companies",
+                "{{companyId}}",
+                "csr-programmes",
+                "{{programmeId}}",
+                "assign-ngo"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Transition Programme Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"ACTIVE\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/companies/{{companyId}}/csr-programmes/{{programmeId}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "companies",
+                "{{companyId}}",
+                "csr-programmes",
+                "{{programmeId}}",
+                "status"
+              ]
+            }
+          }
+        }
+      ]
     }
   ]
 }

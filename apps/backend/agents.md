@@ -87,3 +87,7 @@
 19. CSR Programme Read Wrapper
 - Exposed getByIdForCompany in CSRProgrammeService as a thin wrapper over existing ownership check.
 - No behavioural changes; controller wiring can now call the service directly.
+
+20. CSR Programme Controller
+- Added company-scoped controller wiring the existing service methods without altering behaviour.
+- Module now registers CSRProgrammeController for route exposure.

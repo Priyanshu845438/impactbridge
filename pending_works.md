@@ -1,102 +1,59 @@
 # Pending Work Audit (Comprehensive)
 
-## Overview
-- Audit covers `apps/__tests__`, `apps/backend`, `apps/frontend`, and `packages`.
-- No code changes were made; findings are observational for planning and remediation.
+_All findings are observational; no code was modified during this audit. Items are grouped by scope with each task captured as an individual, detailed point._
 
 ## 1. apps/__tests__
-- Directory contains only `api-client.test.ts`, focused on the shared fetch wrapper; there is no cross-package integration coverage.
-- Missing smoke/e2e tests that exercise backend APIs or frontend pages together, leaving CSR, auth, approvals, and financial flows unvalidated.
+1. Only `api-client.test.ts` exists, covering the fetch wrapper in isolation; there are **no integration or contract tests** that exercise backend controllers or shared DTO flows, leaving cross-package regressions undetected.
+2. Vitest mocks rely on global fetch overrides without reset helpers, risking test leakage if additional suites are added.
+3. There is no coverage for CSR, auth, approvals, or financial journeys—future suites must be planned to validate end-to-end scenarios once routes are stable.
 
-## 2. apps/backend Audit
-- NestJS project structure intact (modules, Prisma layer, docs, metrics) but several features stop at the service layer.
-- CSR Programme (`src/csr-programme`): service + DTO mappers exist, yet there is no controller or module wiring; service also lacks a public "get by id" method, blocking detail routes.
-- Financial (`src/financial`): controller/service implemented, but validation hardening, admin analytics, and integration tests are still pending.
-- Notifications (`src/notifications`): intent storage provided, while dispatch workers/providers are absent; no retry or audit logging on delivery.
-- Activity/Audit logging is inconsistent; multiple modules call `ActivityLogService`, but key flows (CSR, approvals, financial) do not log uniformly.
-- Test coverage mixes unit and partial e2e runs; new CSR routes/tests are not yet in place, and RBAC guard behaviour is only unit-tested.
+## 2. apps/backend
+1. **CSR Programme controller** now exposes company-scoped routes but lacks guards (`@UseGuards`, `@Roles`) so RBAC enforcement currently depends on downstream modules—needs explicit protection before release.
+2. `CSRProgrammeController.detail` delegates to `getByIdForCompany`, which returns the raw Prisma entity (no sanitised DTO map); response omits milestone/assignment includes present in list endpoints, creating an inconsistent API surface.
+3. Controller methods accept DTOs but do not apply validation pipes locally—ensure global validation is active or add decorators to avoid unchecked payloads.
+4. CSR service integration tests exist only as in-memory workflow specs; there are **no HTTP-level tests** under `apps/backend/__tests__/csr-programme` verifying the new routes.
+5. Notifications module remains dispatcher-less: intents are queued but no background worker/provider sends emails/SMS; retry, logging, and metrics workflows are still unimplemented.
+6. Financial module exposes core endpoints yet lacks stricter DTO validation, admin analytics, and integration tests for upload/review flows.
+7. Activity/Audit logging utilities are present, but CSR, approvals, and financial services do not consistently emit events, creating traceability gaps.
+8. Shared docs (API guide, Postman collection) mention CSR routes; they require ongoing sync once guards/tests land to avoid divergence.
 
-## 3. apps/frontend Audit
-- Next.js App Router app heavily depends on mock data across dashboards; React Query hooks for CSR/approvals are scaffolded but disabled by feature flags.
-- Auth, approvals, CSR, and financial pages still call mock handlers; the shared API client is not wired to backend endpoints and `ky` remains in contexts.
-- Tests are abundant but mock-based, offering no assurance against real API regressions; Storybook exists yet CI visual regression is disabled.
-- Route-level guards/middleware for RBAC are missing, leaving client-state checks as the only protection.
+## 3. apps/frontend
+1. CSR programme list/detail pages still rely on mock data guarded by feature flags; React Query hooks exist but are not wired to the live API, so shipping requires backend integration work and loading/error UX validation.
+2. Programme adapters introduced to satisfy lint now stub icon/timestamp helpers, altering UI formatting; they must be restored when analytics wiring is completed.
+3. Feature flag `API_PROGRAMME` handling is partially in place—ensure env plumbing, tests, and documentation cover both ON/OFF behaviours before rollout.
+4. Admin dashboard analytics lint suppression is temporary; follow-up task required to reinstate real helpers once API payloads stabilise.
+5. Tests across dashboards are mock-based (Storybook + RTL) and offer no assurance against live API regressions; plan for integration tests once hooks are wired.
+6. RBAC is enforced mostly client-side; audit middleware/route protections to ensure unauthorised users cannot hit protected pages when SSR/cache is used.
 
-## 4. packages Audit
-- `packages/api-contracts` offers DTOs/enums for auth, approvals, CSR programme, financial, and users.
-- DTO coverage for campaigns/donations is missing, so frontend duplicates types; publishing the package remains a manual step without CI automation.
+## 4. packages (api-contracts)
+1. CSR programme DTOs are defined, but there is **no automated publish pipeline**—manual `npm publish` remains a risk; set up CI to build/test/release with semantic versioning.
+2. Campaign and donation DTOs are absent, forcing frontend duplication; documenting or adding these contracts would reduce divergence.
+3. Type-level tests only cover compile-time checks; consider adding runtime validators or schema snapshots if the package fronts public APIs.
+4. Dist output exists but consuming apps rely on path aliases—verify tsconfig paths stay in sync whenever build output moves.
 
-## Module Status by Role
+## Role-Wise Module Status
 
 ### Backend
-1. **Auth** — ✅ Complete
-   - JWT login/register, DTO validation, guards in place.
-   - Pending: refresh tokens and password recovery flows.
-2. **Users** — ✅ Complete
-   - CRUD with RBAC and basic pagination.
-   - Pending: soft-delete restoration endpoints and scoped filters.
-3. **Approvals** — 🟡 In Progress
-   - Core workflow and notification intents delivered.
-   - Pending: RBAC integration tests, audit logging parity, CSR linkage.
-4. **CSR Programme** — 🟡 In Progress
-   - Service/DTO alignment done; controller/routes absent.
-   - Pending: expose company-scoped endpoints, add integration tests, unblock frontend hooks.
-5. **Financial** — 🟡 In Progress
-   - Upload/list APIs exist.
-   - Pending: stricter validation, admin analytics, UI wiring.
-6. **Analytics** — 🟡 In Progress
-   - Aggregators power admin dashboard.
-   - Pending: CSR data feed, caching, metric expansion.
-7. **Notifications** — 🟠 Incomplete
-   - Intent records only; dispatch worker/provider integration outstanding.
-8. **Activity/Audit** — 🟠 Incomplete
-   - Logging utilities present; consistent adoption missing.
+- **Auth** — ✅ Complete (JWT login/register, guards active); _pending_: refresh tokens & password recovery flows.
+- **Users** — ✅ Complete (CRUD + RBAC); _pending_: soft-delete restoration endpoints and scoped pagination filters.
+- **Approvals** — 🟡 In Progress (workflow + notifications queued); _pending_: RBAC integration tests, audit logging parity, CSR linkage.
+- **CSR Programme** — 🟡 In Progress (service + controller present); _pending_: route guards, DTO-aligned detail response, HTTP integration tests, frontend contract validation.
+- **Financial** — 🟡 In Progress (upload/list APIs live); _pending_: stricter validation, admin analytics, UI wiring, comprehensive tests.
+- **Analytics** — 🟡 In Progress (aggregations ready); _pending_: CSR data feed, caching, metric expansion.
+- **Notifications** — 🟠 Incomplete (intent storage only); _pending_: dispatch workers/providers, retry + metrics pipeline.
+- **Activity/Audit Logging** — 🟠 Incomplete (utilities exist); _pending_: consistent adoption across CSR, approvals, financial modules.
 
 ### Frontend
-1. **Auth Experience** — 🟡 In Progress
-   - Mock login/register; real backend integration pending.
-2. **Company Dashboard** — 🟡 In Progress
-   - UI widgets completed with mocks; needs live data.
-3. **NGO Dashboard** — 🟡 In Progress
-   - Financial/impact sections mocked; awaiting API hooks.
-4. **Admin Dashboard** — 🟡 In Progress
-   - Analytics cards rely on adapters + feature flags; no live data.
-5. **Approvals UI** — 🟠 Incomplete
-   - Prototype only; requires backend wiring and real-time updates.
-6. **CSR Programme UI** — 🟠 Incomplete
-   - Hooks partially implemented but feature-flagged off until backend routes exist.
+- **Auth Experience** — 🟡 In Progress (mock flows, guards); _pending_: real backend integration, token refresh handling.
+- **Company Dashboard** — 🟡 In Progress (mock widgets); _pending_: live data via React Query + feature flag validation.
+- **NGO Dashboard** — 🟡 In Progress (mock financial/impact sections); _pending_: API wiring, accessibility review.
+- **Admin Dashboard** — 🟡 In Progress (analytics with temporary suppressions); _pending_: restore helpers, connect API, add regression tests.
+- **Approvals UI** — 🟠 Incomplete (prototype only); _pending_: backend wiring, real-time updates, form validation.
+- **CSR Programme UI** — 🟠 Incomplete (feature-flagged mocks); _pending_: API integration, loading/error UX, contract tests.
 
-## Detailed Pending Work Items
-1. **CSR Programme Controller & Routes**
-   - Wire company-scoped routes to existing service methods and add integration tests.
-   - Introduce a detail/retrieval method (or expose sanitized ensure helper) to satisfy GET by programme ID.
-2. **Frontend Mock Replacement**
-   - Replace mock data with React Query hooks calling backend APIs via `@impactbridge/api-contracts` DTOs.
-   - Ensure loading/error states derive from query status instead of hardcoded placeholders.
-3. **Notification Dispatch & Workers**
-   - Implement background worker/providers to send queued intents with retries and audit logging.
-   - Define failure handling and surface metrics for operations.
-4. **Financial Reporting Hardening**
-   - Enforce DTO validation, add admin review/analytics flows, and create matching frontend UI.
-   - Expand tests to cover success/error paths for uploads and reads.
-5. **RBAC Integration Tests**
-   - Extend e2e coverage to verify guard stacks for approvals, financial, CSR routes using real JWTs.
-   - Document expected roles per endpoint to guide frontend role gating.
-6. **Shared Package Release Automation**
-   - Create CI workflow to build/test/publish `@impactbridge/api-contracts`; formalize semantic versioning.
-   - Add release notes and dependency update checklist for consuming apps.
-7. **Pagination & Soft-Delete Enforcement**
-   - Apply pagination helpers + soft-delete filters across campaigns, donations, programmes, approvals listings.
-   - Provide restore endpoints and regression tests.
-8. **CI/Lint/Test Enforcement**
-   - Ensure pipelines run lint/test/build for backend/frontend before merging; enforce coverage thresholds.
-   - Add alerts for failures and flaky suites.
-9. **Accessibility & Testing Improvements**
-   - Enable automated axe scans and `eslint-plugin-jsx-a11y` in CI; extend RTL coverage to responsive states.
-   - Incorporate accessibility acceptance criteria into PR reviews.
-10. **Storybook & Visual Regression**
-    - Re-enable Storybook CI build with Percy/Chromatic; align stories with DTO-driven props.
-    - Use stories for contract validation against backend data shapes.
+### Shared / Infrastructure
+- **API Contracts** — 🟡 In Progress (core DTOs available); _pending_: add campaign/donation contracts, automate releases, strengthen tests.
+- **Testing/CI** — 🟠 Incomplete (per-app pipelines exist but lack cross-app integration, coverage gates, and visual regression enforcement).
 
 ---
-Update this audit as teams close items or identify new gaps.
+_Update this document whenever items are closed or new findings emerge to maintain alignment across teams._

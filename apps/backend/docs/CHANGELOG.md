@@ -1,4 +1,5 @@
 # Backend Changelog
+- **2025-02-22** — CSR programme company-scoped controller wired with existing service methods; API docs updated to reflect `/companies/:companyId/csr-programmes` routes.
 
 - **2025-01-27** — Approval notifications integrated: intents queued on request/reset/approve/reject/revoke, tests added.
 - **2025-01-24** — Admin analytics service & controller delivered with SUPER_ADMIN-only endpoints.
