@@ -82,3 +82,4 @@
 18. CSR Controller Wiring Blocked
 - Attempted to scaffold CSR programme controller but service lacks the unscoped list/detail/create signatures the routes require.
 - Paused changes to avoid altering service behaviour without confirmation on company-scoped method usage or new APIs.
+- Awaiting confirmation on which existing service call should power the detail route before wiring controllers.
