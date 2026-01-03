@@ -91,3 +91,9 @@
 20. CSR Programme Controller
 - Added company-scoped controller wiring the existing service methods without altering behaviour.
 - Module now registers CSRProgrammeController for route exposure.
+
+
+21. CSR Programme Route Contracts
+- Added company-scoped e2e tests covering list/detail/create/update/assign/status routes.
+- Tests run against Nest testing module with mocked Prisma to assert DTO-aligned responses.
+- No service or controller changes; suites guard against regressions.

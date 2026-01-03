@@ -11,7 +11,7 @@ _All findings are observational; no code was modified during this audit. Items a
 1. **CSR Programme controller** now exposes company-scoped routes but lacks guards (`@UseGuards`, `@Roles`) so RBAC enforcement currently depends on downstream modules—needs explicit protection before release.
 2. `CSRProgrammeController.detail` delegates to `getByIdForCompany`, which returns the raw Prisma entity (no sanitised DTO map); response omits milestone/assignment includes present in list endpoints, creating an inconsistent API surface.
 3. Controller methods accept DTOs but do not apply validation pipes locally—ensure global validation is active or add decorators to avoid unchecked payloads.
-4. CSR service integration tests exist only as in-memory workflow specs; there are **no HTTP-level tests** under `apps/backend/__tests__/csr-programme` verifying the new routes.
+4. CSR service integration tests exist only as in-memory workflow specs; HTTP contract coverage now exists in `apps/backend/__tests__/csr-programme/csr-programme.routes.spec.ts`, but RBAC permutations and negative paths remain pending.
 5. Notifications module remains dispatcher-less: intents are queued but no background worker/provider sends emails/SMS; retry, logging, and metrics workflows are still unimplemented.
 6. Financial module exposes core endpoints yet lacks stricter DTO validation, admin analytics, and integration tests for upload/review flows.
 7. Activity/Audit logging utilities are present, but CSR, approvals, and financial services do not consistently emit events, creating traceability gaps.
