@@ -6,6 +6,7 @@ import { programmes as mockProgrammes } from '@/app/dashboard/company/programmes
 import { useCompanyProgrammes, useProgrammeDetail } from '@/lib/hooks/use-company-programmes';
 import type { FeatureFlags } from '@/lib/feature-flags';
 import { getFeatureFlags } from '@/lib/feature-flags';
+import { mapMockDetail } from '@/app/dashboard/company/programmes/api';
 
 jest.mock('@/lib/feature-flags', () => ({
   getFeatureFlags: jest.fn(),
@@ -114,6 +115,52 @@ describe('CSR programme data hooks', () => {
     expect(detailHook.result.current.data).toEqual(detailPayload);
     detailQueryClient.clear();
 
+  });
+
+  it('returns mock detail when API flag disabled', async () => {
+    (getFeatureFlags as jest.Mock).mockReturnValue({ ...baseFlags, API_PROGRAMME: false });
+
+    const mockDetail = mapMockDetail('company-1', mockProgrammes[0].id);
+    const { Wrapper, queryClient } = createWrapper();
+
+    const { result } = renderHook(
+      () => useProgrammeDetail({ enabled: true, programmeId: mockProgrammes[0].id, companyId: 'company-1' }),
+      { wrapper: Wrapper },
+    );
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(apiRequest).not.toHaveBeenCalled();
+    expect(result.current.data).toEqual(mockDetail);
+
+    queryClient.clear();
+  });
+
+  it('falls back to mock detail when API returns null', async () => {
+    (getFeatureFlags as jest.Mock).mockReturnValue({ ...baseFlags, API_PROGRAMME: true });
+    apiRequest.mockResolvedValueOnce({ data: [] });
+    apiRequest.mockResolvedValueOnce({ data: null });
+
+    const { Wrapper: listWrapper, queryClient: listClient } = createWrapper();
+    renderHook(() => useCompanyProgrammes({ enabled: true, companyId: 'company-123' }), {
+      wrapper: listWrapper,
+    });
+
+    await waitFor(() => expect(apiRequest).toHaveBeenCalledTimes(1));
+    listClient.clear();
+
+    const { Wrapper, queryClient } = createWrapper();
+    const { result } = renderHook(
+      () => useProgrammeDetail({ enabled: true, programmeId: mockProgrammes[0].id, companyId: 'company-123' }),
+      { wrapper: Wrapper },
+    );
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(apiRequest).toHaveBeenNthCalledWith(2, {
+      path: `/api/v1/companies/company-123/csr-programmes/${mockProgrammes[0].id}`,
+    });
+    expect(result.current.data).toEqual(mapMockDetail('company-123', mockProgrammes[0].id));
+
+    queryClient.clear();
   });
 
   it('does not run queries when disabled', () => {

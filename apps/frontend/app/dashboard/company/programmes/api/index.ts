@@ -7,10 +7,10 @@ type ProgrammeList = ProgrammeSummaryDto[];
 
 type DetailResponse = ProgrammeDetailDto | null;
 
-const DEFAULT_COMPANY_ID = 'company-1';
+export const DEFAULT_COMPANY_ID = 'company-1';
 const BASE_PATH = '/api/v1/companies';
 
-function mapMockList(companyId: string): ProgrammeList {
+export function mapMockList(companyId: string): ProgrammeList {
   return mockProgrammes.map((programme) => ({
     id: programme.id,
     title: programme.name,
@@ -20,10 +20,12 @@ function mapMockList(companyId: string): ProgrammeList {
     state: 'ACTIVE',
     startDate: undefined,
     endDate: undefined,
+    createdAt: programme.createdAt ?? new Date(0).toISOString(),
+    updatedAt: programme.updatedAt ?? new Date(0).toISOString(),
   }));
 }
 
-function mapMockDetail(companyId: string, programmeId: string): DetailResponse {
+export function mapMockDetail(companyId: string, programmeId: string): DetailResponse {
   const programme = mockProgrammes.find((item) => item.id === programmeId);
   if (!programme) return null;
 
@@ -38,8 +40,8 @@ function mapMockDetail(companyId: string, programmeId: string): DetailResponse {
     companyId,
     milestones: [],
     assignments: [],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: programme.createdAt ?? new Date(0).toISOString(),
+    updatedAt: programme.updatedAt ?? new Date(0).toISOString(),
   };
 }
 
@@ -71,5 +73,5 @@ export async function getProgrammeById(
     path: `${BASE_PATH}/${companyId}/csr-programmes/${programmeId}`,
   });
 
-  return response.data ?? null;
+  return response.data ?? mapMockDetail(companyId, programmeId);
 }

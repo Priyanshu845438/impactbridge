@@ -47,6 +47,8 @@ interface ProgrammeCardData {
   highlights: string[];
   bannerUrl: string;
   searchHaystack: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export default function CompanyProgrammeDirectoryPage() {

@@ -42,3 +42,8 @@
 - Wired company CSR programme hooks to backend API via feature-flagged wrappers while preserving mock fallback.
 - Added Jest coverage for flag on/off scenarios and ensured React Query providers are seeded in tests.
 - Resolved TypeScript pathing to reuse `@impactbridge/api-contracts` DTOs and verified `npm run build` remains green.
+
+10. CSR Programme Detail Hook Verified
+- Strengthened detail hook fallback logic (mock-first, API optional) with null-safe handling.
+- Added unit tests covering flag off/on and API-null fallbacks to protect UI behaviour.
+- Confirmed frontend build/test flows remain green (`npm run test`, `npm run build`).

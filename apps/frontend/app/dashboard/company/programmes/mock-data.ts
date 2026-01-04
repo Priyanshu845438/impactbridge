@@ -38,6 +38,8 @@ export interface Programme {
     timestamp: string;
   }>;
   relatedProgrammeIds: string[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export const programmes: Programme[] = [
@@ -113,6 +115,8 @@ export const programmes: Programme[] = [
       },
     ],
     relatedProgrammeIds: ["programme-2", "programme-5"],
+    createdAt: "2026-01-01T00:00:00.000Z",
+    updatedAt: "2026-01-01T00:00:00.000Z",
   },
   {
     id: "programme-2",
@@ -167,6 +171,8 @@ export const programmes: Programme[] = [
       },
     ],
     relatedProgrammeIds: ["programme-1", "programme-3"],
+    createdAt: "2026-01-02T00:00:00.000Z",
+    updatedAt: "2026-01-02T00:00:00.000Z",
   },
   {
     id: "programme-3",
@@ -205,6 +211,8 @@ export const programmes: Programme[] = [
     documents: [{ id: "cmr-doc-1", name: "Concept Note.pdf", size: "640 KB" }],
     updates: [],
     relatedProgrammeIds: ["programme-5"],
+    createdAt: "2026-01-03T00:00:00.000Z",
+    updatedAt: "2026-01-03T00:00:00.000Z",
   },
   {
     id: "programme-4",
@@ -252,6 +260,8 @@ export const programmes: Programme[] = [
       },
     ],
     relatedProgrammeIds: ["programme-1"],
+    createdAt: "2026-01-04T00:00:00.000Z",
+    updatedAt: "2026-01-04T00:00:00.000Z",
   },
   {
     id: "programme-5",
@@ -296,6 +306,8 @@ export const programmes: Programme[] = [
       },
     ],
     relatedProgrammeIds: ["programme-1", "programme-3"],
+    createdAt: "2026-01-05T00:00:00.000Z",
+    updatedAt: "2026-01-05T00:00:00.000Z",
   },
   {
     id: "programme-6",

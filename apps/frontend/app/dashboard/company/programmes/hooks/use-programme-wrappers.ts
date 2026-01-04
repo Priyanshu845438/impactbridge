@@ -1,6 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import type { ProgrammeDetailDto, ProgrammeSummaryDto } from '@impactbridge/api-contracts';
-import { listProgrammes, getProgrammeById } from '../api';
+import {
+  listProgrammes,
+  getProgrammeById,
+  mapMockDetail,
+  DEFAULT_COMPANY_ID,
+} from '../api';
 
 interface ListOptions {
   enabled: boolean;
@@ -25,9 +30,19 @@ export function useCompanyProgrammesWrapper({ enabled, companyId }: ListOptions)
 }
 
 export function useProgrammeDetailsWrapper({ programmeId, enabled, companyId }: DetailOptions) {
+  const effectiveCompanyId = companyId ?? DEFAULT_COMPANY_ID;
+
   return useQuery<ProgrammeDetailDto | null>({
     queryKey: [...LIST_QUERY_KEY, companyId ?? 'default', programmeId],
-    queryFn: () => getProgrammeById(programmeId, companyId),
+    queryFn: async () => {
+      const response = await getProgrammeById(programmeId, effectiveCompanyId);
+
+      if (response) {
+        return response;
+      }
+
+      return mapMockDetail(effectiveCompanyId, programmeId) ?? null;
+    },
     enabled: enabled && Boolean(programmeId),
     staleTime: 1000 * 30,
   });

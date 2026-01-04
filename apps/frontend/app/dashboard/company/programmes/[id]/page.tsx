@@ -488,6 +488,8 @@ function adaptProgrammeDetail(detail: ProgrammeDetailDto | null): Programme | un
     documents: [],
     updates: [],
     relatedProgrammeIds: [],
+    createdAt: detail.createdAt,
+    updatedAt: detail.updatedAt,
   } satisfies Programme;
 }
 
