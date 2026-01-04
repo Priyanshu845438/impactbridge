@@ -46,7 +46,7 @@ Refer to controller source files for full parameter shapes. Every request body i
 ### CSR Programmes
 - `GET /api/v1/companies/{companyId}/csr-programmes` — list programmes for a company (returns `ProgrammeSummaryDto[]`)
 - `GET /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — show a single programme (returns `ProgrammeDetailDto`)
-- `POST /api/v1/companies/{companyId}/csr-programmes` — create programme
+- `POST /api/v1/companies/{companyId}/csr-programmes` — create programme (currently stubbed: returns mock-like payload; real implementation pending)
 - `PATCH /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — update programme
 - `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/assign-ngo` — assign NGO
 - `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/status` — transition status
