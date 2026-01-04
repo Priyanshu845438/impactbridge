@@ -62,3 +62,8 @@
 - Detail page now uses the flag-aware hook with a safe mock fallback, keeping skeleton and error states intact.
 - Added unit tests for flag off/on paths, API fallback, loading, and error handling to guarantee UI parity.
 - Re-ran full frontend test/build pipelines (`npm run test`, `npm run build`) to confirm no regressions.
+
+14. CSR Programme Create Scaffold
+- Added mock-backed `useCreateProgramme` mutation hook plus `/dashboard/company/programmes/new` to mirror existing UX.
+- Baseline tests ensure the mock mutation runs and validation remains unchanged.
+- No behavioural differences; build/test stay green (`npm run test`, `npm run build`).

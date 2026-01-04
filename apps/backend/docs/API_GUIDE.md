@@ -44,8 +44,8 @@ Refer to controller source files for full parameter shapes. Every request body i
 - See `docs/CHANGELOG.md` for recent endpoint additions/changes.
 
 ### CSR Programmes
-- `GET /api/v1/companies/{companyId}/csr-programmes` — list programmes for a company
-- `GET /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — show a single programme
+- `GET /api/v1/companies/{companyId}/csr-programmes` — list programmes for a company (returns `ProgrammeSummaryDto[]`)
+- `GET /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — show a single programme (returns `ProgrammeDetailDto`)
 - `POST /api/v1/companies/{companyId}/csr-programmes` — create programme
 - `PATCH /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — update programme
 - `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/assign-ngo` — assign NGO
