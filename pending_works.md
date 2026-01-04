@@ -18,7 +18,7 @@ _All findings are observational; no code was modified during this audit. Items a
 8. Shared docs (API guide, Postman collection) mention CSR routes; they require ongoing sync once guards/tests land to avoid divergence.
 
 ## 3. apps/frontend
-1. CSR programme list/detail pages now use feature-flagged React Query wrappers that call the live API when `API_PROGRAMME` is enabled, with mocks as fallback; detail hook fallback paths are unit-tested but before default-on launch we still need end-to-end validation (loading/error UX, RBAC) and rollout coordination.
+1. CSR programme list/detail pages now use feature-flagged React Query wrappers that call the live API when `API_PROGRAMME` is enabled, with mocks as fallback; list pagination mismatches are normalised but we still need end-to-end validation (loading/error UX, RBAC, pagination parity) and rollout coordination before flipping the flag by default.
 2. Programme adapters introduced to satisfy lint now stub icon/timestamp helpers, altering UI formatting; they must be restored when analytics wiring is completed.
 3. Feature flag `API_PROGRAMME` handling is partially in place—ensure env plumbing, tests, and documentation cover both ON/OFF behaviours before rollout.
 4. Admin dashboard analytics lint suppression is temporary; follow-up task required to reinstate real helpers once API payloads stabilise.

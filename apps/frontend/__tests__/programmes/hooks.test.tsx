@@ -66,10 +66,12 @@ describe('CSR programme data hooks', () => {
       {
         id: 'programme-1',
         title: 'Backend Programme',
-        status: 'ACTIVE',
-        companyId: 'company-123',
-        assignments: [],
-        milestones: [],
+        description: 'Backed by API',
+        state: 'ACTIVE',
+        ownerCompanyId: 'company-123',
+        ngoId: 'ngo-1',
+        startDate: '2024-01-01',
+        endDate: '2024-12-31',
         createdAt: 'today',
         updatedAt: 'today',
       },
@@ -99,7 +101,20 @@ describe('CSR programme data hooks', () => {
     expect(apiRequest).toHaveBeenNthCalledWith(1, {
       path: '/api/v1/companies/company-123/csr-programmes',
     });
-    expect(listHook.result.current.data).toEqual(listPayload);
+    expect(listHook.result.current.data).toEqual([
+      {
+        id: 'programme-1',
+        title: 'Backend Programme',
+        description: 'Backed by API',
+        ownerCompanyId: 'company-123',
+        ngoId: 'ngo-1',
+        state: 'ACTIVE',
+        startDate: '2024-01-01',
+        endDate: '2024-12-31',
+        createdAt: 'today',
+        updatedAt: 'today',
+      },
+    ]);
     listQueryClient.clear();
 
     const { Wrapper: detailWrapper, queryClient: detailQueryClient } = createWrapper();
@@ -159,6 +174,28 @@ describe('CSR programme data hooks', () => {
       path: `/api/v1/companies/company-123/csr-programmes/${mockProgrammes[0].id}`,
     });
     expect(result.current.data).toEqual(mapMockDetail('company-123', mockProgrammes[0].id));
+
+    queryClient.clear();
+  });
+
+  it('falls back to mock list when API returns empty array', async () => {
+    (getFeatureFlags as jest.Mock).mockReturnValue({ ...baseFlags, API_PROGRAMME: true });
+    apiRequest.mockResolvedValueOnce({ data: [] });
+
+    const { Wrapper, queryClient } = createWrapper();
+
+    const { result } = renderHook(() => useCompanyProgrammes({ enabled: true, companyId: 'company-123' }), {
+      wrapper: Wrapper,
+    });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(apiRequest).toHaveBeenCalledWith({
+      path: '/api/v1/companies/company-123/csr-programmes',
+    });
+    expect(result.current.data).toEqual(
+      mockProgrammes.map((programme) => expect.objectContaining({ id: programme.id })),
+    );
 
     queryClient.clear();
   });

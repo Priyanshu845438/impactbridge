@@ -3,7 +3,12 @@ import { apiRequest } from '@/lib/api/client';
 import { getFeatureFlags } from '@/lib/feature-flags';
 import { programmes as mockProgrammes } from '../mock-data';
 
-type ProgrammeList = ProgrammeSummaryDto[];
+type ProgrammeSummaryWithMeta = ProgrammeSummaryDto & {
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+type ProgrammeList = ProgrammeSummaryWithMeta[];
 
 type DetailResponse = ProgrammeDetailDto | null;
 
@@ -45,6 +50,28 @@ export function mapMockDetail(companyId: string, programmeId: string): DetailRes
   };
 }
 
+function normaliseProgrammeList(
+  source: ProgrammeSummaryDto[] | undefined | null,
+  companyId: string,
+): ProgrammeList | null {
+  if (!Array.isArray(source) || source.length === 0) {
+    return null;
+  }
+
+  return source.map((programme) => ({
+    id: programme.id,
+    title: programme.title,
+    description: programme.description ?? '',
+    ownerCompanyId: programme.ownerCompanyId ?? companyId,
+    ngoId: programme.ngoId,
+    state: programme.state ?? 'ACTIVE',
+    startDate: programme.startDate,
+    endDate: programme.endDate,
+    createdAt: (programme as ProgrammeSummaryWithMeta).createdAt ?? new Date(0).toISOString(),
+    updatedAt: (programme as ProgrammeSummaryWithMeta).updatedAt ?? new Date(0).toISOString(),
+  }));
+}
+
 export async function listProgrammes(companyId: string = DEFAULT_COMPANY_ID): Promise<ProgrammeList> {
   const { API_PROGRAMME } = getFeatureFlags();
 
@@ -56,7 +83,13 @@ export async function listProgrammes(companyId: string = DEFAULT_COMPANY_ID): Pr
     path: `${BASE_PATH}/${companyId}/csr-programmes`,
   });
 
-  return response.data ?? [];
+  const normalised = normaliseProgrammeList(response.data, companyId);
+
+  if (!normalised) {
+    return mapMockList(companyId);
+  }
+
+  return normalised;
 }
 
 export async function getProgrammeById(

@@ -47,3 +47,8 @@
 - Strengthened detail hook fallback logic (mock-first, API optional) with null-safe handling.
 - Added unit tests covering flag off/on and API-null fallbacks to protect UI behaviour.
 - Confirmed frontend build/test flows remain green (`npm run test`, `npm run build`).
+
+11. CSR Programme List Hook Stabilised
+- Normalised backend list responses (flag-on) onto mock-equivalent shapes with pagination-safe fallbacks.
+- Added Jest coverage for API-enabled, mock-only, and empty-response scenarios ensuring UI parity.
+- Re-ran frontend test/build pipelines (`npm run test`, `npm run build`) to validate unchanged behaviour.
