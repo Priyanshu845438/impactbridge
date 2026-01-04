@@ -78,7 +78,15 @@ export default function CompanyProgrammeDirectoryPage() {
 
   const filteredProgrammes = useMemo(() => {
     const search = debouncedQuery?.trim().toLowerCase() ?? "";
-    const sourceProgrammes: ProgrammeSource[] = API_PROGRAMME && !isApiError ? apiProgrammes ?? [] : mockProgrammes;
+
+    let sourceProgrammes: ProgrammeSource[] = mockProgrammes;
+
+    if (API_PROGRAMME && !isApiError) {
+      if (apiProgrammes && apiProgrammes.length > 0) {
+        sourceProgrammes = apiProgrammes;
+      }
+    }
+
     const normalised = sourceProgrammes.map(toProgrammeCardData);
 
     return normalised.filter((programme) => {

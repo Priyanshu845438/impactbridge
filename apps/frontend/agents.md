@@ -52,3 +52,8 @@
 - Normalised backend list responses (flag-on) onto mock-equivalent shapes with pagination-safe fallbacks.
 - Added Jest coverage for API-enabled, mock-only, and empty-response scenarios ensuring UI parity.
 - Re-ran frontend test/build pipelines (`npm run test`, `npm run build`) to validate unchanged behaviour.
+
+12. CSR Programme List Page API Switch
+- List page now consumes the flag-aware hook, falling back to mocks when the API is disabled, empty, or errors.
+- Added list-page tests covering flag on/off, API payload rendering, mock fallback, loading, and error banner states.
+- Verified UI parity with full suite and production build (`npm run test`, `npm run build`).
