@@ -1,9 +1,38 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import userEvent from "@testing-library/user-event";
 
 import CompanyProgrammeDirectoryPage from "@/app/dashboard/company/programmes/page";
 import ProgrammeDetailPage from "@/app/dashboard/company/programmes/[id]/page";
+import type { FeatureFlags } from "@/lib/feature-flags";
+
+const baseFlags: FeatureFlags = {
+  API_DASHBOARD: false,
+  REALTIME_NOTIFICATIONS: false,
+  SERVER_NAVIGATION: false,
+  API_AUTH: false,
+  API_PROGRAMME: false,
+};
+
+const mockGetFeatureFlags = jest.fn(() => baseFlags);
+
+jest.mock("@/lib/feature-flags", () => ({
+  getFeatureFlags: () => mockGetFeatureFlags(),
+}));
+
+jest.mock("@/lib/hooks/use-company-programmes", () => ({
+  useCompanyProgrammes: jest.fn(() => ({
+    data: undefined,
+    isLoading: false,
+    isError: false,
+  })),
+  useProgrammeDetail: jest.fn(() => ({
+    data: null,
+    isLoading: false,
+    isError: false,
+  })),
+}));
 
 jest.mock("@/hooks/use-debounced-value", () => ({
   useDebouncedValue: <T,>(value: T) => value,
@@ -29,9 +58,19 @@ jest.mock("next/image", () => ({
   default: (props: React.ComponentPropsWithoutRef<"img">) => <img {...props} alt={props.alt ?? ""} />,
 }));
 
+function QueryClientTestProvider({ children }: { children: React.ReactNode }) {
+  const [queryClient] = React.useState(() => new QueryClient());
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+}
+
+function renderWithProviders(ui: React.ReactElement) {
+  return render(ui, { wrapper: QueryClientTestProvider });
+}
+
 describe("Company CSR programme directory", () => {
   it("renders filters and programme cards", () => {
-    render(<CompanyProgrammeDirectoryPage />);
+    mockGetFeatureFlags.mockReturnValueOnce(baseFlags);
+    renderWithProviders(<CompanyProgrammeDirectoryPage />);
 
     expect(screen.getByRole("heading", { name: /CSR Programmes/i })).toBeInTheDocument();
     expect(screen.getAllByRole("combobox")).toHaveLength(3);
@@ -41,7 +80,8 @@ describe("Company CSR programme directory", () => {
 
   it("filters programmes by search and status", async () => {
     const user = userEvent.setup();
-    render(<CompanyProgrammeDirectoryPage />);
+    mockGetFeatureFlags.mockReturnValueOnce(baseFlags);
+    renderWithProviders(<CompanyProgrammeDirectoryPage />);
 
     const searchInput = screen.getByPlaceholderText(/Search programme/i);
     await user.type(searchInput, "mobile health");
@@ -56,30 +96,22 @@ describe("Company CSR programme directory", () => {
   });
 
   it("shows skeleton while loading", () => {
-    const useStateSpy = jest
-      .spyOn(React, "useState")
-      .mockImplementationOnce(() => [
-        {
-          category: "All",
-          status: "All",
-          region: "All",
-          query: "",
-        },
-        jest.fn(),
-      ])
-      .mockImplementationOnce(() => [true, jest.fn()]);
+    mockGetFeatureFlags.mockReturnValueOnce({ ...baseFlags, API_PROGRAMME: true });
+    const { useCompanyProgrammes } = require("@/lib/hooks/use-company-programmes");
+    (useCompanyProgrammes as jest.Mock).mockReturnValueOnce({ data: undefined, isLoading: true, isError: false });
 
-    render(<CompanyProgrammeDirectoryPage />);
+    renderWithProviders(<CompanyProgrammeDirectoryPage />);
 
     expect(screen.getAllByTestId("programme-skeleton-card")).toHaveLength(6);
-
-    useStateSpy.mockRestore();
   });
 });
 
 describe("Company CSR programme detail", () => {
   it("renders programme information and tabs", () => {
-    render(<ProgrammeDetailPage />);
+    mockGetFeatureFlags.mockReturnValueOnce(baseFlags);
+    const { useProgrammeDetail } = require("@/lib/hooks/use-company-programmes");
+    (useProgrammeDetail as jest.Mock).mockReturnValueOnce({ data: null, isLoading: false, isError: false });
+    renderWithProviders(<ProgrammeDetailPage />);
 
     expect(screen.getByRole("heading", { name: /Rural STEM Labs/i })).toBeInTheDocument();
     expect(screen.getByRole("img", { name: /banner/i })).toBeInTheDocument();
@@ -98,7 +130,10 @@ describe("Company CSR programme detail", () => {
       throw notFoundError;
     });
 
-    expect(() => render(<ProgrammeDetailPage />)).toThrow(notFoundError);
+    mockGetFeatureFlags.mockReturnValueOnce(baseFlags);
+    const { useProgrammeDetail } = require("@/lib/hooks/use-company-programmes");
+    (useProgrammeDetail as jest.Mock).mockReturnValueOnce({ data: null, isLoading: false, isError: false });
+    expect(() => renderWithProviders(<ProgrammeDetailPage />)).toThrow(notFoundError);
     expect(mockNotFound).toHaveBeenCalled();
 
     mockParams = { id: "programme-1" };
@@ -108,5 +143,23 @@ describe("Company CSR programme detail", () => {
 
 afterEach(() => {
   jest.clearAllMocks();
+  mockGetFeatureFlags.mockReset();
+  mockGetFeatureFlags.mockReturnValue(baseFlags);
+
+  const moduleMocks = require("@/lib/hooks/use-company-programmes");
+  (moduleMocks.useCompanyProgrammes as jest.Mock).mockReset();
+  (moduleMocks.useCompanyProgrammes as jest.Mock).mockReturnValue({
+    data: undefined,
+    isLoading: false,
+    isError: false,
+  });
+
+  (moduleMocks.useProgrammeDetail as jest.Mock).mockReset();
+  (moduleMocks.useProgrammeDetail as jest.Mock).mockReturnValue({
+    data: null,
+    isLoading: false,
+    isError: false,
+  });
+
   mockParams = { id: "programme-1" };
 });

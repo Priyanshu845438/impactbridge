@@ -5,6 +5,8 @@ describe("feature flag resolution", () => {
     NEXT_PUBLIC_FLAG_API_DASHBOARD: undefined,
     NEXT_PUBLIC_FLAG_REALTIME_NOTIFICATIONS: undefined,
     NEXT_PUBLIC_FLAG_SERVER_NAVIGATION: undefined,
+    NEXT_PUBLIC_FLAG_API_AUTH: undefined,
+    NEXT_PUBLIC_FLAG_API_PROGRAMME: undefined,
   } as Record<string, string | undefined>;
 
   it("returns defaults when env vars are missing", () => {
@@ -12,6 +14,8 @@ describe("feature flag resolution", () => {
       API_DASHBOARD: false,
       REALTIME_NOTIFICATIONS: false,
       SERVER_NAVIGATION: false,
+      API_AUTH: false,
+      API_PROGRAMME: false,
     });
   });
 
@@ -21,11 +25,15 @@ describe("feature flag resolution", () => {
       NEXT_PUBLIC_FLAG_API_DASHBOARD: "true",
       NEXT_PUBLIC_FLAG_REALTIME_NOTIFICATIONS: "1",
       NEXT_PUBLIC_FLAG_SERVER_NAVIGATION: "enabled",
+      NEXT_PUBLIC_FLAG_API_AUTH: "yes",
+      NEXT_PUBLIC_FLAG_API_PROGRAMME: "on",
     };
     expect(getFeatureFlags(env)).toEqual({
       API_DASHBOARD: true,
       REALTIME_NOTIFICATIONS: true,
       SERVER_NAVIGATION: true,
+      API_AUTH: true,
+      API_PROGRAMME: true,
     });
   });
 
@@ -35,11 +43,15 @@ describe("feature flag resolution", () => {
       NEXT_PUBLIC_FLAG_API_DASHBOARD: "false",
       NEXT_PUBLIC_FLAG_REALTIME_NOTIFICATIONS: "0",
       NEXT_PUBLIC_FLAG_SERVER_NAVIGATION: "disabled",
+      NEXT_PUBLIC_FLAG_API_AUTH: "no",
+      NEXT_PUBLIC_FLAG_API_PROGRAMME: "off",
     };
     expect(getFeatureFlags(env)).toEqual({
       API_DASHBOARD: false,
       REALTIME_NOTIFICATIONS: false,
       SERVER_NAVIGATION: false,
+      API_AUTH: false,
+      API_PROGRAMME: false,
     });
   });
 
@@ -69,6 +81,8 @@ describe("feature flag resolution", () => {
       { key: "API_DASHBOARD", enabled: true },
       { key: "REALTIME_NOTIFICATIONS", enabled: false },
       { key: "SERVER_NAVIGATION", enabled: false },
+      { key: "API_AUTH", enabled: false },
+      { key: "API_PROGRAMME", enabled: false },
     ]);
   });
 });

@@ -30,6 +30,7 @@ import { programmes, Programme } from "../mock-data";
 import { cn } from "@/lib/utils";
 import { getFeatureFlags } from "@/lib/feature-flags";
 import { useProgrammeDetail } from "@/lib/hooks/use-company-programmes";
+import type { ProgrammeDetailDto, ProgrammeListItemDto } from "@impactbridge/api-contracts";
 
 const statusTone: Record<string, string> = {
   Active: "bg-emerald-500/10 text-emerald-600",
@@ -45,9 +46,9 @@ export default function ProgrammeDetailPage() {
     data: apiProgramme,
     isLoading: isApiLoading,
     isError: isApiError,
-  } = useProgrammeDetail({ id: params.id, enabled: API_PROGRAMME });
+  } = useProgrammeDetail({ programmeId: params.id, enabled: API_PROGRAMME });
 
-  const programme = useMemo(() => {
+  const programme = useMemo<Programme | undefined>(() => {
     if (API_PROGRAMME && !isApiError && apiProgramme) {
       return adaptProgrammeDetail(apiProgramme);
     }
@@ -93,9 +94,9 @@ export default function ProgrammeDetailPage() {
         <ErrorState />
       ) : (
         <div className="space-y-8">
-          <HeaderSection programme={programme} />
-          <HeroSection programme={programme} />
-          <MainContent programme={programme} relatedProgrammes={relatedProgrammes} />
+          <HeaderSection programme={programme as Programme} />
+          <HeroSection programme={programme as Programme} />
+          <MainContent programme={programme as Programme} relatedProgrammes={relatedProgrammes} />
         </div>
       )}
     </div>
@@ -446,4 +447,93 @@ function ErrorState() {
       </div>
     </Card>
   );
+}
+
+function adaptProgrammeDetail(detail: ProgrammeDetailDto | null): Programme | undefined {
+  if (!detail) {
+    return undefined;
+  }
+
+  const primaryNgo = detail.assignments?.[0]?.ngo;
+  const normalisedStatus = mapProgrammeStatus(detail.status);
+
+  return {
+    id: detail.id,
+    name: detail.title,
+    summary: detail.description ?? "Programme summary coming soon.",
+    description: detail.description ?? "Programme overview being authored.",
+    goals: detail.milestones?.map((milestone) => milestone.title) ?? [],
+    status: normalisedStatus,
+    budget: detail.budget ? `₹${detail.budget.toLocaleString()}` : "Budget to be confirmed",
+    timeline: [detail.startDate, detail.endDate].filter(Boolean).join(" – ") || "Timeline to be defined",
+    region: primaryNgo?.missionStatement ? "Pan India" : "Multiple regions",
+    impactSummary: detail.milestones?.[0]?.title ?? "Impact summary will be generated once data syncs",
+    bannerUrl: inferProgrammeBanner(detail),
+    sdgs: detail.milestones?.map((milestone) => milestone.title) ?? [],
+    category: inferProgrammeCategory(detail),
+    ngo: {
+      name: primaryNgo?.name ?? "Partner NGO",
+      mission: primaryNgo?.missionStatement ?? "Mission statement coming soon.",
+      email: primaryNgo?.email,
+      phone: undefined,
+      website: undefined,
+    },
+    milestones:
+      detail.milestones?.map((milestone) => ({
+        id: milestone.id,
+        title: milestone.title,
+        summary: milestone.status,
+        date: milestone.dueDate ?? "TBD",
+      })) ?? [],
+    documents: [],
+    updates: [],
+    relatedProgrammeIds: [],
+  } satisfies Programme;
+}
+
+function inferProgrammeBanner(programme: ProgrammeListItemDto | ProgrammeDetailDto) {
+  const base = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80";
+  const mission = programme.assignments?.[0]?.ngo?.missionStatement;
+  if (!mission) return base;
+  const encoded = encodeURIComponent(mission.replace(/\s+/g, " "));
+  return `https://source.unsplash.com/featured/720x320/?csr,impact,${encoded}`;
+}
+
+function mapProgrammeStatus(status: ProgrammeDetailDto["status"]): Programme["status"] {
+  if (!status) {
+    return "Active";
+  }
+
+  const mapping: Record<string, Programme["status"]> = {
+    ACTIVE: "Active",
+    COMPLETED: "Completed",
+    UPCOMING: "Upcoming",
+  };
+
+  return mapping[status] ?? "Active";
+}
+
+function inferProgrammeCategory(detail: ProgrammeDetailDto): string {
+  const milestoneKeywords = detail.milestones
+    ?.map((milestone) => `${milestone.title} ${milestone.description ?? ""}`)
+    .join(" ")
+    .toLowerCase();
+
+  if (milestoneKeywords?.includes("health")) {
+    return "Healthcare";
+  }
+
+  if (milestoneKeywords?.includes("education")) {
+    return "Education";
+  }
+
+  if (milestoneKeywords?.includes("environment")) {
+    return "Environment";
+  }
+
+  if (detail.description?.toLowerCase().includes("women")) {
+    return "Women Empowerment";
+  }
+
+  return "CSR";
 }

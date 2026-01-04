@@ -37,3 +37,8 @@
 - Evaluated admin dashboard analytics lint violations blocking builds.
 - Deferred intrusive fixes to avoid disturbing mock analytics behaviour before API wiring lands.
 - Noted dependency on upcoming analytics refactor for final lint resolution.
+
+9. CSR Programme Hooks Bridge
+- Wired company CSR programme hooks to backend API via feature-flagged wrappers while preserving mock fallback.
+- Added Jest coverage for flag on/off scenarios and ensured React Query providers are seeded in tests.
+- Resolved TypeScript pathing to reuse `@impactbridge/api-contracts` DTOs and verified `npm run build` remains green.

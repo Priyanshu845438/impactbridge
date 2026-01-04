@@ -16,7 +16,7 @@ import { useDebouncedValue } from "@/hooks/use-debounced-value";
 
 import { getFeatureFlags } from "@/lib/feature-flags";
 import { useCompanyProgrammes } from "@/lib/hooks/use-company-programmes";
-import type { ProgrammeListItemDto } from "api-contracts";
+import type { ProgrammeSummaryDto } from "@impactbridge/api-contracts";
 import { programmes as mockProgrammes, Programme } from "./mock-data";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
@@ -27,11 +27,13 @@ interface FilterState {
   query: string;
 }
 
-const statusOptions: Array<FilterState["status"] | "All"> = ["All", "Active", "Completed", "Upcoming", "Draft", "Submitted", "Approved"];
+const statusOptions: Array<FilterState["status"] | "All"> = ["All", "Active", "Completed", "Upcoming", "Draft", "Submitted", "Approved"] as Array<
+  FilterState["status"] | "All"
+>;
 const categoryOptions = ["All", "Education", "Healthcare", "Environment", "Livelihood", "Infrastructure", "Agriculture"];
 const regionOptions = ["All", "Maharashtra", "Uttarakhand", "Tamil Nadu", "Gujarat", "Rajasthan", "Madhya Pradesh"];
 
-type ProgrammeSource = Programme | ProgrammeListItemDto;
+type ProgrammeSource = Programme | ProgrammeSummaryDto;
 
 interface ProgrammeCardData {
   id: string;
@@ -314,15 +316,15 @@ function toProgrammeCardData(programme: ProgrammeSource): ProgrammeCardData {
     };
   }
 
-  const statusLabel = PROGRAMME_STATUS_LABELS[programme.status] ?? programme.status;
+  const statusLabel = PROGRAMME_STATUS_LABELS[programme.state] ?? programme.state;
   const badgeToneClass = normaliseStatusTone(statusLabel);
-  const ngoName = programme.assignments?.[0]?.ngo?.name ?? "Partner NGO";
-  const highlights = programme.milestones?.map((milestone) => milestone.title) ?? [];
+  const ngoName = "Partner NGO";
+  const highlights: string[] = [];
   const description = programme.description ?? "Programme overview coming soon.";
-  const category = programme.assignments?.[0]?.ngo?.missionStatement ? "Impact" : "General";
-  const region = programme.assignments?.[0]?.ngo?.missionStatement ? "Pan India" : "Multiple regions";
-  const bannerUrl = inferProgrammeBanner(programme, ngoName);
-  const searchHaystack = [programme.title, description, ngoName, category, region, highlights.join(" ")].join(" ").toLowerCase();
+  const category = inferProgrammeCategoryFromSummary(programme);
+  const region = inferProgrammeRegion(programme);
+  const bannerUrl = inferProgrammeBanner(programme);
+  const searchHaystack = [programme.title, description, ngoName, category, region].join(" ").toLowerCase();
 
   return {
     id: programme.id,
@@ -339,12 +341,25 @@ function toProgrammeCardData(programme: ProgrammeSource): ProgrammeCardData {
   };
 }
 
-function inferProgrammeBanner(programme: ProgrammeListItemDto, ngoName: string) {
+function inferProgrammeBanner(programme: ProgrammeSummaryDto) {
   const base = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80";
-  const mission = programme.assignments?.[0]?.ngo?.missionStatement;
+  const mission = programme.description;
   if (!mission) return base;
   const encoded = encodeURIComponent(mission.replace(/\s+/g, " "));
   return `https://source.unsplash.com/featured/720x320/?csr,impact,${encoded}`;
+}
+
+function inferProgrammeCategoryFromSummary(programme: ProgrammeSummaryDto): string {
+  const text = `${programme.title} ${programme.description}`.toLowerCase();
+  if (text.includes("health")) return "Healthcare";
+  if (text.includes("education")) return "Education";
+  if (text.includes("climate") || text.includes("environment")) return "Environment";
+  if (text.includes("livelihood")) return "Livelihood";
+  return "CSR";
+}
+
+function inferProgrammeRegion(programme: ProgrammeSummaryDto): string {
+  return programme.description?.toLowerCase().includes("rural") ? "Rural India" : "Pan India";
 }
 
 function normaliseStatusTone(status: string) {

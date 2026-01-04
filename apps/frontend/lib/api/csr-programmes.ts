@@ -1,17 +1,17 @@
 import { apiRequest } from '@/lib/api/client';
 import type {
-  ProgrammeListItemDto,
+  ProgrammeSummaryDto,
   ProgrammeDetailDto,
   ProgrammeCreateDto,
   ProgrammeUpdateDto,
   ProgrammeStatusUpdateDto,
   ProgrammeAssignNgoDto,
-} from 'api-contracts';
+} from '@impactbridge/api-contracts';
 
 const BASE_PATH = '/api/v1/csr/programmes';
 
 export async function fetchCompanyProgrammes() {
-  const response = await apiRequest<ProgrammeListItemDto[]>({ path: BASE_PATH });
+  const response = await apiRequest<ProgrammeSummaryDto[]>({ path: BASE_PATH });
   return response.data ?? [];
 }
 
@@ -55,4 +55,3 @@ export async function assignProgrammeNgo(id: string, payload: ProgrammeAssignNgo
   });
   return response.data;
 }
-

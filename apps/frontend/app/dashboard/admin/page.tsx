@@ -20,7 +20,7 @@ import {
 
 import { QuickActionCard } from "@/components/dashboard/quick-action-card";
 import { SectionHeader } from "@/components/dashboard/section-header";
-import { ActivityFeed, type ActivityFeedItem } from "@/components/dashboard/activity-feed";
+import { ActivityFeed } from "@/components/dashboard/activity-feed";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { useAuth } from "@/providers/auth-context";
 import { toast } from "sonner";
@@ -31,7 +31,6 @@ import { ImpactTrendChart } from "@/components/charts/impact-trend-chart";
 import { DashboardOnboarding } from "@/components/onboarding/dashboard-onboarding";
 import { getFeatureFlags } from "@/lib/feature-flags";
 import { useAdminAnalytics } from "@/lib/hooks/use-admin-analytics";
-import { getStatusCount } from "@/lib/analytics/utils";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -74,25 +73,7 @@ export default function AdminDashboard() {
 
   const analyticsEnabled = useMemo(() => getFeatureFlags().API_DASHBOARD, []);
 
-  const {
-    data: analytics,
-    isLoading: analyticsLoading,
-    isError: analyticsError,
-  } = useAdminAnalytics({ enabled: analyticsEnabled });
-
-
-  const analyticsActivityItems = useMemo<ActivityFeedItem[] | undefined>(() => {
-    if (!analytics?.activity?.length) {
-      return undefined;
-    }
-    return analytics.activity.map((item) => ({
-      id: item.id,
-      title: item.title,
-      description: item.description,
-      timestamp: formatActivityTimestamp(item.timestamp),
-      icon: pickActivityIcon(item.title, item.description),
-    }));
-  }, [analytics]);
+  useAdminAnalytics({ enabled: analyticsEnabled });
 
 
   const quickActions = useMemo(

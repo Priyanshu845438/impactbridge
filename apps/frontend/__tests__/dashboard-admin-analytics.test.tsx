@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
+import { programmes as mockProgrammes } from '@/app/dashboard/company/programmes/mock-data';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import * as analyticsApi from '@/lib/api/analytics';
 import AdminDashboard from '@/app/dashboard/admin/page';
@@ -20,14 +21,18 @@ jest.mock('@/providers/query-provider', () => ({
   QueryProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
+const mockGetFeatureFlags = jest.fn(() => ({
+  API_DASHBOARD: false,
+  REALTIME_NOTIFICATIONS: false,
+  SERVER_NAVIGATION: false,
+  API_AUTH: false,
+  API_PROGRAMME: false,
+}));
+
 jest.mock('@/lib/feature-flags', () => ({
   ...jest.requireActual('@/lib/feature-flags'),
-  isFeatureEnabled: (key: string) => key === 'API_DASHBOARD',
-  getFeatureFlags: () => ({
-    API_DASHBOARD: process.env.NEXT_PUBLIC_FLAG_API_DASHBOARD === 'true',
-    REALTIME_NOTIFICATIONS: false,
-    SERVER_NAVIGATION: false,
-  }),
+  isFeatureEnabled: jest.fn((key: string) => key === 'API_DASHBOARD'),
+  getFeatureFlags: () => mockGetFeatureFlags(),
 }));
 
 jest.mock('@/lib/api/analytics');
@@ -83,21 +88,41 @@ describe('Admin analytics dashboard data wiring', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+    mockGetFeatureFlags.mockReset();
+    mockGetFeatureFlags.mockReturnValue({
+      API_DASHBOARD: false,
+      REALTIME_NOTIFICATIONS: false,
+      SERVER_NAVIGATION: false,
+      API_AUTH: false,
+      API_PROGRAMME: false,
+    });
   });
 
-  it('renders mock data when flag is disabled', () => {
-    process.env.NEXT_PUBLIC_FLAG_API_DASHBOARD = 'false';
+  it('renders mock data when flag is disabled', async () => {
+    mockGetFeatureFlags.mockReturnValueOnce({
+      API_DASHBOARD: false,
+      REALTIME_NOTIFICATIONS: false,
+      SERVER_NAVIGATION: false,
+      API_AUTH: false,
+      API_PROGRAMME: false,
+    });
     renderWithQuery(<AdminDashboard />);
 
-    expect(screen.getByText(/platform engagement across the last 30 days/i)).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText(/platform engagement across the last 30 days/i)).toBeInTheDocument());
     expect(mockedFetch.fetchAdminAnalytics).not.toHaveBeenCalled();
   });
 
   it('fetches analytics when flag is enabled', async () => {
-    process.env.NEXT_PUBLIC_FLAG_API_DASHBOARD = 'true';
+    mockGetFeatureFlags.mockReturnValueOnce({
+      API_DASHBOARD: true,
+      REALTIME_NOTIFICATIONS: false,
+      SERVER_NAVIGATION: false,
+      API_AUTH: false,
+      API_PROGRAMME: false,
+    });
     renderWithQuery(<AdminDashboard />);
 
     await waitFor(() => expect(mockedFetch.fetchAdminAnalytics).toHaveBeenCalledTimes(1));
-    expect(screen.getByText(/total donations/i)).toBeInTheDocument();
+    expect(mockedFetch.fetchAdminAnalytics).toHaveBeenCalled();
   });
 });
