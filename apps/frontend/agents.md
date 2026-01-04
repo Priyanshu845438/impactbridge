@@ -57,3 +57,8 @@
 - List page now consumes the flag-aware hook, falling back to mocks when the API is disabled, empty, or errors.
 - Added list-page tests covering flag on/off, API payload rendering, mock fallback, loading, and error banner states.
 - Verified UI parity with full suite and production build (`npm run test`, `npm run build`).
+
+13. CSR Programme Detail Page API Switch
+- Detail page now uses the flag-aware hook with a safe mock fallback, keeping skeleton and error states intact.
+- Added unit tests for flag off/on paths, API fallback, loading, and error handling to guarantee UI parity.
+- Re-ran full frontend test/build pipelines (`npm run test`, `npm run build`) to confirm no regressions.

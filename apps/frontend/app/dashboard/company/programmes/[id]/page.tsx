@@ -412,7 +412,7 @@ function EmptyUpdatesState() {
 
 function PageSkeleton() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="programme-detail-skeleton">
       <Skeleton className="h-24 w-full rounded-4xl" />
       <Skeleton className="h-60 w-full rounded-4xl" />
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
