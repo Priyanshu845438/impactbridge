@@ -107,3 +107,8 @@
 - Updated service detail path to load assignments + milestones before sanitising.
 - Responses now consistently pass through `toProgrammeDetailDto`, matching shared contracts without altering behaviour.
 - Test/build suites rerun to guarantee no regressions.
+
+24. CSR Programme Route Contracts (HTTP)
+- Added happy-path e2e suite verifying list/detail/create/update/status routes over Nest testing module with guard-auth token.
+- In-memory Prisma double keeps responses DTO-aligned without touching production code.
+- Full unit suite remains green; note: legacy v1 e2e suites still fail pending separate fixes.

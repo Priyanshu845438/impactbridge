@@ -1,4 +1,5 @@
 # Backend Changelog
+- **2025-02-24** — CSR programme happy-path e2e suite added to validate list/detail/create/update/status contracts.
 - **2025-02-22** — CSR programme company-scoped controller wired with existing service methods; API docs updated to reflect `/companies/:companyId/csr-programmes` routes and response DTOs.
 
 - **2025-01-27** — Approval notifications integrated: intents queued on request/reset/approve/reject/revoke, tests added.
