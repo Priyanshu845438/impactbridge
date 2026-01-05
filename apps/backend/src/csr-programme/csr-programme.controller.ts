@@ -5,11 +5,16 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CSRProgrammeService } from './csr-programme.service';
 import { CreateProgrammeDto } from './dto/create-programme.dto';
 import { UpdateProgrammeDto } from './dto/update-programme.dto';
 import { AssignNgoDto } from './dto/assign-ngo.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { UserRole } from '../user/user-role.enum';
 
 @Controller({
   path: 'companies/:companyId/csr-programmes',
@@ -18,11 +23,15 @@ import { AssignNgoDto } from './dto/assign-ngo.dto';
 export class CSRProgrammeController {
   constructor(private readonly csrProgrammeService: CSRProgrammeService) {}
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.COMPANY)
   @Get()
   list(@Param('companyId') companyId: string) {
     return this.csrProgrammeService.listByCompany(companyId);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.COMPANY)
   @Get(':programmeId')
   detail(
     @Param('companyId') companyId: string,
@@ -31,6 +40,8 @@ export class CSRProgrammeController {
     return this.csrProgrammeService.getByIdForCompany(companyId, programmeId);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.COMPANY)
   @Post()
   create(
     @Param('companyId') companyId: string,
@@ -39,6 +50,8 @@ export class CSRProgrammeController {
     return this.csrProgrammeService.create(companyId, dto);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.COMPANY)
   @Patch(':programmeId')
   update(
     @Param('companyId') companyId: string,
@@ -48,6 +61,8 @@ export class CSRProgrammeController {
     return this.csrProgrammeService.update(programmeId, companyId, dto);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.COMPANY)
   @Post(':programmeId/assign-ngo')
   assignNgo(
     @Param('companyId') companyId: string,
@@ -57,6 +72,8 @@ export class CSRProgrammeController {
     return this.csrProgrammeService.assignNgo(programmeId, companyId, dto);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.COMPANY)
   @Post(':programmeId/status')
   transitionStatus(
     @Param('companyId') companyId: string,
@@ -70,4 +87,3 @@ export class CSRProgrammeController {
     );
   }
 }
-

@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
+import { sign } from 'jsonwebtoken';
 import { AppModule } from '../../src/app.module';
 import { PrismaService } from '../../src/prisma/prisma.service';
 import { ProgrammeStatus, ProgrammeAssignmentStatus } from 'prisma/generated';
@@ -34,6 +35,13 @@ const prismaMock = {
   },
 };
 
+const JWT_SECRET = process.env.JWT_SECRET ?? 'test-secret';
+
+function companyAuthHeader() {
+  const token = sign({ sub: 'user-1', role: 'COMPANY' }, JWT_SECRET);
+  return `Bearer ${token}`;
+}
+
 describe('CSR Programme routes (company-scoped contract)', () => {
   let app: INestApplication;
   const companyId = baseCompany.id;
@@ -44,6 +52,7 @@ describe('CSR Programme routes (company-scoped contract)', () => {
   });
 
   beforeAll(async () => {
+    process.env.JWT_SECRET = JWT_SECRET;
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
     })
@@ -98,6 +107,7 @@ describe('CSR Programme routes (company-scoped contract)', () => {
   it('GET /companies/:companyId/csr-programmes returns ProgrammeSummaryDto[]', async () => {
     const { body } = await request(app.getHttpServer())
       .get(`/companies/${companyId}/csr-programmes`)
+      .set('Authorization', companyAuthHeader())
       .expect(200);
 
     expect(Array.isArray(body)).toBe(true);
@@ -114,6 +124,7 @@ describe('CSR Programme routes (company-scoped contract)', () => {
   it('GET /companies/:companyId/csr-programmes/:programmeId returns ProgrammeDetailDto', async () => {
     const { body } = await request(app.getHttpServer())
       .get(`/companies/${companyId}/csr-programmes/${programme.id}`)
+      .set('Authorization', companyAuthHeader())
       .expect(200);
 
     expectProgrammeDetailShape(body);
@@ -133,6 +144,7 @@ describe('CSR Programme routes (company-scoped contract)', () => {
 
     const { body } = await request(app.getHttpServer())
       .post(`/companies/${companyId}/csr-programmes`)
+      .set('Authorization', companyAuthHeader())
       .send(payload)
       .expect(201);
 
@@ -144,6 +156,7 @@ describe('CSR Programme routes (company-scoped contract)', () => {
   it('PATCH /companies/:companyId/csr-programmes/:programmeId returns update response DTO', async () => {
     const { body } = await request(app.getHttpServer())
       .patch(`/companies/${companyId}/csr-programmes/${programme.id}`)
+      .set('Authorization', companyAuthHeader())
       .send({ status: ProgrammeStatus.ACTIVE })
       .expect(200);
 
@@ -155,6 +168,7 @@ describe('CSR Programme routes (company-scoped contract)', () => {
   it('POST /companies/:companyId/csr-programmes/:programmeId/assign-ngo returns assignment DTO', async () => {
     const { body } = await request(app.getHttpServer())
       .post(`/companies/${companyId}/csr-programmes/${programme.id}/assign-ngo`)
+      .set('Authorization', companyAuthHeader())
       .send({ ngoId: baseNgo.id, notes: 'Confirmed' })
       .expect(201);
 
@@ -164,6 +178,7 @@ describe('CSR Programme routes (company-scoped contract)', () => {
   it('POST /companies/:companyId/csr-programmes/:programmeId/status returns status transition DTO', async () => {
     const { body } = await request(app.getHttpServer())
       .post(`/companies/${companyId}/csr-programmes/${programme.id}/status`)
+      .set('Authorization', companyAuthHeader())
       .send({ status: ProgrammeStatus.ACTIVE })
       .expect(201);
 

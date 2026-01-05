@@ -97,3 +97,8 @@
 - Added company-scoped e2e tests covering list/detail/create/update/assign/status routes.
 - Tests run against Nest testing module with mocked Prisma to assert DTO-aligned responses.
 - No service or controller changes; suites guard against regressions.
+
+22. CSR Programme Route Guards
+- Applied `JwtAuthGuard` + `RolesGuard` with COMPANY role requirement across all CSR controller endpoints.
+- Added guard-focused tests to confirm unauthenticated and mis-role requests are rejected while preserving successful responses for COMPANY tokens.
+- Updated contract tests to send bearer tokens, keeping payload expectations unchanged.

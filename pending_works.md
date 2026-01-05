@@ -8,7 +8,7 @@ _All findings are observational; no code was modified during this audit. Items a
 3. There is no coverage for CSR, auth, approvals, or financial journeys—future suites must be planned to validate end-to-end scenarios once routes are stable.
 
 ## 2. apps/backend
-1. **CSR Programme controller** now exposes company-scoped routes but lacks guards (`@UseGuards`, `@Roles`) so RBAC enforcement currently depends on downstream modules—needs explicit protection before release.
+1. **CSR Programme controller** now exposes company-scoped routes with explicit `JwtAuthGuard` + `RolesGuard (COMPANY)` applied; integration tests cover both guard enforcement and happy-path responses.
 2. `CSRProgrammeController.detail` delegates to `getByIdForCompany`, which returns the raw Prisma entity (no sanitised DTO map); response omits milestone/assignment includes present in list endpoints, creating an inconsistent API surface.
 3. Controller methods accept DTOs but do not apply validation pipes locally—ensure global validation is active or add decorators to avoid unchecked payloads.
 4. CSR service integration tests exist only as in-memory workflow specs; HTTP contract coverage now exists in `apps/backend/__tests__/csr-programme/csr-programme.routes.spec.ts`, but RBAC permutations and negative paths remain pending.

@@ -43,10 +43,9 @@ Refer to controller source files for full parameter shapes. Every request body i
 ## Changelog Reference
 - See `docs/CHANGELOG.md` for recent endpoint additions/changes.
 
-### CSR Programmes
-- `GET /api/v1/companies/{companyId}/csr-programmes` — list programmes for a company (returns `ProgrammeSummaryDto[]`)
-- `GET /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — show a single programme (returns `ProgrammeDetailDto`)
+- `GET /api/v1/companies/{companyId}/csr-programmes` — list programmes for a company (returns `ProgrammeSummaryDto[]`); requires COMPANY role.
+- `GET /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — show a single programme (returns `ProgrammeDetailDto`); requires COMPANY role.
 - `POST /api/v1/companies/{companyId}/csr-programmes` — create programme (returns `ProgrammeCreateResponseDto`); requires COMPANY role.
-- `PATCH /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — update programme (returns `ProgrammeUpdateResponseDto`)
-- `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/assign-ngo` — assign NGO
-- `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/status` — transition status (returns `ProgrammeStatusTransitionDto`)
+- `PATCH /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — update programme (returns `ProgrammeUpdateResponseDto`); requires COMPANY role.
+- `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/assign-ngo` — assign NGO; requires COMPANY role.
+- `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/status` — transition status (returns `ProgrammeStatusTransitionDto`); requires COMPANY role.

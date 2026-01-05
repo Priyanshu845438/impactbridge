@@ -10,3 +10,4 @@
 - **2024-11-30** — Auth module hardened: login/signup DTOs, bcrypt utility, JWT issuance and guards.
 - **2024-11-15** — User module RBAC endpoints (`/users`, `/users/:id`, `/users/me`, change-password) finalised.
 - **2024-10-20** — Base NestJS scaffolding, Prisma service wrapper, global validation pipe.
+- **2026-01-05** — Applied explicit JwtAuthGuard + RolesGuard (COMPANY) to all CSR programme controller routes and added guard coverage tests; no response changes.
