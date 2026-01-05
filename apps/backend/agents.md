@@ -116,3 +116,8 @@
 25. CSR Programme actor context
 - Added request-scoped actor helper + controller plumbing; service now receives optional actorId without behaviour change.
 - Prepares for audit logging in follow-up task; all tests remain green (legacy v1 e2e still pending).
+
+26. CSR Programme request context
+- Introduced request-scoped context service/interceptor capturing optional actorId for CSR routes.
+- Controller passes actorId options into service methods without altering behaviour; prepares for audit logging.
+

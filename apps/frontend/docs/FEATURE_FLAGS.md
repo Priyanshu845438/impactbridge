@@ -11,3 +11,5 @@
 - `AuthProvider` and feature-specific hooks (analytics, CSR) branch on flag values to determine data source.
 - Always provide mock fallbacks to keep demo environments functional.
 - Document new flags here with default state and rollout plan.
+
+_Last reviewed: 2026-01-05 — backend request-context plumbing for CSR audit logging does not change flag semantics; API programme flag remains the switch for live list/detail/create flows._

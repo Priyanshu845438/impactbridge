@@ -1,4 +1,6 @@
 # Backend Changelog
+- **2026-01-06** — CSR request context plumbing added (AsyncLocal-based); no behavioural changes yet, logging task pending.
+
 - **2025-02-25** — CSR programme RBAC route tests added to confirm COMPANY-only access without changing guards.
 - **2025-02-24** — CSR programme happy-path e2e suite added to validate list/detail/create/update/status contracts.
 - **2025-02-22** — CSR programme company-scoped controller wired with existing service methods; API docs updated to reflect `/companies/:companyId/csr-programmes` routes and response DTOs.
