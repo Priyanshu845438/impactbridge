@@ -67,3 +67,8 @@
 - Added mock-backed `useCreateProgramme` mutation hook plus `/dashboard/company/programmes/new` to mirror existing UX.
 - Baseline tests ensure the mock mutation runs and validation remains unchanged.
 - No behavioural differences; build/test stay green (`npm run test`, `npm run build`).
+
+15. CSR Programme Create API Bridge
+- Upgraded `useCreateProgramme` mutation to call backend API when `API_PROGRAMME` flag is enabled, while preserving mock fallback.
+- Added hook unit tests covering flag on/off behaviour and response shape parity.
+- Confirmed create form tests remain stable via mocked hook and reran full suite (`npm run test`) and production build (`npm run build`).

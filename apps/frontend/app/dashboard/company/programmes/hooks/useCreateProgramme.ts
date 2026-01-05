@@ -2,7 +2,12 @@
 
 import { useMutation } from '@tanstack/react-query';
 
+import { apiRequest } from '@/lib/api/client';
+import { getFeatureFlags } from '@/lib/feature-flags';
+import type { ProgrammeCreateDto, ProgrammeCreateResponseDto } from '@impactbridge/api-contracts';
+
 import { programmes as mockProgrammes } from '../mock-data';
+import { DEFAULT_COMPANY_ID } from '../api';
 
 interface CreateProgrammeInput {
   name: string;
@@ -16,6 +21,8 @@ interface MockCreateResponse {
   success: boolean;
   programme: (typeof mockProgrammes)[number];
 }
+
+const BASE_PATH = '/api/v1/companies';
 
 function mockCreateProgramme(input: CreateProgrammeInput): MockCreateResponse {
   const programme = {
@@ -31,9 +38,37 @@ function mockCreateProgramme(input: CreateProgrammeInput): MockCreateResponse {
   return { success: true, programme };
 }
 
-export function useCreateProgramme() {
-  return useMutation<MockCreateResponse, Error, CreateProgrammeInput>({
-    mutationFn: async (input) => mockCreateProgramme(input),
+async function apiCreateProgramme(
+  input: CreateProgrammeInput,
+  companyId: string = DEFAULT_COMPANY_ID,
+): Promise<ProgrammeCreateResponseDto> {
+  const payload: ProgrammeCreateDto = {
+    title: input.name,
+    description: input.summary,
+    status: input.status.toUpperCase() as ProgrammeCreateDto['status'],
+  };
+
+  const response = await apiRequest<ProgrammeCreateResponseDto>({
+    method: 'POST',
+    path: `${BASE_PATH}/${companyId}/csr-programmes`,
+    body: payload,
+  });
+
+  return response.data as ProgrammeCreateResponseDto;
+}
+
+export function useCreateProgramme(companyId: string = DEFAULT_COMPANY_ID) {
+  const { API_PROGRAMME } = getFeatureFlags();
+
+  return useMutation<MockCreateResponse | ProgrammeCreateResponseDto, Error, CreateProgrammeInput>({
+    mutationFn: async (input) => {
+      if (!API_PROGRAMME) {
+        return mockCreateProgramme(input);
+      }
+
+      return apiCreateProgramme(input, companyId);
+    },
   });
 }
 
+export type { CreateProgrammeInput, MockCreateResponse };

@@ -10,6 +10,7 @@ const mutateMock = jest.fn();
 jest.mock('@/app/dashboard/company/programmes/hooks/useCreateProgramme', () => ({
   useCreateProgramme: () => ({
     mutate: mutateMock,
+    mutateAsync: mutateMock,
     isPending: false,
   }),
 }));

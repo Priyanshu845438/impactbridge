@@ -14,7 +14,9 @@ export * from './dto/csr-programme/programme-summary.dto';
 export * from './dto/csr-programme/programme-list.dto';
 export * from './dto/csr-programme/programme-detail.dto';
 export * from './dto/csr-programme/programme-create.dto';
+export * from './dto/csr-programme/programme-create-response.dto';
 export * from './dto/csr-programme/programme-update.dto';
+export * from './dto/csr-programme/programme-update-response.dto';
 export * from './dto/csr-programme/programme-status.dto';
 export * from './dto/csr-programme/programme-assign-ngo.dto';
 

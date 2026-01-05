@@ -21,7 +21,7 @@
 | Users | `/api/v1/users/:id` | PATCH | Update arbitrary user | JWT + Role(SUPER_ADMIN) |
 | Users | `/api/v1/users/:id` | DELETE | Delete user | JWT + Role(SUPER_ADMIN) |
 | Users | `/api/v1/users/me/change-password` | POST | Change password | JWT |
-| CSR Programmes | `/api/v1/companies/{companyId}/csr-programmes` | CRUD endpoints for company programmes | JWT + Role(COMPANY) |
+| CSR Programmes | `/api/v1/companies/{companyId}/csr-programmes` | GET list, POST create, PATCH update, assign NGO, transition status for company programmes | JWT + Role(COMPANY) |
 | Approvals | `/api/v1/approvals/...` | Request/approve/reject/revoke campaign approvals | JWT (NGO/COMPANY) + Roles |
 | Analytics | `/api/v1/analytics/...` | Admin metrics endpoints | JWT + Role(SUPER_ADMIN) |
 | Financial | `/api/v1/financial/ngo/upload` | POST | Upload NGO report (409 on duplicate) | JWT + Role(NGO) |
@@ -46,7 +46,7 @@ Refer to controller source files for full parameter shapes. Every request body i
 ### CSR Programmes
 - `GET /api/v1/companies/{companyId}/csr-programmes` — list programmes for a company (returns `ProgrammeSummaryDto[]`)
 - `GET /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — show a single programme (returns `ProgrammeDetailDto`)
-- `POST /api/v1/companies/{companyId}/csr-programmes` — create programme (currently stubbed: returns mock-like payload; real implementation pending)
-- `PATCH /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — update programme
+- `POST /api/v1/companies/{companyId}/csr-programmes` — create programme (returns `ProgrammeCreateResponseDto`); requires COMPANY role.
+- `PATCH /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — update programme (returns `ProgrammeUpdateResponseDto`)
 - `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/assign-ngo` — assign NGO
 - `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/status` — transition status

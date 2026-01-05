@@ -1,8 +1,9 @@
 import React from 'react';
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { programmes as mockProgrammes } from '@/app/dashboard/company/programmes/mock-data';
+import { useCreateProgramme } from '@/app/dashboard/company/programmes/hooks/useCreateProgramme';
 import { useCompanyProgrammes, useProgrammeDetail } from '@/lib/hooks/use-company-programmes';
 import type { FeatureFlags } from '@/lib/feature-flags';
 import { getFeatureFlags } from '@/lib/feature-flags';
@@ -39,6 +40,86 @@ function createWrapper() {
 describe('CSR programme data hooks', () => {
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  describe('useCreateProgramme', () => {
+    it('uses mock mutation when API flag disabled', async () => {
+      (getFeatureFlags as jest.Mock).mockReturnValue({ ...baseFlags, API_PROGRAMME: false });
+
+      const { Wrapper, queryClient } = createWrapper();
+      const { result } = renderHook(() => useCreateProgramme('company-123'), {
+        wrapper: Wrapper,
+      });
+
+      await act(async () => {
+        const response = await result.current.mutateAsync({
+          name: 'Mock Programme',
+          summary: 'Summary',
+          category: 'Education',
+          region: 'Maharashtra',
+          status: mockProgrammes[0].status,
+        });
+
+        expect(response).toEqual(
+          expect.objectContaining({
+            success: true,
+            programme: expect.objectContaining({ name: 'Mock Programme', summary: 'Summary' }),
+          }),
+        );
+      });
+
+      expect(apiRequest).not.toHaveBeenCalled();
+      queryClient.clear();
+    });
+
+    it('calls backend create API when flag enabled', async () => {
+      (getFeatureFlags as jest.Mock).mockReturnValue({ ...baseFlags, API_PROGRAMME: true });
+
+      const apiResponse = {
+        programme: {
+          id: 'programme-api',
+          title: 'API Programme',
+          description: 'Created via API',
+          status: 'ACTIVE',
+          companyId: 'company-123',
+          milestones: [],
+          assignments: [],
+          createdAt: 'today',
+          updatedAt: 'today',
+        },
+      } as const;
+
+      apiRequest.mockResolvedValueOnce({ data: apiResponse });
+
+      const { Wrapper, queryClient } = createWrapper();
+      const { result } = renderHook(() => useCreateProgramme('company-123'), {
+        wrapper: Wrapper,
+      });
+
+      await act(async () => {
+        const response = await result.current.mutateAsync({
+          name: 'API Programme',
+          summary: 'Created via API',
+          category: 'Education',
+          region: 'Maharashtra',
+          status: mockProgrammes[0].status,
+        });
+
+        expect(apiRequest).toHaveBeenCalledWith({
+          method: 'POST',
+          path: '/api/v1/companies/company-123/csr-programmes',
+          body: {
+            title: 'API Programme',
+            description: 'Created via API',
+            status: mockProgrammes[0].status.toUpperCase(),
+          },
+        });
+
+        expect(response).toEqual(apiResponse);
+      });
+
+      queryClient.clear();
+    });
   });
 
   it('falls back to mock data when API flag disabled', async () => {
