@@ -15,6 +15,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '../user/user-role.enum';
+import { RequestContextService } from '../common/request-context/request-context.service';
 
 @Controller({
   path: 'companies/:companyId/csr-programmes',
@@ -47,7 +48,8 @@ export class CSRProgrammeController {
     @Param('companyId') companyId: string,
     @Body() dto: CreateProgrammeDto,
   ) {
-    return this.csrProgrammeService.create(companyId, dto);
+    const actorId = RequestContextService.getActorId();
+    return this.csrProgrammeService.create(companyId, dto, { actorId });
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -58,7 +60,10 @@ export class CSRProgrammeController {
     @Param('programmeId') programmeId: string,
     @Body() dto: UpdateProgrammeDto,
   ) {
-    return this.csrProgrammeService.update(programmeId, companyId, dto);
+    const actorId = RequestContextService.getActorId();
+    return this.csrProgrammeService.update(programmeId, companyId, dto, {
+      actorId,
+    });
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -69,7 +74,10 @@ export class CSRProgrammeController {
     @Param('programmeId') programmeId: string,
     @Body() dto: AssignNgoDto,
   ) {
-    return this.csrProgrammeService.assignNgo(programmeId, companyId, dto);
+    const actorId = RequestContextService.getActorId();
+    return this.csrProgrammeService.assignNgo(programmeId, companyId, dto, {
+      actorId,
+    });
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -80,10 +88,12 @@ export class CSRProgrammeController {
     @Param('programmeId') programmeId: string,
     @Body('status') status: string,
   ) {
+    const actorId = RequestContextService.getActorId();
     return this.csrProgrammeService.transitionStatus(
       programmeId,
       companyId,
       status,
+      { actorId },
     );
   }
 }

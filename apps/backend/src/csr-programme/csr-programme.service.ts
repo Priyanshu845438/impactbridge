@@ -44,7 +44,11 @@ export class CSRProgrammeService {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(companyId: string, dto: CreateProgrammeDto) {
+  async create(
+    companyId: string,
+    dto: CreateProgrammeDto,
+    _context?: { actorId?: string | null },
+  ) {
     await this.ensureCompany(companyId);
 
     const programme = await this.prisma.cSRProgramme.create({
@@ -70,7 +74,12 @@ export class CSRProgrammeService {
     return toProgrammeCreateResponseDto(sanitized);
   }
 
-  async update(id: string, companyId: string, dto: UpdateProgrammeDto) {
+  async update(
+    id: string,
+    companyId: string,
+    dto: UpdateProgrammeDto,
+    _context?: { actorId?: string | null },
+  ) {
     const programme = await this.ensureProgrammeOwnership(id, companyId);
 
     const data: Prisma.CSRProgrammeUpdateInput = {
@@ -159,7 +168,12 @@ export class CSRProgrammeService {
     return toProgrammeDetailDto(sanitized);
   }
 
-  async assignNgo(programmeId: string, companyId: string, dto: AssignNgoDto) {
+  async assignNgo(
+    programmeId: string,
+    companyId: string,
+    dto: AssignNgoDto,
+    _context?: { actorId?: string | null },
+  ) {
     await this.ensureProgrammeOwnership(programmeId, companyId);
     await this.ensureNgo(dto.ngoId);
 
@@ -348,6 +362,7 @@ export class CSRProgrammeService {
     programmeId: string,
     companyId: string,
     requestedStatus: ProgrammeStatus | string | null | undefined,
+    _context?: { actorId?: string | null },
   ) {
     const programme = await this.ensureProgrammeOwnership(
       programmeId,

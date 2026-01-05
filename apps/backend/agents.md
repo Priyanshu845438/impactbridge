@@ -113,6 +113,6 @@
 - In-memory Prisma double keeps responses DTO-aligned without touching production code.
 - Full unit suite remains green; note: legacy v1 e2e suites still fail pending separate fixes.
 
-25. CSR Programme logging blocked
-- Attempted to add ActivityLogService integration but service lacks actor context; no code changes applied.
-- Pending clarification on preferred actor source before audit logs can be wired.
+25. CSR Programme actor context
+- Added request-scoped actor helper + controller plumbing; service now receives optional actorId without behaviour change.
+- Prepares for audit logging in follow-up task; all tests remain green (legacy v1 e2e still pending).
