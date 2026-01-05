@@ -49,4 +49,4 @@ Refer to controller source files for full parameter shapes. Every request body i
 - `POST /api/v1/companies/{companyId}/csr-programmes` — create programme (returns `ProgrammeCreateResponseDto`); requires COMPANY role.
 - `PATCH /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — update programme (returns `ProgrammeUpdateResponseDto`)
 - `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/assign-ngo` — assign NGO
-- `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/status` — transition status
+- `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/status` — transition status (returns `ProgrammeStatusTransitionDto`)

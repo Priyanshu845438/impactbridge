@@ -3,7 +3,7 @@
 | Flag | Env Var | Default | Description |
 | --- | --- | --- | --- |
 | `API_DASHBOARD` | `NEXT_PUBLIC_FLAG_API_DASHBOARD` | `false` | Enables admin analytics dashboard to fetch real backend data via `useAdminAnalytics`. When `false`, UI falls back to mock dataset. |
-| `API_PROGRAMME` | `NEXT_PUBLIC_FLAG_API_PROGRAMME` | `false` | Enables company CSR programme list/detail pages and create flow to consume backend data through React Query wrappers. When `false`, all views fall back to mock content; when `true`, list/detail fetch from the API and create submits via the `POST /companies/{id}/csr-programmes` endpoint with mock fallback on failure. |
+| `API_PROGRAMME` | `NEXT_PUBLIC_FLAG_API_PROGRAMME` | `false` | Enables company CSR programme list/detail/create flows to consume backend data via React Query wrappers. Status transitions are still mock-only until the mutation hook is wired. When the flag is `true`, list/detail fetch from the API and create submits via `POST /companies/{id}/csr-programmes`; when `false`, all flows fall back to mocks. |
 | `API_AUTH` | `NEXT_PUBLIC_FLAG_API_AUTH` | `false` | Switches login/register forms to real backend auth endpoints. `false` retains mock workflow. |
 
 ## Usage Guidelines

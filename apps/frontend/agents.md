@@ -72,3 +72,8 @@
 - Upgraded `useCreateProgramme` mutation to call backend API when `API_PROGRAMME` flag is enabled, while preserving mock fallback.
 - Added hook unit tests covering flag on/off behaviour and response shape parity.
 - Confirmed create form tests remain stable via mocked hook and reran full suite (`npm run test`) and production build (`npm run build`).
+
+16. CSR Programme Status Flow Pending
+- Status transition actions remain mock-driven; no API hook yet ties into `POST /companies/{id}/csr-programmes/{programmeId}/status`.
+- Documented the gap in pending work docs and feature-flag notes to avoid accidental rollout.
+- Awaiting backend RBAC confirmation and hook scaffolding before adding tests/build wiring.
