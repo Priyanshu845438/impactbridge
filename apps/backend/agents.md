@@ -102,3 +102,8 @@
 - Applied `JwtAuthGuard` + `RolesGuard` with COMPANY role requirement across all CSR controller endpoints.
 - Added guard-focused tests to confirm unauthenticated and mis-role requests are rejected while preserving successful responses for COMPANY tokens.
 - Updated contract tests to send bearer tokens, keeping payload expectations unchanged.
+
+23. CSR Programme Detail DTO Alignment
+- Updated service detail path to load assignments + milestones before sanitising.
+- Responses now consistently pass through `toProgrammeDetailDto`, matching shared contracts without altering behaviour.
+- Test/build suites rerun to guarantee no regressions.

@@ -21,7 +21,10 @@
 | Users | `/api/v1/users/:id` | PATCH | Update arbitrary user | JWT + Role(SUPER_ADMIN) |
 | Users | `/api/v1/users/:id` | DELETE | Delete user | JWT + Role(SUPER_ADMIN) |
 | Users | `/api/v1/users/me/change-password` | POST | Change password | JWT |
-| CSR Programmes | `/api/v1/companies/{companyId}/csr-programmes` | GET list, POST create, PATCH update, assign NGO, transition status for company programmes | JWT + Role(COMPANY) |
+| CSR Programmes | `/api/v1/companies/{companyId}/csr-programmes` | GET list / POST create | JWT + Role(COMPANY) |
+| CSR Programmes | `/api/v1/companies/{companyId}/csr-programmes/{programmeId}` | GET detail / PATCH update | JWT + Role(COMPANY) |
+| CSR Programmes | `/api/v1/companies/{companyId}/csr-programmes/{programmeId}/assign-ngo` | POST assign NGO | JWT + Role(COMPANY) |
+| CSR Programmes | `/api/v1/companies/{companyId}/csr-programmes/{programmeId}/status` | POST transition status | JWT + Role(COMPANY) |
 | Approvals | `/api/v1/approvals/...` | Request/approve/reject/revoke campaign approvals | JWT (NGO/COMPANY) + Roles |
 | Analytics | `/api/v1/analytics/...` | Admin metrics endpoints | JWT + Role(SUPER_ADMIN) |
 | Financial | `/api/v1/financial/ngo/upload` | POST | Upload NGO report (409 on duplicate) | JWT + Role(NGO) |
@@ -43,9 +46,9 @@ Refer to controller source files for full parameter shapes. Every request body i
 ## Changelog Reference
 - See `docs/CHANGELOG.md` for recent endpoint additions/changes.
 
-- `GET /api/v1/companies/{companyId}/csr-programmes` — list programmes for a company (returns `ProgrammeSummaryDto[]`); requires COMPANY role.
-- `GET /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — show a single programme (returns `ProgrammeDetailDto`); requires COMPANY role.
-- `POST /api/v1/companies/{companyId}/csr-programmes` — create programme (returns `ProgrammeCreateResponseDto`); requires COMPANY role.
-- `PATCH /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — update programme (returns `ProgrammeUpdateResponseDto`); requires COMPANY role.
-- `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/assign-ngo` — assign NGO; requires COMPANY role.
-- `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/status` — transition status (returns `ProgrammeStatusTransitionDto`); requires COMPANY role.
+- `GET /api/v1/companies/{companyId}/csr-programmes` — list programmes for a company (returns `ProgrammeSummaryDto[]`).
+- `GET /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — fetch programme detail (`ProgrammeDetailDto`).
+- `POST /api/v1/companies/{companyId}/csr-programmes` — create programme (`ProgrammeCreateResponseDto`).
+- `PATCH /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — update programme (`ProgrammeUpdateResponseDto`).
+- `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/assign-ngo` — assign NGO (`ProgrammeAssignmentDto`).
+- `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/status` — transition status (`ProgrammeStatusTransitionDto`).

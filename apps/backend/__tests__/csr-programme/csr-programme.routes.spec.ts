@@ -4,7 +4,11 @@ import request from 'supertest';
 import { sign } from 'jsonwebtoken';
 import { AppModule } from '../../src/app.module';
 import { PrismaService } from '../../src/prisma/prisma.service';
-import { ProgrammeStatus, ProgrammeAssignmentStatus } from 'prisma/generated';
+import {
+  ProgrammeStatus,
+  ProgrammeAssignmentStatus,
+  ProgrammeMilestoneStatus,
+} from 'prisma/generated';
 import {
   baseCompany,
   baseNgo,
@@ -77,12 +81,38 @@ describe('CSR Programme routes (company-scoped contract)', () => {
       programme,
       programmeWithoutAssignments,
     ]);
-    prismaMock.cSRProgramme.findUnique.mockImplementation(({ where }) => {
+    prismaMock.cSRProgramme.findUnique.mockImplementation(({ where, include }) => {
+      const includeWithDefaults = {
+        milestones: include?.milestones ?? true,
+        assignments: include?.assignments ?? true,
+      };
+
+      const enrich = (base: any) =>
+        base
+          ? {
+              ...base,
+              milestones: base.milestones ?? [],
+              assignments: base.assignments ?? [],
+            }
+          : null;
+
       if (where.id === programme.id) {
-        return Promise.resolve(programme);
+        return Promise.resolve(
+          enrich({
+            ...programme,
+            milestones: includeWithDefaults.milestones ? programme.milestones : undefined,
+            assignments: includeWithDefaults.assignments ? programme.assignments : undefined,
+          }),
+        );
       }
       if (where.id === programmeWithoutAssignments.id) {
-        return Promise.resolve(programmeWithoutAssignments);
+        return Promise.resolve(
+          enrich({
+            ...programmeWithoutAssignments,
+            milestones: includeWithDefaults.milestones ? programmeWithoutAssignments.milestones : undefined,
+            assignments: includeWithDefaults.assignments ? programmeWithoutAssignments.assignments : undefined,
+          }),
+        );
       }
       return Promise.resolve(null);
     });
@@ -91,6 +121,8 @@ describe('CSR Programme routes (company-scoped contract)', () => {
       ...programme,
       status: ProgrammeStatus.ACTIVE,
       updatedAt: new Date('2024-12-31T00:00:00.000Z'),
+      milestones: programme.milestones,
+      assignments: programme.assignments,
     });
     prismaMock.programmeAssignment.upsert.mockResolvedValue({
       id: 'assignment-2',

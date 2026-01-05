@@ -20,6 +20,7 @@ import { sanitizeEntity, sanitizeEntities } from '../utils/sanitize.util';
 import {
   toProgrammeAssignmentDto,
   toProgrammeCreateResponseDto,
+  toProgrammeDetailDto,
   toProgrammeListItemDto,
   toProgrammeStatusTransitionDto,
   toProgrammeUpdateResponseDto,
@@ -130,7 +131,32 @@ export class CSRProgrammeService {
   }
 
   async getByIdForCompany(companyId: string, programmeId: string) {
-    return this.ensureProgrammeOwnership(programmeId, companyId);
+    await this.ensureProgrammeOwnership(programmeId, companyId);
+
+    const programmeWithRelations = await this.prisma.cSRProgramme.findUnique({
+      where: { id: programmeId },
+      include: {
+        milestones: true,
+        assignments: {
+          include: {
+            ngo: {
+              select: {
+                id: true,
+                missionStatement: true,
+                user: { select: { id: true, name: true, email: true } },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!programmeWithRelations) {
+      throw new NotFoundException('Programme not found');
+    }
+
+    const sanitized = sanitizeEntity(programmeWithRelations)!;
+    return toProgrammeDetailDto(sanitized);
   }
 
   async assignNgo(programmeId: string, companyId: string, dto: AssignNgoDto) {
