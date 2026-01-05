@@ -112,3 +112,8 @@
 - Added happy-path e2e suite verifying list/detail/create/update/status routes over Nest testing module with guard-auth token.
 - In-memory Prisma double keeps responses DTO-aligned without touching production code.
 - Full unit suite remains green; note: legacy v1 e2e suites still fail pending separate fixes.
+
+25. CSR Programme RBAC Enforcement
+- Added targeted Nest tests confirming company routes accept COMPANY role and reject NGO/SUPER_ADMIN tokens.
+- Tests rely on in-memory Prisma stub; transitions assert 201 or existing 400 guard behaviour without altering logic.
+- No production changes; unit suite passes, with legacy `/api/v1` e2e failures unchanged.
