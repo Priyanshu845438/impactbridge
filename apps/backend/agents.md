@@ -113,7 +113,6 @@
 - In-memory Prisma double keeps responses DTO-aligned without touching production code.
 - Full unit suite remains green; note: legacy v1 e2e suites still fail pending separate fixes.
 
-25. CSR Programme RBAC Enforcement
-- Added targeted Nest tests confirming company routes accept COMPANY role and reject NGO/SUPER_ADMIN tokens.
-- Tests rely on in-memory Prisma stub; transitions assert 201 or existing 400 guard behaviour without altering logic.
-- No production changes; unit suite passes, with legacy `/api/v1` e2e failures unchanged.
+25. CSR Programme logging blocked
+- Attempted to add ActivityLogService integration but service lacks actor context; no code changes applied.
+- Pending clarification on preferred actor source before audit logs can be wired.

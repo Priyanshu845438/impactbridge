@@ -10,6 +10,7 @@ _All findings are observational; no code was modified during this audit. Items a
 ## 2. apps/backend
 1. **CSR Programme controller** now exposes company-scoped routes with explicit `JwtAuthGuard` + `RolesGuard (COMPANY)` applied; integration tests cover both guard enforcement and happy-path responses.
 2. `CSRProgrammeController.detail` now re-fetches with milestones/assignments and maps via `toProgrammeDetailDto`; pending follow-up: audit other service consumers to confirm they include relation data before sanitising.
+9. CSR programme activity logging still unimplemented: service lacks actor context, so guard/channel strategy must be clarified before adding ActivityLogService calls.
 3. Controller methods accept DTOs but do not apply validation pipes locally—ensure global validation is active or add decorators to avoid unchecked payloads.
 4. CSR service integration tests exist only as in-memory workflow specs; HTTP contract coverage now exists in `apps/backend/__tests__/csr-programme/csr-programme.routes.spec.ts`, the happy-path e2e suite, and RBAC-focused route tests, but negative paths and legacy `/api/v1` e2e suites still fail pending Prisma-backed fixtures.
 5. Notifications module remains dispatcher-less: intents are queued but no background worker/provider sends emails/SMS; retry, logging, and metrics workflows are still unimplemented.
