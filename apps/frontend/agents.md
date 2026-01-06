@@ -77,6 +77,7 @@
 - `useProgrammeStatus` now switches between mock and backend API paths based on `API_PROGRAMME`, preserving the existing UX.
 - Hook unit tests validate flag on/off execution and ensure the mutation falls back to mocks when the API lacks data.
 - Frontend test/build suites re-run (`npm run test`, `npm run build`) to confirm no regressions.
+
 17. CSR Programme Assignment API Hook
 - Added feature-flag-aware `useProgrammeAssignment` mutation that calls the backend assign-ngo endpoint when enabled, falling back to mocks otherwise.
 - Extended hook test suite to validate flag on/off paths and null-data fallback, keeping UI behaviour unchanged.
@@ -85,3 +86,8 @@
 18. Technology Overview Documentation
 - Authored `project_technologies.md` summarising frontend/backend stacks, data flow, and Prisma schema highlights for onboarding.
 - No code changes required; serves as a living reference for teams connecting UI hooks with NestJS modules.
+
+19. CSR Programme Update API Hook
+- Upgraded `useUpdateProgramme` to call the backend PATCH endpoint under the `API_PROGRAMME` flag with graceful mock fallback.
+- Refactored the edit page to consume the hook without altering UX and added hook tests for flag on/off paths.
+- Re-ran targeted hook tests and full Next.js build (`npm run test -- programmes/hooks.test.tsx`, `npm run build`) to confirm unchanged behaviour.
