@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { programmes as mockProgrammes } from '@/app/dashboard/company/programmes/mock-data';
 import { useCreateProgramme } from '@/app/dashboard/company/programmes/hooks/useCreateProgramme';
+import { useProgrammeStatus } from '@/app/dashboard/company/programmes/hooks/useProgrammeStatus';
 import { useCompanyProgrammes, useProgrammeDetail } from '@/lib/hooks/use-company-programmes';
 import type { FeatureFlags } from '@/lib/feature-flags';
 import { getFeatureFlags } from '@/lib/feature-flags';
@@ -116,6 +117,57 @@ describe('CSR programme data hooks', () => {
         });
 
         expect(response).toEqual(apiResponse);
+      });
+
+      queryClient.clear();
+    });
+  });
+
+  describe('useProgrammeStatus', () => {
+    it('uses mock transition when API flag disabled', async () => {
+      (getFeatureFlags as jest.Mock).mockReturnValue({ ...baseFlags, API_PROGRAMME: false });
+
+      const { Wrapper, queryClient } = createWrapper();
+      const { result } = renderHook(() => useProgrammeStatus('company-123'), {
+        wrapper: Wrapper,
+      });
+
+      await act(async () => {
+        const response = await result.current.mutateAsync({
+          programmeId: 'programme-1',
+          nextStatus: mockProgrammes[0].status,
+        });
+
+        expect(response).toEqual({ success: true, status: mockProgrammes[0].status });
+      });
+
+      expect(apiRequest).not.toHaveBeenCalled();
+      queryClient.clear();
+    });
+
+    it('calls backend status API when flag enabled', async () => {
+      (getFeatureFlags as jest.Mock).mockReturnValue({ ...baseFlags, API_PROGRAMME: true });
+
+      apiRequest.mockResolvedValueOnce({ data: { status: 'ACTIVE' } });
+
+      const { Wrapper, queryClient } = createWrapper();
+      const { result } = renderHook(() => useProgrammeStatus('company-123'), {
+        wrapper: Wrapper,
+      });
+
+      await act(async () => {
+        const response = await result.current.mutateAsync({
+          programmeId: 'programme-1',
+          nextStatus: 'Active',
+        });
+
+        expect(apiRequest).toHaveBeenCalledWith({
+          method: 'POST',
+          path: '/api/v1/companies/company-123/csr-programmes/programme-1/status',
+          body: { status: 'ACTIVE' },
+        });
+
+        expect(response).toEqual({ success: true, status: 'Active' });
       });
 
       queryClient.clear();

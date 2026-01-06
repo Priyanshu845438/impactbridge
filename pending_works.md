@@ -21,7 +21,7 @@ _All findings are observational; no code was modified during this audit. Items a
 ## 3. apps/frontend
 1. CSR programme list/detail pages use feature-flagged React Query wrappers that call the live API when `API_PROGRAMME` is enabled, with mocks as fallback; newly added RTL contract tests cover flag on/off, loading, error, and fallback states. End-to-end validation (RBAC, pagination parity) and rollout coordination remain pending before enabling the flag by default.
 2. CSR programme create flow now routes through the feature-flagged hook: when `API_PROGRAMME` is enabled it calls the backend `POST /companies/{id}/csr-programmes` endpoint, otherwise it falls back to the legacy mock mutation. Follow-up tasks: wire company selection once auth delivers IDs, add integration tests for API path, and monitor backend DTO changes.
-3. CSR programme status transition UX still runs entirely on mock data; there is no hook bridging to `POST /companies/{id}/csr-programmes/{programmeId}/status`. Pending: implement a flag-aware mutation, align DTO expectations with backend responses, and add regression tests before enabling API mode.
+3. CSR programme status transition flow now uses a feature-flag-aware mutation (`useProgrammeStatus`) with API fallback logic and dedicated tests. Follow-up: monitor backend contract changes and add end-to-end coverage once programme ownership checks expose real company IDs.
 3. Programme adapters introduced to satisfy lint now stub icon/timestamp helpers, altering UI formatting; they must be restored when analytics wiring is completed.
 4. Feature flag `API_PROGRAMME` handling is partially in place—ensure env plumbing, tests, and documentation cover both ON/OFF behaviours before rollout.
 5. Admin dashboard analytics lint suppression is temporary; follow-up task required to reinstate real helpers once API payloads stabilise.
@@ -52,7 +52,7 @@ _All findings are observational; no code was modified during this audit. Items a
 - **NGO Dashboard** — 🟡 In Progress (mock financial/impact sections); _pending_: API wiring, accessibility review.
 - **Admin Dashboard** — 🟡 In Progress (analytics with temporary suppressions); _pending_: restore helpers, connect API, add regression tests.
 - **Approvals UI** — 🟠 Incomplete (prototype only); _pending_: backend wiring, real-time updates, form validation.
-- **CSR Programme UI** — 🟠 Incomplete (feature-flagged mocks); _pending_: production API rollout, RBAC validation, pagination parity, and status transition wiring (contract tests for list/detail now in place).
+- **CSR Programme UI** — 🟠 Incomplete (feature-flagged mocks); _pending_: production API rollout, RBAC validation, pagination parity, and end-to-end validation before enabling default API mode (status transitions now wired via feature flag with mock fallback).
 
 ### Shared / Infrastructure
 - **API Contracts** — 🟡 In Progress (core DTOs available); _pending_: add campaign/donation contracts, automate releases, strengthen tests.
