@@ -81,3 +81,7 @@
 - Added feature-flag-aware `useProgrammeAssignment` mutation that calls the backend assign-ngo endpoint when enabled, falling back to mocks otherwise.
 - Extended hook test suite to validate flag on/off paths and null-data fallback, keeping UI behaviour unchanged.
 - Frontend test/build pipeline rerun (`npm run test -- programmes/hooks.test.tsx`, `npm run build`) to ensure zero regressions.
+
+18. Technology Overview Documentation
+- Authored `project_technologies.md` summarising frontend/backend stacks, data flow, and Prisma schema highlights for onboarding.
+- No code changes required; serves as a living reference for teams connecting UI hooks with NestJS modules.
