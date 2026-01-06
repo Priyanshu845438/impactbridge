@@ -25,6 +25,7 @@ import {
   toProgrammeStatusTransitionDto,
   toProgrammeUpdateResponseDto,
 } from './mappers/programme.mapper';
+import { ActivityLogService } from '../activity/activity-log.service';
 
 @Injectable()
 export class CSRProgrammeService {
@@ -42,12 +43,15 @@ export class CSRProgrammeService {
     [ProgrammeStatus.ARCHIVED]: [],
   };
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly activityLog: ActivityLogService,
+  ) {}
 
   async create(
     companyId: string,
     dto: CreateProgrammeDto,
-    _context?: { actorId?: string | null },
+    context?: { actorId?: string | null },
   ) {
     await this.ensureCompany(companyId);
 
@@ -70,6 +74,11 @@ export class CSRProgrammeService {
       },
     });
 
+    await this.emitActivityLog(context?.actorId, 'created', programme.id, {
+      companyId,
+      status: programme.status,
+    });
+
     const sanitized = sanitizeEntity(programme)!;
     return toProgrammeCreateResponseDto(sanitized);
   }
@@ -78,7 +87,7 @@ export class CSRProgrammeService {
     id: string,
     companyId: string,
     dto: UpdateProgrammeDto,
-    _context?: { actorId?: string | null },
+    context?: { actorId?: string | null },
   ) {
     const programme = await this.ensureProgrammeOwnership(id, companyId);
 
@@ -105,6 +114,15 @@ export class CSRProgrammeService {
         milestones: true,
         assignments: true,
       },
+    });
+
+    await this.emitActivityLog(context?.actorId, 'updated', id, {
+      companyId,
+      status: updated.status,
+      previousStatus: programme.status,
+      changedFields: Object.entries(dto)
+        .filter(([, value]) => value !== undefined)
+        .map(([key]) => key),
     });
 
     const sanitized = sanitizeEntity(updated)!;
@@ -172,7 +190,7 @@ export class CSRProgrammeService {
     programmeId: string,
     companyId: string,
     dto: AssignNgoDto,
-    _context?: { actorId?: string | null },
+    context?: { actorId?: string | null },
   ) {
     await this.ensureProgrammeOwnership(programmeId, companyId);
     await this.ensureNgo(dto.ngoId);
@@ -208,6 +226,12 @@ export class CSRProgrammeService {
           },
         },
       },
+    });
+
+    await this.emitActivityLog(context?.actorId, 'assigned_ngo', programmeId, {
+      companyId,
+      ngoId: dto.ngoId,
+      assignmentStatus: assignment.status,
     });
 
     const sanitized = sanitizeEntity(assignment)!;
@@ -362,7 +386,7 @@ export class CSRProgrammeService {
     programmeId: string,
     companyId: string,
     requestedStatus: ProgrammeStatus | string | null | undefined,
-    _context?: { actorId?: string | null },
+    context?: { actorId?: string | null },
   ) {
     const programme = await this.ensureProgrammeOwnership(
       programmeId,
@@ -377,6 +401,12 @@ export class CSRProgrammeService {
     this.assertStatusTransition(programme.status, nextStatus);
 
     if (nextStatus === programme.status) {
+      await this.emitActivityLog(context?.actorId, 'status_changed', programmeId, {
+        companyId,
+        status: nextStatus,
+        previousStatus: programme.status,
+      });
+
       const sanitized = sanitizeEntity(programme)!;
       return toProgrammeStatusTransitionDto(sanitized);
     }
@@ -390,8 +420,33 @@ export class CSRProgrammeService {
       },
     });
 
+    await this.emitActivityLog(context?.actorId, 'status_changed', programmeId, {
+      companyId,
+      status: nextStatus,
+      previousStatus: programme.status,
+    });
+
     const sanitized = sanitizeEntity(updated)!;
     return toProgrammeStatusTransitionDto(sanitized);
+  }
+
+  private async emitActivityLog(
+    actorId: string | null | undefined,
+    action: 'created' | 'updated' | 'assigned_ngo' | 'status_changed',
+    programmeId: string,
+    metadata: Record<string, unknown>,
+  ) {
+    if (!actorId) {
+      return;
+    }
+
+    await this.activityLog.log({
+      actorId,
+      entity: 'csr_programme',
+      entityId: programmeId,
+      action,
+      metadata,
+    });
   }
 
   private async ensureCompany(companyId: string) {

@@ -121,3 +121,7 @@
 - Introduced request-scoped context service/interceptor capturing optional actorId for CSR routes.
 - Controller passes actorId options into service methods without altering behaviour; prepares for audit logging.
 
+27. CSR Programme activity logging
+- Wired CSR lifecycle actions (create, update, assign NGO, status change) to emit audit logs via actor context when available.
+- Logging skips silently without actorId; primary behaviour and responses unchanged.
+
