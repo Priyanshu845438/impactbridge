@@ -44,11 +44,5 @@ Refer to controller source files for full parameter shapes. Every request body i
 - Global rate limiter returns `429` with retry-after header when thresholds exceeded.
 
 ## Changelog Reference
-- See `docs/CHANGELOG.md` for recent endpoint additions/changes.
+- See `docs/CHANGELOG.md` for recent endpoint additions/changes. Frontend contract tests now cover CSR list/detail responses to ensure DTO alignment without altering these APIs.
 
-- `GET /api/v1/companies/{companyId}/csr-programmes` — list programmes for a company (returns `ProgrammeSummaryDto[]`).
-- `GET /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — fetch programme detail (`ProgrammeDetailDto`).
-- `POST /api/v1/companies/{companyId}/csr-programmes` — create programme (`ProgrammeCreateResponseDto`).
-- `PATCH /api/v1/companies/{companyId}/csr-programmes/{programmeId}` — update programme (`ProgrammeUpdateResponseDto`).
-- `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/assign-ngo` — assign NGO (`ProgrammeAssignmentDto`).
-- `POST /api/v1/companies/{companyId}/csr-programmes/{programmeId}/status` — transition status (`ProgrammeStatusTransitionDto`).

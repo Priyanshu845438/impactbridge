@@ -3,9 +3,9 @@
 _All findings are observational; no code was modified during this audit. Items are grouped by scope with each task captured as an individual, detailed point._
 
 ## 1. apps/__tests__
-1. Only `api-client.test.ts` exists, covering the fetch wrapper in isolation; there are **no integration or contract tests** that exercise backend controllers or shared DTO flows, leaving cross-package regressions undetected.
+1. Jest coverage now includes CSR programme list/detail contract tests alongside baseline suites, but there are still **no cross-package integration tests** that exercise backend controllers or shared DTO flows, leaving regression gaps.
 2. Vitest mocks rely on global fetch overrides without reset helpers, risking test leakage if additional suites are added.
-3. There is no coverage for CSR, auth, approvals, or financial journeys—future suites must be planned to validate end-to-end scenarios once routes are stable.
+3. Broader journeys (auth, approvals, financial) still lack end-to-end coverage—plan feature-level integration tests once routes and data contracts stabilise.
 
 ## 2. apps/backend
 1. **CSR Programme controller** now exposes company-scoped routes with explicit `JwtAuthGuard` + `RolesGuard (COMPANY)` applied; integration tests cover both guard enforcement and happy-path responses.
@@ -19,7 +19,7 @@ _All findings are observational; no code was modified during this audit. Items a
 8. Shared docs (API guide, Postman collection) mention CSR routes; they require ongoing sync once guards/tests land to avoid divergence.
 
 ## 3. apps/frontend
-1. CSR programme list/detail pages now use feature-flagged React Query wrappers that call the live API when `API_PROGRAMME` is enabled, with mocks as fallback; list/detail views preserve existing skeleton/error states, but we still need end-to-end validation (loading/error UX, RBAC, pagination parity) plus rollout coordination before turning the flag on by default.
+1. CSR programme list/detail pages use feature-flagged React Query wrappers that call the live API when `API_PROGRAMME` is enabled, with mocks as fallback; newly added RTL contract tests cover flag on/off, loading, error, and fallback states. End-to-end validation (RBAC, pagination parity) and rollout coordination remain pending before enabling the flag by default.
 2. CSR programme create flow now routes through the feature-flagged hook: when `API_PROGRAMME` is enabled it calls the backend `POST /companies/{id}/csr-programmes` endpoint, otherwise it falls back to the legacy mock mutation. Follow-up tasks: wire company selection once auth delivers IDs, add integration tests for API path, and monitor backend DTO changes.
 3. CSR programme status transition UX still runs entirely on mock data; there is no hook bridging to `POST /companies/{id}/csr-programmes/{programmeId}/status`. Pending: implement a flag-aware mutation, align DTO expectations with backend responses, and add regression tests before enabling API mode.
 3. Programme adapters introduced to satisfy lint now stub icon/timestamp helpers, altering UI formatting; they must be restored when analytics wiring is completed.
@@ -52,7 +52,7 @@ _All findings are observational; no code was modified during this audit. Items a
 - **NGO Dashboard** — 🟡 In Progress (mock financial/impact sections); _pending_: API wiring, accessibility review.
 - **Admin Dashboard** — 🟡 In Progress (analytics with temporary suppressions); _pending_: restore helpers, connect API, add regression tests.
 - **Approvals UI** — 🟠 Incomplete (prototype only); _pending_: backend wiring, real-time updates, form validation.
-- **CSR Programme UI** — 🟠 Incomplete (feature-flagged mocks); _pending_: API integration, loading/error UX, contract tests.
+- **CSR Programme UI** — 🟠 Incomplete (feature-flagged mocks); _pending_: production API rollout, RBAC validation, pagination parity, and status transition wiring (contract tests for list/detail now in place).
 
 ### Shared / Infrastructure
 - **API Contracts** — 🟡 In Progress (core DTOs available); _pending_: add campaign/donation contracts, automate releases, strengthen tests.
