@@ -77,3 +77,7 @@
 - `useProgrammeStatus` now switches between mock and backend API paths based on `API_PROGRAMME`, preserving the existing UX.
 - Hook unit tests validate flag on/off execution and ensure the mutation falls back to mocks when the API lacks data.
 - Frontend test/build suites re-run (`npm run test`, `npm run build`) to confirm no regressions.
+17. CSR Programme Assignment API Hook
+- Added feature-flag-aware `useProgrammeAssignment` mutation that calls the backend assign-ngo endpoint when enabled, falling back to mocks otherwise.
+- Extended hook test suite to validate flag on/off paths and null-data fallback, keeping UI behaviour unchanged.
+- Frontend test/build pipeline rerun (`npm run test -- programmes/hooks.test.tsx`, `npm run build`) to ensure zero regressions.

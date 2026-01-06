@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { programmes as mockProgrammes } from '@/app/dashboard/company/programmes/mock-data';
 import { useCreateProgramme } from '@/app/dashboard/company/programmes/hooks/useCreateProgramme';
 import { useProgrammeStatus } from '@/app/dashboard/company/programmes/hooks/useProgrammeStatus';
+import { useProgrammeAssignment } from '@/app/dashboard/company/programmes/hooks/useProgrammeAssignment';
 import { useCompanyProgrammes, useProgrammeDetail } from '@/lib/hooks/use-company-programmes';
 import type { FeatureFlags } from '@/lib/feature-flags';
 import { getFeatureFlags } from '@/lib/feature-flags';
@@ -168,6 +169,68 @@ describe('CSR programme data hooks', () => {
         });
 
         expect(response).toEqual({ success: true, status: 'Active' });
+      });
+
+      queryClient.clear();
+    });
+  });
+
+  describe('useProgrammeAssignment', () => {
+    it('uses mock assignment when API flag disabled', async () => {
+      (getFeatureFlags as jest.Mock).mockReturnValue({ ...baseFlags, API_PROGRAMME: false });
+
+      const { Wrapper, queryClient } = createWrapper();
+      const { result } = renderHook(() => useProgrammeAssignment('company-123'), {
+        wrapper: Wrapper,
+      });
+
+      await act(async () => {
+        const response = await result.current.mutateAsync({ programmeId: 'programme-1', ngoId: 'ngo-1' });
+        expect(response).toEqual({ success: true, ngoId: 'ngo-1' });
+      });
+
+      expect(apiRequest).not.toHaveBeenCalled();
+      queryClient.clear();
+    });
+
+    it('calls backend assign API when flag enabled', async () => {
+      (getFeatureFlags as jest.Mock).mockReturnValue({ ...baseFlags, API_PROGRAMME: true });
+
+      apiRequest.mockResolvedValueOnce({ data: { ngoId: 'ngo-1' } });
+
+      const { Wrapper, queryClient } = createWrapper();
+      const { result } = renderHook(() => useProgrammeAssignment('company-123'), {
+        wrapper: Wrapper,
+      });
+
+      await act(async () => {
+        const response = await result.current.mutateAsync({ programmeId: 'programme-1', ngoId: 'ngo-1' });
+
+        expect(apiRequest).toHaveBeenCalledWith({
+          method: 'POST',
+          path: '/api/v1/companies/company-123/csr-programmes/programme-1/assign-ngo',
+          body: { ngoId: 'ngo-1' },
+        });
+
+        expect(response).toEqual({ success: true, ngoId: 'ngo-1' });
+      });
+
+      queryClient.clear();
+    });
+
+    it('falls back to mock when API responds without data', async () => {
+      (getFeatureFlags as jest.Mock).mockReturnValue({ ...baseFlags, API_PROGRAMME: true });
+
+      apiRequest.mockResolvedValueOnce({ data: undefined });
+
+      const { Wrapper, queryClient } = createWrapper();
+      const { result } = renderHook(() => useProgrammeAssignment('company-123'), {
+        wrapper: Wrapper,
+      });
+
+      await act(async () => {
+        const response = await result.current.mutateAsync({ programmeId: 'programme-1', ngoId: 'ngo-1' });
+        expect(response).toEqual({ success: true, ngoId: 'ngo-1' });
       });
 
       queryClient.clear();
