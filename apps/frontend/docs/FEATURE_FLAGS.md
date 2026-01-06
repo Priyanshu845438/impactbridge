@@ -13,3 +13,5 @@
 - Document new flags here with default state and rollout plan.
 
 _Last reviewed: 2026-01-06 — CSR lifecycle logging + negative-path tests landed; API programme flag is backed by list/detail/create/status UX contract tests across flag on/off modes._
+
+> NOTE: CSR programme status transitions now participate in the API flag flow alongside list/detail/create, keeping mock fallback behaviour.

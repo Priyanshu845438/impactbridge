@@ -27,3 +27,5 @@
 
 ## Recent Additions
 - CSR programme list & detail pages now have contract-level tests ensuring mock and API modes render identically across happy-path, loading, and error states without altering runtime behaviour.
+
+> NOTE: CSR status mutation tests now cover flag on/off modes, safeguarding the mock fallback logic.

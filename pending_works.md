@@ -19,6 +19,7 @@ _All findings are observational; no code was modified during this audit. Items a
 8. Shared docs (API guide, Postman collection) mention CSR routes; they require ongoing sync once guards/tests land to avoid divergence.
 
 ## 3. apps/frontend
+- Documentation refresh: API flag notes now cover CSR status mutation parity, tests updated to reflect flag on/off coverage.
 1. CSR programme list/detail pages use feature-flagged React Query wrappers that call the live API when `API_PROGRAMME` is enabled, with mocks as fallback; newly added RTL contract tests cover flag on/off, loading, error, and fallback states. End-to-end validation (RBAC, pagination parity) and rollout coordination remain pending before enabling the flag by default.
 2. CSR programme create flow now routes through the feature-flagged hook: when `API_PROGRAMME` is enabled it calls the backend `POST /companies/{id}/csr-programmes` endpoint, otherwise it falls back to the legacy mock mutation. Follow-up tasks: wire company selection once auth delivers IDs, add integration tests for API path, and monitor backend DTO changes.
 3. CSR programme status transition flow now uses a feature-flag-aware mutation (`useProgrammeStatus`) with API fallback logic and dedicated tests. Follow-up: monitor backend contract changes and add end-to-end coverage once programme ownership checks expose real company IDs.

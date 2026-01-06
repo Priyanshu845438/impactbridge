@@ -17,6 +17,6 @@
 - **2026-01-06** — CSR lifecycle actions now emit audit logs when actor context is present; unassignment/milestone logging still pending.
 - **2026-01-06** — CSR negative-path route tests added covering ownership and not-found cases; runtime behaviour unchanged.
 - **2026-01-06** — CSR programme list/detail frontend contract tests documented to preserve UI parity while backend contracts remain unchanged (no server code modifications).
-
-
 - **2026-01-05** — Applied explicit JwtAuthGuard + RolesGuard (COMPANY) to all CSR programme controller routes and added guard coverage tests; no response changes.
+
+- Recorded CSR status mutation wiring (frontend documentation updates).
