@@ -12,4 +12,4 @@
 - Always provide mock fallbacks to keep demo environments functional.
 - Document new flags here with default state and rollout plan.
 
-_Last reviewed: 2026-01-05 — backend request-context plumbing for CSR audit logging does not change flag semantics; API programme flag remains the switch for live list/detail/create flows._
+_Last reviewed: 2026-01-06 — CSR lifecycle logging + negative-path tests landed; API programme flag still gates live list/detail/create flows._

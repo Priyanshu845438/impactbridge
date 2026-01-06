@@ -18,6 +18,8 @@ import {
   expectProgrammeDetailShape,
 } from './fixtures';
 
+const otherCompanyId = 'company-2';
+
 const prismaMock = {
   $connect: jest.fn().mockResolvedValue(undefined),
   $disconnect: jest.fn().mockResolvedValue(undefined),
@@ -33,11 +35,14 @@ const prismaMock = {
     create: jest.fn(),
     update: jest.fn(),
   },
-  programmeAssignment: {
-    upsert: jest.fn(),
-    findFirst: jest.fn(),
-  },
-};
+    programmeAssignment: {
+      upsert: jest.fn(),
+      findFirst: jest.fn(),
+    },
+    programmeMilestone: {
+      findMany: jest.fn(),
+    },
+  };
 
 const JWT_SECRET = process.env.JWT_SECRET ?? 'test-secret';
 
@@ -74,7 +79,15 @@ describe('CSR Programme routes (company-scoped contract)', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    prismaMock.companyProfile.findUnique.mockResolvedValue(baseCompany);
+    prismaMock.companyProfile.findUnique.mockImplementation(async ({ where }) => {
+      if (where.id === companyId) {
+        return baseCompany;
+      }
+      if (where.id === otherCompanyId) {
+        return { id: otherCompanyId };
+      }
+      return null;
+    });
     prismaMock.nGOProfile.findUnique.mockResolvedValue(baseNgo);
     prismaMock.programmeAssignment.findFirst.mockResolvedValue(null);
     prismaMock.cSRProgramme.findMany.mockResolvedValue([
@@ -160,8 +173,67 @@ describe('CSR Programme routes (company-scoped contract)', () => {
       .expect(200);
 
     expectProgrammeDetailShape(body);
-    expect(body.id).toBe(programme.id);
+    expect(body).toMatchObject({
+      id: programme.id,
+      title: programme.title,
+      description: programme.description ?? undefined,
+      status: programme.status,
+      budget: programme.budget ?? undefined,
+      companyId: programme.companyId,
+    });
+    expect(body.createdAt).toBe(programme.createdAt.toISOString());
+    expect(body.updatedAt).toBe(programme.updatedAt.toISOString());
     expect(body.assignments.length).toBe(programme.assignments.length);
+    if (programme.assignments.length > 0) {
+      const assignment = programme.assignments[0];
+      const payload = body.assignments[0];
+      expect(payload).toMatchObject({
+        id: assignment.id,
+        ngoId: assignment.ngoId,
+        status: assignment.status,
+        notes: assignment.notes ?? undefined,
+      });
+      expect(payload.assignedAt).toBe(assignment.createdAt.toISOString());
+      expect(payload.updatedAt).toBe(assignment.updatedAt.toISOString());
+    }
+    if (programme.milestones.length > 0) {
+      const milestone = programme.milestones[0];
+      const payload = body.milestones[0];
+      expect(payload).toMatchObject({
+        id: milestone.id,
+        title: milestone.title,
+        description: milestone.description ?? undefined,
+        status: milestone.status,
+        progress: milestone.progress,
+      });
+      expect(payload.dueDate).toBe(milestone.dueDate?.toISOString());
+    }
+  });
+
+  it('GET detail returns 404 for missing programme', async () => {
+    prismaMock.cSRProgramme.findUnique.mockResolvedValueOnce(null);
+
+    const { status, body } = await request(app.getHttpServer())
+      .get(`/companies/${companyId}/csr-programmes/missing-programme`)
+      .set('Authorization', companyAuthHeader());
+
+    expect(status).toBe(404);
+    expect(body).toMatchObject({
+      statusCode: 404,
+      message: 'Programme not found',
+    });
+  });
+
+  it('GET detail enforces ownership', async () => {
+    const { status, body } = await request(app.getHttpServer())
+      .get(`/companies/${otherCompanyId}/csr-programmes/${programme.id}`)
+      .set('Authorization', companyAuthHeader());
+
+    expect(status).toBe(403);
+    expect(body).toMatchObject({
+      statusCode: 403,
+      message: 'Programme does not belong to this company',
+    });
   });
 
   it('POST /companies/:companyId/csr-programmes returns create response DTO', async () => {
@@ -197,14 +269,47 @@ describe('CSR Programme routes (company-scoped contract)', () => {
     expect(body.programme.status).toBe(ProgrammeStatus.ACTIVE);
   });
 
-  it('POST /companies/:companyId/csr-programmes/:programmeId/assign-ngo returns assignment DTO', async () => {
-    const { body } = await request(app.getHttpServer())
-      .post(`/companies/${companyId}/csr-programmes/${programme.id}/assign-ngo`)
-      .set('Authorization', companyAuthHeader())
-      .send({ ngoId: baseNgo.id, notes: 'Confirmed' })
-      .expect(201);
+  it('PATCH update returns 404 for missing programme', async () => {
+    prismaMock.cSRProgramme.findUnique.mockResolvedValueOnce(null);
 
-    expectAssignmentDtoShape(body);
+    const { status, body } = await request(app.getHttpServer())
+      .patch(`/companies/${companyId}/csr-programmes/missing-programme`)
+      .set('Authorization', companyAuthHeader())
+      .send({ status: ProgrammeStatus.ACTIVE });
+
+    expect(status).toBe(404);
+    expect(body).toMatchObject({
+      statusCode: 404,
+      message: 'Programme not found',
+    });
+  });
+
+  it('POST assign-ngo returns 404 for missing programme', async () => {
+    prismaMock.cSRProgramme.findUnique.mockResolvedValueOnce(null);
+
+    const { status, body } = await request(app.getHttpServer())
+      .post(`/companies/${companyId}/csr-programmes/missing-programme/assign-ngo`)
+      .set('Authorization', companyAuthHeader())
+      .send({ ngoId: baseNgo.id });
+
+    expect(status).toBe(404);
+    expect(body).toMatchObject({
+      statusCode: 404,
+      message: 'Programme not found',
+    });
+  });
+
+  it('POST assign-ngo enforces ownership', async () => {
+    const { status, body } = await request(app.getHttpServer())
+      .post(`/companies/${otherCompanyId}/csr-programmes/${programme.id}/assign-ngo`)
+      .set('Authorization', companyAuthHeader())
+      .send({ ngoId: baseNgo.id });
+
+    expect(status).toBe(403);
+    expect(body).toMatchObject({
+      statusCode: 403,
+      message: 'Programme does not belong to this company',
+    });
   });
 
   it('POST /companies/:companyId/csr-programmes/:programmeId/status returns status transition DTO', async () => {
@@ -220,5 +325,18 @@ describe('CSR Programme routes (company-scoped contract)', () => {
     expect(body.programmeId).toBe(programme.id);
     expect(body.status).toBe(ProgrammeStatus.ACTIVE);
     expect(typeof body.updatedAt).toBe('string');
+  });
+
+  it('POST status change enforces ownership', async () => {
+    const { status, body } = await request(app.getHttpServer())
+      .post(`/companies/${otherCompanyId}/csr-programmes/${programme.id}/status`)
+      .set('Authorization', companyAuthHeader())
+      .send({ status: ProgrammeStatus.ACTIVE });
+
+    expect(status).toBe(403);
+    expect(body).toMatchObject({
+      statusCode: 403,
+      message: 'Programme does not belong to this company',
+    });
   });
 });

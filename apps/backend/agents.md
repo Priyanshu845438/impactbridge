@@ -125,3 +125,9 @@
 - Wired CSR lifecycle actions (create, update, assign NGO, status change) to emit audit logs via actor context when available.
 - Logging skips silently without actorId; primary behaviour and responses unchanged.
 
+28. CSR Programme detail DTO normalisation
+- Detail endpoint now reuses sanitiser + mapper so payload matches create/update/list structure without altering data.
+
+29. CSR Programme negative-path tests
+- Added ownership, not-found, and validation coverage to CSR route contracts without altering behaviour.
+
