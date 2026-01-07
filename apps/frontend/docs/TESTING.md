@@ -25,6 +25,6 @@
 - Ensure `NEXT_PUBLIC_API_URL` and relevant flags are configured for test environment (set via `.env.test` or jest setup).
 - Keep tests deterministic: mock timers, random IDs, and current time when necessary.
 
-## Recent Additions
-- CSR programme list & detail pages now have contract-level tests ensuring mock and API modes render identically across happy-path, loading, and error states without altering runtime behaviour; update/edit hook tests cover the new API pathway while page-level edit RTL coverage remains a TODO.
-> NOTE: CSR status, assignment, and update mutation tests now cover flag on/off modes, safeguarding the mock fallback logic.
+## Recent Additions & Gaps
+- CSR programme list & detail pages now have contract-level tests ensuring mock and API modes render identically across happy-path, loading, and error states without altering runtime behaviour. Hook suites cover create/update/status/assignment flag paths. End-to-end smoke coverage remains a TODO after the earlier scaffolding was rolled back, so rerun planning is required before enabling the API flag by default.
+- Page-level RTL coverage for the edit flow is still pending; add once the feature-flagged API path is exercised in smoke tests.

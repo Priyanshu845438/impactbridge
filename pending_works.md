@@ -6,6 +6,7 @@ _All findings are observational; no code was modified during this audit. Items a
 1. Jest coverage now includes CSR programme list/detail contract tests alongside baseline suites, but there are still **no cross-package integration tests** that exercise backend controllers or shared DTO flows, leaving regression gaps.
 2. Vitest mocks rely on global fetch overrides without reset helpers, risking test leakage if additional suites are added.
 3. Broader journeys (auth, approvals, financial) still lack end-to-end coverage—plan feature-level integration tests once routes and data contracts stabilise.
+4. CSR programme smoke tests (mock vs API flag) remain outstanding; prior scaffolding was removed after parity issues surfaced, so fresh end-to-end validation must be implemented before flag rollout.
 
 ## 2. apps/backend
 1. **CSR Programme controller** now exposes company-scoped routes with explicit `JwtAuthGuard` + `RolesGuard (COMPANY)` applied; integration tests cover both guard enforcement and happy-path responses.

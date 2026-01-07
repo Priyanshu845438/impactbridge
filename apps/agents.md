@@ -52,3 +52,8 @@
 - Confirmed existing CSR programme response DTOs in `@impactbridge/api-contracts` already cover list/detail/assignment use cases.
 - Re-ran the package build to verify shared contracts compile cleanly without modifications.
 - Ready to proceed with backend service alignment using the established contract shapes.
+
+12. CSR Smoke Testing Reset
+- Identified gaps in CSR end-to-end smoke coverage; previous draft spec was removed after payload parity issues.
+- Documented outstanding work in `pending_works.md` and docs to ensure future validation efforts resume from a clean state.
+- No runtime changes were introduced; builds remain aligned with mock-first behaviour until smoke tests are reimplemented.
