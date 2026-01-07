@@ -62,3 +62,8 @@
 - Added safe-fallback behaviour across CSR programme hooks so API failures automatically revert to mock data without altering UX.
 - Extended hook Jest suites to cover rejection paths and confirm warning logs fire while maintaining feature-flag parity.
 - Frontend and backend builds rerun to verify the implementation introduces no regressions; smoke tests remain pending before flag rollout.
+
+14. CSR Programme Page-Level Tests Added
+- Introduced RTL suites for programme list, detail, and edit pages with `API_PROGRAMME` enabled to verify API vs mock parity and edit submission wiring.
+- Tests confirm skeleton/error fallbacks mirror existing behaviour and mutation submits unchanged payloads via the feature-flagged hook.
+- Frontend and backend builds re-executed post-tests to ensure stability across the stack.
