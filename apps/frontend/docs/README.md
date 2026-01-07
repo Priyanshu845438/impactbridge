@@ -7,5 +7,6 @@ The docs folder captures the minimum set of references required to work on the N
 - `ANALYTICS_DASHBOARD.md` — admin dashboard data wiring, query behaviour, and fallbacks.
 - `STYLE_GUIDE.md` — design system guidelines, component conventions, and accessibility guardrails.
 - `TESTING.md` — unit/integration testing strategy, scripts, and utilities.
+- `CSR_PROGRAMME_DATA_FLOW.md` — end-to-end view of CSR programme hooks, feature flag behaviour, fallback safety, and cache invalidation patterns.
 
 Keep each document concise and updated as the implementation evolves.

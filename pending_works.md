@@ -18,14 +18,15 @@ _All findings are observational; no code was modified during this audit. Items a
 8. Shared docs (API guide, Postman collection) mention CSR routes; they require ongoing sync once guards/tests land to avoid divergence.
 
 ## 3. apps/frontend
-1. CSR programme list/detail pages use feature-flagged React Query wrappers that call the live API when `API_PROGRAMME` is enabled, with mocks as fallback; newly added RTL contract tests cover flag on/off, loading, error, and fallback states. End-to-end validation (RBAC, pagination parity) and rollout coordination remain pending before enabling the flag by default.
+1. CSR programme list/detail pages use feature-flagged React Query wrappers with shared query keys, ensuring cache invalidation stays in sync after create/update/status/assignment mutations. Page-level RTL parity tests and end-to-end validation (RBAC, pagination) remain pending before enabling the flag by default.
 2. CSR programme create flow now routes through the feature-flagged hook: when `API_PROGRAMME` is enabled it calls the backend `POST /companies/{id}/csr-programmes` endpoint, otherwise it falls back to the legacy mock mutation. Follow-up tasks: wire company selection once auth delivers IDs, add integration tests for API path, and monitor backend DTO changes.
 3. CSR programme status transition and NGO assignment flows are now feature-flag-aware (`useProgrammeStatus`, `useProgrammeAssignment`), each preserving the existing UX with API fallbacks and dedicated hook tests. Next steps: monitor backend responses for schema changes and expand page-level RTL coverage to assert mutation feedback remains unchanged.
-4. Programme adapters introduced to satisfy lint now stub icon/timestamp helpers, altering UI formatting; they must be restored when analytics wiring is completed.
-5. Feature flag `API_PROGRAMME` handling is partially in place—ensure env plumbing, tests, and documentation cover both ON/OFF behaviours before rollout.
-6. Admin dashboard analytics lint suppression is temporary; follow-up task required to reinstate real helpers once API payloads stabilise.
-7. Tests across dashboards are mock-based (Storybook + RTL) and offer no assurance against live API regressions; plan for integration tests once hooks are wired.
-8. RBAC is enforced mostly client-side; audit middleware/route protections to ensure unauthorised users cannot hit protected pages when SSR/cache is used.
+4. CSR programme update/status/assignment flows now invalidate list/detail caches consistently; add page-level RTL coverage for API-enabled edit submission before defaulting the flag to on.
+5. Programme adapters introduced to satisfy lint now stub icon/timestamp helpers, altering UI formatting; they must be restored when analytics wiring is completed.
+6. Feature flag `API_PROGRAMME` handling is partially in place—ensure env plumbing, tests, and documentation cover both ON/OFF behaviours before rollout.
+7. Admin dashboard analytics lint suppression is temporary; follow-up task required to reinstate real helpers once API payloads stabilise.
+8. Tests across dashboards are mock-based (Storybook + RTL) and offer no assurance against live API regressions; plan for integration tests once hooks are wired.
+9. RBAC is enforced mostly client-side; audit middleware/route protections to ensure unauthorised users cannot hit protected pages when SSR/cache is used.
 
 ## 4. packages (api-contracts)
 1. CSR programme DTOs are defined, but there is **no automated publish pipeline**—manual `npm publish` remains a risk; set up CI to build/test/release with semantic versioning.

@@ -1,10 +1,14 @@
 "use client";
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { apiRequest } from '@/lib/api/client';
 import { getFeatureFlags } from '@/lib/feature-flags';
 import { DEFAULT_COMPANY_ID } from '../api';
+import {
+  getProgrammeDetailKey,
+  getProgrammeListKey,
+} from './use-programme-wrappers';
 
 interface AssignmentInput {
   programmeId: string;
@@ -47,6 +51,7 @@ async function assignViaApi(
 
 export function useProgrammeAssignment(companyId: string = DEFAULT_COMPANY_ID) {
   const { API_PROGRAMME } = getFeatureFlags();
+  const queryClient = useQueryClient();
 
   return useMutation<AssignmentResponse, Error, AssignmentInput>({
     mutationFn: (input) => {
@@ -55,6 +60,18 @@ export function useProgrammeAssignment(companyId: string = DEFAULT_COMPANY_ID) {
       }
 
       return assignViaApi(input, companyId);
+    },
+    onSettled: (_result, _error, variables) => {
+      if (!variables) {
+        return;
+      }
+
+      queryClient.invalidateQueries({
+        queryKey: getProgrammeDetailKey(companyId, variables.programmeId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: getProgrammeListKey(companyId),
+      });
     },
   });
 }

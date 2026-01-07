@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type {
   ProgrammeUpdateDto,
   ProgrammeDetailDto,
@@ -10,6 +10,10 @@ import { apiRequest } from "@/lib/api/client";
 import { getFeatureFlags } from "@/lib/feature-flags";
 import { programmes as mockProgrammes } from "../mock-data";
 import { DEFAULT_COMPANY_ID } from "../api";
+import {
+  getProgrammeDetailKey,
+  getProgrammeListKey,
+} from "./use-programme-wrappers";
 
 type ProgrammeStatus = (typeof mockProgrammes)[number]["status"];
 
@@ -104,6 +108,7 @@ export function useUpdateProgramme(
   defaultCompanyId: string = DEFAULT_COMPANY_ID,
 ) {
   const { API_PROGRAMME } = getFeatureFlags();
+  const queryClient = useQueryClient();
 
   return useMutation<MockUpdateResponse, Error, UpdateProgrammeInput>({
     mutationFn: (input) => {
@@ -114,6 +119,20 @@ export function useUpdateProgramme(
       }
 
       return apiUpdateProgramme(input, companyId);
+    },
+    onSettled: (_result, _error, variables) => {
+      if (!variables) {
+        return;
+      }
+
+      const companyId = variables.companyId ?? defaultCompanyId;
+
+      queryClient.invalidateQueries({
+        queryKey: getProgrammeDetailKey(companyId, variables.programmeId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: getProgrammeListKey(companyId),
+      });
     },
   });
 }

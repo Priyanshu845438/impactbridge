@@ -91,3 +91,13 @@
 - Upgraded `useUpdateProgramme` to call the backend PATCH endpoint under the `API_PROGRAMME` flag with graceful mock fallback.
 - Refactored the edit page to consume the hook without altering UX and added hook tests for flag on/off paths.
 - Re-ran targeted hook tests and full Next.js build (`npm run test -- programmes/hooks.test.tsx`, `npm run build`) to confirm unchanged behaviour.
+
+20. CSR Programme — Update Flow Integration
+- Connected the edit/update flow to the backend API behind the feature flag while preserving the existing mock fallback.
+- Maintained identical UX across flag modes; no new states introduced.
+- Documented flag behaviour and validated with hook tests plus full build (`npm run test -- programmes/hooks.test.tsx`, `npm run build`).
+
+21. CSR Programme — Cache Consistency Hardening
+- Unified list/detail query keys and hooked create/update/status/assignment mutations into React Query invalidation.
+- Added tests verifying cache refresh behaviour across mock/API modes with no UX changes.
+- Re-ran targeted hook tests and full build (`npm run test -- programmes/hooks.test.tsx`, `npm run build`) to confirm stable behaviour.

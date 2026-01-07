@@ -14,7 +14,7 @@
 - Tests live under `__tests__/` mirroring feature directories.
 - Use `vi.mock('ky')` or provided mocks to intercept API calls.
 - Prefer testing observable UI output over implementation details.
-- For feature-flagged features, add separate tests covering enabled vs disabled states (e.g., CSR programme list/detail/create/update/status hooks have dedicated flag on/off suites; list/detail pages now have full UX contract tests covering flag on/off, loading, error, and mock fallback states).
+- For feature-flagged features, add separate tests covering enabled vs disabled states (e.g., CSR programme list/detail/create/update/status hooks have dedicated flag on/off suites; list/detail pages now have full UX contract tests covering flag on/off, loading, error, and mock fallback states. Hook tests now assert cache invalidation via shared query keys so API and mock modes stay aligned without UI changes).
 
 ## Coverage Expectations
 - Critical flows (auth, dashboard pages, hooks) must have direct test coverage.

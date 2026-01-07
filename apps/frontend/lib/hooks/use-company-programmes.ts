@@ -1,2 +1,3 @@
-export { useCompanyProgrammesWrapper as useCompanyProgrammes, useProgrammeDetailsWrapper as useProgrammeDetail } from '@/app/dashboard/company/programmes/hooks/use-programme-wrappers';
-export type { ProgrammeSummaryDto, ProgrammeDetailDto } from '@impactbridge/api-contracts';
+export { useCompanyProgrammes } from "@/app/dashboard/company/programmes/hooks/useCompanyProgrammes";
+export { useProgrammeDetail } from "@/app/dashboard/company/programmes/hooks/useProgrammeDetail";
+export type { ProgrammeSummaryDto, ProgrammeDetailDto } from "@impactbridge/api-contracts";

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { apiRequest } from '@/lib/api/client';
 import { getFeatureFlags } from '@/lib/feature-flags';
@@ -8,6 +8,10 @@ import type { ProgrammeCreateDto, ProgrammeCreateResponseDto } from '@impactbrid
 
 import { programmes as mockProgrammes } from '../mock-data';
 import { DEFAULT_COMPANY_ID } from '../api';
+import {
+  getProgrammeDetailKey,
+  getProgrammeListKey,
+} from './use-programme-wrappers';
 
 interface CreateProgrammeInput {
   name: string;
@@ -59,6 +63,7 @@ async function apiCreateProgramme(
 
 export function useCreateProgramme(companyId: string = DEFAULT_COMPANY_ID) {
   const { API_PROGRAMME } = getFeatureFlags();
+  const queryClient = useQueryClient();
 
   return useMutation<MockCreateResponse | ProgrammeCreateResponseDto, Error, CreateProgrammeInput>({
     mutationFn: async (input) => {
@@ -67,6 +72,22 @@ export function useCreateProgramme(companyId: string = DEFAULT_COMPANY_ID) {
       }
 
       return apiCreateProgramme(input, companyId);
+    },
+    onSuccess: (data) => {
+      const createdProgramme =
+        (data as ProgrammeCreateResponseDto | MockCreateResponse)?.programme;
+      const createdId = createdProgramme?.id;
+
+      if (createdId) {
+        queryClient.invalidateQueries({
+          queryKey: getProgrammeDetailKey(companyId, createdId),
+        });
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: getProgrammeListKey(companyId),
+      });
     },
   });
 }

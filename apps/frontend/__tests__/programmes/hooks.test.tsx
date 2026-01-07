@@ -7,13 +7,18 @@ import { useCreateProgramme } from "@/app/dashboard/company/programmes/hooks/use
 import { useProgrammeStatus } from "@/app/dashboard/company/programmes/hooks/useProgrammeStatus";
 import { useProgrammeAssignment } from "@/app/dashboard/company/programmes/hooks/useProgrammeAssignment";
 import { useUpdateProgramme } from "@/app/dashboard/company/programmes/hooks/useUpdateProgramme";
+import { useCompanyProgrammes } from "@/app/dashboard/company/programmes/hooks/useCompanyProgrammes";
+import { useProgrammeDetail } from "@/app/dashboard/company/programmes/hooks/useProgrammeDetail";
 import {
-  useCompanyProgrammes,
-  useProgrammeDetail,
-} from "@/lib/hooks/use-company-programmes";
+  getProgrammeDetailKey,
+  getProgrammeListKey,
+} from "@/app/dashboard/company/programmes/hooks/use-programme-wrappers";
 import type { FeatureFlags } from "@/lib/feature-flags";
 import { getFeatureFlags } from "@/lib/feature-flags";
-import { mapMockDetail } from "@/app/dashboard/company/programmes/api";
+import {
+  mapMockDetail,
+  DEFAULT_COMPANY_ID,
+} from "@/app/dashboard/company/programmes/api";
 
 jest.mock("@/lib/feature-flags", () => ({
   getFeatureFlags: jest.fn(),
@@ -36,7 +41,11 @@ const baseFlags: FeatureFlags = {
 };
 
 function createWrapper() {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+    },
+  });
   const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
@@ -44,9 +53,11 @@ function createWrapper() {
 }
 
 describe("CSR programme data hooks", () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+afterEach(() => {
+  jest.clearAllMocks();
+  apiRequest.mockRestore?.();
+  apiRequest.mockReset();
+});
 
   describe("useCreateProgramme", () => {
     it("uses mock mutation when API flag disabled", async () => {
@@ -56,9 +67,15 @@ describe("CSR programme data hooks", () => {
       });
 
       const { Wrapper, queryClient } = createWrapper();
+      const invalidateSpy = jest.spyOn(queryClient, "invalidateQueries");
       const { result } = renderHook(() => useCreateProgramme("company-123"), {
         wrapper: Wrapper,
       });
+
+      const detailBefore = queryClient.getQueryData(
+        getProgrammeDetailKey("company-123", "programme-1"),
+      );
+      expect(detailBefore).toBeUndefined();
 
       await act(async () => {
         const response = await result.current.mutateAsync({
@@ -81,6 +98,10 @@ describe("CSR programme data hooks", () => {
       });
 
       expect(apiRequest).not.toHaveBeenCalled();
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: getProgrammeListKey("company-123"),
+      });
+
       queryClient.clear();
     });
 
@@ -107,6 +128,7 @@ describe("CSR programme data hooks", () => {
       apiRequest.mockResolvedValueOnce({ data: apiResponse });
 
       const { Wrapper, queryClient } = createWrapper();
+      const invalidateSpy = jest.spyOn(queryClient, "invalidateQueries");
       const { result } = renderHook(() => useCreateProgramme("company-123"), {
         wrapper: Wrapper,
       });
@@ -133,6 +155,13 @@ describe("CSR programme data hooks", () => {
         expect(response).toEqual(apiResponse);
       });
 
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: getProgrammeListKey("company-123"),
+      });
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: getProgrammeDetailKey("company-123", "programme-api"),
+      });
+
       queryClient.clear();
     });
   });
@@ -145,9 +174,15 @@ describe("CSR programme data hooks", () => {
       });
 
       const { Wrapper, queryClient } = createWrapper();
+      const invalidateSpy = jest.spyOn(queryClient, "invalidateQueries");
       const { result } = renderHook(() => useProgrammeStatus("company-123"), {
         wrapper: Wrapper,
       });
+
+      queryClient.setQueryData(
+        getProgrammeDetailKey("company-123", "programme-1"),
+        { status: "Active" },
+      );
 
       await act(async () => {
         const response = await result.current.mutateAsync({
@@ -162,6 +197,13 @@ describe("CSR programme data hooks", () => {
       });
 
       expect(apiRequest).not.toHaveBeenCalled();
+
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: getProgrammeDetailKey("company-123", "programme-1"),
+      });
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: getProgrammeListKey("company-123"),
+      });
       queryClient.clear();
     });
 
@@ -174,9 +216,15 @@ describe("CSR programme data hooks", () => {
       apiRequest.mockResolvedValueOnce({ data: { status: "ACTIVE" } });
 
       const { Wrapper, queryClient } = createWrapper();
+      const invalidateSpy = jest.spyOn(queryClient, "invalidateQueries");
       const { result } = renderHook(() => useProgrammeStatus("company-123"), {
         wrapper: Wrapper,
       });
+
+      queryClient.setQueryData(
+        getProgrammeDetailKey("company-123", "programme-1"),
+        { status: "Active" },
+      );
 
       await act(async () => {
         const response = await result.current.mutateAsync({
@@ -184,15 +232,21 @@ describe("CSR programme data hooks", () => {
           nextStatus: "Active",
         });
 
-        expect(apiRequest).toHaveBeenCalledWith({
-          method: "POST",
-          path: "/api/v1/companies/company-123/csr-programmes/programme-1/status",
-          body: { status: "ACTIVE" },
-        });
-
-        expect(response).toEqual({ success: true, status: "Active" });
+      expect(apiRequest).toHaveBeenCalledWith({
+        method: "POST",
+        path: "/api/v1/companies/company-123/csr-programmes/programme-1/status",
+        body: { status: "ACTIVE" },
       });
 
+      expect(response).toEqual({ success: true, status: "Active" });
+      });
+
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: getProgrammeDetailKey("company-123", "programme-1"),
+      });
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: getProgrammeListKey("company-123"),
+      });
       queryClient.clear();
     });
   });
@@ -205,11 +259,17 @@ describe("CSR programme data hooks", () => {
       });
 
       const { Wrapper, queryClient } = createWrapper();
+      const invalidateSpy = jest.spyOn(queryClient, "invalidateQueries");
       const { result } = renderHook(
         () => useProgrammeAssignment("company-123"),
         {
           wrapper: Wrapper,
         },
+      );
+
+      queryClient.setQueryData(
+        getProgrammeDetailKey("company-123", "programme-1"),
+        { assignments: [] },
       );
 
       await act(async () => {
@@ -221,6 +281,13 @@ describe("CSR programme data hooks", () => {
       });
 
       expect(apiRequest).not.toHaveBeenCalled();
+
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: getProgrammeDetailKey("company-123", "programme-1"),
+      });
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: getProgrammeListKey("company-123"),
+      });
       queryClient.clear();
     });
 
@@ -233,11 +300,17 @@ describe("CSR programme data hooks", () => {
       apiRequest.mockResolvedValueOnce({ data: { ngoId: "ngo-1" } });
 
       const { Wrapper, queryClient } = createWrapper();
+      const invalidateSpy = jest.spyOn(queryClient, "invalidateQueries");
       const { result } = renderHook(
         () => useProgrammeAssignment("company-123"),
         {
           wrapper: Wrapper,
         },
+      );
+
+      queryClient.setQueryData(
+        getProgrammeDetailKey("company-123", "programme-1"),
+        { assignments: [] },
       );
 
       await act(async () => {
@@ -255,6 +328,12 @@ describe("CSR programme data hooks", () => {
         expect(response).toEqual({ success: true, ngoId: "ngo-1" });
       });
 
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: getProgrammeDetailKey("company-123", "programme-1"),
+      });
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: getProgrammeListKey("company-123"),
+      });
       queryClient.clear();
     });
 
@@ -388,7 +467,9 @@ describe("CSR programme data hooks", () => {
     expect(apiRequest).toHaveBeenNthCalledWith(2, {
       path: "/api/v1/companies/company-123/csr-programmes/programme-1",
     });
-    expect(detailHook.result.current.data).toEqual(detailPayload);
+    expect(detailHook.result.current.data).toEqual(
+      expect.objectContaining(detailPayload),
+    );
     detailQueryClient.clear();
   });
 
@@ -459,6 +540,46 @@ describe("CSR programme data hooks", () => {
     queryClient.clear();
   });
 
+  it("normalises API detail payload with missing fields", async () => {
+    (getFeatureFlags as jest.Mock).mockReturnValue({
+      ...baseFlags,
+      API_PROGRAMME: true,
+    });
+
+    apiRequest.mockResolvedValueOnce({
+      data: {
+        id: mockProgrammes[0].id,
+        title: undefined,
+        description: undefined,
+        status: undefined,
+        companyId: undefined,
+        milestones: undefined,
+        assignments: undefined,
+        createdAt: undefined,
+        updatedAt: undefined,
+      },
+    });
+
+    const { Wrapper, queryClient } = createWrapper();
+    const { result } = renderHook(
+      () =>
+        useProgrammeDetail({
+          enabled: true,
+          programmeId: mockProgrammes[0].id,
+          companyId: "company-123",
+        }),
+      { wrapper: Wrapper },
+    );
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(result.current.data).toEqual(
+      mapMockDetail("company-123", mockProgrammes[0].id),
+    );
+
+    queryClient.clear();
+  });
+
   it("falls back to mock list when API returns empty array", async () => {
     (getFeatureFlags as jest.Mock).mockReturnValue({
       ...baseFlags,
@@ -485,6 +606,40 @@ describe("CSR programme data hooks", () => {
         expect.objectContaining({ id: programme.id }),
       ),
     );
+
+    queryClient.clear();
+  });
+
+  it("normalises API list payload with missing fields", async () => {
+    (getFeatureFlags as jest.Mock).mockReturnValue({
+      ...baseFlags,
+      API_PROGRAMME: true,
+    });
+
+    apiRequest.mockResolvedValueOnce({
+      data: [
+        {
+          id: mockProgrammes[0].id,
+          title: undefined,
+          description: undefined,
+          ownerCompanyId: undefined,
+          state: undefined,
+        },
+      ],
+    });
+
+    const { Wrapper, queryClient } = createWrapper();
+
+    const { result } = renderHook(
+      () => useCompanyProgrammes({ enabled: true, companyId: "company-123" }),
+      { wrapper: Wrapper },
+    );
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(result.current.data).toEqual([
+      expect.objectContaining({ id: mockProgrammes[0].id, title: mockProgrammes[0].name }),
+    ]);
 
     queryClient.clear();
   });
@@ -530,9 +685,18 @@ describe("CSR programme data hooks", () => {
       });
 
       const { Wrapper, queryClient } = createWrapper();
+      const invalidateSpy = jest.spyOn(queryClient, "invalidateQueries");
       const { result } = renderHook(() => useUpdateProgramme("company-123"), {
         wrapper: Wrapper,
       });
+
+      queryClient.setQueryData(
+        getProgrammeDetailKey("company-123", "programme-1"),
+        { title: "Original" },
+      );
+
+      const listKey = getProgrammeListKey("company-123");
+      queryClient.setQueryData(listKey, [{ id: "programme-1", title: "Original" }]);
 
       await act(async () => {
         const response = await result.current.mutateAsync({
@@ -556,6 +720,13 @@ describe("CSR programme data hooks", () => {
       });
 
       expect(apiRequest).not.toHaveBeenCalled();
+
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: getProgrammeDetailKey("company-123", "programme-1"),
+      });
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: getProgrammeListKey("company-123"),
+      });
       queryClient.clear();
     });
 
@@ -579,9 +750,18 @@ describe("CSR programme data hooks", () => {
       apiRequest.mockResolvedValueOnce({ data: apiResponse });
 
       const { Wrapper, queryClient } = createWrapper();
+      const invalidateSpy = jest.spyOn(queryClient, "invalidateQueries");
       const { result } = renderHook(() => useUpdateProgramme("company-123"), {
         wrapper: Wrapper,
       });
+
+      queryClient.setQueryData(
+        getProgrammeDetailKey("company-123", "programme-1"),
+        { title: "Original" },
+      );
+
+      const listKey = getProgrammeListKey("company-123");
+      queryClient.setQueryData(listKey, [{ id: "programme-1", title: "Original" }]);
 
       await act(async () => {
         const response = await result.current.mutateAsync({
@@ -603,17 +783,23 @@ describe("CSR programme data hooks", () => {
           },
         });
 
-        expect(response).toEqual(
-          expect.objectContaining({
-            success: true,
-            programme: expect.objectContaining({
-              name: "Updated Programme",
-              status: "Active",
-            }),
+      expect(response).toEqual(
+        expect.objectContaining({
+          success: true,
+          programme: expect.objectContaining({
+            name: "Updated Programme",
+            status: "Active",
           }),
-        );
+        }),
+      );
       });
 
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: getProgrammeDetailKey("company-123", "programme-1"),
+      });
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: getProgrammeListKey("company-123"),
+      });
       queryClient.clear();
     });
   });
