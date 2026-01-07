@@ -164,6 +164,47 @@ afterEach(() => {
 
       queryClient.clear();
     });
+
+    it("falls back to mock when API request rejects", async () => {
+      (getFeatureFlags as jest.Mock).mockReturnValue({
+        ...baseFlags,
+        API_PROGRAMME: true,
+      });
+
+      const consoleWarnSpy = jest
+        .spyOn(console, "warn")
+        .mockImplementation(() => undefined);
+
+      apiRequest.mockRejectedValueOnce(new Error("create failed"));
+
+      const { Wrapper } = createWrapper();
+      const { result } = renderHook(() => useCreateProgramme("company-123"), {
+        wrapper: Wrapper,
+      });
+
+      await act(async () => {
+        const response = await result.current.mutateAsync({
+          name: "Resilient Programme",
+          summary: "Summary",
+          category: "Education",
+          region: "Maharashtra",
+          status: mockProgrammes[0].status,
+        });
+
+        expect(response).toEqual(
+          expect.objectContaining({
+            success: true,
+            programme: expect.objectContaining({
+              name: "Resilient Programme",
+              summary: "Summary",
+            }),
+          }),
+        );
+      });
+
+      expect(consoleWarnSpy).toHaveBeenCalled();
+      consoleWarnSpy.mockRestore();
+    });
   });
 
   describe("useProgrammeStatus", () => {
@@ -248,6 +289,36 @@ afterEach(() => {
         queryKey: getProgrammeListKey("company-123"),
       });
       queryClient.clear();
+    });
+
+    it("falls back to mock when API rejects", async () => {
+      (getFeatureFlags as jest.Mock).mockReturnValue({
+        ...baseFlags,
+        API_PROGRAMME: true,
+      });
+
+      const consoleWarnSpy = jest
+        .spyOn(console, "warn")
+        .mockImplementation(() => undefined);
+
+      apiRequest.mockRejectedValueOnce(new Error("status failed"));
+
+      const { Wrapper } = createWrapper();
+      const { result } = renderHook(() => useProgrammeStatus("company-123"), {
+        wrapper: Wrapper,
+      });
+
+      await act(async () => {
+        const response = await result.current.mutateAsync({
+          programmeId: "programme-1",
+          nextStatus: "Active",
+        });
+
+        expect(response).toEqual({ success: true, status: "Active" });
+      });
+
+      expect(consoleWarnSpy).toHaveBeenCalled();
+      consoleWarnSpy.mockRestore();
     });
   });
 
@@ -362,6 +433,81 @@ afterEach(() => {
       });
 
       queryClient.clear();
+    });
+
+    it("falls back to mock when API rejects", async () => {
+      (getFeatureFlags as jest.Mock).mockReturnValue({
+        ...baseFlags,
+        API_PROGRAMME: true,
+      });
+
+      const consoleWarnSpy = jest
+        .spyOn(console, "warn")
+        .mockImplementation(() => undefined);
+
+      apiRequest.mockRejectedValueOnce(new Error("assign failed"));
+
+      const { Wrapper } = createWrapper();
+      const { result } = renderHook(
+        () => useProgrammeAssignment("company-123"),
+        {
+          wrapper: Wrapper,
+        },
+      );
+
+      await act(async () => {
+        const response = await result.current.mutateAsync({
+          programmeId: "programme-1",
+          ngoId: "ngo-1",
+        });
+
+        expect(response).toEqual({ success: true, ngoId: "ngo-1" });
+      });
+
+      expect(consoleWarnSpy).toHaveBeenCalled();
+      consoleWarnSpy.mockRestore();
+    });
+
+    it("falls back to mock when API rejects", async () => {
+      (getFeatureFlags as jest.Mock).mockReturnValue({
+        ...baseFlags,
+        API_PROGRAMME: true,
+      });
+
+      const consoleWarnSpy = jest
+        .spyOn(console, "warn")
+        .mockImplementation(() => undefined);
+
+      apiRequest.mockRejectedValueOnce(new Error("update failed"));
+
+      const { Wrapper } = createWrapper();
+      const { result } = renderHook(() => useUpdateProgramme("company-123"), {
+        wrapper: Wrapper,
+      });
+
+      await act(async () => {
+        const response = await result.current.mutateAsync({
+          programmeId: "programme-1",
+          name: "Updated Programme",
+          summary: "Updated summary",
+          category: "Education",
+          region: "Maharashtra",
+          status: "Active",
+        });
+
+        expect(response).toEqual(
+          expect.objectContaining({
+            success: true,
+            programme: expect.objectContaining({
+              name: "Updated Programme",
+              summary: "Updated summary",
+            }),
+          }),
+        );
+      });
+
+      expect(consoleWarnSpy).toHaveBeenCalled();
+      consoleWarnSpy.mockRestore();
     });
   });
 

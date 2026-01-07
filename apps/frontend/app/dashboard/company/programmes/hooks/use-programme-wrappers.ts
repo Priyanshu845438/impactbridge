@@ -139,8 +139,16 @@ export function useCompanyProgrammesWrapper({
   return useQuery<ProgrammeSummaryDto[]>({
     queryKey: getProgrammeListKey(effectiveCompanyId),
     queryFn: async () => {
-      const response = await listProgrammes(effectiveCompanyId);
-      return ensureSummaryList(response, effectiveCompanyId) as ProgrammeSummaryDto[];
+      try {
+        const response = await listProgrammes(effectiveCompanyId);
+        return ensureSummaryList(response, effectiveCompanyId) as ProgrammeSummaryDto[];
+      } catch (error) {
+        console.warn(
+          "CSR Programme list request failed, falling back to mock data",
+          error,
+        );
+        return mapMockList(effectiveCompanyId) as ProgrammeSummaryDto[];
+      }
     },
     enabled,
     staleTime: 1000 * 30,
@@ -157,8 +165,16 @@ export function useProgrammeDetailsWrapper({
   return useQuery<ProgrammeDetailDto | null>({
     queryKey: getProgrammeDetailKey(effectiveCompanyId, programmeId),
     queryFn: async () => {
-      const response = await getProgrammeById(programmeId, effectiveCompanyId);
-      return normaliseDetail(response, programmeId, effectiveCompanyId);
+      try {
+        const response = await getProgrammeById(programmeId, effectiveCompanyId);
+        return normaliseDetail(response, programmeId, effectiveCompanyId);
+      } catch (error) {
+        console.warn(
+          "CSR Programme detail request failed, falling back to mock data",
+          error,
+        );
+        return normaliseDetail(null, programmeId, effectiveCompanyId);
+      }
     },
     enabled: enabled && Boolean(programmeId),
     staleTime: 1000 * 30,

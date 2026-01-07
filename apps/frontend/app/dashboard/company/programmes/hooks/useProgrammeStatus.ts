@@ -65,7 +65,13 @@ export function useProgrammeStatus(companyId: string = DEFAULT_COMPANY_ID) {
         return Promise.resolve(mockTransitionStatus(input));
       }
 
-      return apiTransitionStatus(input, companyId);
+      return apiTransitionStatus(input, companyId).catch((error) => {
+        console.warn(
+          "CSR Programme status API failed, reverting to mock",
+          error,
+        );
+        return mockTransitionStatus(input);
+      });
     },
     onSettled: (_result, _error, variables) => {
       if (!variables) {

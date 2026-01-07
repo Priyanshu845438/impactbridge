@@ -118,7 +118,13 @@ export function useUpdateProgramme(
         return Promise.resolve(mockUpdateProgramme(input));
       }
 
-      return apiUpdateProgramme(input, companyId);
+      return apiUpdateProgramme(input, companyId).catch((error) => {
+        console.warn(
+          "CSR Programme update API failed, reverting to mock",
+          error,
+        );
+        return mockUpdateProgramme(input);
+      });
     },
     onSettled: (_result, _error, variables) => {
       if (!variables) {

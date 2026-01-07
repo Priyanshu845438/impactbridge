@@ -71,7 +71,24 @@ export function useCreateProgramme(companyId: string = DEFAULT_COMPANY_ID) {
         return mockCreateProgramme(input);
       }
 
-      return apiCreateProgramme(input, companyId);
+      try {
+        const response = await apiCreateProgramme(input, companyId);
+
+        if (!response?.programme) {
+          console.warn(
+            "CSR Programme create API returned empty payload, reverting to mock",
+          );
+          return mockCreateProgramme(input);
+        }
+
+        return response;
+      } catch (error) {
+        console.warn(
+          "CSR Programme create API failed, reverting to mock",
+          error,
+        );
+        return mockCreateProgramme(input);
+      }
     },
     onSuccess: (data) => {
       const createdProgramme =

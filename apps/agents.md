@@ -58,7 +58,7 @@
 - Documented outstanding work in `pending_works.md` and docs to ensure future validation efforts resume from a clean state.
 - No runtime changes were introduced; builds remain aligned with mock-first behaviour until smoke tests are reimplemented.
 
-13. CSR Runtime Fallback Pending
-- Runtime safe-fallback behaviour for CSR programme hooks is still outstanding; documentation now tracks the gap alongside the deferred smoke tests.
-- Feature flag remains default-off while reliability and test coverage are re-planned.
-- No code changes were made; status updates captured in docs only.
+13. CSR Runtime Fallback Implemented
+- Added safe-fallback behaviour across CSR programme hooks so API failures automatically revert to mock data without altering UX.
+- Extended hook Jest suites to cover rejection paths and confirm warning logs fire while maintaining feature-flag parity.
+- Frontend and backend builds rerun to verify the implementation introduces no regressions; smoke tests remain pending before flag rollout.

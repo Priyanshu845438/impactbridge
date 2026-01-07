@@ -26,5 +26,5 @@
 - Keep tests deterministic: mock timers, random IDs, and current time when necessary.
 
 ## Recent Additions & Gaps
-- CSR programme list & detail pages now have contract-level tests ensuring mock and API modes render identically across happy-path, loading, and error states without altering runtime behaviour. Hook suites cover create/update/status/assignment flag paths. Runtime fallback behaviour for API failures and end-to-end smoke coverage remain TODOs after earlier scaffolding was rolled back; both must be revisited before enabling the API flag by default.
+- CSR programme list & detail pages now have contract-level tests ensuring mock and API modes render identically across happy-path, loading, and error states without altering runtime behaviour. Hook suites cover create/update/status/assignment flag paths, including runtime fallback behaviour for API failures. End-to-end smoke coverage remains a TODO before enabling the API flag by default.
 - Page-level RTL coverage for the edit flow is still pending; add once runtime fallbacks and smoke tests are reinstated so the API path is exercised safely.

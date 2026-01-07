@@ -59,7 +59,13 @@ export function useProgrammeAssignment(companyId: string = DEFAULT_COMPANY_ID) {
         return Promise.resolve(mapMockAssignment(input));
       }
 
-      return assignViaApi(input, companyId);
+      return assignViaApi(input, companyId).catch((error) => {
+        console.warn(
+          "CSR Programme assignment API failed, reverting to mock",
+          error,
+        );
+        return mapMockAssignment(input);
+      });
     },
     onSettled: (_result, _error, variables) => {
       if (!variables) {

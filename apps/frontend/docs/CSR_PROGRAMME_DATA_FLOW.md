@@ -13,7 +13,7 @@ Company CSR programme experiences are feature-flagged so that the frontend can s
 
 ## Fallback Safety
 - Normalisation utilities (`use-programme-wrappers.ts`) ensure undefined API fields inherit mock defaults, keeping UI stable.
-- Hooks guard against null responses by returning mock results instead of propagating errors when possible.
+- Hooks guard against null responses and unexpected errors by returning mock results instead of propagating failures when possible. Runtime fallbacks also catch network/API exceptions and log console warnings in development so UX stays identical.
 - Loading and error states surface via standard skeletons and toasts—no additional UI states were introduced.
 
 ## Testing Coverage
