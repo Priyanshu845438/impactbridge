@@ -41,7 +41,7 @@ _All findings are observational; no code was modified during this audit. Items a
 - **Auth** — ✅ Complete (JWT login/register, guards active); _pending_: refresh tokens & password recovery flows.
 - **Users** — ✅ Complete (CRUD + RBAC); _pending_: soft-delete restoration endpoints and scoped pagination filters.
 - **Approvals** — 🟡 In Progress (workflow + notifications queued); _pending_: RBAC integration tests, audit logging parity, CSR linkage.
-- **CSR Programme** — 🟡 In Progress (service + controller present); _pending_: guard hardening, DTO-aligned responses, end-to-end validation, activity log expansion, and frontend parity checks before turning on APIs by default.
+- **CSR Programme** — ✅ Complete (service + controller, guards, DTO alignment, activity logging, and comprehensive tests in place); continue monitoring frontend parity before enabling APIs by default.
 - **Financial** — 🟡 In Progress (upload/list APIs live); _pending_: stricter validation, admin analytics, UI wiring, comprehensive tests.
 - **Analytics** — 🟡 In Progress (aggregations ready); _pending_: CSR data feed, caching, metric expansion.
 - **Notifications** — 🟠 Incomplete (intent storage only); _pending_: dispatch workers/providers, retry + metrics pipeline.
