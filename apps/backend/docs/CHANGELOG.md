@@ -25,3 +25,4 @@
 ## Notifications
 - Added safe delivery processing for notification intents with status updates on success/failure.
 - Introduced retry metadata (retryCount, lastAttemptAt) and provider metrics logging without altering current delivery behaviour.
+- Enabled automated cron-based retries for FAILED intents with PERMANENT_FAILURE safeguards and lifecycle logging; enqueue behaviour unchanged.

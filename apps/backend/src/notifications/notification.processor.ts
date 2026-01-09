@@ -7,7 +7,7 @@ import {
 import type { NotificationProvider } from './notification.types';
 import { NotificationRepository } from './notification.repository';
 
-interface ProcessResult {
+export interface ProcessResult {
   intent: NotificationIntent;
   outcome: 'sent' | 'failed';
   error?: unknown;
@@ -32,33 +32,38 @@ export class NotificationProcessor {
     const results: ProcessResult[] = [];
 
     for (const intent of intents) {
-      this.logger.log(
-        `Delivery attempt started for intent ${intent.id} (channel=${intent.channel}, retryCount=${intent.retryCount})`,
-      );
-
-      try {
-        await this.provider.send(intent);
-        await this.repository.markSent(intent.id);
-        await this.safeRecordMetric(intent.id, 'success');
-        this.logger.log(`Delivery success for intent ${intent.id}`);
-        results.push({ intent, outcome: 'sent' });
-      } catch (error) {
-        await this.repository.markFailed(intent.id);
-        await this.safeRecordMetric(
-          intent.id,
-          'failure',
-          error instanceof Error ? error.message : 'unknown error',
-        );
-        this.logger.warn(
-          `Delivery failure for intent ${intent.id}: ${
-            error instanceof Error ? error.message : 'unknown error'
-          }`,
-        );
-        results.push({ intent, outcome: 'failed', error });
-      }
+      const result = await this.processIntent(intent);
+      results.push(result);
     }
 
     return results;
+  }
+
+  async processIntent(intent: NotificationIntent): Promise<ProcessResult> {
+    this.logger.log(
+      `Delivery attempt started for intent ${intent.id} (channel=${intent.channel}, retryCount=${intent.retryCount})`,
+    );
+
+    try {
+      await this.provider.send(intent);
+      const updatedIntent = await this.repository.markSent(intent.id);
+      await this.safeRecordMetric(intent.id, 'success');
+      this.logger.log(`Delivery success for intent ${intent.id}`);
+      return { intent: updatedIntent, outcome: 'sent' };
+    } catch (error) {
+      const updatedIntent = await this.repository.markFailed(intent.id);
+      await this.safeRecordMetric(
+        intent.id,
+        'failure',
+        error instanceof Error ? error.message : 'unknown error',
+      );
+      this.logger.warn(
+        `Delivery failure for intent ${intent.id}: ${
+          error instanceof Error ? error.message : 'unknown error'
+        }`,
+      );
+      return { intent: updatedIntent, outcome: 'failed', error };
+    }
   }
 
   private async safeRecordMetric(

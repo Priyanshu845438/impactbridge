@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { Prisma } from 'prisma/generated';
-import { NotificationRepository } from '../../../src/notifications/notification.repository';
+import { NotificationRepository, MAX_RETRY_ATTEMPTS, MIN_RETRY_DELAY_MS } from '../../../src/notifications/notification.repository';
 import { PrismaService } from '../../../src/prisma/prisma.service';
 
 class MockPrismaService {
@@ -35,18 +35,19 @@ describe('NotificationRepository', () => {
     repository = moduleRef.get(NotificationRepository);
   });
 
+  const sample = {
+    id: 'intent-123',
+    channel: 'email',
+    recipient: { email: 'user@example.com' } as Prisma.JsonObject,
+    payload: { body: 'Hello' } as Prisma.JsonObject,
+    status: 'PENDING',
+    createdAt: new Date(),
+    retryCount: 0,
+    lastAttemptAt: null,
+  };
+
   it('persists notification intent with pending status', async () => {
-    const now = new Date();
-    prisma.notificationIntent.create.mockResolvedValue({
-      id: 'intent-123',
-      channel: 'email',
-      recipient: { email: 'user@example.com' },
-      payload: { body: 'Hello' },
-      status: 'PENDING',
-      createdAt: now,
-      retryCount: 0,
-      lastAttemptAt: null,
-    });
+    prisma.notificationIntent.create.mockResolvedValue(sample);
 
     const result = await repository.createIntent({
       channel: 'email',
@@ -75,52 +76,55 @@ describe('NotificationRepository', () => {
       recipient: { email: 'user@example.com' },
       payload: { body: 'Hello' },
       status: 'PENDING',
-      createdAt: now,
+      createdAt: sample.createdAt,
       retryCount: 0,
       lastAttemptAt: null,
     });
   });
 
-  it('returns pending intents ordered by createdAt', async () => {
+  it('returns retryable failed intents respecting backoff', async () => {
     const now = new Date();
+    const past = new Date(now.getTime() - MIN_RETRY_DELAY_MS - 1000);
     prisma.notificationIntent.findMany.mockResolvedValue([
       {
-        id: 'intent-b',
-        channel: 'email',
-        recipient: { email: 'b@example.com' },
-        payload: { body: 'B' },
-        status: 'PENDING',
-        createdAt: now,
+        ...sample,
+        id: 'intent-retry',
+        status: 'FAILED',
         retryCount: 1,
-        lastAttemptAt: now,
+        lastAttemptAt: past,
       },
     ]);
 
-    const result = await repository.findPending(5);
+    const result = await repository.findRetryableFailed(now, 10);
 
     expect(prisma.notificationIntent.findMany).toHaveBeenCalledWith({
-      where: { status: 'PENDING' },
-      orderBy: { createdAt: 'asc' },
-      take: 5,
-    });
-    expect(result).toEqual([
-      {
-        id: 'intent-b',
-        channel: 'email',
-        recipient: { email: 'b@example.com' },
-        payload: { body: 'B' },
-        status: 'PENDING',
-        createdAt: now,
-        retryCount: 1,
-        lastAttemptAt: now,
+      where: {
+        status: 'FAILED',
+        retryCount: { lt: MAX_RETRY_ATTEMPTS },
+        OR: [
+          { lastAttemptAt: null },
+          {
+            lastAttemptAt: {
+              lt: new Date(now.getTime() - MIN_RETRY_DELAY_MS),
+            },
+          },
+        ],
       },
-    ]);
+      orderBy: { createdAt: 'asc' },
+      take: 10,
+    });
+    expect(result[0].id).toBe('intent-retry');
   });
 
   it('marks intents as sent', async () => {
-    prisma.notificationIntent.update.mockResolvedValue(undefined);
+    prisma.notificationIntent.update.mockResolvedValue({
+      ...sample,
+      status: 'SENT',
+      retryCount: 1,
+      lastAttemptAt: new Date(),
+    });
 
-    await repository.markSent('intent-1');
+    const result = await repository.markSent('intent-1');
 
     expect(prisma.notificationIntent.update).toHaveBeenCalledWith({
       where: { id: 'intent-1' },
@@ -130,12 +134,18 @@ describe('NotificationRepository', () => {
         lastAttemptAt: expect.any(Date),
       },
     });
+    expect(result.status).toBe('SENT');
   });
 
   it('marks intents as failed', async () => {
-    prisma.notificationIntent.update.mockResolvedValue(undefined);
+    prisma.notificationIntent.update.mockResolvedValue({
+      ...sample,
+      status: 'FAILED',
+      retryCount: 2,
+      lastAttemptAt: new Date(),
+    });
 
-    await repository.markFailed('intent-2');
+    const result = await repository.markFailed('intent-2');
 
     expect(prisma.notificationIntent.update).toHaveBeenCalledWith({
       where: { id: 'intent-2' },
@@ -145,6 +155,7 @@ describe('NotificationRepository', () => {
         lastAttemptAt: expect.any(Date),
       },
     });
+    expect(result.retryCount).toBe(2);
   });
 
   it('records delivery metrics without affecting control flow', async () => {

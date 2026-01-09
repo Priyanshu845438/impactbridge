@@ -140,3 +140,8 @@
 - Added retry metadata (`retryCount`, `lastAttemptAt`) and delivery metrics storage to notification intents, laying groundwork for future workers without changing current behaviour.
 - Introduced structured logs and repository helpers to record provider success/failure outcomes while keeping delivery non-blocking.
 - Updated unit tests, Prisma schema, and docs to reflect retry strategy (max 5 attempts, PENDING/FAILED retryable) and observability scope.
+
+17. Automated Notification Retry Scheduling
+- Enabled background cron-based retries for FAILED intents using existing metadata without altering enqueue flows or payloads.
+- Added eligibility logic, PERMANENT_FAILURE handling, and detailed retry lifecycle logging while ensuring retries remain non-blocking.
+- Expanded unit coverage for repository helpers and retry service; backend/frontend builds and notifications test suite rerun to confirm stability.

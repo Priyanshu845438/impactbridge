@@ -1,6 +1,10 @@
 export type NotificationChannel = 'email' | 'sms';
 
-export type NotificationIntentStatus = 'PENDING' | 'SENT' | 'FAILED';
+export type NotificationIntentStatus =
+  | 'PENDING'
+  | 'SENT'
+  | 'FAILED'
+  | 'PERMANENT_FAILURE';
 
 export type NotificationDeliveryOutcome = 'success' | 'failure';
 

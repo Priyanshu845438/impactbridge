@@ -16,6 +16,10 @@ const DEFAULT_STATUS: NotificationIntentStatus = 'PENDING';
 const PENDING_STATUS: NotificationIntentStatus = 'PENDING';
 const SENT_STATUS: NotificationIntentStatus = 'SENT';
 const FAILED_STATUS: NotificationIntentStatus = 'FAILED';
+const PERMANENT_FAILURE_STATUS: NotificationIntentStatus = 'PERMANENT_FAILURE';
+
+export const MAX_RETRY_ATTEMPTS = 5;
+export const MIN_RETRY_DELAY_MS = 60 * 1000; // 1 minute minimum delay between retries.
 
 const DEFAULT_PENDING_LIMIT = 25;
 
@@ -85,8 +89,32 @@ export class NotificationRepository {
     return rows.map(toIntent);
   }
 
-  async markSent(id: string): Promise<void> {
-    await this.prisma.notificationIntent.update({
+  async findRetryableFailed(
+    now: Date,
+    limit = DEFAULT_PENDING_LIMIT,
+  ): Promise<NotificationIntent[]> {
+    const rows = await this.prisma.notificationIntent.findMany({
+      where: {
+        status: FAILED_STATUS,
+        retryCount: { lt: MAX_RETRY_ATTEMPTS },
+        OR: [
+          { lastAttemptAt: null },
+          {
+            lastAttemptAt: {
+              lt: new Date(now.getTime() - MIN_RETRY_DELAY_MS),
+            },
+          },
+        ],
+      },
+      orderBy: { createdAt: 'asc' },
+      take: limit,
+    });
+
+    return rows.map(toIntent);
+  }
+
+  async markSent(id: string): Promise<NotificationIntent> {
+    const updated = await this.prisma.notificationIntent.update({
       where: { id },
       data: {
         status: SENT_STATUS,
@@ -94,14 +122,28 @@ export class NotificationRepository {
         lastAttemptAt: new Date(),
       },
     });
+
+    return toIntent(updated);
   }
 
-  async markFailed(id: string): Promise<void> {
-    await this.prisma.notificationIntent.update({
+  async markFailed(id: string): Promise<NotificationIntent> {
+    const updated = await this.prisma.notificationIntent.update({
       where: { id },
       data: {
         status: FAILED_STATUS,
         retryCount: { increment: 1 },
+        lastAttemptAt: new Date(),
+      },
+    });
+
+    return toIntent(updated);
+  }
+
+  async markPermanentFailure(id: string): Promise<void> {
+    await this.prisma.notificationIntent.update({
+      where: { id },
+      data: {
+        status: PERMANENT_FAILURE_STATUS,
         lastAttemptAt: new Date(),
       },
     });
