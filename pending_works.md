@@ -13,7 +13,7 @@ _All findings are observational; no code was modified during this audit. Items a
 2. `CSRProgrammeController.detail` now re-fetches with milestones/assignments and maps via `toProgrammeDetailDto`; pending follow-up: audit other service consumers to confirm they include relation data before sanitising.
 3. Controller methods accept DTOs but do not apply validation pipes locally—ensure global validation is active or add decorators to avoid unchecked payloads.
 4. CSR service integration tests exist only as in-memory workflow specs; HTTP contract coverage now exists in `apps/backend/__tests__/csr-programme/csr-programme.routes.spec.ts`, the happy-path e2e suite, and RBAC-focused route tests, but negative paths and legacy `/api/v1` e2e suites still fail pending Prisma-backed fixtures.
-5. Notifications module remains dispatcher-less: intents are queued but no background worker/provider sends emails/SMS; retry, logging, and metrics workflows are still unimplemented.
+5. Notifications module now includes safe delivery, metrics, and automated retry scheduling; long-term worker orchestration remains pending to support provider scaling.
 6. Financial module exposes core endpoints yet lacks stricter DTO validation, admin analytics, and integration tests for upload/review flows.
 7. Activity/Audit logging utilities are present, but CSR, approvals, and financial services do not consistently emit events, creating traceability gaps.
 8. Shared docs (API guide, Postman collection) mention CSR routes; they require ongoing sync once guards/tests land to avoid divergence.
@@ -44,7 +44,7 @@ _All findings are observational; no code was modified during this audit. Items a
 - **CSR Programme** — ✅ Complete (service + controller, guards, DTO alignment, activity logging, and comprehensive tests in place); continue monitoring frontend parity before enabling APIs by default.
 - **Financial** — 🟡 In Progress (upload/list APIs live); _pending_: stricter validation, admin analytics, UI wiring, comprehensive tests.
 - **Analytics** — 🟡 In Progress (aggregations ready); _pending_: CSR data feed, caching, metric expansion.
-- **Notifications** — 🟢 Complete (delivery processor + automated retries with metrics); _pending_: provider metrics dashboards, long-term worker orchestration.
+- **Notifications** — 🟢 Complete (delivery processor + automated retries with metrics); _pending_: provider dashboards, long-term worker orchestration.
 - **Activity/Audit Logging** — 🟠 Incomplete (utilities exist); _pending_: consistent adoption across CSR, approvals, financial modules.
 
 ### Frontend

@@ -14,7 +14,7 @@
 - **2024-11-30** — Auth module hardened: login/signup DTOs, bcrypt utility, JWT issuance and guards.
 - **2024-11-15** — User module RBAC endpoints (`/users`, `/users/:id`, `/users/me`, change-password) finalised.
 - **2024-10-20** — Base NestJS scaffolding, Prisma service wrapper, global validation pipe.
-- **2026-01-06** — CSR lifecycle actions now emit audit logs when actor context is present; unassignment/milestone logging still pending.
+- **2026-01-06** — CSR lifecycle actions now emit audit logs when actor context is present; unassignment/milestone logging added in follow-up update.
 - **2026-01-08** — No backend implementation changes; frontend CSR programme update flow now consumes existing PATCH endpoint via feature flag. Keep monitoring response DTO expectations (title/description/status fields) as frontend normalises onto mock shape.
 - **2026-01-06** — CSR negative-path route tests added covering ownership and not-found cases; runtime behaviour unchanged.
 - **2026-01-06** — CSR programme list/detail frontend contract tests documented to preserve UI parity while backend contracts remain unchanged (no server code modifications).

@@ -145,3 +145,7 @@
 - Enabled background cron-based retries for FAILED intents using existing metadata without altering enqueue flows or payloads.
 - Added eligibility logic, PERMANENT_FAILURE handling, and detailed retry lifecycle logging while ensuring retries remain non-blocking.
 - Expanded unit coverage for repository helpers and retry service; backend/frontend builds and notifications test suite rerun to confirm stability.
+
+18. Notifications Delivery Docs Updated
+- Documented notification delivery + retry readiness across backend guides without touching runtime code.
+- Synced pending work audit and frontend CSR docs to reflect current fallback behaviour after verifying builds.

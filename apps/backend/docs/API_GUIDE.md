@@ -24,6 +24,8 @@
 | CSR Programmes | `/api/v1/companies/{companyId}/csr-programmes` | GET list / POST create | JWT + Role(COMPANY) |
 | CSR Programmes | `/api/v1/companies/{companyId}/csr-programmes/{programmeId}` | GET detail / PATCH update | JWT + Role(COMPANY) |
 | CSR Programmes | `/api/v1/companies/{companyId}/csr-programmes/{programmeId}/assign-ngo` | POST assign NGO | JWT + Role(COMPANY) |
+| CSR Programmes | `/api/v1/companies/{companyId}/csr-programmes/{programmeId}/unassign-ngo` | POST unassign NGO (final status) | JWT + Role(COMPANY) |
+| CSR Programmes | `/api/v1/companies/{companyId}/csr-programmes/{programmeId}/milestones` | POST create / PATCH update milestone | JWT + Role(COMPANY) |
 | CSR Programmes | `/api/v1/companies/{companyId}/csr-programmes/{programmeId}/status` | POST transition status | JWT + Role(COMPANY) |
 | Approvals | `/api/v1/approvals/...` | Request/approve/reject/revoke campaign approvals | JWT (NGO/COMPANY) + Roles |
 | Analytics | `/api/v1/analytics/...` | Admin metrics endpoints | JWT + Role(SUPER_ADMIN) |
