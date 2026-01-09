@@ -5,7 +5,7 @@
 - **2025-02-24** — CSR programme happy-path e2e suite added to validate list/detail/create/update/status contracts.
 - **2025-02-22** — CSR programme company-scoped controller wired with existing service methods; API docs updated to reflect `/companies/:companyId/csr-programmes` routes and response DTOs.
 
-- **2025-01-27** — Approval notifications integrated: intents queued on request/reset/approve/reject/revoke, tests added.
+- **2025-01-27** — Approval notifications integrated: intents queued on request/reset/approve/reject/revoke, tests added; stored payload includes channel/recipient/body/metadata for future delivery.
 - **2025-01-24** — Admin analytics service & controller delivered with SUPER_ADMIN-only endpoints.
 - **2025-01-26** — CSR programme workflow hardened: NGO unassignment, milestone lifecycle, status transition enforcement, and new integration tests.
 - **2025-01-15** — CSR programme modules exposing company flows with feature-flagged frontend integration support.

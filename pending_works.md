@@ -44,7 +44,7 @@ _All findings are observational; no code was modified during this audit. Items a
 - **CSR Programme** — ✅ Complete (service + controller, guards, DTO alignment, activity logging, and comprehensive tests in place); continue monitoring frontend parity before enabling APIs by default.
 - **Financial** — 🟡 In Progress (upload/list APIs live); _pending_: stricter validation, admin analytics, UI wiring, comprehensive tests.
 - **Analytics** — 🟡 In Progress (aggregations ready); _pending_: CSR data feed, caching, metric expansion.
-- **Notifications** — 🟠 Incomplete (intent storage only); _pending_: dispatch workers/providers, retry + metrics pipeline.
+- **Notifications** — 🟠 Incomplete (intent storage capturing channel/recipient/payload from approvals events); _pending_: add safe delivery processor, retries, provider metrics, and long-term worker orchestration.
 - **Activity/Audit Logging** — 🟠 Incomplete (utilities exist); _pending_: consistent adoption across CSR, approvals, financial modules.
 
 ### Frontend

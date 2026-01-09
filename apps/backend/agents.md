@@ -28,7 +28,7 @@
 6. Approval Workflow Notifications
 - Integrated notification intents into approval state transitions (request/reset/approve/reject/revoke).
 - Expanded unit tests to confirm enqueue behaviour for each transition pathway.
-- Maintained separation between intent creation and downstream delivery providers.
+- Maintained separation between intent creation and downstream delivery providers (no dispatch layer yet).
 
 7. Financial Reporting Hardening
 - Enforced NGO ownership checks and period/year uniqueness for financial reports.
@@ -130,4 +130,3 @@
 
 29. CSR Programme negative-path tests
 - Added ownership, not-found, and validation coverage to CSR route contracts without altering behaviour.
-

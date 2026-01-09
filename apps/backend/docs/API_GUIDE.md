@@ -44,4 +44,4 @@ Refer to controller source files for full parameter shapes. Every request body i
 - Global rate limiter returns `429` with retry-after header when thresholds exceeded.
 
 ## Changelog Reference
-- See `docs/CHANGELOG.md` for recent endpoint additions/changes. Frontend contract tests now cover CSR list/detail responses to ensure DTO alignment without altering these APIs. Runtime fallback handling now protects frontend hooks by reverting to mock data on API failure; end-to-end smoke validation remains outstanding and will be documented once complete.
+- See `docs/CHANGELOG.md` for recent endpoint additions/changes. Frontend contract tests cover CSR list/detail responses to ensure DTO alignment without altering these APIs. Notification intents are still queued only (no dispatch layer yet); runtimes should monitor the changelog for delivery updates once a worker is introduced.

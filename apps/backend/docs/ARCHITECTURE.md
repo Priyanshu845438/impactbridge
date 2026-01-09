@@ -22,7 +22,7 @@ Support modules (`activity`, `documents`, `donations`, etc.) follow the controll
 1. **HTTP Entry** → Versioned controller (`@Controller('v1/...')`) validating DTOs via global `ValidationPipe`.
 2. **Service Layer** → Business orchestration, RBAC, cross-module coordination (e.g., approvals writing activity logs + notifications).
 3. **Persistence** → Prisma client with soft-delete awareness, standard transactions for multi-write operations.
-4. **Events/Notifications** → `NotificationsService.enqueue(...)` captures intent for asynchronous delivery (currently noop provider).
+4. **Events/Notifications** → `NotificationsService.enqueue(...)` captures intent for asynchronous delivery (currently noop provider). Stored intent records contain channel, recipient JSON (email/name), payload (subject/body/metadata), and status to support future workers.
 5. **Analytics** → `AnalyticsAggregationService` executes aggregations directly via Prisma, used by admin dashboards.
 
 ## Cross-Cutting Concerns
@@ -37,7 +37,7 @@ Support modules (`activity`, `documents`, `donations`, etc.) follow the controll
 - `NGOProfile`, `CompanyProfile`, `DonorProfile` auto-created post registration
 - `Campaign`, `CampaignApproval`, `CSRProgramme`, `Milestone`
 - `Donation`, `FinancialReport`, `UtilizationReport`
-- `NotificationIntent` storing queued deliveries
+- `NotificationIntent` storing queued deliveries (channel, recipient JSON, payload, status)
 - `AuditLog` central trace of significant actions
 
 Refer to the Prisma schema (`prisma/schema.prisma`) for complete definitions and relations.
