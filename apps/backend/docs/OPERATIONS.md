@@ -32,5 +32,5 @@
 
 ## Observability
 - Request logs include `requestId`, method, status, duration; ensure downstream log aggregator preserves structured JSON.
-- Activity logs available via `ActivityLogService` for auditing actions (approvals, programmes, etc.).
+- Activity logs available via `ActivityLogService` for auditing actions (approvals, programmes, financial uploads). CSR lifecycle, approval transitions, and financial report submissions were verified to emit single, actor-scoped entries with accurate metadata and no duplicates.
 - Analytics aggregation metrics can be invoked manually via `AnalyticsAggregationService` (no public API aside from controller).

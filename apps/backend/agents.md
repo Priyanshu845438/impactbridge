@@ -149,3 +149,7 @@
 18. Notifications Delivery Docs Updated
 - Documented notification delivery + retry readiness across backend guides without touching runtime code.
 - Synced pending work audit and frontend CSR docs to reflect current fallback behaviour after verifying builds.
+
+19. Activity Logging Verified
+- Exercised CSR, approvals, and financial flows in existing unit suites to confirm single-entry, actor-scoped audit logs with correct metadata and no duplicates.
+- Documentation (CHANGELOG, OPERATIONS, pending works) updated to mark logging as compliance-ready without altering runtime behaviour.

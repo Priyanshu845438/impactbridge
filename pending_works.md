@@ -15,7 +15,7 @@ _All findings are observational; no code was modified during this audit. Items a
 4. CSR service integration tests exist only as in-memory workflow specs; HTTP contract coverage now exists in `apps/backend/__tests__/csr-programme/csr-programme.routes.spec.ts`, the happy-path e2e suite, and RBAC-focused route tests, but negative paths and legacy `/api/v1` e2e suites still fail pending Prisma-backed fixtures.
 5. Notifications module now includes safe delivery, metrics, and automated retry scheduling; long-term worker orchestration remains pending to support provider scaling.
 6. Financial module exposes core endpoints yet lacks stricter DTO validation, admin analytics, and integration tests for upload/review flows.
-7. Activity/Audit logging utilities are present, but CSR, approvals, and financial services do not consistently emit events, creating traceability gaps.
+7. Activity/Audit logging flows validated end-to-end: CSR lifecycle, approvals transitions, and financial report uploads emit single, actor-scoped entries with correct metadata; failure paths avoid duplicate writes.
 8. Shared docs (API guide, Postman collection) mention CSR routes; they require ongoing sync once guards/tests land to avoid divergence.
 
 ## 3. apps/frontend
@@ -45,7 +45,7 @@ _All findings are observational; no code was modified during this audit. Items a
 - **Financial** — 🟡 In Progress (upload/list APIs live); _pending_: stricter validation, admin analytics, UI wiring, comprehensive tests.
 - **Analytics** — 🟡 In Progress (aggregations ready); _pending_: CSR data feed, caching, metric expansion.
 - **Notifications** — 🟢 Complete (delivery processor + automated retries with metrics); _pending_: provider dashboards, long-term worker orchestration.
-- **Activity/Audit Logging** — 🟠 Incomplete (utilities exist); _pending_: consistent adoption across CSR, approvals, financial modules.
+- **Activity/Audit Logging** — 🟢 Complete (CSR, approvals, financial flows verified to emit single, actor-scoped entries with correct metadata); ongoing: monitor new modules for compliance.
 
 ### Frontend
 - **Auth Experience** — 🟡 In Progress (mock flows, guards); _pending_: real backend integration, token refresh handling.

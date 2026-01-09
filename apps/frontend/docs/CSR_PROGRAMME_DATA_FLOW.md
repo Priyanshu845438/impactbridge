@@ -18,7 +18,7 @@ Company CSR programme experiences are feature-flagged so that the frontend can s
 
 ## Testing Coverage
 - Hook unit tests exercise flag on/off paths, malformed API payloads, and fallback behaviour.
-- Page-level RTL tests (list/detail) validate consistent UI output across mock/API states, loading, and error scenarios.
+- Page-level RTL tests (list/detail) validate consistent UI output across mock/API states, loading, and error scenarios. Audit logging verification did not require UI changes; tests remain unchanged but confirm that backend payloads include metadata consumed by activity logs.
 - Edit/update page RTL coverage remains a known follow-up before enabling API mode by default; cases were added to cover list/detail parity but edit flows are still pending.
 
 Keep this document in sync with additional hook behaviour (e.g., pagination, filtering) or when feature flags are retired.
