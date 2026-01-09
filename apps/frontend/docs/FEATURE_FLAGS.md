@@ -12,5 +12,5 @@
 - Always provide mock fallbacks to keep demo environments functional.
 - Document new flags here with default state and rollout plan.
 
-_Last reviewed: 2026-01-08 — API programme flag now covers the edit/update flow with hook-level tests; runtime fallback safeguards are in place. Page-level RTL coverage for edit and end-to-end smoke validation remain pending before enabling the flag by default._
+_Last reviewed: 2026-01-12 — API programme flag now covers the edit/update flow with hook-level tests; runtime fallback safeguards are in place. Page-level RTL coverage for edit and end-to-end smoke validation remain pending before enabling the flag by default._
 > NOTE: CSR programme status transitions, NGO assignment, and update/edit flows now participate in the API flag flow alongside list/detail/create, keeping mock fallback behaviour.

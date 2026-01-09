@@ -14,7 +14,7 @@ _All findings are observational; no code was modified during this audit. Items a
 3. Controller methods accept DTOs but do not apply validation pipes locally—ensure global validation is active or add decorators to avoid unchecked payloads.
 4. CSR service integration tests exist only as in-memory workflow specs; HTTP contract coverage now exists in `apps/backend/__tests__/csr-programme/csr-programme.routes.spec.ts`, the happy-path e2e suite, and RBAC-focused route tests, but negative paths and legacy `/api/v1` e2e suites still fail pending Prisma-backed fixtures.
 5. Notifications module now includes safe delivery, metrics, and automated retry scheduling; long-term worker orchestration remains pending to support provider scaling.
-6. Financial module exposes core endpoints yet lacks stricter DTO validation, admin analytics, and integration tests for upload/review flows.
+6. Financial module exposes core endpoints with stricter DTO validation enforced (report period/year/url checks now hardened); admin analytics and integration tests for upload/review flows remain pending.
 7. Activity/Audit logging flows validated end-to-end: CSR lifecycle, approvals transitions, and financial report uploads emit single, actor-scoped entries with correct metadata; failure paths avoid duplicate writes.
 8. Shared docs (API guide, Postman collection) mention CSR routes; they require ongoing sync once guards/tests land to avoid divergence.
 
@@ -42,7 +42,7 @@ _All findings are observational; no code was modified during this audit. Items a
 - **Users** — ✅ Complete (CRUD + RBAC); _pending_: soft-delete restoration endpoints and scoped pagination filters.
 - **Approvals** — 🟡 In Progress (workflow + notifications queued); _pending_: RBAC integration tests, audit logging parity, CSR linkage.
 - **CSR Programme** — ✅ Complete (service + controller, guards, DTO alignment, activity logging, and comprehensive tests in place); continue monitoring frontend parity before enabling APIs by default.
-- **Financial** — 🟡 In Progress (upload/list APIs live); _pending_: stricter validation, admin analytics, UI wiring, comprehensive tests.
+- **Financial** — 🟡 In Progress (upload/list APIs live with hardened DTO validation); _pending_: admin analytics, UI wiring, comprehensive integration tests.
 - **Analytics** — 🟡 In Progress (aggregations ready); _pending_: CSR data feed, caching, metric expansion.
 - **Notifications** — 🟢 Complete (delivery processor + automated retries with metrics); _pending_: provider dashboards, long-term worker orchestration.
 - **Activity/Audit Logging** — 🟢 Complete (CSR, approvals, financial flows verified to emit single, actor-scoped entries with correct metadata); ongoing: monitor new modules for compliance.

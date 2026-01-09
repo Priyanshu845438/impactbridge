@@ -153,3 +153,8 @@
 19. Activity Logging Verified
 - Exercised CSR, approvals, and financial flows in existing unit suites to confirm single-entry, actor-scoped audit logs with correct metadata and no duplicates.
 - Documentation (CHANGELOG, OPERATIONS, pending works) updated to mark logging as compliance-ready without altering runtime behaviour.
+
+### **27. Financial DTO Validation Hardened**
+- Financial report upload DTO now enforces period/year/url constraints with unit tests.
+- No endpoint behaviour changes; invalid payloads fail early under existing validation pipe.
+

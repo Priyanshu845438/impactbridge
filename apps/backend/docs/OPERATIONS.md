@@ -29,6 +29,7 @@
 - **JWT errors**: ensure `JWT_SECRET` matches env; tokens issued before rotation become invalid.
 - **Rate limiting**: adjust environment variables controlling window/requests or whitelist internal probes.
 - **Notification intents**: default provider is noop; to enable real delivery, bind a concrete provider via `NOTIFICATION_PROVIDER`.
+- **Financial validation**: Upload endpoints rely on DTO checks enforcing reporting period (1-12), year (>=2000), and HTTPS report URLs; invalid payloads are rejected before persistence with existing error messages.
 
 ## Observability
 - Request logs include `requestId`, method, status, duration; ensure downstream log aggregator preserves structured JSON.
