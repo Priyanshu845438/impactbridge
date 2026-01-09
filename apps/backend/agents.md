@@ -135,3 +135,8 @@
 - Implemented `NotificationProcessor` with repository helpers to send pending intents via the existing provider and update status to SENT/FAILED.
 - Extended repository and service tests to cover pending retrieval, status transitions, and flush delegation without altering enqueue behaviour.
 - Backend build and notifications test suites rerun to confirm no regressions while enabling controlled delivery.
+
+16. Notifications Retry Planning & Metrics
+- Added retry metadata (`retryCount`, `lastAttemptAt`) and delivery metrics storage to notification intents, laying groundwork for future workers without changing current behaviour.
+- Introduced structured logs and repository helpers to record provider success/failure outcomes while keeping delivery non-blocking.
+- Updated unit tests, Prisma schema, and docs to reflect retry strategy (max 5 attempts, PENDING/FAILED retryable) and observability scope.

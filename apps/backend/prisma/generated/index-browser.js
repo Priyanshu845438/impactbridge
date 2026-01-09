@@ -249,6 +249,17 @@ exports.Prisma.NotificationIntentScalarFieldEnum = {
   recipient: 'recipient',
   payload: 'payload',
   status: 'status',
+  retryCount: 'retryCount',
+  lastAttemptAt: 'lastAttemptAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.NotificationDeliveryMetricScalarFieldEnum = {
+  id: 'id',
+  intentId: 'intentId',
+  provider: 'provider',
+  outcome: 'outcome',
+  failureReason: 'failureReason',
   createdAt: 'createdAt'
 };
 
@@ -464,6 +475,7 @@ exports.Prisma.ModelName = {
   Document: 'Document',
   FinancialReport: 'FinancialReport',
   NotificationIntent: 'NotificationIntent',
+  NotificationDeliveryMetric: 'NotificationDeliveryMetric',
   CampaignApproval: 'CampaignApproval',
   ImpactMetric: 'ImpactMetric',
   UtilizationReport: 'UtilizationReport',

@@ -9,6 +9,10 @@ class MockPrismaService {
     findMany: jest.fn(),
     update: jest.fn(),
   };
+
+  public notificationDeliveryMetric = {
+    create: jest.fn(),
+  };
 }
 
 describe('NotificationRepository', () => {
@@ -40,6 +44,8 @@ describe('NotificationRepository', () => {
       payload: { body: 'Hello' },
       status: 'PENDING',
       createdAt: now,
+      retryCount: 0,
+      lastAttemptAt: null,
     });
 
     const result = await repository.createIntent({
@@ -49,12 +55,12 @@ describe('NotificationRepository', () => {
     });
 
     expect(prisma.notificationIntent.create).toHaveBeenCalledWith({
-      data: {
+      data: expect.objectContaining({
         channel: 'email',
-        recipient: expect.anything(),
-        payload: expect.anything(),
         status: 'PENDING',
-      },
+        retryCount: 0,
+        lastAttemptAt: null,
+      }),
     });
     const createArgs = prisma.notificationIntent.create.mock.calls[0][0];
     expect(createArgs.data.recipient).toEqual(
@@ -70,6 +76,8 @@ describe('NotificationRepository', () => {
       payload: { body: 'Hello' },
       status: 'PENDING',
       createdAt: now,
+      retryCount: 0,
+      lastAttemptAt: null,
     });
   });
 
@@ -83,6 +91,8 @@ describe('NotificationRepository', () => {
         payload: { body: 'B' },
         status: 'PENDING',
         createdAt: now,
+        retryCount: 1,
+        lastAttemptAt: now,
       },
     ]);
 
@@ -101,6 +111,8 @@ describe('NotificationRepository', () => {
         payload: { body: 'B' },
         status: 'PENDING',
         createdAt: now,
+        retryCount: 1,
+        lastAttemptAt: now,
       },
     ]);
   });
@@ -112,7 +124,11 @@ describe('NotificationRepository', () => {
 
     expect(prisma.notificationIntent.update).toHaveBeenCalledWith({
       where: { id: 'intent-1' },
-      data: { status: 'SENT' },
+      data: {
+        status: 'SENT',
+        retryCount: { increment: 1 },
+        lastAttemptAt: expect.any(Date),
+      },
     });
   });
 
@@ -123,7 +139,46 @@ describe('NotificationRepository', () => {
 
     expect(prisma.notificationIntent.update).toHaveBeenCalledWith({
       where: { id: 'intent-2' },
-      data: { status: 'FAILED' },
+      data: {
+        status: 'FAILED',
+        retryCount: { increment: 1 },
+        lastAttemptAt: expect.any(Date),
+      },
+    });
+  });
+
+  it('records delivery metrics without affecting control flow', async () => {
+    const now = new Date();
+    prisma.notificationDeliveryMetric.create.mockResolvedValue({
+      id: 'metric-1',
+      intentId: 'intent-3',
+      provider: 'NoopNotificationProvider',
+      outcome: 'success',
+      failureReason: null,
+      createdAt: now,
+    });
+
+    const metric = await repository.recordMetric(
+      'intent-3',
+      'NoopNotificationProvider',
+      'success',
+    );
+
+    expect(prisma.notificationDeliveryMetric.create).toHaveBeenCalledWith({
+      data: {
+        intentId: 'intent-3',
+        provider: 'NoopNotificationProvider',
+        outcome: 'success',
+        failureReason: undefined,
+      },
+    });
+    expect(metric).toEqual({
+      id: 'metric-1',
+      intentId: 'intent-3',
+      provider: 'NoopNotificationProvider',
+      outcome: 'success',
+      failureReason: null,
+      createdAt: now,
     });
   });
 });

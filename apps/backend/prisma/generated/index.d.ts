@@ -69,6 +69,11 @@ export type FinancialReport = $Result.DefaultSelection<Prisma.$FinancialReportPa
  */
 export type NotificationIntent = $Result.DefaultSelection<Prisma.$NotificationIntentPayload>
 /**
+ * Model NotificationDeliveryMetric
+ * 
+ */
+export type NotificationDeliveryMetric = $Result.DefaultSelection<Prisma.$NotificationDeliveryMetricPayload>
+/**
  * Model CampaignApproval
  * 
  */
@@ -454,6 +459,16 @@ export class PrismaClient<
     * ```
     */
   get notificationIntent(): Prisma.NotificationIntentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.notificationDeliveryMetric`: Exposes CRUD operations for the **NotificationDeliveryMetric** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more NotificationDeliveryMetrics
+    * const notificationDeliveryMetrics = await prisma.notificationDeliveryMetric.findMany()
+    * ```
+    */
+  get notificationDeliveryMetric(): Prisma.NotificationDeliveryMetricDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.campaignApproval`: Exposes CRUD operations for the **CampaignApproval** model.
@@ -996,6 +1011,7 @@ export namespace Prisma {
     Document: 'Document',
     FinancialReport: 'FinancialReport',
     NotificationIntent: 'NotificationIntent',
+    NotificationDeliveryMetric: 'NotificationDeliveryMetric',
     CampaignApproval: 'CampaignApproval',
     ImpactMetric: 'ImpactMetric',
     UtilizationReport: 'UtilizationReport',
@@ -1023,7 +1039,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "invitation" | "nGOProfile" | "companyProfile" | "donorProfile" | "campaign" | "donation" | "bankDetail" | "document" | "financialReport" | "notificationIntent" | "campaignApproval" | "impactMetric" | "utilizationReport" | "milestone" | "address" | "auditLog" | "cSRProgramme" | "programmeMilestone" | "programmeAssignment"
+      modelProps: "user" | "invitation" | "nGOProfile" | "companyProfile" | "donorProfile" | "campaign" | "donation" | "bankDetail" | "document" | "financialReport" | "notificationIntent" | "notificationDeliveryMetric" | "campaignApproval" | "impactMetric" | "utilizationReport" | "milestone" | "address" | "auditLog" | "cSRProgramme" | "programmeMilestone" | "programmeAssignment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1841,6 +1857,80 @@ export namespace Prisma {
           }
         }
       }
+      NotificationDeliveryMetric: {
+        payload: Prisma.$NotificationDeliveryMetricPayload<ExtArgs>
+        fields: Prisma.NotificationDeliveryMetricFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NotificationDeliveryMetricFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationDeliveryMetricPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NotificationDeliveryMetricFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationDeliveryMetricPayload>
+          }
+          findFirst: {
+            args: Prisma.NotificationDeliveryMetricFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationDeliveryMetricPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NotificationDeliveryMetricFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationDeliveryMetricPayload>
+          }
+          findMany: {
+            args: Prisma.NotificationDeliveryMetricFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationDeliveryMetricPayload>[]
+          }
+          create: {
+            args: Prisma.NotificationDeliveryMetricCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationDeliveryMetricPayload>
+          }
+          createMany: {
+            args: Prisma.NotificationDeliveryMetricCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NotificationDeliveryMetricCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationDeliveryMetricPayload>[]
+          }
+          delete: {
+            args: Prisma.NotificationDeliveryMetricDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationDeliveryMetricPayload>
+          }
+          update: {
+            args: Prisma.NotificationDeliveryMetricUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationDeliveryMetricPayload>
+          }
+          deleteMany: {
+            args: Prisma.NotificationDeliveryMetricDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NotificationDeliveryMetricUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NotificationDeliveryMetricUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationDeliveryMetricPayload>[]
+          }
+          upsert: {
+            args: Prisma.NotificationDeliveryMetricUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationDeliveryMetricPayload>
+          }
+          aggregate: {
+            args: Prisma.NotificationDeliveryMetricAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNotificationDeliveryMetric>
+          }
+          groupBy: {
+            args: Prisma.NotificationDeliveryMetricGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NotificationDeliveryMetricGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NotificationDeliveryMetricCountArgs<ExtArgs>
+            result: $Utils.Optional<NotificationDeliveryMetricCountAggregateOutputType> | number
+          }
+        }
+      }
       CampaignApproval: {
         payload: Prisma.$CampaignApprovalPayload<ExtArgs>
         fields: Prisma.CampaignApprovalFieldRefs
@@ -2614,6 +2704,7 @@ export namespace Prisma {
     document?: DocumentOmit
     financialReport?: FinancialReportOmit
     notificationIntent?: NotificationIntentOmit
+    notificationDeliveryMetric?: NotificationDeliveryMetricOmit
     campaignApproval?: CampaignApprovalOmit
     impactMetric?: ImpactMetricOmit
     utilizationReport?: UtilizationReportOmit
@@ -3088,6 +3179,37 @@ export namespace Prisma {
    */
   export type DonationCountOutputTypeCountAuditLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AuditLogWhereInput
+  }
+
+
+  /**
+   * Count Type NotificationIntentCountOutputType
+   */
+
+  export type NotificationIntentCountOutputType = {
+    metrics: number
+  }
+
+  export type NotificationIntentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    metrics?: boolean | NotificationIntentCountOutputTypeCountMetricsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * NotificationIntentCountOutputType without action
+   */
+  export type NotificationIntentCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationIntentCountOutputType
+     */
+    select?: NotificationIntentCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * NotificationIntentCountOutputType without action
+   */
+  export type NotificationIntentCountOutputTypeCountMetricsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationDeliveryMetricWhereInput
   }
 
 
@@ -15541,14 +15663,26 @@ export namespace Prisma {
 
   export type AggregateNotificationIntent = {
     _count: NotificationIntentCountAggregateOutputType | null
+    _avg: NotificationIntentAvgAggregateOutputType | null
+    _sum: NotificationIntentSumAggregateOutputType | null
     _min: NotificationIntentMinAggregateOutputType | null
     _max: NotificationIntentMaxAggregateOutputType | null
+  }
+
+  export type NotificationIntentAvgAggregateOutputType = {
+    retryCount: number | null
+  }
+
+  export type NotificationIntentSumAggregateOutputType = {
+    retryCount: number | null
   }
 
   export type NotificationIntentMinAggregateOutputType = {
     id: string | null
     channel: string | null
     status: string | null
+    retryCount: number | null
+    lastAttemptAt: Date | null
     createdAt: Date | null
   }
 
@@ -15556,6 +15690,8 @@ export namespace Prisma {
     id: string | null
     channel: string | null
     status: string | null
+    retryCount: number | null
+    lastAttemptAt: Date | null
     createdAt: Date | null
   }
 
@@ -15565,15 +15701,27 @@ export namespace Prisma {
     recipient: number
     payload: number
     status: number
+    retryCount: number
+    lastAttemptAt: number
     createdAt: number
     _all: number
   }
 
 
+  export type NotificationIntentAvgAggregateInputType = {
+    retryCount?: true
+  }
+
+  export type NotificationIntentSumAggregateInputType = {
+    retryCount?: true
+  }
+
   export type NotificationIntentMinAggregateInputType = {
     id?: true
     channel?: true
     status?: true
+    retryCount?: true
+    lastAttemptAt?: true
     createdAt?: true
   }
 
@@ -15581,6 +15729,8 @@ export namespace Prisma {
     id?: true
     channel?: true
     status?: true
+    retryCount?: true
+    lastAttemptAt?: true
     createdAt?: true
   }
 
@@ -15590,6 +15740,8 @@ export namespace Prisma {
     recipient?: true
     payload?: true
     status?: true
+    retryCount?: true
+    lastAttemptAt?: true
     createdAt?: true
     _all?: true
   }
@@ -15632,6 +15784,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: NotificationIntentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: NotificationIntentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: NotificationIntentMinAggregateInputType
@@ -15662,6 +15826,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: NotificationIntentCountAggregateInputType | true
+    _avg?: NotificationIntentAvgAggregateInputType
+    _sum?: NotificationIntentSumAggregateInputType
     _min?: NotificationIntentMinAggregateInputType
     _max?: NotificationIntentMaxAggregateInputType
   }
@@ -15672,8 +15838,12 @@ export namespace Prisma {
     recipient: JsonValue
     payload: JsonValue
     status: string
+    retryCount: number
+    lastAttemptAt: Date | null
     createdAt: Date
     _count: NotificationIntentCountAggregateOutputType | null
+    _avg: NotificationIntentAvgAggregateOutputType | null
+    _sum: NotificationIntentSumAggregateOutputType | null
     _min: NotificationIntentMinAggregateOutputType | null
     _max: NotificationIntentMaxAggregateOutputType | null
   }
@@ -15698,7 +15868,11 @@ export namespace Prisma {
     recipient?: boolean
     payload?: boolean
     status?: boolean
+    retryCount?: boolean
+    lastAttemptAt?: boolean
     createdAt?: boolean
+    metrics?: boolean | NotificationIntent$metricsArgs<ExtArgs>
+    _count?: boolean | NotificationIntentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["notificationIntent"]>
 
   export type NotificationIntentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -15707,6 +15881,8 @@ export namespace Prisma {
     recipient?: boolean
     payload?: boolean
     status?: boolean
+    retryCount?: boolean
+    lastAttemptAt?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["notificationIntent"]>
 
@@ -15716,6 +15892,8 @@ export namespace Prisma {
     recipient?: boolean
     payload?: boolean
     status?: boolean
+    retryCount?: boolean
+    lastAttemptAt?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["notificationIntent"]>
 
@@ -15725,20 +15903,32 @@ export namespace Prisma {
     recipient?: boolean
     payload?: boolean
     status?: boolean
+    retryCount?: boolean
+    lastAttemptAt?: boolean
     createdAt?: boolean
   }
 
-  export type NotificationIntentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "channel" | "recipient" | "payload" | "status" | "createdAt", ExtArgs["result"]["notificationIntent"]>
+  export type NotificationIntentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "channel" | "recipient" | "payload" | "status" | "retryCount" | "lastAttemptAt" | "createdAt", ExtArgs["result"]["notificationIntent"]>
+  export type NotificationIntentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    metrics?: boolean | NotificationIntent$metricsArgs<ExtArgs>
+    _count?: boolean | NotificationIntentCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type NotificationIntentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type NotificationIntentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $NotificationIntentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "NotificationIntent"
-    objects: {}
+    objects: {
+      metrics: Prisma.$NotificationDeliveryMetricPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       channel: string
       recipient: Prisma.JsonValue
       payload: Prisma.JsonValue
       status: string
+      retryCount: number
+      lastAttemptAt: Date | null
       createdAt: Date
     }, ExtArgs["result"]["notificationIntent"]>
     composites: {}
@@ -16134,6 +16324,7 @@ export namespace Prisma {
    */
   export interface Prisma__NotificationIntentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    metrics<T extends NotificationIntent$metricsArgs<ExtArgs> = {}>(args?: Subset<T, NotificationIntent$metricsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationDeliveryMetricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16168,6 +16359,8 @@ export namespace Prisma {
     readonly recipient: FieldRef<"NotificationIntent", 'Json'>
     readonly payload: FieldRef<"NotificationIntent", 'Json'>
     readonly status: FieldRef<"NotificationIntent", 'String'>
+    readonly retryCount: FieldRef<"NotificationIntent", 'Int'>
+    readonly lastAttemptAt: FieldRef<"NotificationIntent", 'DateTime'>
     readonly createdAt: FieldRef<"NotificationIntent", 'DateTime'>
   }
     
@@ -16185,6 +16378,10 @@ export namespace Prisma {
      * Omit specific fields from the NotificationIntent
      */
     omit?: NotificationIntentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIntentInclude<ExtArgs> | null
     /**
      * Filter, which NotificationIntent to fetch.
      */
@@ -16204,6 +16401,10 @@ export namespace Prisma {
      */
     omit?: NotificationIntentOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIntentInclude<ExtArgs> | null
+    /**
      * Filter, which NotificationIntent to fetch.
      */
     where: NotificationIntentWhereUniqueInput
@@ -16221,6 +16422,10 @@ export namespace Prisma {
      * Omit specific fields from the NotificationIntent
      */
     omit?: NotificationIntentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIntentInclude<ExtArgs> | null
     /**
      * Filter, which NotificationIntent to fetch.
      */
@@ -16270,6 +16475,10 @@ export namespace Prisma {
      */
     omit?: NotificationIntentOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIntentInclude<ExtArgs> | null
+    /**
      * Filter, which NotificationIntent to fetch.
      */
     where?: NotificationIntentWhereInput
@@ -16318,6 +16527,10 @@ export namespace Prisma {
      */
     omit?: NotificationIntentOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIntentInclude<ExtArgs> | null
+    /**
      * Filter, which NotificationIntents to fetch.
      */
     where?: NotificationIntentWhereInput
@@ -16360,6 +16573,10 @@ export namespace Prisma {
      * Omit specific fields from the NotificationIntent
      */
     omit?: NotificationIntentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIntentInclude<ExtArgs> | null
     /**
      * The data needed to create a NotificationIntent.
      */
@@ -16408,6 +16625,10 @@ export namespace Prisma {
      * Omit specific fields from the NotificationIntent
      */
     omit?: NotificationIntentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIntentInclude<ExtArgs> | null
     /**
      * The data needed to update a NotificationIntent.
      */
@@ -16475,6 +16696,10 @@ export namespace Prisma {
      */
     omit?: NotificationIntentOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIntentInclude<ExtArgs> | null
+    /**
      * The filter to search for the NotificationIntent to update in case it exists.
      */
     where: NotificationIntentWhereUniqueInput
@@ -16501,6 +16726,10 @@ export namespace Prisma {
      */
     omit?: NotificationIntentOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIntentInclude<ExtArgs> | null
+    /**
      * Filter which NotificationIntent to delete.
      */
     where: NotificationIntentWhereUniqueInput
@@ -16521,6 +16750,30 @@ export namespace Prisma {
   }
 
   /**
+   * NotificationIntent.metrics
+   */
+  export type NotificationIntent$metricsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationDeliveryMetric
+     */
+    select?: NotificationDeliveryMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationDeliveryMetric
+     */
+    omit?: NotificationDeliveryMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationDeliveryMetricInclude<ExtArgs> | null
+    where?: NotificationDeliveryMetricWhereInput
+    orderBy?: NotificationDeliveryMetricOrderByWithRelationInput | NotificationDeliveryMetricOrderByWithRelationInput[]
+    cursor?: NotificationDeliveryMetricWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificationDeliveryMetricScalarFieldEnum | NotificationDeliveryMetricScalarFieldEnum[]
+  }
+
+  /**
    * NotificationIntent without action
    */
   export type NotificationIntentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16532,6 +16785,1081 @@ export namespace Prisma {
      * Omit specific fields from the NotificationIntent
      */
     omit?: NotificationIntentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationIntentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model NotificationDeliveryMetric
+   */
+
+  export type AggregateNotificationDeliveryMetric = {
+    _count: NotificationDeliveryMetricCountAggregateOutputType | null
+    _min: NotificationDeliveryMetricMinAggregateOutputType | null
+    _max: NotificationDeliveryMetricMaxAggregateOutputType | null
+  }
+
+  export type NotificationDeliveryMetricMinAggregateOutputType = {
+    id: string | null
+    intentId: string | null
+    provider: string | null
+    outcome: string | null
+    failureReason: string | null
+    createdAt: Date | null
+  }
+
+  export type NotificationDeliveryMetricMaxAggregateOutputType = {
+    id: string | null
+    intentId: string | null
+    provider: string | null
+    outcome: string | null
+    failureReason: string | null
+    createdAt: Date | null
+  }
+
+  export type NotificationDeliveryMetricCountAggregateOutputType = {
+    id: number
+    intentId: number
+    provider: number
+    outcome: number
+    failureReason: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type NotificationDeliveryMetricMinAggregateInputType = {
+    id?: true
+    intentId?: true
+    provider?: true
+    outcome?: true
+    failureReason?: true
+    createdAt?: true
+  }
+
+  export type NotificationDeliveryMetricMaxAggregateInputType = {
+    id?: true
+    intentId?: true
+    provider?: true
+    outcome?: true
+    failureReason?: true
+    createdAt?: true
+  }
+
+  export type NotificationDeliveryMetricCountAggregateInputType = {
+    id?: true
+    intentId?: true
+    provider?: true
+    outcome?: true
+    failureReason?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type NotificationDeliveryMetricAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NotificationDeliveryMetric to aggregate.
+     */
+    where?: NotificationDeliveryMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationDeliveryMetrics to fetch.
+     */
+    orderBy?: NotificationDeliveryMetricOrderByWithRelationInput | NotificationDeliveryMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NotificationDeliveryMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationDeliveryMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationDeliveryMetrics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned NotificationDeliveryMetrics
+    **/
+    _count?: true | NotificationDeliveryMetricCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NotificationDeliveryMetricMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NotificationDeliveryMetricMaxAggregateInputType
+  }
+
+  export type GetNotificationDeliveryMetricAggregateType<T extends NotificationDeliveryMetricAggregateArgs> = {
+        [P in keyof T & keyof AggregateNotificationDeliveryMetric]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNotificationDeliveryMetric[P]>
+      : GetScalarType<T[P], AggregateNotificationDeliveryMetric[P]>
+  }
+
+
+
+
+  export type NotificationDeliveryMetricGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationDeliveryMetricWhereInput
+    orderBy?: NotificationDeliveryMetricOrderByWithAggregationInput | NotificationDeliveryMetricOrderByWithAggregationInput[]
+    by: NotificationDeliveryMetricScalarFieldEnum[] | NotificationDeliveryMetricScalarFieldEnum
+    having?: NotificationDeliveryMetricScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NotificationDeliveryMetricCountAggregateInputType | true
+    _min?: NotificationDeliveryMetricMinAggregateInputType
+    _max?: NotificationDeliveryMetricMaxAggregateInputType
+  }
+
+  export type NotificationDeliveryMetricGroupByOutputType = {
+    id: string
+    intentId: string
+    provider: string
+    outcome: string
+    failureReason: string | null
+    createdAt: Date
+    _count: NotificationDeliveryMetricCountAggregateOutputType | null
+    _min: NotificationDeliveryMetricMinAggregateOutputType | null
+    _max: NotificationDeliveryMetricMaxAggregateOutputType | null
+  }
+
+  type GetNotificationDeliveryMetricGroupByPayload<T extends NotificationDeliveryMetricGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NotificationDeliveryMetricGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NotificationDeliveryMetricGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NotificationDeliveryMetricGroupByOutputType[P]>
+            : GetScalarType<T[P], NotificationDeliveryMetricGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NotificationDeliveryMetricSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    intentId?: boolean
+    provider?: boolean
+    outcome?: boolean
+    failureReason?: boolean
+    createdAt?: boolean
+    intent?: boolean | NotificationIntentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notificationDeliveryMetric"]>
+
+  export type NotificationDeliveryMetricSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    intentId?: boolean
+    provider?: boolean
+    outcome?: boolean
+    failureReason?: boolean
+    createdAt?: boolean
+    intent?: boolean | NotificationIntentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notificationDeliveryMetric"]>
+
+  export type NotificationDeliveryMetricSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    intentId?: boolean
+    provider?: boolean
+    outcome?: boolean
+    failureReason?: boolean
+    createdAt?: boolean
+    intent?: boolean | NotificationIntentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["notificationDeliveryMetric"]>
+
+  export type NotificationDeliveryMetricSelectScalar = {
+    id?: boolean
+    intentId?: boolean
+    provider?: boolean
+    outcome?: boolean
+    failureReason?: boolean
+    createdAt?: boolean
+  }
+
+  export type NotificationDeliveryMetricOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "intentId" | "provider" | "outcome" | "failureReason" | "createdAt", ExtArgs["result"]["notificationDeliveryMetric"]>
+  export type NotificationDeliveryMetricInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    intent?: boolean | NotificationIntentDefaultArgs<ExtArgs>
+  }
+  export type NotificationDeliveryMetricIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    intent?: boolean | NotificationIntentDefaultArgs<ExtArgs>
+  }
+  export type NotificationDeliveryMetricIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    intent?: boolean | NotificationIntentDefaultArgs<ExtArgs>
+  }
+
+  export type $NotificationDeliveryMetricPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "NotificationDeliveryMetric"
+    objects: {
+      intent: Prisma.$NotificationIntentPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      intentId: string
+      provider: string
+      outcome: string
+      failureReason: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["notificationDeliveryMetric"]>
+    composites: {}
+  }
+
+  type NotificationDeliveryMetricGetPayload<S extends boolean | null | undefined | NotificationDeliveryMetricDefaultArgs> = $Result.GetResult<Prisma.$NotificationDeliveryMetricPayload, S>
+
+  type NotificationDeliveryMetricCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NotificationDeliveryMetricFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NotificationDeliveryMetricCountAggregateInputType | true
+    }
+
+  export interface NotificationDeliveryMetricDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NotificationDeliveryMetric'], meta: { name: 'NotificationDeliveryMetric' } }
+    /**
+     * Find zero or one NotificationDeliveryMetric that matches the filter.
+     * @param {NotificationDeliveryMetricFindUniqueArgs} args - Arguments to find a NotificationDeliveryMetric
+     * @example
+     * // Get one NotificationDeliveryMetric
+     * const notificationDeliveryMetric = await prisma.notificationDeliveryMetric.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NotificationDeliveryMetricFindUniqueArgs>(args: SelectSubset<T, NotificationDeliveryMetricFindUniqueArgs<ExtArgs>>): Prisma__NotificationDeliveryMetricClient<$Result.GetResult<Prisma.$NotificationDeliveryMetricPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one NotificationDeliveryMetric that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NotificationDeliveryMetricFindUniqueOrThrowArgs} args - Arguments to find a NotificationDeliveryMetric
+     * @example
+     * // Get one NotificationDeliveryMetric
+     * const notificationDeliveryMetric = await prisma.notificationDeliveryMetric.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NotificationDeliveryMetricFindUniqueOrThrowArgs>(args: SelectSubset<T, NotificationDeliveryMetricFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NotificationDeliveryMetricClient<$Result.GetResult<Prisma.$NotificationDeliveryMetricPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NotificationDeliveryMetric that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationDeliveryMetricFindFirstArgs} args - Arguments to find a NotificationDeliveryMetric
+     * @example
+     * // Get one NotificationDeliveryMetric
+     * const notificationDeliveryMetric = await prisma.notificationDeliveryMetric.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NotificationDeliveryMetricFindFirstArgs>(args?: SelectSubset<T, NotificationDeliveryMetricFindFirstArgs<ExtArgs>>): Prisma__NotificationDeliveryMetricClient<$Result.GetResult<Prisma.$NotificationDeliveryMetricPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NotificationDeliveryMetric that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationDeliveryMetricFindFirstOrThrowArgs} args - Arguments to find a NotificationDeliveryMetric
+     * @example
+     * // Get one NotificationDeliveryMetric
+     * const notificationDeliveryMetric = await prisma.notificationDeliveryMetric.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NotificationDeliveryMetricFindFirstOrThrowArgs>(args?: SelectSubset<T, NotificationDeliveryMetricFindFirstOrThrowArgs<ExtArgs>>): Prisma__NotificationDeliveryMetricClient<$Result.GetResult<Prisma.$NotificationDeliveryMetricPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more NotificationDeliveryMetrics that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationDeliveryMetricFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all NotificationDeliveryMetrics
+     * const notificationDeliveryMetrics = await prisma.notificationDeliveryMetric.findMany()
+     * 
+     * // Get first 10 NotificationDeliveryMetrics
+     * const notificationDeliveryMetrics = await prisma.notificationDeliveryMetric.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const notificationDeliveryMetricWithIdOnly = await prisma.notificationDeliveryMetric.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NotificationDeliveryMetricFindManyArgs>(args?: SelectSubset<T, NotificationDeliveryMetricFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationDeliveryMetricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a NotificationDeliveryMetric.
+     * @param {NotificationDeliveryMetricCreateArgs} args - Arguments to create a NotificationDeliveryMetric.
+     * @example
+     * // Create one NotificationDeliveryMetric
+     * const NotificationDeliveryMetric = await prisma.notificationDeliveryMetric.create({
+     *   data: {
+     *     // ... data to create a NotificationDeliveryMetric
+     *   }
+     * })
+     * 
+     */
+    create<T extends NotificationDeliveryMetricCreateArgs>(args: SelectSubset<T, NotificationDeliveryMetricCreateArgs<ExtArgs>>): Prisma__NotificationDeliveryMetricClient<$Result.GetResult<Prisma.$NotificationDeliveryMetricPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many NotificationDeliveryMetrics.
+     * @param {NotificationDeliveryMetricCreateManyArgs} args - Arguments to create many NotificationDeliveryMetrics.
+     * @example
+     * // Create many NotificationDeliveryMetrics
+     * const notificationDeliveryMetric = await prisma.notificationDeliveryMetric.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NotificationDeliveryMetricCreateManyArgs>(args?: SelectSubset<T, NotificationDeliveryMetricCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many NotificationDeliveryMetrics and returns the data saved in the database.
+     * @param {NotificationDeliveryMetricCreateManyAndReturnArgs} args - Arguments to create many NotificationDeliveryMetrics.
+     * @example
+     * // Create many NotificationDeliveryMetrics
+     * const notificationDeliveryMetric = await prisma.notificationDeliveryMetric.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many NotificationDeliveryMetrics and only return the `id`
+     * const notificationDeliveryMetricWithIdOnly = await prisma.notificationDeliveryMetric.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NotificationDeliveryMetricCreateManyAndReturnArgs>(args?: SelectSubset<T, NotificationDeliveryMetricCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationDeliveryMetricPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a NotificationDeliveryMetric.
+     * @param {NotificationDeliveryMetricDeleteArgs} args - Arguments to delete one NotificationDeliveryMetric.
+     * @example
+     * // Delete one NotificationDeliveryMetric
+     * const NotificationDeliveryMetric = await prisma.notificationDeliveryMetric.delete({
+     *   where: {
+     *     // ... filter to delete one NotificationDeliveryMetric
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NotificationDeliveryMetricDeleteArgs>(args: SelectSubset<T, NotificationDeliveryMetricDeleteArgs<ExtArgs>>): Prisma__NotificationDeliveryMetricClient<$Result.GetResult<Prisma.$NotificationDeliveryMetricPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one NotificationDeliveryMetric.
+     * @param {NotificationDeliveryMetricUpdateArgs} args - Arguments to update one NotificationDeliveryMetric.
+     * @example
+     * // Update one NotificationDeliveryMetric
+     * const notificationDeliveryMetric = await prisma.notificationDeliveryMetric.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NotificationDeliveryMetricUpdateArgs>(args: SelectSubset<T, NotificationDeliveryMetricUpdateArgs<ExtArgs>>): Prisma__NotificationDeliveryMetricClient<$Result.GetResult<Prisma.$NotificationDeliveryMetricPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more NotificationDeliveryMetrics.
+     * @param {NotificationDeliveryMetricDeleteManyArgs} args - Arguments to filter NotificationDeliveryMetrics to delete.
+     * @example
+     * // Delete a few NotificationDeliveryMetrics
+     * const { count } = await prisma.notificationDeliveryMetric.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NotificationDeliveryMetricDeleteManyArgs>(args?: SelectSubset<T, NotificationDeliveryMetricDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NotificationDeliveryMetrics.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationDeliveryMetricUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many NotificationDeliveryMetrics
+     * const notificationDeliveryMetric = await prisma.notificationDeliveryMetric.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NotificationDeliveryMetricUpdateManyArgs>(args: SelectSubset<T, NotificationDeliveryMetricUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NotificationDeliveryMetrics and returns the data updated in the database.
+     * @param {NotificationDeliveryMetricUpdateManyAndReturnArgs} args - Arguments to update many NotificationDeliveryMetrics.
+     * @example
+     * // Update many NotificationDeliveryMetrics
+     * const notificationDeliveryMetric = await prisma.notificationDeliveryMetric.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more NotificationDeliveryMetrics and only return the `id`
+     * const notificationDeliveryMetricWithIdOnly = await prisma.notificationDeliveryMetric.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NotificationDeliveryMetricUpdateManyAndReturnArgs>(args: SelectSubset<T, NotificationDeliveryMetricUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationDeliveryMetricPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one NotificationDeliveryMetric.
+     * @param {NotificationDeliveryMetricUpsertArgs} args - Arguments to update or create a NotificationDeliveryMetric.
+     * @example
+     * // Update or create a NotificationDeliveryMetric
+     * const notificationDeliveryMetric = await prisma.notificationDeliveryMetric.upsert({
+     *   create: {
+     *     // ... data to create a NotificationDeliveryMetric
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the NotificationDeliveryMetric we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NotificationDeliveryMetricUpsertArgs>(args: SelectSubset<T, NotificationDeliveryMetricUpsertArgs<ExtArgs>>): Prisma__NotificationDeliveryMetricClient<$Result.GetResult<Prisma.$NotificationDeliveryMetricPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of NotificationDeliveryMetrics.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationDeliveryMetricCountArgs} args - Arguments to filter NotificationDeliveryMetrics to count.
+     * @example
+     * // Count the number of NotificationDeliveryMetrics
+     * const count = await prisma.notificationDeliveryMetric.count({
+     *   where: {
+     *     // ... the filter for the NotificationDeliveryMetrics we want to count
+     *   }
+     * })
+    **/
+    count<T extends NotificationDeliveryMetricCountArgs>(
+      args?: Subset<T, NotificationDeliveryMetricCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NotificationDeliveryMetricCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a NotificationDeliveryMetric.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationDeliveryMetricAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NotificationDeliveryMetricAggregateArgs>(args: Subset<T, NotificationDeliveryMetricAggregateArgs>): Prisma.PrismaPromise<GetNotificationDeliveryMetricAggregateType<T>>
+
+    /**
+     * Group by NotificationDeliveryMetric.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationDeliveryMetricGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NotificationDeliveryMetricGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NotificationDeliveryMetricGroupByArgs['orderBy'] }
+        : { orderBy?: NotificationDeliveryMetricGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NotificationDeliveryMetricGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificationDeliveryMetricGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the NotificationDeliveryMetric model
+   */
+  readonly fields: NotificationDeliveryMetricFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for NotificationDeliveryMetric.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NotificationDeliveryMetricClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    intent<T extends NotificationIntentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, NotificationIntentDefaultArgs<ExtArgs>>): Prisma__NotificationIntentClient<$Result.GetResult<Prisma.$NotificationIntentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the NotificationDeliveryMetric model
+   */
+  interface NotificationDeliveryMetricFieldRefs {
+    readonly id: FieldRef<"NotificationDeliveryMetric", 'String'>
+    readonly intentId: FieldRef<"NotificationDeliveryMetric", 'String'>
+    readonly provider: FieldRef<"NotificationDeliveryMetric", 'String'>
+    readonly outcome: FieldRef<"NotificationDeliveryMetric", 'String'>
+    readonly failureReason: FieldRef<"NotificationDeliveryMetric", 'String'>
+    readonly createdAt: FieldRef<"NotificationDeliveryMetric", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * NotificationDeliveryMetric findUnique
+   */
+  export type NotificationDeliveryMetricFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationDeliveryMetric
+     */
+    select?: NotificationDeliveryMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationDeliveryMetric
+     */
+    omit?: NotificationDeliveryMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationDeliveryMetricInclude<ExtArgs> | null
+    /**
+     * Filter, which NotificationDeliveryMetric to fetch.
+     */
+    where: NotificationDeliveryMetricWhereUniqueInput
+  }
+
+  /**
+   * NotificationDeliveryMetric findUniqueOrThrow
+   */
+  export type NotificationDeliveryMetricFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationDeliveryMetric
+     */
+    select?: NotificationDeliveryMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationDeliveryMetric
+     */
+    omit?: NotificationDeliveryMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationDeliveryMetricInclude<ExtArgs> | null
+    /**
+     * Filter, which NotificationDeliveryMetric to fetch.
+     */
+    where: NotificationDeliveryMetricWhereUniqueInput
+  }
+
+  /**
+   * NotificationDeliveryMetric findFirst
+   */
+  export type NotificationDeliveryMetricFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationDeliveryMetric
+     */
+    select?: NotificationDeliveryMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationDeliveryMetric
+     */
+    omit?: NotificationDeliveryMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationDeliveryMetricInclude<ExtArgs> | null
+    /**
+     * Filter, which NotificationDeliveryMetric to fetch.
+     */
+    where?: NotificationDeliveryMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationDeliveryMetrics to fetch.
+     */
+    orderBy?: NotificationDeliveryMetricOrderByWithRelationInput | NotificationDeliveryMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NotificationDeliveryMetrics.
+     */
+    cursor?: NotificationDeliveryMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationDeliveryMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationDeliveryMetrics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NotificationDeliveryMetrics.
+     */
+    distinct?: NotificationDeliveryMetricScalarFieldEnum | NotificationDeliveryMetricScalarFieldEnum[]
+  }
+
+  /**
+   * NotificationDeliveryMetric findFirstOrThrow
+   */
+  export type NotificationDeliveryMetricFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationDeliveryMetric
+     */
+    select?: NotificationDeliveryMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationDeliveryMetric
+     */
+    omit?: NotificationDeliveryMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationDeliveryMetricInclude<ExtArgs> | null
+    /**
+     * Filter, which NotificationDeliveryMetric to fetch.
+     */
+    where?: NotificationDeliveryMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationDeliveryMetrics to fetch.
+     */
+    orderBy?: NotificationDeliveryMetricOrderByWithRelationInput | NotificationDeliveryMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NotificationDeliveryMetrics.
+     */
+    cursor?: NotificationDeliveryMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationDeliveryMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationDeliveryMetrics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NotificationDeliveryMetrics.
+     */
+    distinct?: NotificationDeliveryMetricScalarFieldEnum | NotificationDeliveryMetricScalarFieldEnum[]
+  }
+
+  /**
+   * NotificationDeliveryMetric findMany
+   */
+  export type NotificationDeliveryMetricFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationDeliveryMetric
+     */
+    select?: NotificationDeliveryMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationDeliveryMetric
+     */
+    omit?: NotificationDeliveryMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationDeliveryMetricInclude<ExtArgs> | null
+    /**
+     * Filter, which NotificationDeliveryMetrics to fetch.
+     */
+    where?: NotificationDeliveryMetricWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationDeliveryMetrics to fetch.
+     */
+    orderBy?: NotificationDeliveryMetricOrderByWithRelationInput | NotificationDeliveryMetricOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing NotificationDeliveryMetrics.
+     */
+    cursor?: NotificationDeliveryMetricWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationDeliveryMetrics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationDeliveryMetrics.
+     */
+    skip?: number
+    distinct?: NotificationDeliveryMetricScalarFieldEnum | NotificationDeliveryMetricScalarFieldEnum[]
+  }
+
+  /**
+   * NotificationDeliveryMetric create
+   */
+  export type NotificationDeliveryMetricCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationDeliveryMetric
+     */
+    select?: NotificationDeliveryMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationDeliveryMetric
+     */
+    omit?: NotificationDeliveryMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationDeliveryMetricInclude<ExtArgs> | null
+    /**
+     * The data needed to create a NotificationDeliveryMetric.
+     */
+    data: XOR<NotificationDeliveryMetricCreateInput, NotificationDeliveryMetricUncheckedCreateInput>
+  }
+
+  /**
+   * NotificationDeliveryMetric createMany
+   */
+  export type NotificationDeliveryMetricCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many NotificationDeliveryMetrics.
+     */
+    data: NotificationDeliveryMetricCreateManyInput | NotificationDeliveryMetricCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NotificationDeliveryMetric createManyAndReturn
+   */
+  export type NotificationDeliveryMetricCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationDeliveryMetric
+     */
+    select?: NotificationDeliveryMetricSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationDeliveryMetric
+     */
+    omit?: NotificationDeliveryMetricOmit<ExtArgs> | null
+    /**
+     * The data used to create many NotificationDeliveryMetrics.
+     */
+    data: NotificationDeliveryMetricCreateManyInput | NotificationDeliveryMetricCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationDeliveryMetricIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * NotificationDeliveryMetric update
+   */
+  export type NotificationDeliveryMetricUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationDeliveryMetric
+     */
+    select?: NotificationDeliveryMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationDeliveryMetric
+     */
+    omit?: NotificationDeliveryMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationDeliveryMetricInclude<ExtArgs> | null
+    /**
+     * The data needed to update a NotificationDeliveryMetric.
+     */
+    data: XOR<NotificationDeliveryMetricUpdateInput, NotificationDeliveryMetricUncheckedUpdateInput>
+    /**
+     * Choose, which NotificationDeliveryMetric to update.
+     */
+    where: NotificationDeliveryMetricWhereUniqueInput
+  }
+
+  /**
+   * NotificationDeliveryMetric updateMany
+   */
+  export type NotificationDeliveryMetricUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update NotificationDeliveryMetrics.
+     */
+    data: XOR<NotificationDeliveryMetricUpdateManyMutationInput, NotificationDeliveryMetricUncheckedUpdateManyInput>
+    /**
+     * Filter which NotificationDeliveryMetrics to update
+     */
+    where?: NotificationDeliveryMetricWhereInput
+    /**
+     * Limit how many NotificationDeliveryMetrics to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * NotificationDeliveryMetric updateManyAndReturn
+   */
+  export type NotificationDeliveryMetricUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationDeliveryMetric
+     */
+    select?: NotificationDeliveryMetricSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationDeliveryMetric
+     */
+    omit?: NotificationDeliveryMetricOmit<ExtArgs> | null
+    /**
+     * The data used to update NotificationDeliveryMetrics.
+     */
+    data: XOR<NotificationDeliveryMetricUpdateManyMutationInput, NotificationDeliveryMetricUncheckedUpdateManyInput>
+    /**
+     * Filter which NotificationDeliveryMetrics to update
+     */
+    where?: NotificationDeliveryMetricWhereInput
+    /**
+     * Limit how many NotificationDeliveryMetrics to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationDeliveryMetricIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * NotificationDeliveryMetric upsert
+   */
+  export type NotificationDeliveryMetricUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationDeliveryMetric
+     */
+    select?: NotificationDeliveryMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationDeliveryMetric
+     */
+    omit?: NotificationDeliveryMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationDeliveryMetricInclude<ExtArgs> | null
+    /**
+     * The filter to search for the NotificationDeliveryMetric to update in case it exists.
+     */
+    where: NotificationDeliveryMetricWhereUniqueInput
+    /**
+     * In case the NotificationDeliveryMetric found by the `where` argument doesn't exist, create a new NotificationDeliveryMetric with this data.
+     */
+    create: XOR<NotificationDeliveryMetricCreateInput, NotificationDeliveryMetricUncheckedCreateInput>
+    /**
+     * In case the NotificationDeliveryMetric was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NotificationDeliveryMetricUpdateInput, NotificationDeliveryMetricUncheckedUpdateInput>
+  }
+
+  /**
+   * NotificationDeliveryMetric delete
+   */
+  export type NotificationDeliveryMetricDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationDeliveryMetric
+     */
+    select?: NotificationDeliveryMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationDeliveryMetric
+     */
+    omit?: NotificationDeliveryMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationDeliveryMetricInclude<ExtArgs> | null
+    /**
+     * Filter which NotificationDeliveryMetric to delete.
+     */
+    where: NotificationDeliveryMetricWhereUniqueInput
+  }
+
+  /**
+   * NotificationDeliveryMetric deleteMany
+   */
+  export type NotificationDeliveryMetricDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NotificationDeliveryMetrics to delete
+     */
+    where?: NotificationDeliveryMetricWhereInput
+    /**
+     * Limit how many NotificationDeliveryMetrics to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * NotificationDeliveryMetric without action
+   */
+  export type NotificationDeliveryMetricDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationDeliveryMetric
+     */
+    select?: NotificationDeliveryMetricSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NotificationDeliveryMetric
+     */
+    omit?: NotificationDeliveryMetricOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationDeliveryMetricInclude<ExtArgs> | null
   }
 
 
@@ -27367,10 +28695,24 @@ export namespace Prisma {
     recipient: 'recipient',
     payload: 'payload',
     status: 'status',
+    retryCount: 'retryCount',
+    lastAttemptAt: 'lastAttemptAt',
     createdAt: 'createdAt'
   };
 
   export type NotificationIntentScalarFieldEnum = (typeof NotificationIntentScalarFieldEnum)[keyof typeof NotificationIntentScalarFieldEnum]
+
+
+  export const NotificationDeliveryMetricScalarFieldEnum: {
+    id: 'id',
+    intentId: 'intentId',
+    provider: 'provider',
+    outcome: 'outcome',
+    failureReason: 'failureReason',
+    createdAt: 'createdAt'
+  };
+
+  export type NotificationDeliveryMetricScalarFieldEnum = (typeof NotificationDeliveryMetricScalarFieldEnum)[keyof typeof NotificationDeliveryMetricScalarFieldEnum]
 
 
   export const CampaignApprovalScalarFieldEnum: {
@@ -28630,7 +29972,10 @@ export namespace Prisma {
     recipient?: JsonFilter<"NotificationIntent">
     payload?: JsonFilter<"NotificationIntent">
     status?: StringFilter<"NotificationIntent"> | string
+    retryCount?: IntFilter<"NotificationIntent"> | number
+    lastAttemptAt?: DateTimeNullableFilter<"NotificationIntent"> | Date | string | null
     createdAt?: DateTimeFilter<"NotificationIntent"> | Date | string
+    metrics?: NotificationDeliveryMetricListRelationFilter
   }
 
   export type NotificationIntentOrderByWithRelationInput = {
@@ -28639,7 +29984,10 @@ export namespace Prisma {
     recipient?: SortOrder
     payload?: SortOrder
     status?: SortOrder
+    retryCount?: SortOrder
+    lastAttemptAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    metrics?: NotificationDeliveryMetricOrderByRelationAggregateInput
   }
 
   export type NotificationIntentWhereUniqueInput = Prisma.AtLeast<{
@@ -28651,7 +29999,10 @@ export namespace Prisma {
     recipient?: JsonFilter<"NotificationIntent">
     payload?: JsonFilter<"NotificationIntent">
     status?: StringFilter<"NotificationIntent"> | string
+    retryCount?: IntFilter<"NotificationIntent"> | number
+    lastAttemptAt?: DateTimeNullableFilter<"NotificationIntent"> | Date | string | null
     createdAt?: DateTimeFilter<"NotificationIntent"> | Date | string
+    metrics?: NotificationDeliveryMetricListRelationFilter
   }, "id">
 
   export type NotificationIntentOrderByWithAggregationInput = {
@@ -28660,10 +30011,14 @@ export namespace Prisma {
     recipient?: SortOrder
     payload?: SortOrder
     status?: SortOrder
+    retryCount?: SortOrder
+    lastAttemptAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: NotificationIntentCountOrderByAggregateInput
+    _avg?: NotificationIntentAvgOrderByAggregateInput
     _max?: NotificationIntentMaxOrderByAggregateInput
     _min?: NotificationIntentMinOrderByAggregateInput
+    _sum?: NotificationIntentSumOrderByAggregateInput
   }
 
   export type NotificationIntentScalarWhereWithAggregatesInput = {
@@ -28675,7 +30030,69 @@ export namespace Prisma {
     recipient?: JsonWithAggregatesFilter<"NotificationIntent">
     payload?: JsonWithAggregatesFilter<"NotificationIntent">
     status?: StringWithAggregatesFilter<"NotificationIntent"> | string
+    retryCount?: IntWithAggregatesFilter<"NotificationIntent"> | number
+    lastAttemptAt?: DateTimeNullableWithAggregatesFilter<"NotificationIntent"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"NotificationIntent"> | Date | string
+  }
+
+  export type NotificationDeliveryMetricWhereInput = {
+    AND?: NotificationDeliveryMetricWhereInput | NotificationDeliveryMetricWhereInput[]
+    OR?: NotificationDeliveryMetricWhereInput[]
+    NOT?: NotificationDeliveryMetricWhereInput | NotificationDeliveryMetricWhereInput[]
+    id?: StringFilter<"NotificationDeliveryMetric"> | string
+    intentId?: StringFilter<"NotificationDeliveryMetric"> | string
+    provider?: StringFilter<"NotificationDeliveryMetric"> | string
+    outcome?: StringFilter<"NotificationDeliveryMetric"> | string
+    failureReason?: StringNullableFilter<"NotificationDeliveryMetric"> | string | null
+    createdAt?: DateTimeFilter<"NotificationDeliveryMetric"> | Date | string
+    intent?: XOR<NotificationIntentScalarRelationFilter, NotificationIntentWhereInput>
+  }
+
+  export type NotificationDeliveryMetricOrderByWithRelationInput = {
+    id?: SortOrder
+    intentId?: SortOrder
+    provider?: SortOrder
+    outcome?: SortOrder
+    failureReason?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    intent?: NotificationIntentOrderByWithRelationInput
+  }
+
+  export type NotificationDeliveryMetricWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: NotificationDeliveryMetricWhereInput | NotificationDeliveryMetricWhereInput[]
+    OR?: NotificationDeliveryMetricWhereInput[]
+    NOT?: NotificationDeliveryMetricWhereInput | NotificationDeliveryMetricWhereInput[]
+    intentId?: StringFilter<"NotificationDeliveryMetric"> | string
+    provider?: StringFilter<"NotificationDeliveryMetric"> | string
+    outcome?: StringFilter<"NotificationDeliveryMetric"> | string
+    failureReason?: StringNullableFilter<"NotificationDeliveryMetric"> | string | null
+    createdAt?: DateTimeFilter<"NotificationDeliveryMetric"> | Date | string
+    intent?: XOR<NotificationIntentScalarRelationFilter, NotificationIntentWhereInput>
+  }, "id">
+
+  export type NotificationDeliveryMetricOrderByWithAggregationInput = {
+    id?: SortOrder
+    intentId?: SortOrder
+    provider?: SortOrder
+    outcome?: SortOrder
+    failureReason?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: NotificationDeliveryMetricCountOrderByAggregateInput
+    _max?: NotificationDeliveryMetricMaxOrderByAggregateInput
+    _min?: NotificationDeliveryMetricMinOrderByAggregateInput
+  }
+
+  export type NotificationDeliveryMetricScalarWhereWithAggregatesInput = {
+    AND?: NotificationDeliveryMetricScalarWhereWithAggregatesInput | NotificationDeliveryMetricScalarWhereWithAggregatesInput[]
+    OR?: NotificationDeliveryMetricScalarWhereWithAggregatesInput[]
+    NOT?: NotificationDeliveryMetricScalarWhereWithAggregatesInput | NotificationDeliveryMetricScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"NotificationDeliveryMetric"> | string
+    intentId?: StringWithAggregatesFilter<"NotificationDeliveryMetric"> | string
+    provider?: StringWithAggregatesFilter<"NotificationDeliveryMetric"> | string
+    outcome?: StringWithAggregatesFilter<"NotificationDeliveryMetric"> | string
+    failureReason?: StringNullableWithAggregatesFilter<"NotificationDeliveryMetric"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"NotificationDeliveryMetric"> | Date | string
   }
 
   export type CampaignApprovalWhereInput = {
@@ -30410,7 +31827,10 @@ export namespace Prisma {
     recipient: JsonNullValueInput | InputJsonValue
     payload: JsonNullValueInput | InputJsonValue
     status?: string
+    retryCount?: number
+    lastAttemptAt?: Date | string | null
     createdAt?: Date | string
+    metrics?: NotificationDeliveryMetricCreateNestedManyWithoutIntentInput
   }
 
   export type NotificationIntentUncheckedCreateInput = {
@@ -30419,7 +31839,10 @@ export namespace Prisma {
     recipient: JsonNullValueInput | InputJsonValue
     payload: JsonNullValueInput | InputJsonValue
     status?: string
+    retryCount?: number
+    lastAttemptAt?: Date | string | null
     createdAt?: Date | string
+    metrics?: NotificationDeliveryMetricUncheckedCreateNestedManyWithoutIntentInput
   }
 
   export type NotificationIntentUpdateInput = {
@@ -30428,7 +31851,10 @@ export namespace Prisma {
     recipient?: JsonNullValueInput | InputJsonValue
     payload?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
+    retryCount?: IntFieldUpdateOperationsInput | number
+    lastAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    metrics?: NotificationDeliveryMetricUpdateManyWithoutIntentNestedInput
   }
 
   export type NotificationIntentUncheckedUpdateInput = {
@@ -30437,7 +31863,10 @@ export namespace Prisma {
     recipient?: JsonNullValueInput | InputJsonValue
     payload?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
+    retryCount?: IntFieldUpdateOperationsInput | number
+    lastAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    metrics?: NotificationDeliveryMetricUncheckedUpdateManyWithoutIntentNestedInput
   }
 
   export type NotificationIntentCreateManyInput = {
@@ -30446,6 +31875,8 @@ export namespace Prisma {
     recipient: JsonNullValueInput | InputJsonValue
     payload: JsonNullValueInput | InputJsonValue
     status?: string
+    retryCount?: number
+    lastAttemptAt?: Date | string | null
     createdAt?: Date | string
   }
 
@@ -30455,6 +31886,8 @@ export namespace Prisma {
     recipient?: JsonNullValueInput | InputJsonValue
     payload?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
+    retryCount?: IntFieldUpdateOperationsInput | number
+    lastAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -30464,6 +31897,70 @@ export namespace Prisma {
     recipient?: JsonNullValueInput | InputJsonValue
     payload?: JsonNullValueInput | InputJsonValue
     status?: StringFieldUpdateOperationsInput | string
+    retryCount?: IntFieldUpdateOperationsInput | number
+    lastAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationDeliveryMetricCreateInput = {
+    id?: string
+    provider: string
+    outcome: string
+    failureReason?: string | null
+    createdAt?: Date | string
+    intent: NotificationIntentCreateNestedOneWithoutMetricsInput
+  }
+
+  export type NotificationDeliveryMetricUncheckedCreateInput = {
+    id?: string
+    intentId: string
+    provider: string
+    outcome: string
+    failureReason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationDeliveryMetricUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    intent?: NotificationIntentUpdateOneRequiredWithoutMetricsNestedInput
+  }
+
+  export type NotificationDeliveryMetricUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    intentId?: StringFieldUpdateOperationsInput | string
+    provider?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationDeliveryMetricCreateManyInput = {
+    id?: string
+    intentId: string
+    provider: string
+    outcome: string
+    failureReason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationDeliveryMetricUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationDeliveryMetricUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    intentId?: StringFieldUpdateOperationsInput | string
+    provider?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -32189,19 +33686,37 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NotificationDeliveryMetricListRelationFilter = {
+    every?: NotificationDeliveryMetricWhereInput
+    some?: NotificationDeliveryMetricWhereInput
+    none?: NotificationDeliveryMetricWhereInput
+  }
+
+  export type NotificationDeliveryMetricOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type NotificationIntentCountOrderByAggregateInput = {
     id?: SortOrder
     channel?: SortOrder
     recipient?: SortOrder
     payload?: SortOrder
     status?: SortOrder
+    retryCount?: SortOrder
+    lastAttemptAt?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type NotificationIntentAvgOrderByAggregateInput = {
+    retryCount?: SortOrder
   }
 
   export type NotificationIntentMaxOrderByAggregateInput = {
     id?: SortOrder
     channel?: SortOrder
     status?: SortOrder
+    retryCount?: SortOrder
+    lastAttemptAt?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -32209,7 +33724,13 @@ export namespace Prisma {
     id?: SortOrder
     channel?: SortOrder
     status?: SortOrder
+    retryCount?: SortOrder
+    lastAttemptAt?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type NotificationIntentSumOrderByAggregateInput = {
+    retryCount?: SortOrder
   }
   export type JsonWithAggregatesFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -32236,6 +33757,38 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedJsonFilter<$PrismaModel>
     _max?: NestedJsonFilter<$PrismaModel>
+  }
+
+  export type NotificationIntentScalarRelationFilter = {
+    is?: NotificationIntentWhereInput
+    isNot?: NotificationIntentWhereInput
+  }
+
+  export type NotificationDeliveryMetricCountOrderByAggregateInput = {
+    id?: SortOrder
+    intentId?: SortOrder
+    provider?: SortOrder
+    outcome?: SortOrder
+    failureReason?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NotificationDeliveryMetricMaxOrderByAggregateInput = {
+    id?: SortOrder
+    intentId?: SortOrder
+    provider?: SortOrder
+    outcome?: SortOrder
+    failureReason?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NotificationDeliveryMetricMinOrderByAggregateInput = {
+    id?: SortOrder
+    intentId?: SortOrder
+    provider?: SortOrder
+    outcome?: SortOrder
+    failureReason?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type CompanyProfileScalarRelationFilter = {
@@ -34292,6 +35845,62 @@ export namespace Prisma {
     upsert?: NGOProfileUpsertWithoutFinancialReportsInput
     connect?: NGOProfileWhereUniqueInput
     update?: XOR<XOR<NGOProfileUpdateToOneWithWhereWithoutFinancialReportsInput, NGOProfileUpdateWithoutFinancialReportsInput>, NGOProfileUncheckedUpdateWithoutFinancialReportsInput>
+  }
+
+  export type NotificationDeliveryMetricCreateNestedManyWithoutIntentInput = {
+    create?: XOR<NotificationDeliveryMetricCreateWithoutIntentInput, NotificationDeliveryMetricUncheckedCreateWithoutIntentInput> | NotificationDeliveryMetricCreateWithoutIntentInput[] | NotificationDeliveryMetricUncheckedCreateWithoutIntentInput[]
+    connectOrCreate?: NotificationDeliveryMetricCreateOrConnectWithoutIntentInput | NotificationDeliveryMetricCreateOrConnectWithoutIntentInput[]
+    createMany?: NotificationDeliveryMetricCreateManyIntentInputEnvelope
+    connect?: NotificationDeliveryMetricWhereUniqueInput | NotificationDeliveryMetricWhereUniqueInput[]
+  }
+
+  export type NotificationDeliveryMetricUncheckedCreateNestedManyWithoutIntentInput = {
+    create?: XOR<NotificationDeliveryMetricCreateWithoutIntentInput, NotificationDeliveryMetricUncheckedCreateWithoutIntentInput> | NotificationDeliveryMetricCreateWithoutIntentInput[] | NotificationDeliveryMetricUncheckedCreateWithoutIntentInput[]
+    connectOrCreate?: NotificationDeliveryMetricCreateOrConnectWithoutIntentInput | NotificationDeliveryMetricCreateOrConnectWithoutIntentInput[]
+    createMany?: NotificationDeliveryMetricCreateManyIntentInputEnvelope
+    connect?: NotificationDeliveryMetricWhereUniqueInput | NotificationDeliveryMetricWhereUniqueInput[]
+  }
+
+  export type NotificationDeliveryMetricUpdateManyWithoutIntentNestedInput = {
+    create?: XOR<NotificationDeliveryMetricCreateWithoutIntentInput, NotificationDeliveryMetricUncheckedCreateWithoutIntentInput> | NotificationDeliveryMetricCreateWithoutIntentInput[] | NotificationDeliveryMetricUncheckedCreateWithoutIntentInput[]
+    connectOrCreate?: NotificationDeliveryMetricCreateOrConnectWithoutIntentInput | NotificationDeliveryMetricCreateOrConnectWithoutIntentInput[]
+    upsert?: NotificationDeliveryMetricUpsertWithWhereUniqueWithoutIntentInput | NotificationDeliveryMetricUpsertWithWhereUniqueWithoutIntentInput[]
+    createMany?: NotificationDeliveryMetricCreateManyIntentInputEnvelope
+    set?: NotificationDeliveryMetricWhereUniqueInput | NotificationDeliveryMetricWhereUniqueInput[]
+    disconnect?: NotificationDeliveryMetricWhereUniqueInput | NotificationDeliveryMetricWhereUniqueInput[]
+    delete?: NotificationDeliveryMetricWhereUniqueInput | NotificationDeliveryMetricWhereUniqueInput[]
+    connect?: NotificationDeliveryMetricWhereUniqueInput | NotificationDeliveryMetricWhereUniqueInput[]
+    update?: NotificationDeliveryMetricUpdateWithWhereUniqueWithoutIntentInput | NotificationDeliveryMetricUpdateWithWhereUniqueWithoutIntentInput[]
+    updateMany?: NotificationDeliveryMetricUpdateManyWithWhereWithoutIntentInput | NotificationDeliveryMetricUpdateManyWithWhereWithoutIntentInput[]
+    deleteMany?: NotificationDeliveryMetricScalarWhereInput | NotificationDeliveryMetricScalarWhereInput[]
+  }
+
+  export type NotificationDeliveryMetricUncheckedUpdateManyWithoutIntentNestedInput = {
+    create?: XOR<NotificationDeliveryMetricCreateWithoutIntentInput, NotificationDeliveryMetricUncheckedCreateWithoutIntentInput> | NotificationDeliveryMetricCreateWithoutIntentInput[] | NotificationDeliveryMetricUncheckedCreateWithoutIntentInput[]
+    connectOrCreate?: NotificationDeliveryMetricCreateOrConnectWithoutIntentInput | NotificationDeliveryMetricCreateOrConnectWithoutIntentInput[]
+    upsert?: NotificationDeliveryMetricUpsertWithWhereUniqueWithoutIntentInput | NotificationDeliveryMetricUpsertWithWhereUniqueWithoutIntentInput[]
+    createMany?: NotificationDeliveryMetricCreateManyIntentInputEnvelope
+    set?: NotificationDeliveryMetricWhereUniqueInput | NotificationDeliveryMetricWhereUniqueInput[]
+    disconnect?: NotificationDeliveryMetricWhereUniqueInput | NotificationDeliveryMetricWhereUniqueInput[]
+    delete?: NotificationDeliveryMetricWhereUniqueInput | NotificationDeliveryMetricWhereUniqueInput[]
+    connect?: NotificationDeliveryMetricWhereUniqueInput | NotificationDeliveryMetricWhereUniqueInput[]
+    update?: NotificationDeliveryMetricUpdateWithWhereUniqueWithoutIntentInput | NotificationDeliveryMetricUpdateWithWhereUniqueWithoutIntentInput[]
+    updateMany?: NotificationDeliveryMetricUpdateManyWithWhereWithoutIntentInput | NotificationDeliveryMetricUpdateManyWithWhereWithoutIntentInput[]
+    deleteMany?: NotificationDeliveryMetricScalarWhereInput | NotificationDeliveryMetricScalarWhereInput[]
+  }
+
+  export type NotificationIntentCreateNestedOneWithoutMetricsInput = {
+    create?: XOR<NotificationIntentCreateWithoutMetricsInput, NotificationIntentUncheckedCreateWithoutMetricsInput>
+    connectOrCreate?: NotificationIntentCreateOrConnectWithoutMetricsInput
+    connect?: NotificationIntentWhereUniqueInput
+  }
+
+  export type NotificationIntentUpdateOneRequiredWithoutMetricsNestedInput = {
+    create?: XOR<NotificationIntentCreateWithoutMetricsInput, NotificationIntentUncheckedCreateWithoutMetricsInput>
+    connectOrCreate?: NotificationIntentCreateOrConnectWithoutMetricsInput
+    upsert?: NotificationIntentUpsertWithoutMetricsInput
+    connect?: NotificationIntentWhereUniqueInput
+    update?: XOR<XOR<NotificationIntentUpdateToOneWithWhereWithoutMetricsInput, NotificationIntentUpdateWithoutMetricsInput>, NotificationIntentUncheckedUpdateWithoutMetricsInput>
   }
 
   export type CampaignCreateNestedOneWithoutApprovalsInput = {
@@ -38454,6 +40063,120 @@ export namespace Prisma {
     programmeAssignments?: ProgrammeAssignmentUncheckedUpdateManyWithoutNgoNestedInput
   }
 
+  export type NotificationDeliveryMetricCreateWithoutIntentInput = {
+    id?: string
+    provider: string
+    outcome: string
+    failureReason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationDeliveryMetricUncheckedCreateWithoutIntentInput = {
+    id?: string
+    provider: string
+    outcome: string
+    failureReason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationDeliveryMetricCreateOrConnectWithoutIntentInput = {
+    where: NotificationDeliveryMetricWhereUniqueInput
+    create: XOR<NotificationDeliveryMetricCreateWithoutIntentInput, NotificationDeliveryMetricUncheckedCreateWithoutIntentInput>
+  }
+
+  export type NotificationDeliveryMetricCreateManyIntentInputEnvelope = {
+    data: NotificationDeliveryMetricCreateManyIntentInput | NotificationDeliveryMetricCreateManyIntentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type NotificationDeliveryMetricUpsertWithWhereUniqueWithoutIntentInput = {
+    where: NotificationDeliveryMetricWhereUniqueInput
+    update: XOR<NotificationDeliveryMetricUpdateWithoutIntentInput, NotificationDeliveryMetricUncheckedUpdateWithoutIntentInput>
+    create: XOR<NotificationDeliveryMetricCreateWithoutIntentInput, NotificationDeliveryMetricUncheckedCreateWithoutIntentInput>
+  }
+
+  export type NotificationDeliveryMetricUpdateWithWhereUniqueWithoutIntentInput = {
+    where: NotificationDeliveryMetricWhereUniqueInput
+    data: XOR<NotificationDeliveryMetricUpdateWithoutIntentInput, NotificationDeliveryMetricUncheckedUpdateWithoutIntentInput>
+  }
+
+  export type NotificationDeliveryMetricUpdateManyWithWhereWithoutIntentInput = {
+    where: NotificationDeliveryMetricScalarWhereInput
+    data: XOR<NotificationDeliveryMetricUpdateManyMutationInput, NotificationDeliveryMetricUncheckedUpdateManyWithoutIntentInput>
+  }
+
+  export type NotificationDeliveryMetricScalarWhereInput = {
+    AND?: NotificationDeliveryMetricScalarWhereInput | NotificationDeliveryMetricScalarWhereInput[]
+    OR?: NotificationDeliveryMetricScalarWhereInput[]
+    NOT?: NotificationDeliveryMetricScalarWhereInput | NotificationDeliveryMetricScalarWhereInput[]
+    id?: StringFilter<"NotificationDeliveryMetric"> | string
+    intentId?: StringFilter<"NotificationDeliveryMetric"> | string
+    provider?: StringFilter<"NotificationDeliveryMetric"> | string
+    outcome?: StringFilter<"NotificationDeliveryMetric"> | string
+    failureReason?: StringNullableFilter<"NotificationDeliveryMetric"> | string | null
+    createdAt?: DateTimeFilter<"NotificationDeliveryMetric"> | Date | string
+  }
+
+  export type NotificationIntentCreateWithoutMetricsInput = {
+    id?: string
+    channel: string
+    recipient: JsonNullValueInput | InputJsonValue
+    payload: JsonNullValueInput | InputJsonValue
+    status?: string
+    retryCount?: number
+    lastAttemptAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationIntentUncheckedCreateWithoutMetricsInput = {
+    id?: string
+    channel: string
+    recipient: JsonNullValueInput | InputJsonValue
+    payload: JsonNullValueInput | InputJsonValue
+    status?: string
+    retryCount?: number
+    lastAttemptAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationIntentCreateOrConnectWithoutMetricsInput = {
+    where: NotificationIntentWhereUniqueInput
+    create: XOR<NotificationIntentCreateWithoutMetricsInput, NotificationIntentUncheckedCreateWithoutMetricsInput>
+  }
+
+  export type NotificationIntentUpsertWithoutMetricsInput = {
+    update: XOR<NotificationIntentUpdateWithoutMetricsInput, NotificationIntentUncheckedUpdateWithoutMetricsInput>
+    create: XOR<NotificationIntentCreateWithoutMetricsInput, NotificationIntentUncheckedCreateWithoutMetricsInput>
+    where?: NotificationIntentWhereInput
+  }
+
+  export type NotificationIntentUpdateToOneWithWhereWithoutMetricsInput = {
+    where?: NotificationIntentWhereInput
+    data: XOR<NotificationIntentUpdateWithoutMetricsInput, NotificationIntentUncheckedUpdateWithoutMetricsInput>
+  }
+
+  export type NotificationIntentUpdateWithoutMetricsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channel?: StringFieldUpdateOperationsInput | string
+    recipient?: JsonNullValueInput | InputJsonValue
+    payload?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    retryCount?: IntFieldUpdateOperationsInput | number
+    lastAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationIntentUncheckedUpdateWithoutMetricsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    channel?: StringFieldUpdateOperationsInput | string
+    recipient?: JsonNullValueInput | InputJsonValue
+    payload?: JsonNullValueInput | InputJsonValue
+    status?: StringFieldUpdateOperationsInput | string
+    retryCount?: IntFieldUpdateOperationsInput | number
+    lastAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CampaignCreateWithoutApprovalsInput = {
     id?: string
     title: string
@@ -42013,6 +43736,38 @@ export namespace Prisma {
     campaignId?: NullableStringFieldUpdateOperationsInput | string | null
     action?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationDeliveryMetricCreateManyIntentInput = {
+    id?: string
+    provider: string
+    outcome: string
+    failureReason?: string | null
+    createdAt?: Date | string
+  }
+
+  export type NotificationDeliveryMetricUpdateWithoutIntentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationDeliveryMetricUncheckedUpdateWithoutIntentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationDeliveryMetricUncheckedUpdateManyWithoutIntentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

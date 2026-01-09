@@ -179,12 +179,29 @@ model FinancialReport {
 }
 
 model NotificationIntent {
-  id        String   @id @default(uuid())
-  channel   String
-  recipient Json
-  payload   Json
-  status    String   @default("PENDING")
-  createdAt DateTime @default(now())
+  id            String    @id @default(uuid())
+  channel       String
+  recipient     Json
+  payload       Json
+  status        String    @default("PENDING")
+  retryCount    Int       @default(0)
+  lastAttemptAt DateTime?
+  createdAt     DateTime  @default(now())
+
+  metrics NotificationDeliveryMetric[]
+}
+
+model NotificationDeliveryMetric {
+  id            String   @id @default(uuid())
+  intentId      String
+  provider      String
+  outcome       String
+  failureReason String?
+  createdAt     DateTime @default(now())
+
+  intent NotificationIntent @relation(fields: [intentId], references: [id], onDelete: Cascade)
+
+  @@index([intentId])
 }
 
 model CampaignApproval {

@@ -1,5 +1,9 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { NotificationIntent, NOTIFICATION_PROVIDER } from './notification.types';
+import {
+  NotificationIntent,
+  NotificationDeliveryOutcome,
+  NOTIFICATION_PROVIDER,
+} from './notification.types';
 import type { NotificationProvider } from './notification.types';
 import { NotificationRepository } from './notification.repository';
 
@@ -13,6 +17,10 @@ interface ProcessResult {
 export class NotificationProcessor {
   private readonly logger = new Logger(NotificationProcessor.name);
 
+  // Retry policy (no automated retries yet):
+  // - statuses eligible for future retries: PENDING, FAILED (SENT is terminal)
+  // - maximum retry attempts: 5 (enforced by future schedulers/workers)
+  // These rules are documented here for visibility only; current behaviour remains one-shot delivery.
   constructor(
     private readonly repository: NotificationRepository,
     @Inject(NOTIFICATION_PROVIDER)
@@ -24,14 +32,25 @@ export class NotificationProcessor {
     const results: ProcessResult[] = [];
 
     for (const intent of intents) {
+      this.logger.log(
+        `Delivery attempt started for intent ${intent.id} (channel=${intent.channel}, retryCount=${intent.retryCount})`,
+      );
+
       try {
         await this.provider.send(intent);
         await this.repository.markSent(intent.id);
+        await this.safeRecordMetric(intent.id, 'success');
+        this.logger.log(`Delivery success for intent ${intent.id}`);
         results.push({ intent, outcome: 'sent' });
       } catch (error) {
         await this.repository.markFailed(intent.id);
+        await this.safeRecordMetric(
+          intent.id,
+          'failure',
+          error instanceof Error ? error.message : 'unknown error',
+        );
         this.logger.warn(
-          `Notification intent ${intent.id} failed: ${
+          `Delivery failure for intent ${intent.id}: ${
             error instanceof Error ? error.message : 'unknown error'
           }`,
         );
@@ -40,5 +59,26 @@ export class NotificationProcessor {
     }
 
     return results;
+  }
+
+  private async safeRecordMetric(
+    intentId: string,
+    outcome: NotificationDeliveryOutcome,
+    failureReason?: string,
+  ): Promise<void> {
+    try {
+      await this.repository.recordMetric(
+        intentId,
+        this.provider.constructor.name,
+        outcome,
+        failureReason,
+      );
+    } catch (err) {
+      const warning =
+        err instanceof Error ? err.message : 'unknown metric persistence error';
+      this.logger.warn(
+        `Metric persistence failed for intent ${intentId}: ${warning}`,
+      );
+    }
   }
 }

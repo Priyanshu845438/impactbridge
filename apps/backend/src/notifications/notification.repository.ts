@@ -6,6 +6,8 @@ import {
   NotificationIntent,
   NotificationIntentCreate,
   NotificationIntentStatus,
+  NotificationDeliveryMetric,
+  NotificationDeliveryOutcome,
   NotificationPayload,
   NotificationRecipient,
 } from './notification.types';
@@ -39,6 +41,8 @@ const toIntent = (value: {
   payload: Prisma.JsonValue;
   status: string;
   createdAt: Date;
+  retryCount: number;
+  lastAttemptAt: Date | null;
 }): NotificationIntent => ({
   id: value.id,
   channel: toChannel(value.channel),
@@ -46,6 +50,8 @@ const toIntent = (value: {
   payload: toPayload(value.payload),
   status: toStatus(value.status),
   createdAt: value.createdAt,
+  retryCount: value.retryCount,
+  lastAttemptAt: value.lastAttemptAt,
 });
 
 @Injectable()
@@ -61,6 +67,8 @@ export class NotificationRepository {
         recipient: toJsonValue(data.recipient),
         payload: toJsonValue(data.payload),
         status: DEFAULT_STATUS,
+        retryCount: 0,
+        lastAttemptAt: null,
       },
     });
 
@@ -80,14 +88,47 @@ export class NotificationRepository {
   async markSent(id: string): Promise<void> {
     await this.prisma.notificationIntent.update({
       where: { id },
-      data: { status: SENT_STATUS },
+      data: {
+        status: SENT_STATUS,
+        retryCount: { increment: 1 },
+        lastAttemptAt: new Date(),
+      },
     });
   }
 
   async markFailed(id: string): Promise<void> {
     await this.prisma.notificationIntent.update({
       where: { id },
-      data: { status: FAILED_STATUS },
+      data: {
+        status: FAILED_STATUS,
+        retryCount: { increment: 1 },
+        lastAttemptAt: new Date(),
+      },
     });
+  }
+
+  async recordMetric(
+    intentId: string,
+    provider: string,
+    outcome: NotificationDeliveryOutcome,
+    failureReason?: string,
+  ): Promise<NotificationDeliveryMetric> {
+    const created = await this.prisma.notificationDeliveryMetric.create({
+      data: {
+        intentId,
+        provider,
+        outcome,
+        failureReason,
+      },
+    });
+
+    return {
+      id: created.id,
+      intentId: created.intentId,
+      provider: created.provider,
+      outcome: created.outcome as NotificationDeliveryOutcome,
+      failureReason: created.failureReason,
+      createdAt: created.createdAt,
+    };
   }
 }

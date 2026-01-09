@@ -2,6 +2,8 @@ export type NotificationChannel = 'email' | 'sms';
 
 export type NotificationIntentStatus = 'PENDING' | 'SENT' | 'FAILED';
 
+export type NotificationDeliveryOutcome = 'success' | 'failure';
+
 export interface NotificationRecipient {
   email?: string;
   phone?: string;
@@ -23,6 +25,17 @@ export interface NotificationIntentCreate {
 export interface NotificationIntent extends NotificationIntentCreate {
   id: string;
   status: NotificationIntentStatus;
+  createdAt: Date;
+  retryCount: number;
+  lastAttemptAt: Date | null;
+}
+
+export interface NotificationDeliveryMetric {
+  id: string;
+  intentId: string;
+  provider: string;
+  outcome: NotificationDeliveryOutcome;
+  failureReason?: string | null;
   createdAt: Date;
 }
 

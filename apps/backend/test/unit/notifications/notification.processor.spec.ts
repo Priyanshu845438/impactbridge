@@ -11,6 +11,7 @@ class MockNotificationRepository {
   public findPending = jest.fn<Promise<NotificationIntent[]>, []>();
   public markSent = jest.fn<Promise<void>, [string]>();
   public markFailed = jest.fn<Promise<void>, [string]>();
+  public recordMetric = jest.fn<Promise<void>, [string, string, string, string?]>();
 }
 
 class MockNotificationProvider implements NotificationProvider {
@@ -67,6 +68,13 @@ describe('NotificationProcessor', () => {
     expect(repository.markSent).toHaveBeenCalledWith('intent-1');
     expect(repository.markSent).toHaveBeenCalledWith('intent-2');
     expect(repository.markFailed).not.toHaveBeenCalled();
+    expect(repository.recordMetric).toHaveBeenCalledTimes(2);
+    expect(repository.recordMetric).toHaveBeenCalledWith(
+      'intent-1',
+      'MockNotificationProvider',
+      'success',
+      undefined,
+    );
     expect(results).toHaveLength(2);
     expect(results.map((r) => r.outcome)).toEqual(['sent', 'sent']);
   });
@@ -97,6 +105,12 @@ describe('NotificationProcessor', () => {
 
     expect(repository.markSent).not.toHaveBeenCalled();
     expect(repository.markFailed).toHaveBeenCalledWith('intent-failed');
+    expect(repository.recordMetric).toHaveBeenCalledWith(
+      'intent-failed',
+      'MockNotificationProvider',
+      'failure',
+      expect.stringContaining('failed-intent-failed'),
+    );
     expect(results).toHaveLength(1);
     expect(results[0].outcome).toBe('failed');
   });
