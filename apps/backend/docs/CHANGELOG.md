@@ -21,3 +21,6 @@
 - **2026-01-05** — Applied explicit JwtAuthGuard + RolesGuard (COMPANY) to all CSR programme controller routes and added guard coverage tests; no response changes.
 
 - **2026-01-07** — Documented frontend CSR assignment/status feature-flag usage; backend CSR endpoints unchanged but verified by existing contract tests.
+
+## Notifications
+- Added safe delivery processing for notification intents with status updates on success/failure.

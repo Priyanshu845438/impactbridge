@@ -130,3 +130,8 @@
 
 29. CSR Programme negative-path tests
 - Added ownership, not-found, and validation coverage to CSR route contracts without altering behaviour.
+
+15. Notifications Safe Delivery Processor Added
+- Implemented `NotificationProcessor` with repository helpers to send pending intents via the existing provider and update status to SENT/FAILED.
+- Extended repository and service tests to cover pending retrieval, status transitions, and flush delegation without altering enqueue behaviour.
+- Backend build and notifications test suites rerun to confirm no regressions while enabling controlled delivery.

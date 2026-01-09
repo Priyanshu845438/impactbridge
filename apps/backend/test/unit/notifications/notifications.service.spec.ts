@@ -6,6 +6,7 @@ import {
   NotificationProvider,
 } from '../../../src/notifications/notification.types';
 import { NotificationRepository } from '../../../src/notifications/notification.repository';
+import { NotificationProcessor } from '../../../src/notifications/notification.processor';
 
 class MockNotificationProvider implements NotificationProvider {
   public lastIntent: NotificationIntent | null = null;
@@ -24,10 +25,12 @@ describe('NotificationsService', () => {
   let service: NotificationsService;
   let provider: MockNotificationProvider;
   let repository: MockNotificationRepository;
+  let processor: NotificationProcessor;
 
   beforeEach(async () => {
     provider = new MockNotificationProvider();
     repository = new MockNotificationRepository();
+    processor = { processBatch: jest.fn() } as unknown as NotificationProcessor;
 
     const moduleRef = await Test.createTestingModule({
       providers: [
@@ -40,22 +43,28 @@ describe('NotificationsService', () => {
           provide: NotificationRepository,
           useValue: repository,
         },
+        {
+          provide: NotificationProcessor,
+          useValue: processor,
+        },
       ],
     }).compile();
 
     service = moduleRef.get(NotificationsService);
   });
 
+  const buildIntent = (overrides: Partial<NotificationIntent> = {}): NotificationIntent => ({
+    id: 'intent-1',
+    channel: 'email',
+    recipient: { email: 'user@example.com' },
+    payload: { body: 'Hello' },
+    status: 'PENDING',
+    createdAt: new Date(),
+    ...overrides,
+  });
+
   it('persists intent then delegates to provider', async () => {
-    const now = new Date();
-    const storedIntent: NotificationIntent = {
-      id: 'intent-1',
-      channel: 'email',
-      recipient: { email: 'user@example.com' },
-      payload: { body: 'Hello' },
-      status: 'PENDING',
-      createdAt: now,
-    };
+    const storedIntent = buildIntent();
 
     repository.createIntent.mockResolvedValue(storedIntent);
 
@@ -72,5 +81,14 @@ describe('NotificationsService', () => {
     });
     expect(provider.lastIntent).toEqual(storedIntent);
     expect(intent).toEqual(storedIntent);
+  });
+
+  it('delegates delivery to processor when flush requested', async () => {
+    await service.deliverPending();
+
+    expect(processor.processBatch).toHaveBeenCalledWith(undefined);
+
+    await service.deliverPending(10);
+    expect(processor.processBatch).toHaveBeenLastCalledWith(10);
   });
 });

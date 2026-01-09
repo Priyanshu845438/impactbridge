@@ -6,6 +6,8 @@ import { PrismaService } from '../../../src/prisma/prisma.service';
 class MockPrismaService {
   public notificationIntent = {
     create: jest.fn(),
+    findMany: jest.fn(),
+    update: jest.fn(),
   };
 }
 
@@ -68,6 +70,60 @@ describe('NotificationRepository', () => {
       payload: { body: 'Hello' },
       status: 'PENDING',
       createdAt: now,
+    });
+  });
+
+  it('returns pending intents ordered by createdAt', async () => {
+    const now = new Date();
+    prisma.notificationIntent.findMany.mockResolvedValue([
+      {
+        id: 'intent-b',
+        channel: 'email',
+        recipient: { email: 'b@example.com' },
+        payload: { body: 'B' },
+        status: 'PENDING',
+        createdAt: now,
+      },
+    ]);
+
+    const result = await repository.findPending(5);
+
+    expect(prisma.notificationIntent.findMany).toHaveBeenCalledWith({
+      where: { status: 'PENDING' },
+      orderBy: { createdAt: 'asc' },
+      take: 5,
+    });
+    expect(result).toEqual([
+      {
+        id: 'intent-b',
+        channel: 'email',
+        recipient: { email: 'b@example.com' },
+        payload: { body: 'B' },
+        status: 'PENDING',
+        createdAt: now,
+      },
+    ]);
+  });
+
+  it('marks intents as sent', async () => {
+    prisma.notificationIntent.update.mockResolvedValue(undefined);
+
+    await repository.markSent('intent-1');
+
+    expect(prisma.notificationIntent.update).toHaveBeenCalledWith({
+      where: { id: 'intent-1' },
+      data: { status: 'SENT' },
+    });
+  });
+
+  it('marks intents as failed', async () => {
+    prisma.notificationIntent.update.mockResolvedValue(undefined);
+
+    await repository.markFailed('intent-2');
+
+    expect(prisma.notificationIntent.update).toHaveBeenCalledWith({
+      where: { id: 'intent-2' },
+      data: { status: 'FAILED' },
     });
   });
 });

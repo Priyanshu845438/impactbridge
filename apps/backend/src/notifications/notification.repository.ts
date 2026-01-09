@@ -11,6 +11,11 @@ import {
 } from './notification.types';
 
 const DEFAULT_STATUS: NotificationIntentStatus = 'PENDING';
+const PENDING_STATUS: NotificationIntentStatus = 'PENDING';
+const SENT_STATUS: NotificationIntentStatus = 'SENT';
+const FAILED_STATUS: NotificationIntentStatus = 'FAILED';
+
+const DEFAULT_PENDING_LIMIT = 25;
 
 const toJsonValue = (value: unknown): Prisma.InputJsonValue =>
   value as Prisma.InputJsonValue;
@@ -26,6 +31,22 @@ const toChannel = (value: string): NotificationChannel =>
 
 const toStatus = (value: string): NotificationIntentStatus =>
   value as NotificationIntentStatus;
+
+const toIntent = (value: {
+  id: string;
+  channel: string;
+  recipient: Prisma.JsonValue;
+  payload: Prisma.JsonValue;
+  status: string;
+  createdAt: Date;
+}): NotificationIntent => ({
+  id: value.id,
+  channel: toChannel(value.channel),
+  recipient: toRecipient(value.recipient),
+  payload: toPayload(value.payload),
+  status: toStatus(value.status),
+  createdAt: value.createdAt,
+});
 
 @Injectable()
 export class NotificationRepository {
@@ -43,13 +64,30 @@ export class NotificationRepository {
       },
     });
 
-    return {
-      id: created.id,
-      channel: toChannel(created.channel),
-      recipient: toRecipient(created.recipient),
-      payload: toPayload(created.payload),
-      status: toStatus(created.status),
-      createdAt: created.createdAt,
-    };
+    return toIntent(created);
+  }
+
+  async findPending(limit = DEFAULT_PENDING_LIMIT): Promise<NotificationIntent[]> {
+    const rows = await this.prisma.notificationIntent.findMany({
+      where: { status: PENDING_STATUS },
+      orderBy: { createdAt: 'asc' },
+      take: limit,
+    });
+
+    return rows.map(toIntent);
+  }
+
+  async markSent(id: string): Promise<void> {
+    await this.prisma.notificationIntent.update({
+      where: { id },
+      data: { status: SENT_STATUS },
+    });
+  }
+
+  async markFailed(id: string): Promise<void> {
+    await this.prisma.notificationIntent.update({
+      where: { id },
+      data: { status: FAILED_STATUS },
+    });
   }
 }
