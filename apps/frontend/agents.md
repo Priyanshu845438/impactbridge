@@ -106,3 +106,4 @@
 - Connected the admin donations screen to `GET /donations/admin/all` via a new React Query hook while preserving mock fallback under `API_DASHBOARD`.
 - Added `dashboard-admin-donations.test.tsx` smoke coverage to confirm live data renders without altering existing UX.
 - Validated the path with `npm run test -- dashboard-admin-donations.test.tsx` and ensured no other surfaces were affected.
+
