@@ -21,6 +21,12 @@ export interface ApprovalAggregationFilter {
   ngoId?: string;
 }
 
+export interface FinancialReportOverview {
+  totalReports: number;
+  ngoCount: number;
+  latestSubmittedAt: Date | null;
+}
+
 @Injectable()
 export class AnalyticsAggregationService {
   constructor(private readonly prisma: PrismaService) {}
@@ -140,6 +146,26 @@ export class AnalyticsAggregationService {
     return {
       totalApprovals: total,
       byStatus,
+    };
+  }
+
+  async getFinancialReportOverview(): Promise<FinancialReportOverview> {
+    const [totalReports, groupedByNgo, latest] = await Promise.all([
+      this.prisma.financialReport.count(),
+      this.prisma.financialReport.groupBy({
+        by: ['ngoId'],
+        _count: { ngoId: true },
+      }),
+      this.prisma.financialReport.findFirst({
+        orderBy: { createdAt: 'desc' },
+        select: { createdAt: true },
+      }),
+    ]);
+
+    return {
+      totalReports,
+      ngoCount: groupedByNgo.length,
+      latestSubmittedAt: latest?.createdAt ?? null,
     };
   }
 

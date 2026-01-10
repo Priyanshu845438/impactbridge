@@ -138,4 +138,53 @@ describe('AnalyticsAggregationService', () => {
       });
     });
   });
+
+  describe('getFinancialReportOverview', () => {
+    it('aggregates totals and latest submission date', async () => {
+      const now = new Date('2025-02-18T10:00:00Z');
+
+      prisma.financialReport = {
+        count: jest.fn().mockResolvedValue(42),
+        groupBy: jest.fn().mockResolvedValue([
+          { ngoId: 'ngo-1', _count: { ngoId: 3 } },
+          { ngoId: 'ngo-2', _count: { ngoId: 2 } },
+        ]),
+        findFirst: jest.fn().mockResolvedValue({ createdAt: now }),
+      } as any;
+
+      const result = await service.getFinancialReportOverview();
+
+      expect(result).toEqual({
+        totalReports: 42,
+        ngoCount: 2,
+        latestSubmittedAt: now,
+      });
+
+      expect(prisma.financialReport.count).toHaveBeenCalledWith();
+      expect(prisma.financialReport.groupBy).toHaveBeenCalledWith({
+        by: ['ngoId'],
+        _count: { ngoId: true },
+      });
+      expect(prisma.financialReport.findFirst).toHaveBeenCalledWith({
+        orderBy: { createdAt: 'desc' },
+        select: { createdAt: true },
+      });
+    });
+
+    it('handles empty dataset gracefully', async () => {
+      prisma.financialReport = {
+        count: jest.fn().mockResolvedValue(0),
+        groupBy: jest.fn().mockResolvedValue([]),
+        findFirst: jest.fn().mockResolvedValue(null),
+      } as any;
+
+      const result = await service.getFinancialReportOverview();
+
+      expect(result).toEqual({
+        totalReports: 0,
+        ngoCount: 0,
+        latestSubmittedAt: null,
+      });
+    });
+  });
 });

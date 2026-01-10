@@ -51,7 +51,7 @@ _All findings are observational; no code was modified during this audit. Items a
 - **Approvals** — 🟡 Working (state transitions, notification intents, audit logs). _Pending_: guard integration tests across company/NGO roles, CSR linkage for downstream analytics, and transactional wrapping when notifications + approvals fire together.
 - **CSR Programme** — ✅ Stable (service/controller aligned with shared DTOs, company scoping, audit logging). _Pending_: rebuild legacy `/api/v1` e2e fixtures, monitor frontend parity before default API rollout, and extend analytics aggregation with programme KPIs.
 - **Financial** — 🟡 Working (upload + NGO list endpoints, duplicate prevention, DTO validation). _Pending_: wire admin analytics/list endpoints into dashboards, reconcile reports with donations, and add end-to-end tests covering NGO → admin flows. Backend admin listing verified for stability.
-- **Analytics** — 🟡 Working (donation/programme/approval aggregations). _Pending_: expose financial KPIs, add company/NGO scoped filters, cache expensive queries, and document operational guardrails.
+- **Analytics** — 🟡 Working (donation/programme/approval aggregations plus financial report overview). _Pending_: expose richer KPIs, add company/NGO scoped filters, cache expensive queries, and document operational guardrails.
 - **Notifications** — 🟢 Complete (intent storage, safe delivery processor, metrics, automated retries). _Pending_: provider dashboards, SLA monitoring hooks, and long-term worker orchestration.
 - **Activity / Audit Logging** — 🟢 Complete (CSR, approvals, financial flows emit actor-scoped entries). _Pending_: ensure future modules register logs and surface reporting UI.
 

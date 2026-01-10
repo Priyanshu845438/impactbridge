@@ -161,3 +161,6 @@
 ### **28. Financial Admin Endpoint Validated**
 - Reviewed `/financial/admin/all` responses ensuring NGO contacts included and ordering stable.
 - Added unit coverage for admin listings (no behaviour change, access guards intact).
+### **29. Financial Analytics Overview Ready**
+- Extended analytics aggregation with existing financial report totals (count, NGO coverage, latest submission).
+- Added unit tests to ensure stable responses; no UI or behaviour changes.
