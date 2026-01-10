@@ -158,3 +158,6 @@
 - Financial report upload DTO now enforces period/year/url constraints with unit tests.
 - No endpoint behaviour changes; invalid payloads fail early under existing validation pipe.
 
+### **28. Financial Admin Endpoint Validated**
+- Reviewed `/financial/admin/all` responses ensuring NGO contacts included and ordering stable.
+- Added unit coverage for admin listings (no behaviour change, access guards intact).

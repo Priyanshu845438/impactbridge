@@ -165,4 +165,24 @@ describe('FinancialService', () => {
       });
     });
   });
+
+  describe('getReportsForAdmin', () => {
+    it('returns all reports with NGO contact info ordered by newest first', async () => {
+      prisma.financialReport.findMany.mockResolvedValue([report] as any);
+
+      const result = await service.getReportsForAdmin();
+
+      expect(result).toEqual([report]);
+      expect(prisma.financialReport.findMany).toHaveBeenCalledWith({
+        include: {
+          ngo: {
+            include: {
+              user: { select: { id: true, name: true, email: true } },
+            },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+      });
+    });
+  });
 });

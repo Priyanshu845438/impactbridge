@@ -2,6 +2,11 @@
 
 _All findings are observational; no code was modified during this audit. Items are grouped by scope with each task captured as an individual, detailed point._
 
+### Recommended Implementation Order
+1. Financial module & Admin analytics wiring (backend + frontend) to unlock real financial visibility for admins.
+2. CSR Programme frontend parity (page-level tests + enabling API flag safely) to align UI with stable backend.
+3. Testing & CI infrastructure to add cross-app integration/e2e coverage and keep regressions out.
+
 ## 1. apps/__tests__
 1. Jest, RTL, and Nest unit suites exist per app, but there are still **no cross-application integration tests** that exercise real HTTP controllers, shared DTOs, and Prisma together; regressions can hide when contracts drift between backend and frontend.
 2. Vitest-based mocks in the frontend rely on global fetch overrides without scoped reset helpers, so state leakage can occur when new suites are added or run in parallel.
@@ -41,27 +46,28 @@ _All findings are observational; no code was modified during this audit. Items a
 ## Role-Wise Module Status
 
 ### Backend
-- **Auth** — ✅ Complete (JWT login/register, guards active); _pending_: refresh tokens & password recovery flows.
-- **Users** — ✅ Complete (CRUD + RBAC); _pending_: soft-delete restoration endpoints and scoped pagination filters.
-- **Approvals** — 🟡 In Progress (workflow + notifications queued); _pending_: RBAC integration tests, CSR linkage, approval → audit analytics integration.
-- **CSR Programme** — ✅ Complete (service + controller, guards, DTO alignment, audit logging, and integration tests); monitor frontend parity and legacy e2e fixtures before enabling APIs by default.
-- **Financial** — 🟡 In Progress (upload/list APIs with hardened DTO validation); _pending_: admin analytics wiring, reconciliation with donations, comprehensive integration tests, and parity with frontend dashboards.
-- **Analytics** — 🟡 In Progress (aggregation service live); _pending_: financial KPIs, caching/backoff, company/NGO scoping, dashboard wiring.
-- **Notifications** — 🟢 Complete (delivery processor + retries with metrics); _pending_: provider dashboards, SLA monitoring, long-term worker orchestration.
-- **Activity/Audit Logging** — 🟢 Complete (CSR, approvals, financial flows verified to emit single, actor-scoped entries); continue to enforce on new modules.
+- **Auth** — ✅ Stable (JWT register/login, guards, hashing utilities). _Pending_: refresh-token rotation, password recovery flows, and multi-factor support once product scope finalises.
+- **Users** — ✅ Stable (CRUD, RBAC endpoints, profile services). _Pending_: soft-delete restore endpoints, scoped pagination filters, and admin export tooling.
+- **Approvals** — 🟡 Working (state transitions, notification intents, audit logs). _Pending_: guard integration tests across company/NGO roles, CSR linkage for downstream analytics, and transactional wrapping when notifications + approvals fire together.
+- **CSR Programme** — ✅ Stable (service/controller aligned with shared DTOs, company scoping, audit logging). _Pending_: rebuild legacy `/api/v1` e2e fixtures, monitor frontend parity before default API rollout, and extend analytics aggregation with programme KPIs.
+- **Financial** — 🟡 Working (upload + NGO list endpoints, duplicate prevention, DTO validation). _Pending_: wire admin analytics/list endpoints into dashboards, reconcile reports with donations, and add end-to-end tests covering NGO → admin flows. Backend admin listing verified for stability.
+- **Analytics** — 🟡 Working (donation/programme/approval aggregations). _Pending_: expose financial KPIs, add company/NGO scoped filters, cache expensive queries, and document operational guardrails.
+- **Notifications** — 🟢 Complete (intent storage, safe delivery processor, metrics, automated retries). _Pending_: provider dashboards, SLA monitoring hooks, and long-term worker orchestration.
+- **Activity / Audit Logging** — 🟢 Complete (CSR, approvals, financial flows emit actor-scoped entries). _Pending_: ensure future modules register logs and surface reporting UI.
 
 ### Frontend
-- **Auth Experience** — 🟡 In Progress (mock flows, guards); _pending_: real backend integration, token refresh handling, protected route SSR checks.
-- **Company Dashboard** — 🟡 In Progress (mock widgets); _pending_: wire analytics + CSR counts via React Query, feature flag validation, performance tuning under API mode.
-- **NGO Dashboard** — 🟡 In Progress (mock financial/impact sections); _pending_: API wiring, accessibility review, empty/error state handling when backend responds with no data.
-- **Admin Dashboard** — 🟡 In Progress (analytics placeholders); _pending_: connect to backend analytics + financial endpoints, add smoke tests, restore helper utilities.
-- **Approvals UI** — 🟠 Incomplete (prototype only); _pending_: backend wiring, real-time updates, form validation, audit log surfacing.
-- **CSR Programme UI** — 🟠 Incomplete (feature-flagged mocks + selective API hooks); _pending_: production API rollout, RBAC validation, pagination parity, status/assignment page-level tests, and e2e validation before enabling default API mode.
+- **Auth Experience** — 🟡 Working (mock flows with guards). _Pending_: real backend auth integration, token refresh, protected route SSR validation.
+- **Company Dashboard** — 🟡 Working (mock widgets + CSR hooks). _Pending_: enable API-backed analytics, confirm feature flag parity, add page-level tests for API mode, and optimise loading states.
+- **NGO Dashboard** — 🟡 Working (financial/impact sections mocked). _Pending_: consume real financial endpoints, accessibility audit for tables/forms, and error handling for empty states.
+- **Admin Dashboard** — 🟡 Working (analytics placeholders). _Pending_: wire donation/programme/financial metrics to backend aggregations, replace hard-coded cards, add smoke tests for flag-on mode, and restore helper utilities currently stubbed.
+- **Approvals UI** — 🟠 Prototype (static cards). _Pending_: hook into real approval APIs, add form validation and optimistic updates, surface audit trail.
+- **CSR Programme UI** — 🟠 Prototype (feature-flagged API hooks with mock fallbacks). _Pending_: page-level RTL parity for edit/status/assignment flows, e2e validation, RBAC guard checks, and pagination parity before flag default-on.
+- **Notifications UI** — 🔴 Missing (only unread count placeholder). _Pending_: render intent statuses, subscribe to real-time updates, align with backend metrics.
 
 ### Shared / Infrastructure
-- **API Contracts** — 🟡 In Progress (core CSR DTOs available); _pending_: add campaign/donation/financial/analytics contracts, automate releases, strengthen tests.
-- **Testing/CI** — 🟠 Incomplete (per-app pipelines exist but lack cross-app integration, coverage gates, or visual regression enforcement).
-- **Observability** — 🟡 In Progress (structured logs + activity logs); _pending_: analytics dashboards, notification metrics surfaces, financial reconciliation reports.
+- **API Contracts** — 🟡 Working (core CSR DTOs published). _Pending_: add campaign/donation/financial/analytics DTOs, automate releases, strengthen runtime validation.
+- **Testing & CI** — 🟠 Prototype (per-app suites, no cross-app coverage). _Pending_: integration/e2e pipelines, coverage gates, visual regression, and doc-sync checks.
+- **Observability & Docs** — 🟡 Working (structured logs, ops guides). _Pending_: analytics dashboards, notification metric summaries, financial reconciliation playbooks, and automated doc validation.
 
 ---
 _Update this document whenever items are closed or new findings emerge to maintain alignment across teams._
