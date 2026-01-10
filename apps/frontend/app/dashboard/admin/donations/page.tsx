@@ -6,7 +6,7 @@ import {
   CreditCard,
   Download,
   Filter,
-    Search,
+  Search,
   TicketCheck,
 } from "lucide-react";
 
@@ -33,10 +33,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const paymentStatus = ["Success", "Pending", "Failed"] as const;
-const paymentModes = ["UPI", "Card", "Bank"] as const;
+import { useAdminDonations, type AdminDonationTableRecord } from "@/lib/hooks/use-admin-donations";
+import { isFeatureEnabled } from "@/lib/feature-flags";
 
-const donationRecords = [
+const paymentStatus = ["Success", "Pending", "Failed"] as const;
+const paymentModes = ["UPI", "Card", "Bank", "Domestic", "Foreign", "Public form", "Unknown"] as const;
+
+const unique = (values: ReadonlyArray<string | undefined | null>) =>
+  Array.from(
+    new Set(
+      values.filter((value): value is string => typeof value === "string" && value.trim().length > 0),
+    ),
+  ).sort((first, second) => first.localeCompare(second));
+
+const mockDonationRecords: readonly AdminDonationTableRecord[] = [
   {
     id: "txn-5012",
     donor: "Aarav Mehta",
@@ -44,8 +54,8 @@ const donationRecords = [
     entity: "Urban Shelter Expansion",
     entityType: "Campaign",
     amount: "₹1,50,000",
-    mode: "UPI" as const,
-    status: "Success" as const,
+    mode: "UPI",
+    status: "Success",
     ngo: "City Shelter Trust",
     company: "Zdxy Pvt Ltd",
     date: "24 Jan 2025",
@@ -57,8 +67,8 @@ const donationRecords = [
     entity: "Swasthya Seva Foundation",
     entityType: "NGO",
     amount: "₹1,25,000",
-    mode: "Card" as const,
-    status: "Success" as const,
+    mode: "Card",
+    status: "Success",
     ngo: "Swasthya Seva Foundation",
     company: "Zdxy Pvt Ltd",
     date: "12 Feb 2025",
@@ -70,8 +80,8 @@ const donationRecords = [
     entity: "Clean Water Initiative",
     entityType: "Campaign",
     amount: "₹85,000",
-    mode: "Bank" as const,
-    status: "Pending" as const,
+    mode: "Bank",
+    status: "Pending",
     ngo: "Blue River Welfare",
     company: "Axis CSR Trust",
     date: "03 Feb 2025",
@@ -83,8 +93,8 @@ const donationRecords = [
     entity: "Green Earth Alliance",
     entityType: "NGO",
     amount: "₹2,40,000",
-    mode: "Card" as const,
-    status: "Success" as const,
+    mode: "Card",
+    status: "Success",
     ngo: "Green Earth Alliance",
     company: "Axis CSR Trust",
     date: "28 Jan 2025",
@@ -96,8 +106,8 @@ const donationRecords = [
     entity: "Rural Health Camps",
     entityType: "Campaign",
     amount: "₹95,000",
-    mode: "UPI" as const,
-    status: "Failed" as const,
+    mode: "UPI",
+    status: "Failed",
     ngo: "HealthReach Foundation",
     company: "Zdxy Pvt Ltd",
     date: "25 Jan 2025",
@@ -109,17 +119,34 @@ const donationRecords = [
     entity: "Swasthya Seva Foundation",
     entityType: "NGO",
     amount: "₹65,000",
-    mode: "Bank" as const,
-    status: "Success" as const,
+    mode: "Bank",
+    status: "Success",
     ngo: "Swasthya Seva Foundation",
     company: "Zdxy Pvt Ltd",
     date: "18 Jan 2025",
   },
+];
+
+const mockDonors = [
+  "All",
+  "Aarav Mehta",
+  "Ishita Sharma",
+  "Rahul Banerjee",
+  "Nikita Rao",
+  "Devansh Khanna",
+  "Anjali Deshmukh",
 ] as const;
 
-const donors = ["All", "Aarav Mehta", "Ishita Sharma", "Rahul Banerjee", "Nikita Rao", "Devansh Khanna", "Anjali Deshmukh"] as const;
-const ngos = ["All", "City Shelter Trust", "Swasthya Seva Foundation", "Blue River Welfare", "Green Earth Alliance", "HealthReach Foundation"] as const;
-const companies = ["All", "Zdxy Pvt Ltd", "Axis CSR Trust", "NorthBridge CSR"] as const;
+const mockNgos = [
+  "All",
+  "City Shelter Trust",
+  "Swasthya Seva Foundation",
+  "Blue River Welfare",
+  "Green Earth Alliance",
+  "HealthReach Foundation",
+] as const;
+
+const mockCompanies = ["All", "Zdxy Pvt Ltd", "Axis CSR Trust", "NorthBridge CSR"] as const;
 
 const perPage = 5;
 
@@ -127,13 +154,22 @@ export default function DonationHistoryPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<(typeof paymentStatus)[number] | "All">("All");
   const [modeFilter, setModeFilter] = useState<(typeof paymentModes)[number] | "All">("All");
-  const [donorFilter, setDonorFilter] = useState<(typeof donors)[number]>("All");
-  const [ngoFilter, setNgoFilter] = useState<(typeof ngos)[number]>("All");
-  const [companyFilter, setCompanyFilter] = useState<(typeof companies)[number]>("All");
+  const [donorFilter, setDonorFilter] = useState<string>("All");
+  const [ngoFilter, setNgoFilter] = useState<string>("All");
+  const [companyFilter, setCompanyFilter] = useState<string>("All");
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
   const [receiptModalOpen, setReceiptModalOpen] = useState(false);
   const [activeReceiptId, setActiveReceiptId] = useState<string | null>(null);
+
+  const apiEnabled = isFeatureEnabled("API_DASHBOARD");
+  const { data: liveDonations, isLoading: isLoadingDonations } = useAdminDonations();
+
+  const donors = apiEnabled && liveDonations.length > 0 ? ["All", ...unique(liveDonations.map((donation) => donation.donor))] : [...mockDonors];
+  const ngos = apiEnabled && liveDonations.length > 0 ? ["All", ...unique(liveDonations.map((donation) => donation.ngo))] : [...mockNgos];
+  const companies = apiEnabled && liveDonations.length > 0 ? ["All", ...unique(liveDonations.map((donation) => donation.company))] : [...mockCompanies];
+
+  const donationRecords: readonly AdminDonationTableRecord[] =
+    apiEnabled && liveDonations.length > 0 ? liveDonations : mockDonationRecords;
 
   const filteredDonations = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -154,18 +190,14 @@ export default function DonationHistoryPage() {
 
       return matchesQuery && matchesStatus && matchesMode && matchesDonor && matchesNgo && matchesCompany;
     });
-  }, [companyFilter, donorFilter, modeFilter, ngoFilter, search, statusFilter]);
+  }, [companyFilter, donorFilter, donationRecords, modeFilter, ngoFilter, search, statusFilter]);
 
   const totalPages = Math.max(1, Math.ceil(filteredDonations.length / perPage));
   const paginatedDonations = filteredDonations.slice((page - 1) * perPage, page * perPage);
 
   const handlePageChange = (nextPage: number) => {
     if (nextPage === page) return;
-    setLoading(true);
-    setTimeout(() => {
-      setPage(nextPage);
-      setLoading(false);
-    }, 320);
+    setPage(nextPage);
   };
 
   const openReceipt = (transactionId: string) => {
@@ -255,7 +287,7 @@ export default function DonationHistoryPage() {
             <Select
               value={donorFilter}
               onValueChange={(value) => {
-                setDonorFilter(value as typeof donors[number]);
+                setDonorFilter(value);
                 setPage(1);
               }}
             >
@@ -274,7 +306,7 @@ export default function DonationHistoryPage() {
             <Select
               value={ngoFilter}
               onValueChange={(value) => {
-                setNgoFilter(value as typeof ngos[number]);
+                setNgoFilter(value);
                 setPage(1);
               }}
             >
@@ -293,7 +325,7 @@ export default function DonationHistoryPage() {
             <Select
               value={companyFilter}
               onValueChange={(value) => {
-                setCompanyFilter(value as typeof companies[number]);
+                setCompanyFilter(value);
                 setPage(1);
               }}
             >
@@ -331,7 +363,7 @@ export default function DonationHistoryPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {loading
+                {(apiEnabled && isLoadingDonations)
                   ? Array.from({ length: perPage }).map((_, index) => (
                       <TableRow key={`loading-row-${index}`} className="animate-pulse">
                         <TableCell>
@@ -398,7 +430,7 @@ export default function DonationHistoryPage() {
                           <Button
                             type="button"
                             variant="ghost"
-                            className="gap-1 text-brand-600 hover:text-brand-700"
+                            className="gap-2"
                             onClick={() => openReceipt(donation.id)}
                           >
                             <TicketCheck className="h-4 w-4" />
@@ -407,156 +439,144 @@ export default function DonationHistoryPage() {
                         </TableCell>
                       </TableRow>
                     ))}
-                {!loading && !paginatedDonations.length ? (
-                  <TableRow>
-                    <TableCell colSpan={7} className="py-12 text-center text-sm text-slate-500 dark:text-slate-400">
-                      No donations match the current filters.
-                    </TableCell>
-                  </TableRow>
-                ) : null}
               </TableBody>
             </Table>
           </div>
 
-          <div className="flex flex-col gap-4 p-4 xl:hidden">
-            {loading
-              ? Array.from({ length: perPage }).map((_, index) => (
-                  <div
-                    key={`mobile-loading-${index}`}
-                    className="rounded-2xl border border-slate-200 p-4 shadow-sm dark:border-slate-800"
-                  >
-                    <div className="space-y-3">
-                      <Skeleton className="h-5 w-24 rounded-full" />
-                      <Skeleton className="h-3 w-36 rounded-full" />
-                      <Skeleton className="h-3 w-24 rounded-full" />
-                      <Skeleton className="h-3 w-20 rounded-full" />
-                      <div className="flex items-center gap-3">
-                        <Skeleton className="h-8 w-24 rounded-full" />
-                        <Skeleton className="h-8 w-24 rounded-full" />
-                      </div>
-                    </div>
-                  </div>
-                ))
-              : paginatedDonations.map((donation) => (
-                  <div
-                    key={donation.id}
-                    className="rounded-2xl border border-slate-200 p-4 shadow-sm dark:border-slate-800"
-                  >
-                    <div className="space-y-2 text-sm">
+          <div className="xl:hidden">
+            <ul className="divide-y divide-slate-200 dark:divide-slate-800">
+              {(apiEnabled && isLoadingDonations)
+                ? Array.from({ length: perPage }).map((_, index) => (
+                    <li key={`mobile-loading-${index}`} className="space-y-4 py-4">
+                      <Skeleton className="h-4 w-40 rounded-full" />
+                      <Skeleton className="h-4 w-32 rounded-full" />
+                      <Skeleton className="h-4 w-24 rounded-full" />
+                      <Skeleton className="h-8 w-28 rounded-full" />
+                    </li>
+                  ))
+                : paginatedDonations.map((donation) => (
+                    <li key={donation.id} className="space-y-4 py-4">
                       <div>
                         <p className="font-semibold text-slate-900 dark:text-slate-100">{donation.donor}</p>
                         <p className="text-xs text-slate-400">{donation.company}</p>
                       </div>
-                      <p className="text-slate-600 dark:text-slate-300">{donation.entity}</p>
-                      <p className="text-slate-600 dark:text-slate-300">{donation.amount}</p>
-                      <p className="text-xs uppercase tracking-[0.24em] text-slate-400">{donation.status}</p>
-                      <p className="inline-flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-                        <Calendar className="h-4 w-4" />
-                        {donation.date}
-                      </p>
-                      <div className="pt-2">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className="w-full gap-2 border-slate-200 dark:border-slate-700"
-                          onClick={() => openReceipt(donation.id)}
-                        >
+                      <div className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+                        <p>
+                          <span className="font-medium text-slate-900 dark:text-slate-100">Campaign / NGO:</span> {donation.entity}
+                        </p>
+                        <p>
+                          <span className="font-medium text-slate-900 dark:text-slate-100">Amount:</span> {donation.amount}
+                        </p>
+                        <p className="flex items-center gap-2">
+                          <CreditCard className="h-4 w-4 text-slate-400" />
+                          {donation.mode}
+                        </p>
+                        <p>
+                          <span className="font-medium text-slate-900 dark:text-slate-100">Status:</span> {donation.status}
+                        </p>
+                        <p>
+                          <Calendar className="mr-2 inline h-4 w-4 text-slate-400" />
+                          {donation.date}
+                        </p>
+                      </div>
+                      <div>
+                        <Button type="button" variant="outline" className="gap-2" onClick={() => openReceipt(donation.id)}>
                           <TicketCheck className="h-4 w-4" />
                           View receipt
                         </Button>
                       </div>
-                    </div>
-                  </div>
-                ))}
-            {!loading && !paginatedDonations.length ? (
-              <div className="rounded-2xl border border-dashed border-slate-200 p-6 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
-                No donations found. Adjust your filters and try again.
-              </div>
-            ) : null}
+                    </li>
+                  ))}
+            </ul>
           </div>
         </div>
 
-        <div className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-slate-200 pt-4 text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400 lg:flex-row">
-          <p>
-            Showing <span className="font-semibold text-slate-700 dark:text-slate-200">{paginatedDonations.length}</span> of
-            <span className="font-semibold text-slate-700 dark:text-slate-200"> {filteredDonations.length}</span> donations
-          </p>
-          <div className="flex items-center gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => handlePageChange(Math.max(1, page - 1))}
-              disabled={page === 1 || loading}
-              className="h-9 rounded-full border-slate-200 px-4 text-sm dark:border-slate-700"
-            >
-              Previous
-            </Button>
-            <div className="flex items-center gap-2 text-sm">
-              <span>Page</span>
-              <span className="rounded-full bg-slate-100 px-3 py-1 font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-100">
-                {page}
-              </span>
-              <span>of {totalPages}</span>
+        <div className="mt-6 flex flex-col gap-4 border-t border-slate-100 pt-4 dark:border-slate-800">
+          <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-500 dark:text-slate-400">
+            <p>
+              Showing <span className="font-semibold text-slate-700 dark:text-slate-200">{paginatedDonations.length}</span> of
+              <span className="font-semibold text-slate-700 dark:text-slate-200"> {filteredDonations.length} </span>
+              records
+            </p>
+
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                className="rounded-full"
+                disabled={page === 1}
+                onClick={() => handlePageChange(page - 1)}
+              >
+                Previous
+              </Button>
+              <p className="font-medium text-slate-700 dark:text-slate-200">
+                Page {page} of {totalPages}
+              </p>
+              <Button
+                type="button"
+                variant="outline"
+                className="rounded-full"
+                disabled={page >= totalPages}
+                onClick={() => handlePageChange(page + 1)}
+              >
+                Next
+              </Button>
             </div>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => handlePageChange(Math.min(totalPages, page + 1))}
-              disabled={page === totalPages || loading}
-              className="h-9 rounded-full border-slate-200 px-4 text-sm dark:border-slate-700"
-            >
-              Next
-            </Button>
           </div>
         </div>
       </div>
 
-      <Modal open={receiptModalOpen} onClose={() => setReceiptModalOpen(false)} title="Donation receipt">
-        {activeDonation ? (
-          <div className="space-y-4 text-sm text-slate-600 dark:text-slate-300">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Transaction ID</p>
-                <p className="mt-1 font-semibold text-slate-900 dark:text-slate-100">{activeDonation.id}</p>
-              </div>
-              <Badge
-                variant="outline"
-                className="border-slate-200 bg-slate-50 text-slate-600 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-300"
-              >
-                {activeDonation.status}
-              </Badge>
-            </div>
-            <div className="grid gap-3 md:grid-cols-2">
-              <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Donor</p>
-                <p className="mt-1 font-medium text-slate-900 dark:text-slate-100">{activeDonation.donor}</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Program / NGO</p>
-                <p className="mt-1 font-medium text-slate-900 dark:text-slate-100">{activeDonation.entity}</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Amount</p>
-                <p className="mt-1 font-medium text-emerald-600">{activeDonation.amount}</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Payment mode</p>
-                <p className="mt-1 font-medium text-slate-900 dark:text-slate-100">{activeDonation.mode}</p>
-              </div>
-            </div>
-            <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-900/40">
-              <span>{activeDonation.date}</span>
-              <Button type="button" size="sm" variant="outline" className="gap-2 border-slate-200 dark:border-slate-700">
-                <Download className="h-4 w-4" />
-                Download PDF
-              </Button>
-            </div>
+      <Modal open={receiptModalOpen} onOpenChange={setReceiptModalOpen} title="Donation receipt">
+        {!activeDonation ? (
+          <div className="space-y-4">
+            <Skeleton className="h-6 w-48 rounded-full" />
+            <Skeleton className="h-4 w-full rounded-full" />
+            <Skeleton className="h-4 w-3/4 rounded-full" />
+            <Skeleton className="h-10 w-32 rounded-full" />
           </div>
         ) : (
-          <div className="space-y-3">
-            <Skeleton className="h-5 w-40 rounded-full" />
-            <Skeleton className="h-12 w-full rounded-2xl" />
-            <Skeleton className="h-12 w-full rounded-2xl" />
+          <div className="space-y-4 text-sm text-slate-600 dark:text-slate-300">
+            <div className="flex flex-col gap-1">
+              <p className="font-semibold text-slate-900 dark:text-slate-100">{activeDonation.donor}</p>
+              <p className="text-xs text-slate-400">{activeDonation.donorId}</p>
+            </div>
+
+            <div className="grid gap-2 md:grid-cols-2">
+              <div>
+                <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Campaign / NGO</p>
+                <p className="font-medium text-slate-900 dark:text-slate-100">{activeDonation.entity}</p>
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-[0.28em] text-slate-400">NGO</p>
+                <p className="font-medium text-slate-900 dark:text-slate-100">{activeDonation.ngo}</p>
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Amount</p>
+                <p className="font-medium text-slate-900 dark:text-slate-100">{activeDonation.amount}</p>
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Date</p>
+                <p className="font-medium text-slate-900 dark:text-slate-100">{activeDonation.date}</p>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-dashed border-slate-200 p-4 dark:border-slate-700">
+              <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Status</p>
+              <p className="mt-2 text-base font-semibold text-slate-900 dark:text-slate-100">{activeDonation.status}</p>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                Receipts mirror the metadata captured during the transaction. Downloadable PDFs are coming soon.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <Button type="button" className="gap-2">
+                <Download className="h-4 w-4" />
+                Download receipt
+              </Button>
+              <Button type="button" variant="outline" className="gap-2">
+                Share via email
+              </Button>
+            </div>
           </div>
         )}
       </Modal>

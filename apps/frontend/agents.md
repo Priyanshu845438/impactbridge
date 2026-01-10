@@ -101,3 +101,8 @@
 - Unified list/detail query keys and hooked create/update/status/assignment mutations into React Query invalidation.
 - Added tests verifying cache refresh behaviour across mock/API modes with no UX changes.
 - Re-ran targeted hook tests and full build (`npm run test -- programmes/hooks.test.tsx`, `npm run build`) to confirm stable behaviour.
+
+22. Admin Donations Dashboard Wiring
+- Connected the admin donations screen to `GET /donations/admin/all` via a new React Query hook while preserving mock fallback under `API_DASHBOARD`.
+- Added `dashboard-admin-donations.test.tsx` smoke coverage to confirm live data renders without altering existing UX.
+- Validated the path with `npm run test -- dashboard-admin-donations.test.tsx` and ensured no other surfaces were affected.
