@@ -1,4 +1,6 @@
 # Backend Changelog
+- **2026-01-12** — Analytics aggregation now exposes financial report overview (totals, NGO coverage, latest submission) with tests; no API surface changes.
+
 - **2026-01-12** — Financial report DTO validation hardened (strict period/year bounds and URL checks) with accompanying tests; no endpoint behaviour changes.
 
 - **2026-01-06** — CSR request context plumbing added (AsyncLocal-based); no behavioural changes yet, logging task pending.

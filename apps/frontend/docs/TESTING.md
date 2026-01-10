@@ -27,5 +27,6 @@
 
 ## Recent Additions & Gaps
 - CSR programme list & detail pages now have contract-level tests ensuring mock and API modes render identically across happy-path, loading, and error states without altering runtime behaviour. Hook suites cover create/update/status/assignment flag paths, including runtime fallback behaviour for API failures. Backend audit logging verification confirmed the payloads powering these flows produce traceable metadata without frontend changes. End-to-end smoke coverage remains a TODO before enabling the API flag by default.
+- Financial analytics overview covered by backend unit tests; frontend still needs wiring tests once dashboards consume the data.
 - Page-level RTL coverage for the edit flow is still pending; add once runtime fallbacks and smoke tests are reinstated so the API path is exercised safely.
 - Financial upload form integration continues to rely on backend DTO validation; no frontend changes required, but tests should mock 422 responses to reflect stricter period/year/url enforcement.

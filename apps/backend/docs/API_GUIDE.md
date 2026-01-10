@@ -45,5 +45,8 @@ Refer to controller source files for full parameter shapes. Every request body i
 - Validation errors respond with `400` and constraint details.
 - Global rate limiter returns `429` with retry-after header when thresholds exceeded.
 
+## Analytics Helpers
+- Admin overview aggregates donations, programme counts, approvals, and now financial report overview (totals, NGO coverage, latest submission).
+
 ## Changelog Reference
 - See `docs/CHANGELOG.md` for recent endpoint additions/changes. Frontend contract tests cover CSR list/detail responses to ensure DTO alignment without altering these APIs. Notification intents are still queued only (no dispatch layer yet); runtimes should monitor the changelog for delivery updates once a worker is introduced.

@@ -30,6 +30,7 @@
 - **Rate limiting**: adjust environment variables controlling window/requests or whitelist internal probes.
 - **Notification intents**: default provider is noop; to enable real delivery, bind a concrete provider via `NOTIFICATION_PROVIDER`.
 - **Financial validation**: Upload endpoints rely on DTO checks enforcing reporting period (1-12), year (>=2000), and HTTPS report URLs; invalid payloads are rejected before persistence with existing error messages.
+- **Financial analytics**: Admin aggregation exposes total reports, NGO coverage, and latest submission timestamp (data only); wiring to dashboards can rely on stable responses.
 
 ## Observability
 - Request logs include `requestId`, method, status, duration; ensure downstream log aggregator preserves structured JSON.
