@@ -22,34 +22,39 @@ export interface AdminActivityItem {
   timestamp: string;
 }
 
-export interface AdminAnalyticsPayload {
-  donations: {
-    totals: AdminDonationMetric[];
-    timeline: Array<{ date: string; amount: number }>;
-    summary?: {
-      totalCount: number;
-      totalAmount: number;
-      today: { count: number; amount: number };
-      last7Days: { count: number; amount: number };
-      last30Days: { count: number; amount: number };
-    };
-  };
-  programmes: {
-    counts: AdminProgrammeMetric[];
-    summary?: {
-      totalProgrammes: number;
-      byStatus: Record<string, number>;
-    };
-  };
-  approvals: {
-    counts: AdminApprovalMetric[];
-    summary?: {
-      totalApprovals: number;
-      byStatus: Record<string, number>;
-    };
-  };
-  recentActivity: AdminActivityItem[];
-}
+ export interface AdminAnalyticsPayload {
+   donations: {
+     totals: AdminDonationMetric[];
+     timeline: Array<{ date: string; amount: number }>;
+     summary: {
+       totalCount: number;
+       totalAmount: number;
+       today: { count: number; amount: number };
+       last7Days: { count: number; amount: number };
+       last30Days: { count: number; amount: number };
+     };
+   };
+   programmes: {
+     counts: AdminProgrammeMetric[];
+     summary: {
+       totalProgrammes: number;
+       byStatus: Record<string, number>;
+     };
+   };
+   approvals: {
+     counts: AdminApprovalMetric[];
+     summary: {
+       totalApprovals: number;
+       byStatus: Record<string, number>;
+     };
+   };
+   financial: {
+     totalReports: number;
+     ngoCount: number;
+     latestSubmittedAt: string | null;
+   };
+   recentActivity: AdminActivityItem[];
+ }
 
 export interface CompanyCsrMetric {
   label: string;

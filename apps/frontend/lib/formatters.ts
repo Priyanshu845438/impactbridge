@@ -1,13 +1,21 @@
-export function formatINR(value: number, options: Intl.NumberFormatOptions = {}) {
+export function formatCurrency(amount: number, currency: string = 'INR'): string {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
-    currency: 'INR',
+    currency,
     maximumFractionDigits: 0,
-    ...options,
-  }).format(value);
+  }).format(amount ?? 0);
 }
 
-export function formatPercent(value: number, fractionDigits = 1) {
-  return `${value >= 0 ? '+' : ''}${Math.abs(value).toFixed(fractionDigits)}%`;
+export function formatNumber(value: number): string {
+  return new Intl.NumberFormat('en-IN').format(value ?? 0);
 }
 
+export function formatDateTime(iso: string | null | undefined): string {
+  if (!iso) return '';
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return '';
+  return date.toLocaleString('en-IN', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
+}

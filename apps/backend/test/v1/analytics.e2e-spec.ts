@@ -5,6 +5,7 @@ import { AppModule } from '../../src/app.module';
 import { PrismaService } from '../../src/prisma/prisma.service';
 import { signToken } from '../../src/auth/utils/jwt.util';
 import { UserRole } from '../../src/user/user-role.enum';
+import { ProgrammeStatus } from 'prisma/generated';
 
 describe('V1 AnalyticsController (e2e)', () => {
   let app: INestApplication;
@@ -49,20 +50,49 @@ describe('V1 AnalyticsController (e2e)', () => {
 
     expect(res.body).toMatchObject({
       donations: {
-        totalCount: 3,
-        totalAmount: 3000,
+        summary: {
+          totalCount: 3,
+          totalAmount: 3000,
+        },
+        totals: expect.arrayContaining([
+          expect.objectContaining({ label: 'Total' }),
+          expect.objectContaining({ label: 'Last 7 days' }),
+          expect.objectContaining({ label: 'Today' }),
+        ]),
+        timeline: expect.any(Array),
       },
       programmes: {
-        totalProgrammes: 2,
-        byStatus: expect.objectContaining({ ACTIVE: 1, COMPLETED: 1 }),
+        summary: {
+          totalProgrammes: 2,
+          byStatus: expect.objectContaining({
+            [ProgrammeStatus.ACTIVE]: 1,
+            [ProgrammeStatus.COMPLETED]: 1,
+          }),
+        },
+        counts: expect.arrayContaining([
+          expect.objectContaining({ status: ProgrammeStatus.ACTIVE, count: 1 }),
+          expect.objectContaining({ status: ProgrammeStatus.COMPLETED, count: 1 }),
+        ]),
       },
       approvals: {
-        totalApprovals: 2,
-        byStatus: expect.objectContaining({ APPROVED: 1, PENDING: 1 }),
+        summary: {
+          totalApprovals: 2,
+          byStatus: expect.objectContaining({ APPROVED: 1, PENDING: 1 }),
+        },
+        counts: expect.arrayContaining([
+          expect.objectContaining({ status: 'APPROVED', count: 1 }),
+          expect.objectContaining({ status: 'PENDING', count: 1 }),
+        ]),
       },
+      financial: {
+        totalReports: 0,
+        ngoCount: 0,
+        latestSubmittedAt: null,
+      },
+      recentActivity: expect.any(Array),
     });
 
-    expect(res.body.donations.today.count).toBeGreaterThanOrEqual(1);
+    expect(res.body.donations.summary.today.count).toBeGreaterThanOrEqual(1);
   });
 
   it('forbids access for non-admin roles', async () => {
@@ -135,16 +165,16 @@ async function seedData(prisma: PrismaService) {
     prisma.cSRProgramme.create({
       data: {
         id: 'programme-1',
-        name: 'Programme A',
-        status: 'ACTIVE',
+        title: 'Programme A',
+        status: ProgrammeStatus.ACTIVE,
         companyId: 'company-profile',
       },
     }),
     prisma.cSRProgramme.create({
       data: {
         id: 'programme-2',
-        name: 'Programme B',
-        status: 'COMPLETED',
+        title: 'Programme B',
+        status: ProgrammeStatus.COMPLETED,
         companyId: 'company-profile',
       },
     }),
@@ -164,6 +194,23 @@ async function seedData(prisma: PrismaService) {
         campaignId: 'campaign-2',
         companyId: 'company-profile',
         ngoId: 'ngo-profile',
+      },
+    }),
+    prisma.financialReport.create({
+      data: {
+        id: 'report-1',
+        ngoId: 'ngo-profile',
+        period: 'Q1',
+        year: 2025,
+        reportUrl: 'https://example.com/report.pdf',
+      },
+    }),
+    prisma.auditLog.create({
+      data: {
+        id: 'log-1',
+        userId: 'admin-id',
+        action: 'login',
+        details: {},
       },
     }),
     prisma.donation.createMany({

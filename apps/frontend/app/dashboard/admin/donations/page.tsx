@@ -526,7 +526,7 @@ export default function DonationHistoryPage() {
         </div>
       </div>
 
-      <Modal open={receiptModalOpen} onOpenChange={setReceiptModalOpen} title="Donation receipt">
+      <Modal open={receiptModalOpen} onClose={() => setReceiptModalOpen(false)} title="Donation receipt">
         {!activeDonation ? (
           <div className="space-y-4">
             <Skeleton className="h-6 w-48 rounded-full" />

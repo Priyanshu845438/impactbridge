@@ -19,6 +19,17 @@ type ActivityFeedProps = React.ComponentPropsWithoutRef<"section"> & {
   icon?: LucideIcon;
 };
 
+function formatTimestamp(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+  return date.toLocaleString(undefined, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
+}
+
 const FALLBACK_ACTIVITY: Array<ActivityFeedItem & { icon: LucideIcon }> = [
   {
     id: "fallback-ngo-verified",
@@ -63,6 +74,7 @@ export const ActivityFeed = React.memo(function ActivityFeed({
     ? items.map((item) => ({
         ...item,
         icon: item.icon ?? icon ?? HandshakeIcon,
+        timestamp: formatTimestamp(item.timestamp),
       }))
     : FALLBACK_ACTIVITY;
   return (

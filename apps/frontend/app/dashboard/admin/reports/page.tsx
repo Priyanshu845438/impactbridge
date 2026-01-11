@@ -18,8 +18,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
+import { getFeatureFlags } from "@/lib/feature-flags";
+import { useAdminAnalytics } from "@/lib/hooks/use-admin-analytics";
+import { formatCurrency, formatNumber, formatDateTime } from "@/lib/formatters";
 
-const summaryTiles = [
+const DEFAULT_SUMMARY_TILES = [
   { id: "donations", label: "Total donations", value: "₹2.45 Crore", change: "+12.4% vs last month" },
   { id: "campaigns", label: "Active campaigns", value: "28", change: "3 paused" },
   { id: "ngos", label: "NGOs onboarded", value: "146", change: "+8 pending review" },
@@ -27,7 +30,7 @@ const summaryTiles = [
   { id: "users", label: "Total users", value: "1,204", change: "412 admins" },
 ] as const;
 
-const donationTrend = [
+const DEFAULT_DONATION_TREND = [
   { month: "Jan", amount: 28 },
   { month: "Feb", amount: 32 },
   { month: "Mar", amount: 36 },
@@ -36,7 +39,7 @@ const donationTrend = [
   { month: "Jun", amount: 48 },
 ] as const;
 
-const categoryBreakdown = [
+const DEFAULT_CATEGORY_BREAKDOWN = [
   { label: "Education", value: 34, color: "bg-sky-400" },
   { label: "Healthcare", value: 26, color: "bg-emerald-400" },
   { label: "Environment", value: 18, color: "bg-amber-400" },
@@ -44,7 +47,7 @@ const categoryBreakdown = [
   { label: "Women", value: 8, color: "bg-indigo-400" },
 ] as const;
 
-const contributionSplit = [
+const DEFAULT_CONTRIBUTION_SPLIT = [
   { label: "NGOs", value: 62 },
   { label: "Companies", value: 38 },
 ] as const;
@@ -54,6 +57,123 @@ export default function ReportsDashboardPage() {
   const [loading] = useState(false);
 
   const gridColumns = useMemo(() => (activeRange === "custom" ? "lg:grid-cols-1" : "lg:grid-cols-2"), [activeRange]);
+
+  const analyticsEnabled = useMemo(() => getFeatureFlags().API_DASHBOARD, []);
+  const { data: analytics } = useAdminAnalytics({ enabled: analyticsEnabled });
+  const hasAnalytics = analyticsEnabled && Boolean(analytics);
+
+  const summaryTiles = useMemo(() => {
+    if (!hasAnalytics || !analytics) {
+      return DEFAULT_SUMMARY_TILES;
+    }
+
+    const totalDonations = formatCurrency(analytics.donationSummary.totalAmount);
+    const last7Amount = formatCurrency(analytics.donationSummary.last7Days.amount);
+    const totalProgrammes = formatNumber(
+      analytics.programmeStatus.reduce((acc, entry) => acc + entry.value, 0),
+    );
+    const activeProgrammes = analytics.programmeStatus.find((entry) => entry.label === "ACTIVE")?.value ?? 0;
+
+    return [
+      {
+        id: "donations",
+        label: "Total donations",
+        value: totalDonations,
+        change: `${last7Amount} in last 7 days`,
+      },
+      {
+        id: "campaigns",
+        label: "Active campaigns",
+        value: formatNumber(activeProgrammes),
+        change: `${totalProgrammes} tracked total`,
+      },
+      {
+        id: "ngos",
+        label: "NGOs onboarded",
+        value: formatNumber(analytics.financial.ngoCount),
+        change: analytics.financial.latestSubmittedAt
+          ? `Latest report ${formatDateTime(analytics.financial.latestSubmittedAt)}`
+          : "Awaiting latest submission",
+      },
+      {
+        id: "companies",
+        label: "Companies",
+        value: formatNumber(analytics.donationSummary.totalCount),
+        change: `${formatCurrency(analytics.donationSummary.today.amount)} today`,
+      },
+      {
+        id: "users",
+        label: "Total users",
+        value: "1,204",
+        change: "412 admins",
+      },
+    ] as const;
+  }, [analytics, hasAnalytics]);
+
+  const donationTrend = useMemo(() => {
+    if (!hasAnalytics || !analytics) {
+      return DEFAULT_DONATION_TREND;
+    }
+
+    const points = analytics.donationTimeline.slice(-12);
+
+    if (!points.length) {
+      return DEFAULT_DONATION_TREND;
+    }
+
+    return points.map((point) => {
+      const date = new Date(point.name);
+      const label = Number.isNaN(date.getTime())
+        ? point.name
+        : date.toLocaleString("en-IN", { month: "short" });
+      return {
+        month: label,
+        amount: Math.round(point.value / 100000) || 0,
+      };
+    });
+  }, [analytics, hasAnalytics]);
+
+  const categoryBreakdown = useMemo(() => {
+    if (!hasAnalytics || !analytics) {
+      return DEFAULT_CATEGORY_BREAKDOWN;
+    }
+
+    const palette = ["bg-emerald-400", "bg-indigo-400", "bg-amber-400", "bg-rose-400", "bg-sky-400"] as const;
+
+    const total = analytics.programmeStatus.reduce((acc, entry) => acc + entry.value, 0);
+    if (!total) {
+      return DEFAULT_CATEGORY_BREAKDOWN;
+    }
+
+    return analytics.programmeStatus.slice(0, palette.length).map((entry, index) => ({
+      label: entry.label,
+      value: Math.round((entry.value / total) * 100),
+      color: palette[index] ?? "bg-slate-400",
+    }));
+  }, [analytics, hasAnalytics]);
+
+  const contributionSplit = useMemo(() => {
+    if (!hasAnalytics || !analytics) {
+      return DEFAULT_CONTRIBUTION_SPLIT;
+    }
+
+    const totals = analytics.donationStats;
+    if (!totals.length) {
+      return DEFAULT_CONTRIBUTION_SPLIT;
+    }
+
+    const today = totals.find((item) => item.label.toLowerCase().includes("today"))?.amount ?? 0;
+    const last30 = totals.find((item) => item.label.includes("30"))?.amount ?? 0;
+    const totalAmount = analytics.donationSummary.totalAmount || 1;
+
+    const primary = Math.min(Math.round((last30 / totalAmount) * 100), 100);
+    const secondary = Math.min(Math.round((today / totalAmount) * 100), 100);
+
+    return [
+      { label: "NGOs", value: primary || 1 },
+      { label: "Companies", value: Math.max(100 - primary, secondary || 1) },
+    ] as const;
+  }, [analytics, hasAnalytics]);
 
   return (
     <div className="space-y-8">
@@ -118,25 +238,45 @@ export default function ReportsDashboardPage() {
       </Card>
 
       <div className={`grid gap-6 ${gridColumns}`}>
-        <AnalyticsCard
-          title="Donations over time"
-          description="Mock trend for visual placeholder — Wire to backend metrics later."
+          <AnalyticsCard
+            title="Donations over time"
+          description="Donation volume trend"
           Icon={LineChart}
           loading={loading}
         >
           <ChartSkeleton>
             <svg viewBox="0 0 400 160" className="h-64 w-full text-brand-400" role="presentation" aria-hidden="true">
-              <polyline fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" points="0,120 50,110 100,90 150,100 200,75 250,60 300,72 350,50 400,65" />
+              <polyline
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                points={donationTrend
+                  .map((point, index) => {
+                    const x = (index / Math.max(donationTrend.length - 1, 1)) * 380 + 10;
+                    const y = 130 - point.amount;
+                    return `${x},${y}`;
+                  })
+                  .join(" ") || "0,120 380,120"}
+              />
               {donationTrend.map((point, index) => (
-                <circle key={point.month} cx={(index / (donationTrend.length - 1)) * 380 + 10} cy={130 - point.amount} r="4" fill="currentColor" className="drop-shadow" />
+                <circle
+                  key={`${point.month}-${index}`}
+                  cx={(index / Math.max(donationTrend.length - 1, 1)) * 380 + 10}
+                  cy={130 - point.amount}
+                  r="4"
+                  fill="currentColor"
+                  className="drop-shadow"
+                />
               ))}
             </svg>
           </ChartSkeleton>
         </AnalyticsCard>
 
-        <AnalyticsCard
-          title="Contributions by category"
-          description="Static seed data — replace with API once available."
+          <AnalyticsCard
+            title="Contributions by category"
+          description="Distribution by programme status"
           Icon={PieChart}
           loading={loading}
         >
@@ -165,9 +305,9 @@ export default function ReportsDashboardPage() {
           </ChartSkeleton>
         </AnalyticsCard>
 
-        <AnalyticsCard
-          title="NGO vs company contributions"
-          description="Mock comparison until backend totals land."
+          <AnalyticsCard
+            title="NGO vs company contributions"
+          description="Relative share of recent donations"
           Icon={BarChartBig}
           loading={loading}
         >

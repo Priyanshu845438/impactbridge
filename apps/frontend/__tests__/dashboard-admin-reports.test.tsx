@@ -1,8 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { programmes as mockProgrammes } from '@/app/dashboard/company/programmes/mock-data';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import AdminReportsPage from '@/app/dashboard/admin/reports/page';
 import * as analyticsApi from '@/lib/api/analytics';
-import AdminDashboard from '@/app/dashboard/admin/page';
 
 jest.mock('@/providers/auth-context', () => ({
   useAuth: () => ({
@@ -31,22 +30,19 @@ const mockGetFeatureFlags = jest.fn(() => ({
 
 jest.mock('@/lib/feature-flags', () => ({
   ...jest.requireActual('@/lib/feature-flags'),
-  isFeatureEnabled: jest.fn((key: string) => key === 'API_DASHBOARD'),
   getFeatureFlags: () => mockGetFeatureFlags(),
 }));
 
 jest.mock('@/lib/api/analytics');
 
-const mockedFetch = analyticsApi as jest.Mocked<typeof analyticsApi>;
-
-function renderWithQuery(ui: React.ReactElement) {
-  const client = new QueryClient();
-  return render(<QueryClientProvider client={client}>{ui}</QueryClientProvider>);
-}
+const mockedApi = analyticsApi as jest.Mocked<typeof analyticsApi>;
 
 const mockResponse = {
   donations: {
-    totals: [{ label: 'Last 7 days', amount: 125000, delta: 0.12 }],
+    totals: [
+      { label: 'Last 30 days', amount: 320000, delta: 0.12 },
+      { label: 'Today', amount: 25000 },
+    ],
     timeline: [
       { date: '2025-02-01T00:00:00.000Z', amount: 50000 },
       { date: '2025-02-02T00:00:00.000Z', amount: 75000 },
@@ -63,6 +59,7 @@ const mockResponse = {
     counts: [
       { status: 'ACTIVE', count: 3 },
       { status: 'PENDING', count: 2 },
+      { status: 'COMPLETED', count: 1 },
     ],
     summary: {
       totalProgrammes: 6,
@@ -93,19 +90,21 @@ const mockResponse = {
     ngoCount: 7,
     latestSubmittedAt: '2025-02-02T10:00:00.000Z',
   },
-  recentActivity: [
-    {
-      id: 'log1',
-      actor: 'Vidya Rao',
-      action: 'programme_created',
-      timestamp: '2025-02-02T10:00:00.000Z',
-    },
-  ],
+  recentActivity: [],
 };
 
-describe('Admin analytics dashboard data wiring', () => {
+function renderPage() {
+  const client = new QueryClient();
+  return render(
+    <QueryClientProvider client={client}>
+      <AdminReportsPage />
+    </QueryClientProvider>,
+  );
+}
+
+describe('Admin reports dashboard wiring', () => {
   beforeEach(() => {
-    mockedFetch.fetchAdminAnalytics.mockResolvedValue(mockResponse);
+    mockedApi.fetchAdminAnalytics.mockResolvedValue(mockResponse as any);
   });
 
   afterEach(() => {
@@ -120,21 +119,13 @@ describe('Admin analytics dashboard data wiring', () => {
     });
   });
 
-  it('renders mock data when flag is disabled', async () => {
-    mockGetFeatureFlags.mockReturnValueOnce({
-      API_DASHBOARD: false,
-      REALTIME_NOTIFICATIONS: false,
-      SERVER_NAVIGATION: false,
-      API_AUTH: false,
-      API_PROGRAMME: false,
-    });
-    renderWithQuery(<AdminDashboard />);
-
-    await waitFor(() => expect(screen.getByText(/platform engagement across the last 30 days/i)).toBeInTheDocument());
-    expect(mockedFetch.fetchAdminAnalytics).not.toHaveBeenCalled();
+  it('keeps mock tiles when API is disabled', async () => {
+    renderPage();
+    expect(screen.getByText(/Total donations/i)).toBeInTheDocument();
+    expect(mockedApi.fetchAdminAnalytics).not.toHaveBeenCalled();
   });
 
-  it('fetches analytics when flag is enabled', async () => {
+  it('populates analytics when API is enabled', async () => {
     mockGetFeatureFlags.mockReturnValueOnce({
       API_DASHBOARD: true,
       REALTIME_NOTIFICATIONS: false,
@@ -142,9 +133,11 @@ describe('Admin analytics dashboard data wiring', () => {
       API_AUTH: false,
       API_PROGRAMME: false,
     });
-    renderWithQuery(<AdminDashboard />);
 
-    await waitFor(() => expect(mockedFetch.fetchAdminAnalytics).toHaveBeenCalledTimes(1));
-    expect(mockedFetch.fetchAdminAnalytics).toHaveBeenCalled();
+    renderPage();
+
+    await waitFor(() => expect(mockedApi.fetchAdminAnalytics).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(screen.getByText(/NGOs onboarded/i)).toBeInTheDocument());
+    expect(screen.getByText(/Latest report/i)).toBeInTheDocument();
   });
 });

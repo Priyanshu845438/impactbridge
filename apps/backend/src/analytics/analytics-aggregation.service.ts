@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, ProgrammeStatus } from 'prisma/generated';
+import { Donation, Prisma, ProgrammeStatus } from 'prisma/generated';
 
 type DonationDateFilter = Prisma.DateTimeFilter<'Donation'>;
 import { PrismaService } from '../prisma/prisma.service';
@@ -27,11 +27,62 @@ export interface FinancialReportOverview {
   latestSubmittedAt: Date | null;
 }
 
+export interface DonationTimelinePoint {
+  date: string;
+  amount: number;
+}
+
+export interface DonationOverview {
+  totalAmount: number;
+  totalCount: number;
+  today: { totalAmount: number; totalCount: number };
+  last7Days: { totalAmount: number; totalCount: number };
+  last30Days: { totalAmount: number; totalCount: number };
+  totals: Array<{ label: string; amount: number; delta?: number }>;
+  timeline: DonationTimelinePoint[];
+  summary: {
+    totalAmount: number;
+    totalCount: number;
+    today: { count: number; amount: number };
+    last7Days: { count: number; amount: number };
+    last30Days: { count: number; amount: number };
+  };
+}
+
+export interface ProgrammeOverview {
+  totalProgrammes: number;
+  byStatus: Record<string, number>;
+  counts: Array<{ status: string; count: number }>;
+  summary: {
+    totalProgrammes: number;
+    byStatus: Record<string, number>;
+  };
+}
+
+export interface ApprovalOverview {
+  totalApprovals: number;
+  byStatus: Record<string, number>;
+  counts: Array<{ status: string; count: number }>;
+  summary: {
+    totalApprovals: number;
+    byStatus: Record<string, number>;
+  };
+}
+
+export interface ActivityEntry {
+  id: string;
+  actor: string;
+  action: string;
+  timestamp: string;
+}
+
 @Injectable()
 export class AnalyticsAggregationService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getDonationTotals(filter: DonationAggregationFilter = {}) {
+  async getDonationOverview(
+    filter: DonationAggregationFilter = {},
+  ): Promise<DonationOverview> {
     const where = this.buildDonationWhere(filter);
 
     const aggregate = await this.prisma.donation.aggregate({
@@ -75,25 +126,50 @@ export class AnalyticsAggregationService {
       _count: { _all: true },
     });
 
-    return {
+    const timeline = await this.buildDonationTimeline(where);
+    const totals = this.buildDonationTotals(today, last7Days, last30Days);
+
+    const summary = {
       totalAmount: aggregate._sum.amount ?? 0,
       totalCount: aggregate._count._all ?? 0,
       today: {
-        totalAmount: today._sum.amount ?? 0,
-        totalCount: today._count._all ?? 0,
+        count: today._count._all ?? 0,
+        amount: today._sum.amount ?? 0,
       },
       last7Days: {
-        totalAmount: last7Days._sum.amount ?? 0,
-        totalCount: last7Days._count._all ?? 0,
+        count: last7Days._count._all ?? 0,
+        amount: last7Days._sum.amount ?? 0,
       },
       last30Days: {
-        totalAmount: last30Days._sum.amount ?? 0,
-        totalCount: last30Days._count._all ?? 0,
+        count: last30Days._count._all ?? 0,
+        amount: last30Days._sum.amount ?? 0,
       },
+    };
+
+    return {
+      totalAmount: summary.totalAmount,
+      totalCount: summary.totalCount,
+      today: {
+        totalAmount: summary.today.amount,
+        totalCount: summary.today.count,
+      },
+      last7Days: {
+        totalAmount: summary.last7Days.amount,
+        totalCount: summary.last7Days.count,
+      },
+      last30Days: {
+        totalAmount: summary.last30Days.amount,
+        totalCount: summary.last30Days.count,
+      },
+      totals,
+      timeline,
+      summary,
     };
   }
 
-  async getProgrammeCounts(filter: ProgrammeAggregationFilter = {}) {
+  async getProgrammeOverview(
+    filter: ProgrammeAggregationFilter = {},
+  ): Promise<ProgrammeOverview> {
     const where = this.buildProgrammeWhere(filter);
 
     const grouped = await this.prisma.cSRProgramme.groupBy({
@@ -116,13 +192,25 @@ export class AnalyticsAggregationService {
       total += count;
     }
 
+    const counts = grouped.map((row) => ({
+      status: row.status,
+      count: row._count._all ?? 0,
+    }));
+
     return {
       totalProgrammes: total,
       byStatus,
+      counts,
+      summary: {
+        totalProgrammes: total,
+        byStatus,
+      },
     };
   }
 
-  async getApprovalStatusBreakdown(filter: ApprovalAggregationFilter = {}) {
+  async getApprovalOverview(
+    filter: ApprovalAggregationFilter = {},
+  ): Promise<ApprovalOverview> {
     const where: Prisma.CampaignApprovalWhereInput = {
       companyId: filter.companyId,
       ngoId: filter.ngoId,
@@ -143,9 +231,19 @@ export class AnalyticsAggregationService {
       total += count;
     }
 
+    const counts = grouped.map((row) => ({
+      status: row.status,
+      count: row._count._all ?? 0,
+    }));
+
     return {
       totalApprovals: total,
       byStatus,
+      counts,
+      summary: {
+        totalApprovals: total,
+        byStatus,
+      },
     };
   }
 
@@ -167,6 +265,74 @@ export class AnalyticsAggregationService {
       ngoCount: groupedByNgo.length,
       latestSubmittedAt: latest?.createdAt ?? null,
     };
+  }
+
+  async getRecentActivity(limit = 10): Promise<ActivityEntry[]> {
+    const logs = await this.prisma.auditLog.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: limit,
+      select: {
+        id: true,
+        action: true,
+        createdAt: true,
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    return logs.map((log) => ({
+      id: log.id,
+      actor: log.user?.name ?? log.user?.email ?? 'System',
+      action: log.action,
+      timestamp: log.createdAt.toISOString(),
+    }));
+  }
+
+  private async buildDonationTimeline(
+    where: Prisma.DonationWhereInput,
+  ): Promise<DonationTimelinePoint[]> {
+    const donations = await this.prisma.donation.findMany({
+      where,
+      select: { donationDate: true, amount: true },
+      orderBy: { donationDate: 'asc' },
+    });
+
+    const grouped = new Map<string, number>();
+
+    donations.forEach((donation: Pick<Donation, 'donationDate' | 'amount'>) => {
+      const key = this.startOfDayISO(donation.donationDate);
+      const existing = grouped.get(key) ?? 0;
+      grouped.set(key, existing + donation.amount);
+    });
+
+    return Array.from(grouped.entries()).map(([date, amount]) => ({ date, amount }));
+  }
+
+  private buildDonationTotals(
+    today: { _sum: { amount: number | null } | null },
+    last7Days: { _sum: { amount: number | null } | null },
+    last30Days: { _sum: { amount: number | null } | null },
+  ): Array<{ label: string; amount: number; delta?: number }> {
+    const todayAmount = today._sum?.amount ?? 0;
+    const last7Amount = last7Days._sum?.amount ?? 0;
+    const last30Amount = last30Days._sum?.amount ?? 0;
+
+    const previousWeek = last30Amount - last7Amount;
+    const delta = previousWeek > 0 ? (last7Amount - previousWeek) / previousWeek : undefined;
+
+    return [
+      { label: 'Total', amount: last30Amount },
+      {
+        label: 'Last 7 days',
+        amount: last7Amount,
+        delta: delta !== undefined ? Number(delta.toFixed(2)) : undefined,
+      },
+      { label: 'Today', amount: todayAmount },
+    ];
   }
 
   private buildDonationWhere(
@@ -248,5 +414,10 @@ export class AnalyticsAggregationService {
       ...(base ?? {}),
       ...extra,
     };
+  }
+
+  private startOfDayISO(date: Date): string {
+    const d = this.startOfDay(date);
+    return d.toISOString();
   }
 }

@@ -21,18 +21,44 @@ describe("analytics adapters", () => {
           { date: "2024-01-01", amount: 10000 },
           { date: "2024-02-01", amount: 15000 },
         ],
+        summary: {
+          totalCount: 18,
+          totalAmount: 120000,
+          today: { count: 2, amount: 12000 },
+          last7Days: { count: 6, amount: 45000 },
+          last30Days: { count: 12, amount: 90000 },
+        },
       },
       programmes: {
         counts: [
           { status: "ACTIVE", count: 6 },
           { status: "COMPLETED", count: 3 },
         ],
+        summary: {
+          totalProgrammes: 9,
+          byStatus: {
+            ACTIVE: 6,
+            COMPLETED: 3,
+          },
+        },
       },
       approvals: {
         counts: [
           { status: "APPROVED", count: 4 },
           { status: "PENDING", count: 1 },
         ],
+        summary: {
+          totalApprovals: 5,
+          byStatus: {
+            APPROVED: 4,
+            PENDING: 1,
+          },
+        },
+      },
+      financial: {
+        totalReports: 14,
+        ngoCount: 7,
+        latestSubmittedAt: "2025-02-02T10:00:00.000Z",
       },
       recentActivity: [
         { id: "1", actor: "Priya", action: "approved NGO onboarding", timestamp: "2025-01-05T10:00:00Z" },
@@ -52,6 +78,11 @@ describe("analytics adapters", () => {
       { label: "PENDING", value: 1 },
     ]);
     expect(ui.activity[0]).toMatchObject({ id: "1", title: "Priya approved NGO onboarding" });
+    expect(ui.financial).toEqual({
+      totalReports: 14,
+      ngoCount: 7,
+      latestSubmittedAt: "2025-02-02T10:00:00.000Z",
+    });
   });
 
   it("maps company analytics payload", () => {
@@ -103,4 +134,3 @@ describe("analytics adapters", () => {
     expect(ui.compliance[0]).toEqual({ title: "FCRA renewal", status: "Due soon" });
   });
 });
-

@@ -31,6 +31,7 @@ import { ImpactTrendChart } from "@/components/charts/impact-trend-chart";
 import { DashboardOnboarding } from "@/components/onboarding/dashboard-onboarding";
 import { getFeatureFlags } from "@/lib/feature-flags";
 import { useAdminAnalytics } from "@/lib/hooks/use-admin-analytics";
+import { formatCurrency, formatNumber } from "@/lib/formatters";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -60,6 +61,11 @@ export default function AdminDashboard() {
     return () => window.clearTimeout(timer);
   }, [user]);
 
+  const analyticsEnabled = useMemo(() => getFeatureFlags().API_DASHBOARD, []);
+
+  const { data: analytics } = useAdminAnalytics({ enabled: analyticsEnabled });
+  const hasAnalytics = analyticsEnabled && Boolean(analytics);
+
   const activitySeries = useMemo(() => generateSeries(30, 40, 120), []);
   const ngoSeries = useMemo(() => generateSeries(10, 4, 18), []);
   const fundsSeries = useMemo(() => generateSeries(12, 20, 85), []);
@@ -69,12 +75,44 @@ export default function AdminDashboard() {
   const healthSeries = useMemo(() => generateSeries(8, 70, 98), []);
   const lastLoginSeries = useMemo(() => generateSeries(8, 3, 14), []);
   const csrSubmissions = useMemo(() => createCSRSubmissionsData(30), []);
-  const activityTrend = useMemo(() => createActivityData(activitySeries.slice(-12)), [activitySeries]);
+  const activityTrend = useMemo(() => {
+    if (!analytics?.donationTimeline?.length) {
+      return createActivityData(activitySeries.slice(-12));
+    }
+    return analytics.donationTimeline.slice(-12).map((point) => ({
+      label: new Date(point.name).toLocaleDateString(undefined, { month: "short", day: "numeric" }),
+      active: point.value,
+      submissions: point.value,
+    }));
+  }, [activitySeries, analytics?.donationTimeline]);
 
-  const analyticsEnabled = useMemo(() => getFeatureFlags().API_DASHBOARD, []);
+  const programmeTotal = useMemo(() => {
+    if (!hasAnalytics || !analytics?.programmeStatus?.length) {
+      return 0;
+    }
+    return analytics.programmeStatus.reduce((acc, curr) => acc + curr.value, 0);
+  }, [hasAnalytics, analytics?.programmeStatus]);
 
-  useAdminAnalytics({ enabled: analyticsEnabled });
+  const donationTotal = hasAnalytics ? analytics!.donationSummary.totalAmount : 0;
+  const donations30d = hasAnalytics ? analytics!.donationSummary.last30Days.amount : null;
+  const donationsToday = hasAnalytics ? analytics!.donationSummary.today.amount : null;
+  const activeProgrammes = hasAnalytics
+    ? analytics!.programmeStatus.find((entry) => entry.label === "ACTIVE")?.value ?? null
+    : null;
+  const pendingApprovals = hasAnalytics
+    ? analytics!.approvalStatus.find((entry) => entry.label === "PENDING")?.value ?? null
+    : null;
 
+  const donations30dDisplay = hasAnalytics && donations30d !== null ? formatCurrency(donations30d) : "₹4.8 Cr";
+  const donationsTodayDisplay = hasAnalytics && donationsToday !== null ? formatCurrency(donationsToday) : "₹1.2 Cr";
+  const programmesTrackedDisplay = hasAnalytics ? formatNumber(programmeTotal) : "1.8k";
+  const totalDonationsDisplay = hasAnalytics ? formatCurrency(donationTotal) : "₹62.4L";
+  const activeProgrammesDisplay = hasAnalytics && activeProgrammes !== null ? formatNumber(activeProgrammes) : "78%";
+  const pendingApprovalsDisplay = hasAnalytics && pendingApprovals !== null ? formatNumber(pendingApprovals) : "64%";
+  const reportsFiledDisplay = hasAnalytics ? formatNumber(analytics!.financial.totalReports) : "21";
+  const reportsHelper = hasAnalytics
+    ? `Across ${formatNumber(analytics!.financial.ngoCount)} NGOs`
+    : "Initiatives expanding reach YoY";
 
   const quickActions = useMemo(
     () =>
@@ -318,21 +356,21 @@ export default function AdminDashboard() {
               </div>
               <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
                 <KpiCard
-                  label="New NGOs this month"
-                  value="42"
+                  label="Donations (30d)"
+                  value={donations30dDisplay}
                   delta={calculateDelta(ngoSeries)}
                   data={ngoSeries}
                 />
                 <KpiCard
-                  label="CSR funds committed"
-                  value="₹4.8 Cr"
+                  label="Funds today"
+                  value={donationsTodayDisplay}
                   delta={calculateDelta(fundsSeries)}
                   data={fundsSeries}
                   tone="emerald"
                 />
                 <KpiCard
-                  label="Active users trend"
-                  value="1.8k"
+                  label="Programmes tracked"
+                  value={programmesTrackedDisplay}
                   delta={calculateDelta(activeUserSeries)}
                   data={activeUserSeries}
                   tone="indigo"
@@ -348,30 +386,30 @@ export default function AdminDashboard() {
               <div className="grid flex-1 gap-4 sm:grid-cols-2">
                 {[
                   {
-                    title: "Average donation",
-                    metric: "₹62.4L",
-                    helper: "Past 90-day moving average",
+                    title: "Total donations",
+                    metric: totalDonationsDisplay,
+                    helper: "Cumulative across platform",
                     icon: TrendingUp,
                     tone: "emerald",
                   },
                   {
-                    title: "Impact coverage",
-                    metric: "78%",
-                    helper: "Programmes reporting verified outcomes",
+                    title: "Active programmes",
+                    metric: activeProgrammesDisplay,
+                    helper: "Programmes currently in progress",
                     icon: Target,
                     tone: "indigo",
                   },
                   {
-                    title: "Repeat donors",
-                    metric: "64%",
-                    helper: "Returning contributors this quarter",
+                    title: "Approvals pending",
+                    metric: pendingApprovalsDisplay,
+                    helper: "Awaiting verification",
                     icon: Users2,
                     tone: "amber",
                   },
                   {
-                    title: "Programs scaling",
-                    metric: "21",
-                    helper: "Initiatives expanding reach YoY",
+                    title: "Reports filed",
+                    metric: reportsFiledDisplay,
+                    helper: reportsHelper,
                     icon: Sparkles,
                     tone: "slate",
                   },
@@ -541,8 +579,11 @@ export default function AdminDashboard() {
             <SuggestedActionsPanel />
           </section>
 
-          
-          <ActivityFeed className="pt-2" data-onboarding="activity-feed" />
+          <ActivityFeed
+            className="pt-2"
+            data-onboarding="activity-feed"
+            items={hasAnalytics ? analytics!.activity : undefined}
+          />
         </div>
       </div>
     </>

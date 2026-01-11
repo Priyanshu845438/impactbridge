@@ -107,3 +107,11 @@
 - Added `dashboard-admin-donations.test.tsx` smoke coverage to confirm live data renders without altering existing UX.
 - Validated the path with `npm run test -- dashboard-admin-donations.test.tsx` and ensured no other surfaces were affected.
 
+23. Admin Financial Analytics Dashboard Wiring
+- Admin dashboard and reports pages now use real analytics payloads (donation timeline/summary, programme & approval status, financial overview, audit activity) when `API_DASHBOARD` is enabled.
+- Added shared formatters and updated adapters/hooks to expose new metrics while keeping mock fallback intact.
+- Expanded Jest/RTL coverage for dashboard/report pages and analytics adapters, confirming flag on/off scenarios render expected data.
+
+24. Analytics Wiring Builds & Docs
+- Re-ran full frontend test/build pipeline after analytics wiring (`npm run test`, `npm run build`).
+- Updated frontend changelog/operations docs and pending works tracker to reflect completion of admin financial analytics wiring.

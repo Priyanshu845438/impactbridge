@@ -17,31 +17,27 @@ export class V1AnalyticsController {
   @Get('overview')
   @ApiOkResponse({ type: AdminAnalyticsResponseDto })
   async getAdminOverview(): Promise<AdminAnalyticsResponseDto> {
-    const [donations, programmes, approvals] = await Promise.all([
-      this.aggregation.getDonationTotals(),
-      this.aggregation.getProgrammeCounts(),
-      this.aggregation.getApprovalStatusBreakdown(),
+    const [donations, programmes, approvals, financial, recentActivity] =
+      await Promise.all([
+        this.aggregation.getDonationOverview(),
+        this.aggregation.getProgrammeOverview(),
+        this.aggregation.getApprovalOverview(),
+        this.aggregation.getFinancialReportOverview(),
+        this.aggregation.getRecentActivity(),
     ]);
 
     return {
-      donations: {
-        totalCount: donations.totalCount,
-        totalAmount: donations.totalAmount,
-        today: {
-          count: donations.today.totalCount,
-          amount: donations.today.totalAmount,
-        },
-        last7Days: {
-          count: donations.last7Days.totalCount,
-          amount: donations.last7Days.totalAmount,
-        },
-        last30Days: {
-          count: donations.last30Days.totalCount,
-          amount: donations.last30Days.totalAmount,
-        },
-      },
+      donations,
       programmes,
       approvals,
+      financial: {
+        totalReports: financial.totalReports,
+        ngoCount: financial.ngoCount,
+        latestSubmittedAt: financial.latestSubmittedAt
+          ? financial.latestSubmittedAt.toISOString()
+          : null,
+      },
+      recentActivity,
     } satisfies AdminAnalyticsResponseDto;
   }
 }
