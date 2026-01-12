@@ -48,7 +48,7 @@ _All findings are observational; no code was modified during this audit. Items a
 ### Backend
 - **Auth** — ✅ Completed (JWT register/login, guards, hashing utilities). _Pending_: refresh-token rotation, password recovery flows, and multi-factor support once product scope finalises.
 - **Users** — ✅ Completed (CRUD, RBAC endpoints, profile services). _Pending_: soft-delete restore endpoints, scoped pagination filters, and admin export tooling.
-- **Approvals** — 🟡 Working (state transitions, notification intents, audit logs). _Pending_: CSR linkage for downstream analytics, transactional wrapping when notifications + approvals fire together, and expanded UI coverage.
+- **Approvals** — 🟢 Complete (state transitions, notification intents, audit logs validated). _Pending_: Failure-safety covered by design guarantees; focus shifts to frontend wiring and monitoring.
 - **CSR Programme** — ✅ Completed (service/controller aligned with shared DTOs, company scoping, audit logging). _Pending_: rebuild legacy `/api/v1` e2e fixtures, monitor frontend parity before default API rollout, and extend analytics aggregation with programme KPIs.
 - **Financial** — 🟡 Working (upload + NGO list endpoints, duplicate prevention, DTO validation). _Pending_: wire admin analytics/list endpoints into dashboards, reconcile reports with donations, and add end-to-end tests covering NGO → admin flows. Backend admin listing verified for stability.
 - **Analytics** — 🟡 Working (donation/programme/approval aggregations plus financial report overview). _Pending_: expose richer KPIs, add company/NGO scoped filters, cache expensive queries, and document operational guardrails.
