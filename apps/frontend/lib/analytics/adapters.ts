@@ -105,10 +105,16 @@ export function mapAdminAnalyticsToUi(payload: AdminAnalyticsPayload): AdminUiMo
     activity: payload.recentActivity.map((activity) => ({
       id: activity.id,
       title: `${activity.actor} ${activity.action}`,
-      description: activity.action,
+      description: formatActivityDescription(activity.action),
       timestamp: activity.timestamp,
     })),
   };
+}
+
+function formatActivityDescription(action: string): string {
+  return action
+    .replace(/_/g, ' ')
+    .replace(/\b(\w)/g, (match) => match.toUpperCase());
 }
 
 export function mapCompanyAnalyticsToUi(payload: CompanyAnalyticsPayload): CompanyUiModel {

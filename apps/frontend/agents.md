@@ -115,3 +115,8 @@
 24. Analytics Wiring Builds & Docs
 - Re-ran full frontend test/build pipeline after analytics wiring (`npm run test`, `npm run build`).
 - Updated frontend changelog/operations docs and pending works tracker to reflect completion of admin financial analytics wiring.
+
+25. Admin Financial Analytics Data Live
+- Admin dashboard and reports pages now render donation/programme/approval/financial analytics from backend when `API_DASHBOARD` is enabled, preserving mock fallback.
+- Enhanced adapters, hooks, and ActivityFeed formatting to consume new backend fields and display audit timestamps cleanly.
+- Expanded Jest/RTL coverage for dashboard and reports pages plus adapters; lint, test, and build run clean (`npm run lint`, `npm run test`, `npm run build`).

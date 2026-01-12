@@ -161,6 +161,7 @@
 ### **28. Financial Admin Endpoint Validated**
 - Reviewed `/financial/admin/all` responses ensuring NGO contacts included and ordering stable.
 - Added unit coverage for admin listings (no behaviour change, access guards intact).
-### **29. Financial Analytics Overview Ready**
-- Extended analytics aggregation with existing financial report totals (count, NGO coverage, latest submission).
-- Added unit tests to ensure stable responses; no UI or behaviour changes.
+### **30. Admin Financial Analytics Completed**
+- Finalised admin analytics aggregation covering donations, programmes, approvals, financial reports, and activity feed.
+- Updated controller DTO response, adapters, and tests to match frontend contracts without altering RBAC or existing behaviour.
+- Backend build (`npm run build`) and targeted analytics tests confirmed passing (`npm run test -- analytics`).

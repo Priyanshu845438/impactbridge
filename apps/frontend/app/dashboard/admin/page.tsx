@@ -67,14 +67,52 @@ export default function AdminDashboard() {
   const hasAnalytics = analyticsEnabled && Boolean(analytics);
 
   const activitySeries = useMemo(() => generateSeries(30, 40, 120), []);
-  const ngoSeries = useMemo(() => generateSeries(10, 4, 18), []);
-  const fundsSeries = useMemo(() => generateSeries(12, 20, 85), []);
-  const activeUserSeries = useMemo(() => generateSeries(14, 60, 140), []);
+  const baselineNgoSeries = useMemo(() => generateSeries(10, 4, 18), []);
+  const baselineFundsSeries = useMemo(() => generateSeries(12, 20, 85), []);
+  const baselineProgrammeSeries = useMemo(() => generateSeries(14, 60, 140), []);
   const userStatSeries = useMemo(() => generateSeries(8, 900, 1300), []);
   const approvalStatSeries = useMemo(() => generateSeries(8, 12, 28), []);
   const healthSeries = useMemo(() => generateSeries(8, 70, 98), []);
   const lastLoginSeries = useMemo(() => generateSeries(8, 3, 14), []);
-  const csrSubmissions = useMemo(() => createCSRSubmissionsData(30), []);
+
+  const donationTrendSeries = hasAnalytics && analytics?.donationTimeline.length ? analytics.donationTimeline : null;
+
+  const programmeStatusSeries = hasAnalytics && analytics?.programmeStatus.length
+    ? analytics.programmeStatus.map((entry) => entry.value)
+    : baselineProgrammeSeries;
+
+  const buildFlatSeries = (value: number | null | undefined, fallback: number[]) => {
+    const safeValue = typeof value === "number" && Number.isFinite(value) ? value : 0;
+    if (safeValue <= 0) {
+      return fallback;
+    }
+    return Array.from({ length: fallback.length }, () => safeValue);
+  };
+
+  const ngoSeries = hasAnalytics && analytics
+    ? buildFlatSeries(analytics.donationSummary.last30Days.amount, baselineNgoSeries)
+    : baselineNgoSeries;
+
+  const fundsSeries = hasAnalytics && analytics
+    ? buildFlatSeries(analytics.donationSummary.today.amount, baselineFundsSeries)
+    : baselineFundsSeries;
+
+  const activeUserSeries = programmeStatusSeries.length ? programmeStatusSeries : baselineProgrammeSeries;
+
+  const csrSubmissions = useMemo(() => {
+    if (!donationTrendSeries?.length) {
+      return createCSRSubmissionsData(30);
+    }
+    return donationTrendSeries.map((point, index) => {
+      const label = new Date(point.name).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+      const previous = donationTrendSeries[index - 1]?.value ?? point.value;
+      return {
+        label,
+        value: point.value,
+        previous,
+      } satisfies CSRPoint;
+    });
+  }, [donationTrendSeries]);
   const activityTrend = useMemo(() => {
     if (!analytics?.donationTimeline?.length) {
       return createActivityData(activitySeries.slice(-12));
@@ -149,9 +187,9 @@ export default function AdminDashboard() {
     [],
   );
 
-  const oversightSnapshot = useMemo(
-    () =>
-      [
+  const oversightSnapshot = useMemo(() => {
+    if (!hasAnalytics || !analytics) {
+      return [
         {
           title: "Verifications due",
           metric: "12 NGOs",
@@ -170,9 +208,32 @@ export default function AdminDashboard() {
           helper: "Awaiting quarterly validation",
           tone: "slate" as const,
         },
-      ],
-    [],
-  );
+      ];
+    }
+
+    return [
+      {
+        title: "Verifications due",
+        metric: `${formatNumber(analytics.approvalStatus.reduce((acc, entry) => acc + entry.value, 0))} approvals`,
+        helper: "Across legal, financial, compliance tracks",
+        tone: "amber" as const,
+      },
+      {
+        title: "Funds disbursing",
+        metric: formatCurrency(analytics.donationSummary.last30Days.amount),
+        helper: "In settlement over next 30 days",
+        tone: "indigo" as const,
+      },
+      {
+        title: "Impact reports",
+        metric: `${formatNumber(analytics.financial.totalReports)} filed`,
+        helper: analytics.financial.latestSubmittedAt
+          ? `Latest ${new Date(analytics.financial.latestSubmittedAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}`
+          : "Awaiting latest submission",
+        tone: "slate" as const,
+      },
+    ];
+  }, [analytics, hasAnalytics]);
 
   const pipelineMilestones = useMemo(
     () =>
