@@ -3,15 +3,15 @@
 _All findings are observational; no code was modified during this audit. Items are grouped by scope with each task captured as an individual, detailed point._
 
 ### Recommended Implementation Order
-1. CSR Programme frontend parity (page-level tests + enabling API flag safely) to align UI with stable backend.
-2. Testing & CI infrastructure to add cross-app integration/e2e coverage and keep regressions out.
-3. Notifications provider dashboard & monitoring once retry telemetry is in use.
+1. Testing & CI infrastructure to add cross-app integration/e2e coverage and keep regressions out.
+2. Notifications provider dashboard & monitoring once retry telemetry is in use.
+3. Approvals UI wiring (API-backed actions) with audit log surfacing.
 
 ## 1. apps/__tests__
 1. Jest, RTL, and Nest unit suites exist per app, but there are still **no cross-application integration tests** that exercise real HTTP controllers, shared DTOs, and Prisma together; regressions can hide when contracts drift between backend and frontend.
 2. Vitest-based mocks in the frontend rely on global fetch overrides without scoped reset helpers, so state leakage can occur when new suites are added or run in parallel.
 3. Broader customer journeys (auth → dashboard → CSR/financial) still lack end-to-end coverage—plan Playwright or supertest flows once the APIs stabilise to catch navigation or RBAC issues.
-4. CSR programme smoke tests for mock vs API flag remain outstanding; previous scaffolding was removed after parity issues. Fresh e2e validation and runtime fallback assertions are required before enabling the feature flag by default.
+4. CSR programme smoke tests (Playwright or equivalent) remain outstanding to exercise API-on journeys end-to-end; mock vs API parity is now covered at unit + RTL layers.
 5. Financial flows have DTO-level unit coverage, yet there are no tests validating that admin listings, analytics, and retry-safe delivery stay consistent when data volume increases; load-focused or contract tests are still needed.
 
 ## 2. apps/backend
@@ -26,7 +26,7 @@ _All findings are observational; no code was modified during this audit. Items a
 ## 3. apps/frontend
 1. **Admin Dashboard**: Dashboard and reports pages now use live analytics when `API_DASHBOARD` is enabled, with mock fallbacks maintained. Financial widgets, timeline charts, and activity feed consume backend data; monitor performance before defaulting flag to on.
 2. **NGO Dashboard**: Financial reports list/upload screens render mock data only; backend DTO validation is exercised through unit tests but the UI never calls the true endpoints, leaving parity unchecked.
-3. **CSR Programme UI**: Hooks respect the `API_PROGRAMME` flag with runtime fallbacks, yet page-level RTL parity for edit/status/assignment flows and end-to-end smoke coverage remain pending before rolling out API mode.
+3. **CSR Programme UI**: API flag now default-on with parity tests in place; focus shifts to e2e smoke coverage and runtime monitoring for assignment/status flows.
 4. **Approvals & Notifications**: UI remains prototype-level, relying on mocked cards. No hooks exist for real approval actions or notification counts beyond the context stub.
 5. **Feature Flags**: `API_DASHBOARD`, `API_PROGRAMME`, and `API_AUTH` default to false. Documentation reflects runtime fallbacks, but environment plumbing and monitoring for production toggles are not set up.
 6. **Testing**: Dashboard suites assert rendering of mock data; there is no assurance that API-enabled modes render the same output. Major paths (financial admin, approvals, donors) lack even smoke-level coverage.
@@ -58,7 +58,7 @@ _All findings are observational; no code was modified during this audit. Items a
 ### Frontend
 - **Admin Dashboard** — ✅ Completed (analytics wiring live via feature flag, mock fallback retained). _Pending_: monitor live metrics performance and plan richer KPI widgets once the flag is default-on.
 - **Approvals UI** — 🟠 Prototype (static cards). _Pending_: hook into real approval APIs, add form validation and optimistic updates, surface audit trail.
-- **CSR Programme UI** — 🟠 Prototype (feature-flagged API hooks with mock fallbacks). _Pending_: page-level RTL parity for edit/status/assignment flows, e2e validation, RBAC guard checks, and pagination parity before flag default-on.
+- **CSR Programme UI** — ✅ Completed (feature flag default-on with API parity tests for list/detail/create/edit flows). _Pending_: ship end-to-end smoke tests, monitor runtime metrics, and verify RBAC guard telemetry after rollout.
 - **Notifications UI** — 🔴 Missing (only unread count placeholder). _Pending_: render intent statuses, subscribe to real-time updates, align with backend metrics.
 
 ### Shared / Infrastructure

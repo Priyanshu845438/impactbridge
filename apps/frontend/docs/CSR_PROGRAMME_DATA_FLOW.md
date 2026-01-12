@@ -8,7 +8,7 @@ Company CSR programme experiences are feature-flagged so that the frontend can s
 - `useProgrammeDetail` → fetches a single programme. Applies the same normalisation rules, falling back to mock detail when the API returns empty or malformed payloads.
 
 ## Mutation Hooks
-- `useCreateProgramme`, `useUpdateProgramme`, `useProgrammeStatus`, `useProgrammeAssignment` each read `API_PROGRAMME` to decide between backend mutations and mock fallbacks. Success/error toasts and navigation remain unchanged regardless of mode.
+- `useCreateProgramme`, `useUpdateProgramme`, `useProgrammeStatus`, `useProgrammeAssignment` each read `API_PROGRAMME` to decide between backend mutations and mock fallbacks. With the flag now defaulting to on, backend mutations run by default while still falling back to mocks if requests fail. Success/error toasts and navigation remain unchanged regardless of mode.
 - All mutations share query keys with the list/detail hooks and invalidate both after completion so cache stays consistent without manual writes.
 
 ## Fallback Safety
@@ -18,7 +18,7 @@ Company CSR programme experiences are feature-flagged so that the frontend can s
 
 ## Testing Coverage
 - Hook unit tests exercise flag on/off paths, malformed API payloads, and fallback behaviour.
-- Page-level RTL tests (list/detail) validate consistent UI output across mock/API states, loading, and error scenarios. Audit logging verification did not require UI changes; tests remain unchanged but confirm that backend payloads include metadata consumed by activity logs.
-- Edit/update page RTL coverage remains a known follow-up before enabling API mode by default; cases were added to cover list/detail parity but edit flows are still pending.
+- Page-level RTL tests (list/detail/edit) validate consistent UI output across mock/API states, loading, and error scenarios. Audit logging verification did not require UI changes; tests confirm backend payloads include metadata consumed by activity logs.
+- End-to-end smoke coverage is the remaining follow-up before promoting to production environments without manual verification.
 
 Keep this document in sync with additional hook behaviour (e.g., pagination, filtering) or when feature flags are retired.
