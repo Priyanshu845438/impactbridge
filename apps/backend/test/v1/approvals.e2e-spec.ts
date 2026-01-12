@@ -6,10 +6,14 @@ import dotenv from 'dotenv';
 import { AppModule } from '../../src/app.module';
 import { PrismaService } from '../../src/prisma/prisma.service';
 import { signToken } from '../../src/auth/utils/jwt.util';
+import { NotificationsService } from '../../src/notifications/notifications.service';
+import { AnalyticsAggregationService } from '../../src/analytics/analytics-aggregation.service';
 
 describe('ApprovalsController (e2e)', () => {
   let app: INestApplication;
   let prisma: jest.Mocked<PrismaService>;
+  let notifications: { enqueue: jest.Mock };
+  let analytics: AnalyticsAggregationService;
 
   const companyUser = { id: 'company-user', role: 'COMPANY' } as const;
   const ngoUser = { id: 'ngo-user', role: 'NGO' } as const;
@@ -28,32 +32,44 @@ describe('ApprovalsController (e2e)', () => {
         create: jest.fn(),
         update: jest.fn(),
         findMany: jest.fn(),
+        groupBy: jest.fn(),
       },
       auditLog: {
         create: jest.fn(),
       },
     } as unknown as jest.Mocked<PrismaService>;
 
+    notifications = {
+      enqueue: jest.fn(),
+    };
+
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
       .overrideProvider(PrismaService)
       .useValue(prisma)
+      .overrideProvider(NotificationsService)
+      .useValue(notifications)
       .compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
+
+    analytics = moduleFixture.get(AnalyticsAggregationService);
 
     companyToken = await signToken({
       sub: companyUser.id,
       role: companyUser.role,
     });
     ngoToken = await signToken({ sub: ngoUser.id, role: ngoUser.role });
+
+    notifications.enqueue.mockResolvedValue({ id: 'intent-1' });
   });
 
   afterEach(() => {
     jest.clearAllMocks();
     prisma.auditLog.create.mockReset();
+    notifications.enqueue.mockResolvedValue({ id: 'intent-1' });
   });
 
   afterAll(async () => {
@@ -109,7 +125,95 @@ describe('ApprovalsController (e2e)', () => {
 
       expect(prisma.campaignApproval.create).not.toHaveBeenCalled();
     });
+  });
 
+  describe('Failure safety validations', () => {
+    const baseApproval = {
+      id: 'approval-1',
+      status: 'PENDING',
+      campaignId: 'campaign-1',
+      companyId: 'company-user',
+      ngoId: 'ngo-user',
+      remarks: null,
+      campaign: {
+        id: 'campaign-1',
+        ngoId: 'ngo-user',
+        title: 'Campaign',
+      },
+      company: {
+        id: 'company-user',
+        userId: companyUser.id,
+        deletedAt: null,
+        user: { id: 'company-user', name: 'Company', email: 'company@example.com' },
+      },
+      ngo: {
+        id: 'ngo-user',
+        userId: ngoUser.id,
+        user: { id: 'ngo-user', name: 'NGO', email: 'ngo@example.com' },
+      },
+    } as const;
+
+    beforeEach(() => {
+      prisma.campaign.findUnique.mockResolvedValue({
+        id: 'campaign-1',
+        ngoId: 'ngo-user',
+      } as any);
+      prisma.companyProfile.findUnique.mockResolvedValue({
+        id: 'company-user',
+        deletedAt: null,
+      } as any);
+      notifications.enqueue.mockResolvedValue({ id: 'intent-1' });
+    });
+
+    it('persists approval status and audit log when notification enqueue fails', async () => {
+      prisma.campaignApproval.findUnique
+        .mockResolvedValueOnce({ ...baseApproval })
+        .mockResolvedValueOnce({ ...baseApproval, status: 'APPROVED' });
+      prisma.campaignApproval.update.mockResolvedValue({
+        ...baseApproval,
+        status: 'APPROVED',
+      } as any);
+      notifications.enqueue.mockRejectedValueOnce(new Error('notification failure'));
+
+      const response = await request(app.getHttpServer())
+        .post('/api/v1/approvals/campaign-1/approve')
+        .set('Authorization', `Bearer ${companyToken}`)
+        .send({ status: 'APPROVED', remarks: 'All good' });
+
+      expect(response.status).toBeGreaterThanOrEqual(500);
+      expect(prisma.campaignApproval.update).toHaveBeenCalledTimes(1);
+      expect(prisma.auditLog.create).toHaveBeenCalledTimes(1);
+      expect(prisma.campaignApproval.create).not.toHaveBeenCalled();
+      expect(notifications.enqueue).toHaveBeenCalledTimes(1);
+    });
+
+    it('keeps approval analytics available even after notification failure', async () => {
+      prisma.campaignApproval.findUnique
+        .mockResolvedValueOnce({ ...baseApproval })
+        .mockResolvedValueOnce({ ...baseApproval, status: 'APPROVED' });
+      prisma.campaignApproval.update.mockResolvedValue({
+        ...baseApproval,
+        status: 'APPROVED',
+      } as any);
+      notifications.enqueue.mockRejectedValueOnce(new Error('notification failure'));
+
+      await request(app.getHttpServer())
+        .post('/api/v1/approvals/campaign-1/approve')
+        .set('Authorization', `Bearer ${companyToken}`)
+        .send({ status: 'APPROVED', remarks: 'All good' })
+        .expect(500);
+
+      prisma.campaignApproval.groupBy.mockResolvedValue([
+        { status: 'APPROVED', _count: { _all: 3 } },
+        { status: 'PENDING', _count: { _all: 2 } },
+      ] as any);
+
+      const overview = await analytics.getApprovalOverview();
+
+      expect(overview.totalApprovals).toBe(5);
+      expect(overview.byStatus).toEqual({ APPROVED: 3, PENDING: 2 });
+      expect(prisma.campaignApproval.groupBy).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('POST /api/v1/approvals/:campaignId/approve', () => {

@@ -158,3 +158,4 @@
 - Loaded JWT secrets within approvals e2e spec and generated role-specific tokens to mirror production guard behaviour.
 - Added negative integration tests ensuring company-only endpoints reject NGO users and vice versa without touching service logic.
 - Confirmed prisma mocks remain unchanged when 403 responses are returned, preserving existing workflow semantics.
+
