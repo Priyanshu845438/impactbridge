@@ -4,8 +4,8 @@ _All findings are observational; no code was modified during this audit. Items a
 
 ### Recommended Implementation Order
 1. Testing & CI infrastructure to add cross-app integration/e2e coverage and keep regressions out.
-2. Notifications provider dashboard & monitoring once retry telemetry is in use.
-3. Approvals UI wiring (API-backed actions) with audit log surfacing.
+2. Approvals UI wiring (API-backed actions) with audit log surfacing.
+3. Notifications provider dashboard & monitoring once retry telemetry is in use.
 
 ## 1. apps/__tests__
 1. Jest, RTL, and Nest unit suites exist per app, but there are still **no cross-application integration tests** that exercise real HTTP controllers, shared DTOs, and Prisma together; regressions can hide when contracts drift between backend and frontend.
@@ -16,7 +16,7 @@ _All findings are observational; no code was modified during this audit. Items a
 
 ## 2. apps/backend
 1. **CSR Programme**: Controller and service are aligned with shared DTOs and guarded via `JwtAuthGuard` + `RolesGuard (COMPANY)`. Negative paths and audit logging are covered, but legacy `/api/v1` e2e suites still fail until Prisma-backed fixtures are restored.
-2. **Approvals**: Workflow emits notification intents and audit logs, though RBAC integration tests are limited and there is no verification that approval state changes propagate to linked CSR/financial reports.
+2. **Approvals**: Workflow emits notification intents and audit logs, and RBAC integration tests now cover company-vs-NGO access. There is still no verification that approval state changes propagate to linked CSR/financial reports.
 3. **Financial**: Upload/list endpoints enforce DTO validation and duplicate checks. Admin list (`/financial/admin/all`) returns raw Prisma models; analytics surfaces and admin dashboards still consume mock data, and no reconciliation exists between financial reports and donation ledgers.
 4. **Analytics**: Aggregation service exposes donations/programmes/approvals but lacks caching, rate limiting, or filtering by company/NGO. Financial metrics are not surfaced, leaving admin dashboards partially mocked.
 5. **Notifications**: Intent storage, safe delivery, metrics, and automated retry scheduling are in place. Provider dashboards, status introspection endpoints, and long-term worker orchestration remain future work.
@@ -48,7 +48,7 @@ _All findings are observational; no code was modified during this audit. Items a
 ### Backend
 - **Auth** — ✅ Completed (JWT register/login, guards, hashing utilities). _Pending_: refresh-token rotation, password recovery flows, and multi-factor support once product scope finalises.
 - **Users** — ✅ Completed (CRUD, RBAC endpoints, profile services). _Pending_: soft-delete restore endpoints, scoped pagination filters, and admin export tooling.
-- **Approvals** — 🟡 Working (state transitions, notification intents, audit logs). _Pending_: guard integration tests across company/NGO roles, CSR linkage for downstream analytics, and transactional wrapping when notifications + approvals fire together.
+- **Approvals** — 🟡 Working (state transitions, notification intents, audit logs). _Pending_: CSR linkage for downstream analytics, transactional wrapping when notifications + approvals fire together, and expanded UI coverage.
 - **CSR Programme** — ✅ Completed (service/controller aligned with shared DTOs, company scoping, audit logging). _Pending_: rebuild legacy `/api/v1` e2e fixtures, monitor frontend parity before default API rollout, and extend analytics aggregation with programme KPIs.
 - **Financial** — 🟡 Working (upload + NGO list endpoints, duplicate prevention, DTO validation). _Pending_: wire admin analytics/list endpoints into dashboards, reconcile reports with donations, and add end-to-end tests covering NGO → admin flows. Backend admin listing verified for stability.
 - **Analytics** — 🟡 Working (donation/programme/approval aggregations plus financial report overview). _Pending_: expose richer KPIs, add company/NGO scoped filters, cache expensive queries, and document operational guardrails.

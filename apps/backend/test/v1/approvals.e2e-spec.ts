@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
+import path from 'node:path';
+import dotenv from 'dotenv';
 import { AppModule } from '../../src/app.module';
 import { PrismaService } from '../../src/prisma/prisma.service';
 import { signToken } from '../../src/auth/utils/jwt.util';
@@ -12,13 +14,12 @@ describe('ApprovalsController (e2e)', () => {
   const companyUser = { id: 'company-user', role: 'COMPANY' } as const;
   const ngoUser = { id: 'ngo-user', role: 'NGO' } as const;
 
-  const companyToken = signToken({
-    sub: companyUser.id,
-    role: companyUser.role,
-  });
-  const ngoToken = signToken({ sub: ngoUser.id, role: ngoUser.role });
+  let companyToken: string;
+  let ngoToken: string;
 
   beforeAll(async () => {
+    dotenv.config({ path: path.resolve(__dirname, '../../.env.test') });
+
     prisma = {
       campaign: { findUnique: jest.fn() },
       companyProfile: { findUnique: jest.fn() },
@@ -42,6 +43,12 @@ describe('ApprovalsController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
+
+    companyToken = await signToken({
+      sub: companyUser.id,
+      role: companyUser.role,
+    });
+    ngoToken = await signToken({ sub: ngoUser.id, role: ngoUser.role });
   });
 
   afterEach(() => {
@@ -88,6 +95,21 @@ describe('ApprovalsController (e2e)', () => {
         .send({ companyId: 'company-profile' })
         .expect(403);
     });
+    it('forbids company user from requesting approval', async () => {
+      prisma.campaign.findUnique.mockResolvedValue({
+        id: 'campaign-1',
+        ngoId: 'ngo-user',
+      } as any);
+
+      await request(app.getHttpServer())
+        .post('/api/v1/approvals/campaign-1/request')
+        .set('Authorization', `Bearer ${companyToken}`)
+        .send({ companyId: 'company-profile' })
+        .expect(403);
+
+      expect(prisma.campaignApproval.create).not.toHaveBeenCalled();
+    });
+
   });
 
   describe('POST /api/v1/approvals/:campaignId/approve', () => {
@@ -127,6 +149,17 @@ describe('ApprovalsController (e2e)', () => {
         .send({ status: 'REJECTED' })
         .expect(400);
     });
+
+    it('forbids NGO from approving requests', async () => {
+      await request(app.getHttpServer())
+        .post('/api/v1/approvals/campaign-1/approve')
+        .set('Authorization', `Bearer ${ngoToken}`)
+        .send({ status: 'APPROVED', remarks: 'invalid' })
+        .expect(403);
+
+      expect(prisma.campaignApproval.update).not.toHaveBeenCalled();
+    });
+
   });
 
   describe('POST /api/v1/approvals/:campaignId/reject', () => {
@@ -158,6 +191,17 @@ describe('ApprovalsController (e2e)', () => {
         .send({ status: 'REJECTED', remarks: 'Not aligned' })
         .expect(201);
     });
+
+    it('forbids NGO from rejecting requests', async () => {
+      await request(app.getHttpServer())
+        .post('/api/v1/approvals/campaign-1/reject')
+        .set('Authorization', `Bearer ${ngoToken}`)
+        .send({ status: 'REJECTED', remarks: 'nope' })
+        .expect(403);
+
+      expect(prisma.campaignApproval.update).not.toHaveBeenCalled();
+    });
+
   });
 
   describe('POST /api/v1/approvals/:campaignId/revoke', () => {
@@ -212,5 +256,16 @@ describe('ApprovalsController (e2e)', () => {
         .send()
         .expect(403);
     });
+
+    it('forbids NGO from revoking approvals', async () => {
+      await request(app.getHttpServer())
+        .post('/api/v1/approvals/campaign-1/revoke')
+        .set('Authorization', `Bearer ${ngoToken}`)
+        .send({ remarks: 'cannot revoke' })
+        .expect(403);
+
+      expect(prisma.campaignApproval.update).not.toHaveBeenCalled();
+    });
+
   });
 });

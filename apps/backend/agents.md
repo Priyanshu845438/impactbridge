@@ -154,14 +154,7 @@
 - Exercised CSR, approvals, and financial flows in existing unit suites to confirm single-entry, actor-scoped audit logs with correct metadata and no duplicates.
 - Documentation (CHANGELOG, OPERATIONS, pending works) updated to mark logging as compliance-ready without altering runtime behaviour.
 
-### **27. Financial DTO Validation Hardened**
-- Financial report upload DTO now enforces period/year/url constraints with unit tests.
-- No endpoint behaviour changes; invalid payloads fail early under existing validation pipe.
-
-### **28. Financial Admin Endpoint Validated**
-- Reviewed `/financial/admin/all` responses ensuring NGO contacts included and ordering stable.
-- Added unit coverage for admin listings (no behaviour change, access guards intact).
-### **30. Admin Financial Analytics Completed**
-- Finalised admin analytics aggregation covering donations, programmes, approvals, financial reports, and activity feed.
-- Updated controller DTO response, adapters, and tests to match frontend contracts without altering RBAC or existing behaviour.
-- Backend build (`npm run build`) and targeted analytics tests confirmed passing (`npm run test -- analytics`).
+20. Approvals RBAC Guard Coverage
+- Loaded JWT secrets within approvals e2e spec and generated role-specific tokens to mirror production guard behaviour.
+- Added negative integration tests ensuring company-only endpoints reject NGO users and vice versa without touching service logic.
+- Confirmed prisma mocks remain unchanged when 403 responses are returned, preserving existing workflow semantics.
