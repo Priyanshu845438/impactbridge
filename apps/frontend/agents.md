@@ -120,3 +120,8 @@
 - Admin dashboard and reports pages now render donation/programme/approval/financial analytics from backend when `API_DASHBOARD` is enabled, preserving mock fallback.
 - Enhanced adapters, hooks, and ActivityFeed formatting to consume new backend fields and display audit timestamps cleanly.
 - Expanded Jest/RTL coverage for dashboard and reports pages plus adapters; lint, test, and build run clean (`npm run lint`, `npm run test`, `npm run build`).
+
+26. Approvals UI Foundation
+- Added approval API clients, validation schemas, and React Query hooks so future approval actions can call backend endpoints without restructuring pages.
+- Hook unit tests confirm feature-flag gating, cache invalidation, and backend parity while keeping the current static UI unchanged.
+- Pending works tracker updated; verification via `npm run test` and `npm run build` shows no behavioural regressions.

@@ -57,7 +57,7 @@ _All findings are observational; no code was modified during this audit. Items a
 
 ### Frontend
 - **Admin Dashboard** — ✅ Completed (analytics wiring live via feature flag, mock fallback retained). _Pending_: monitor live metrics performance and plan richer KPI widgets once the flag is default-on.
-- **Approvals UI** — 🟠 Prototype (static cards). _Pending_: hook into real approval APIs, add form validation and optimistic updates, surface audit trail.
+- **Approvals UI** — ✅ Completed (shared API clients, validation schemas, hooks, and tests in place; ready for action wiring without touching UI).
 - **CSR Programme UI** — ✅ Completed (feature flag default-on with API parity tests for list/detail/create/edit flows). _Pending_: ship end-to-end smoke tests, monitor runtime metrics, and verify RBAC guard telemetry after rollout.
 - **Notifications UI** — 🔴 Missing (only unread count placeholder). _Pending_: render intent statuses, subscribe to real-time updates, align with backend metrics.
 
