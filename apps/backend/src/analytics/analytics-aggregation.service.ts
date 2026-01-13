@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import NodeCache from 'node-cache';
 import { Donation, Prisma, ProgrammeStatus } from 'prisma/generated';
 
 type DonationDateFilter = Prisma.DateTimeFilter<'Donation'>;
@@ -108,11 +109,19 @@ export interface ActivityEntry {
 
 @Injectable()
 export class AnalyticsAggregationService {
+  private readonly cache = new NodeCache({ stdTTL: 120, useClones: false, checkperiod: 60 });
+
   constructor(private readonly prisma: PrismaService) {}
 
   async getDonationOverview(
     filter: DonationAggregationFilter = {},
   ): Promise<DonationOverview> {
+    const cacheKey = this.buildCacheKey('donations', filter);
+    const cached = this.cache.get<DonationOverview>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
     const where = this.buildDonationWhere(filter);
 
     const aggregate = await this.prisma.donation.aggregate({
@@ -203,7 +212,7 @@ export class AnalyticsAggregationService {
       ? Number((summary.totalAmount / summary.totalCount).toFixed(2))
       : 0;
 
-    return {
+    const overview: DonationOverview = {
       totalAmount: summary.totalAmount,
       totalCount: summary.totalCount,
       today: {
@@ -233,11 +242,20 @@ export class AnalyticsAggregationService {
         uniqueCompanies,
       },
     };
+
+    this.cache.set(cacheKey, overview);
+    return overview;
   }
 
   async getProgrammeOverview(
     filter: ProgrammeAggregationFilter = {},
   ): Promise<ProgrammeOverview> {
+    const cacheKey = this.buildCacheKey('programmes', filter);
+    const cached = this.cache.get<ProgrammeOverview>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
     const where = this.buildProgrammeWhere(filter);
 
     const grouped = await this.prisma.cSRProgramme.groupBy({
@@ -272,7 +290,7 @@ export class AnalyticsAggregationService {
       ? Number((completedCount / total).toFixed(2))
       : 0;
 
-    return {
+    const overview: ProgrammeOverview = {
       totalProgrammes: total,
       byStatus,
       counts,
@@ -287,11 +305,20 @@ export class AnalyticsAggregationService {
         archivedCount,
       },
     };
+
+    this.cache.set(cacheKey, overview);
+    return overview;
   }
 
   async getApprovalOverview(
     filter: ApprovalAggregationFilter = {},
   ): Promise<ApprovalOverview> {
+    const cacheKey = this.buildCacheKey('approvals', filter);
+    const cached = this.cache.get<ApprovalOverview>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
     const where: Prisma.CampaignApprovalWhereInput = {
       companyId: filter.companyId,
       ngoId: filter.ngoId,
@@ -324,7 +351,7 @@ export class AnalyticsAggregationService {
       ? Number((approvedCount / total).toFixed(2))
       : 0;
 
-    return {
+    const overview: ApprovalOverview = {
       totalApprovals: total,
       byStatus,
       counts,
@@ -339,11 +366,20 @@ export class AnalyticsAggregationService {
         rejectionCount,
       },
     };
+
+    this.cache.set(cacheKey, overview);
+    return overview;
   }
 
   async getFinancialReportOverview(
     filter: FinancialReportAggregationFilter = {},
   ): Promise<FinancialReportOverview> {
+    const cacheKey = this.buildCacheKey('financial', filter);
+    const cached = this.cache.get<FinancialReportOverview>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
     let scopedNgoIds: string[] | undefined;
 
     if (filter.ngoId) {
@@ -352,7 +388,9 @@ export class AnalyticsAggregationService {
       scopedNgoIds = await this.resolveCompanyNgoIds(filter.companyId);
 
       if (scopedNgoIds.length === 0) {
-        return this.buildEmptyFinancialOverview();
+        const empty = this.buildEmptyFinancialOverview();
+        this.cache.set(cacheKey, empty);
+        return empty;
       }
     }
 
@@ -414,7 +452,7 @@ export class AnalyticsAggregationService {
         )
       : null;
 
-    return {
+    const overview: FinancialReportOverview = {
       totalReports,
       ngoCount: groupedByNgo.length,
       latestSubmittedAt: latest?.createdAt ?? null,
@@ -425,6 +463,9 @@ export class AnalyticsAggregationService {
         monthOverMonthGrowth,
       },
     };
+
+    this.cache.set(cacheKey, overview);
+    return overview;
   }
 
   private buildEmptyFinancialOverview(): FinancialReportOverview {
@@ -601,6 +642,17 @@ export class AnalyticsAggregationService {
   private startOfDayISO(date: Date): string {
     const d = this.startOfDay(date);
     return d.toISOString();
+  }
+
+  private buildCacheKey(
+    prefix: string,
+    filter:
+      | DonationAggregationFilter
+      | ProgrammeAggregationFilter
+      | ApprovalAggregationFilter
+      | FinancialReportAggregationFilter,
+  ): string {
+    return `${prefix}:${JSON.stringify(filter ?? {})}`;
   }
 
   private async resolveCompanyNgoIds(companyId: string): Promise<string[]> {

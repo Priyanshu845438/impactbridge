@@ -170,3 +170,7 @@
 23. Financial Module Closure
 - Financial module validated end-to-end (NGO upload to admin visibility) with reconciliation checks.
 - Confirmed listings remain stable; no behavioural changes introduced during validation.
+24. Analytics Module Completed
+- Added in-memory caching for donation/programme/approval/financial aggregates with tenant-scoped keys and short TTLs.
+- Extended analytics with richer KPIs, company/NGO filters, and comprehensive tests/endpoints verification.
+- Documented operational guardrails covering query cost, cache expectations, and admin-only usage assumptions.
