@@ -13,10 +13,16 @@ export interface DonationAggregationFilter {
 
 export interface ProgrammeAggregationFilter {
   companyId?: string;
+  ngoId?: string;
   includeArchived?: boolean;
 }
 
 export interface ApprovalAggregationFilter {
+  companyId?: string;
+  ngoId?: string;
+}
+
+export interface FinancialReportAggregationFilter {
   companyId?: string;
   ngoId?: string;
 }
@@ -335,14 +341,34 @@ export class AnalyticsAggregationService {
     };
   }
 
-  async getFinancialReportOverview(): Promise<FinancialReportOverview> {
+  async getFinancialReportOverview(
+    filter: FinancialReportAggregationFilter = {},
+  ): Promise<FinancialReportOverview> {
+    let scopedNgoIds: string[] | undefined;
+
+    if (filter.ngoId) {
+      scopedNgoIds = [filter.ngoId];
+    } else if (filter.companyId) {
+      scopedNgoIds = await this.resolveCompanyNgoIds(filter.companyId);
+
+      if (scopedNgoIds.length === 0) {
+        return this.buildEmptyFinancialOverview();
+      }
+    }
+
+    const baseWhere: Prisma.FinancialReportWhereInput = scopedNgoIds
+      ? { ngoId: { in: scopedNgoIds } }
+      : {};
+
     const [totalReports, groupedByNgo, latest] = await Promise.all([
-      this.prisma.financialReport.count(),
+      this.prisma.financialReport.count({ where: baseWhere }),
       this.prisma.financialReport.groupBy({
+        where: baseWhere,
         by: ['ngoId'],
         _count: { ngoId: true },
       }),
       this.prisma.financialReport.findFirst({
+        where: baseWhere,
         orderBy: { createdAt: 'desc' },
         select: { createdAt: true },
       }),
@@ -360,6 +386,7 @@ export class AnalyticsAggregationService {
     const [reportsThisMonth, reportsPreviousMonth] = await Promise.all([
       this.prisma.financialReport.count({
         where: {
+          ...baseWhere,
           createdAt: {
             gte: startOfMonth,
             lte: now,
@@ -368,6 +395,7 @@ export class AnalyticsAggregationService {
       }),
       this.prisma.financialReport.count({
         where: {
+          ...baseWhere,
           createdAt: {
             gte: startOfPreviousMonth,
             lte: endOfPreviousMonth,
@@ -395,6 +423,20 @@ export class AnalyticsAggregationService {
         reportsThisMonth,
         reportsPreviousMonth,
         monthOverMonthGrowth,
+      },
+    };
+  }
+
+  private buildEmptyFinancialOverview(): FinancialReportOverview {
+    return {
+      totalReports: 0,
+      ngoCount: 0,
+      latestSubmittedAt: null,
+      kpis: {
+        averageReportsPerNgo: 0,
+        reportsThisMonth: 0,
+        reportsPreviousMonth: 0,
+        monthOverMonthGrowth: null,
       },
     };
   }
@@ -505,6 +547,14 @@ export class AnalyticsAggregationService {
       where.companyId = filter.companyId;
     }
 
+    if (filter.ngoId) {
+      where.assignments = {
+        some: {
+          ngoId: filter.ngoId,
+        },
+      };
+    }
+
     if (!filter.includeArchived) {
       where.deletedAt = null;
     }
@@ -551,5 +601,40 @@ export class AnalyticsAggregationService {
   private startOfDayISO(date: Date): string {
     const d = this.startOfDay(date);
     return d.toISOString();
+  }
+
+  private async resolveCompanyNgoIds(companyId: string): Promise<string[]> {
+    const [approvalGroups, donations] = await Promise.all([
+      this.prisma.campaignApproval.groupBy({
+        where: { companyId },
+        by: ['ngoId'],
+        _count: { _all: true },
+      }),
+      this.prisma.donation.findMany({
+        where: { companyId },
+        select: {
+          campaign: {
+            select: { ngoId: true },
+          },
+        },
+      }),
+    ]);
+
+    const ngoIds = new Set<string>();
+
+    approvalGroups.forEach((group) => {
+      if (group.ngoId) {
+        ngoIds.add(group.ngoId);
+      }
+    });
+
+    donations.forEach((donation) => {
+      const ngoId = donation.campaign?.ngoId;
+      if (ngoId) {
+        ngoIds.add(ngoId);
+      }
+    });
+
+    return Array.from(ngoIds);
   }
 }

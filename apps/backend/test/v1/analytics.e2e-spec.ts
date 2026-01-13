@@ -11,11 +11,13 @@ describe('V1 AnalyticsController (e2e)', () => {
   let app: INestApplication;
   let prisma: PrismaService;
 
-  const adminToken = signToken({ sub: 'admin-id', role: UserRole.SUPER_ADMIN });
-  const donorToken = signToken({ sub: 'donor-id', role: UserRole.DONOR });
+  let adminToken: string;
+  let donorToken: string;
 
   beforeAll(async () => {
     process.env.JWT_SECRET = process.env.JWT_SECRET || 'test-secret';
+    adminToken = signToken({ sub: 'admin-id', role: UserRole.SUPER_ADMIN });
+    donorToken = signToken({ sub: 'donor-id', role: UserRole.DONOR });
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -101,6 +103,32 @@ describe('V1 AnalyticsController (e2e)', () => {
       .set('Authorization', `Bearer ${donorToken}`)
       .expect(403);
   });
+
+  it('scopes analytics by company when companyId is provided', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/api/v1/admin/analytics/overview')
+      .query({ companyId: 'company-profile' })
+      .set('Authorization', `Bearer ${adminToken}`)
+      .expect(200);
+
+    expect(res.body.donations.summary.totalAmount).toBe(3000);
+    expect(res.body.donations.summary.totalCount).toBe(3);
+    expect(res.body.programmes.summary.totalProgrammes).toBe(2);
+    expect(res.body.approvals.summary.totalApprovals).toBe(2);
+  });
+
+  it('scopes analytics by NGO when ngoId is provided', async () => {
+    const res = await request(app.getHttpServer())
+      .get('/api/v1/admin/analytics/overview')
+      .query({ ngoId: 'other-ngo' })
+      .set('Authorization', `Bearer ${adminToken}`)
+      .expect(200);
+
+    expect(res.body.donations.summary.totalAmount).toBe(500);
+    expect(res.body.donations.summary.totalCount).toBe(1);
+    expect(res.body.programmes.summary.totalProgrammes).toBe(0);
+    expect(res.body.approvals.summary.totalApprovals).toBe(0);
+  });
 });
 
 async function seedData(prisma: PrismaService) {
@@ -162,6 +190,14 @@ async function seedData(prisma: PrismaService) {
         status: 'PUBLIC',
       },
     }),
+    prisma.campaign.create({
+      data: {
+        id: 'campaign-3',
+        title: 'Campaign Three',
+        ngoId: 'other-ngo',
+        status: 'PUBLIC',
+      },
+    }),
     prisma.cSRProgramme.create({
       data: {
         id: 'programme-1',
@@ -205,6 +241,15 @@ async function seedData(prisma: PrismaService) {
         reportUrl: 'https://example.com/report.pdf',
       },
     }),
+    prisma.financialReport.create({
+      data: {
+        id: 'report-2',
+        ngoId: 'other-ngo',
+        period: 'Q1',
+        year: 2025,
+        reportUrl: 'https://example.com/report2.pdf',
+      },
+    }),
     prisma.auditLog.create({
       data: {
         id: 'log-1',
@@ -235,6 +280,13 @@ async function seedData(prisma: PrismaService) {
           donationDate: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000),
           campaignId: 'campaign-2',
           companyId: 'company-profile',
+        },
+        {
+          id: 'donation-4',
+          amount: 500,
+          donationDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+          campaignId: 'campaign-3',
+          companyId: 'other-company',
         },
       ],
     }),

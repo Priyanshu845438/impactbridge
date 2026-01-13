@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AnalyticsAggregationService } from '../../analytics/analytics-aggregation.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
@@ -6,6 +6,7 @@ import { RolesGuard } from '../../auth/guards/roles.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { UserRole } from '../../user/user-role.enum';
 import { AdminAnalyticsResponseDto } from './dto/admin-analytics-response.dto';
+import { AdminAnalyticsScopeQueryDto } from './dto/admin-analytics-scope-query.dto';
 
 @Controller({ path: 'admin/analytics', version: '1' })
 @ApiTags('Admin Analytics')
@@ -16,13 +17,17 @@ export class V1AnalyticsController {
 
   @Get('overview')
   @ApiOkResponse({ type: AdminAnalyticsResponseDto })
-  async getAdminOverview(): Promise<AdminAnalyticsResponseDto> {
+  async getAdminOverview(
+    @Query() scope: AdminAnalyticsScopeQueryDto,
+  ): Promise<AdminAnalyticsResponseDto> {
+    const { companyId, ngoId } = scope;
+
     const [donations, programmes, approvals, financial, recentActivity] =
       await Promise.all([
-        this.aggregation.getDonationOverview(),
-        this.aggregation.getProgrammeOverview(),
-        this.aggregation.getApprovalOverview(),
-        this.aggregation.getFinancialReportOverview(),
+        this.aggregation.getDonationOverview({ companyId, ngoId }),
+        this.aggregation.getProgrammeOverview({ companyId, ngoId }),
+        this.aggregation.getApprovalOverview({ companyId, ngoId }),
+        this.aggregation.getFinancialReportOverview({ companyId, ngoId }),
         this.aggregation.getRecentActivity(),
     ]);
 

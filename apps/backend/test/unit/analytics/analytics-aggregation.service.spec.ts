@@ -301,12 +301,14 @@ describe('AnalyticsAggregationService', () => {
         },
       });
 
-      expect(prisma.financialReport.count).toHaveBeenNthCalledWith(1);
+      expect(prisma.financialReport.count).toHaveBeenNthCalledWith(1, { where: {} });
       expect(prisma.financialReport.groupBy).toHaveBeenCalledWith({
         by: ['ngoId'],
         _count: { ngoId: true },
+        where: {},
       });
       expect(prisma.financialReport.findFirst).toHaveBeenCalledWith({
+        where: {},
         orderBy: { createdAt: 'desc' },
         select: { createdAt: true },
       });
