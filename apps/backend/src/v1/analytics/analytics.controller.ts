@@ -27,7 +27,20 @@ export class V1AnalyticsController {
     ]);
 
     return {
-      donations,
+      donations: {
+        ...donations,
+        kpis: {
+          ...donations.kpis,
+          largestDonation: donations.kpis.largestDonation
+            ? {
+                amount: donations.kpis.largestDonation.amount,
+                donationDate: donations.kpis.largestDonation.donationDate
+                  ? donations.kpis.largestDonation.donationDate.toISOString()
+                  : null,
+              }
+            : null,
+        },
+      },
       programmes,
       approvals,
       financial: {
@@ -36,6 +49,7 @@ export class V1AnalyticsController {
         latestSubmittedAt: financial.latestSubmittedAt
           ? financial.latestSubmittedAt.toISOString()
           : null,
+        kpis: financial.kpis,
       },
       recentActivity,
     } satisfies AdminAnalyticsResponseDto;

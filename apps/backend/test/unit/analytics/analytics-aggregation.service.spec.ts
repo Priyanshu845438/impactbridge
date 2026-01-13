@@ -11,6 +11,8 @@ describe('AnalyticsAggregationService', () => {
       donation: {
         aggregate: jest.fn(),
         findMany: jest.fn(),
+        groupBy: jest.fn(),
+        count: jest.fn(),
       },
       cSRProgramme: {
         groupBy: jest.fn(),
@@ -38,7 +40,17 @@ describe('AnalyticsAggregationService', () => {
         .mockResolvedValueOnce({ _sum: { amount: null }, _count: { _all: 0 } })
         .mockResolvedValueOnce({ _sum: { amount: null }, _count: { _all: 0 } })
         .mockResolvedValueOnce({ _sum: { amount: null }, _count: { _all: 0 } });
-      prisma.donation.findMany.mockResolvedValue([]);
+      prisma.donation.findMany
+        .mockResolvedValueOnce([])
+        .mockResolvedValueOnce([]);
+
+      prisma.donation.groupBy
+        .mockResolvedValueOnce([])
+        .mockResolvedValueOnce([]);
+
+      prisma.donation.count
+        .mockResolvedValueOnce(0)
+        .mockResolvedValueOnce(0);
 
       const result = await service.getDonationOverview();
 
@@ -60,6 +72,12 @@ describe('AnalyticsAggregationService', () => {
           today: { count: 0, amount: 0 },
           last7Days: { count: 0, amount: 0 },
           last30Days: { count: 0, amount: 0 },
+        },
+        kpis: {
+          averageAmount: 0,
+          largestDonation: null,
+          uniqueDonors: 0,
+          uniqueCompanies: 0,
         },
       });
 
@@ -88,6 +106,10 @@ describe('AnalyticsAggregationService', () => {
         { donationDate: new Date('2024-02-01T00:00:00Z'), amount: 1500 } as any,
       ]);
 
+      prisma.donation.groupBy
+        .mockResolvedValueOnce([])
+        .mockResolvedValueOnce([]);
+
       await service.getDonationOverview({
         companyId: 'company-1',
         ngoId: 'ngo-1',
@@ -107,6 +129,49 @@ describe('AnalyticsAggregationService', () => {
         _sum: { amount: true },
         _count: { _all: true },
       });
+    });
+  });
+
+  it('returns donation KPIs when data present', async () => {
+    prisma.donation.aggregate
+      .mockResolvedValueOnce({ _sum: { amount: 3000 }, _count: { _all: 3 } })
+      .mockResolvedValueOnce({ _sum: { amount: 1000 }, _count: { _all: 1 } })
+      .mockResolvedValueOnce({ _sum: { amount: 2000 }, _count: { _all: 2 } })
+      .mockResolvedValueOnce({ _sum: { amount: 3000 }, _count: { _all: 3 } });
+
+    prisma.donation.findMany
+      .mockResolvedValueOnce([
+        { donationDate: new Date('2024-02-01T00:00:00Z'), amount: 1000 },
+        { donationDate: new Date('2024-02-05T00:00:00Z'), amount: 1500 },
+        { donationDate: new Date('2024-02-10T00:00:00Z'), amount: 500 },
+      ] as any)
+      .mockResolvedValueOnce([
+        { amount: 1500, donationDate: new Date('2024-02-05T00:00:00Z') },
+      ] as any);
+
+    prisma.donation.count
+      .mockResolvedValueOnce(2)
+      .mockResolvedValueOnce(1);
+
+    prisma.donation.groupBy
+      .mockResolvedValueOnce([
+        { donorId: 'donor-1', _count: { _all: 2 } },
+        { donorId: 'donor-2', _count: { _all: 1 } },
+      ] as any)
+      .mockResolvedValueOnce([
+        { companyId: 'company-1', _count: { _all: 3 } },
+      ] as any);
+
+    const result = await service.getDonationOverview();
+
+    expect(result.kpis).toEqual({
+      averageAmount: 1000,
+      largestDonation: {
+        amount: 1500,
+        donationDate: new Date('2024-02-05T00:00:00Z'),
+      },
+      uniqueDonors: 2,
+      uniqueCompanies: 1,
     });
   });
 
@@ -145,6 +210,12 @@ describe('AnalyticsAggregationService', () => {
             [ProgrammeStatus.COMPLETED]: 1,
             [ProgrammeStatus.ARCHIVED]: 0,
           },
+        },
+        kpis: {
+          activeCount: 2,
+          completedCount: 1,
+          completionRate: Number((1 / 3).toFixed(2)),
+          archivedCount: 0,
         },
       });
     });
@@ -190,6 +261,12 @@ describe('AnalyticsAggregationService', () => {
           totalApprovals: 5,
           byStatus: { APPROVED: 4, PENDING: 1 },
         },
+        kpis: {
+          approvedCount: 4,
+          pendingCount: 1,
+          approvalRate: Number((4 / 5).toFixed(2)),
+          rejectionCount: result.byStatus.REJECTED ?? 0,
+        },
       });
     });
   });
@@ -198,12 +275,17 @@ describe('AnalyticsAggregationService', () => {
     it('aggregates totals and latest submission date', async () => {
       const now = new Date('2025-02-18T10:00:00Z');
 
-    prisma.financialReport.count.mockResolvedValue(42);
-    prisma.financialReport.groupBy.mockResolvedValue([
-      { ngoId: 'ngo-1', _count: { ngoId: 3 } },
-      { ngoId: 'ngo-2', _count: { ngoId: 2 } },
-    ] as any);
-    prisma.financialReport.findFirst.mockResolvedValue({ createdAt: now } as any);
+      prisma.financialReport.count.mockResolvedValueOnce(42);
+      prisma.financialReport.groupBy.mockResolvedValue([
+        { ngoId: 'ngo-1', _count: { ngoId: 3 } },
+        { ngoId: 'ngo-2', _count: { ngoId: 2 } },
+      ] as any);
+
+      prisma.financialReport.findFirst.mockResolvedValue({ createdAt: now } as any);
+
+      prisma.financialReport.count
+        .mockResolvedValueOnce(2)
+        .mockResolvedValueOnce(3);
 
       const result = await service.getFinancialReportOverview();
 
@@ -211,9 +293,15 @@ describe('AnalyticsAggregationService', () => {
         totalReports: 42,
         ngoCount: 2,
         latestSubmittedAt: now,
+        kpis: {
+          averageReportsPerNgo: Number((42 / 2).toFixed(2)),
+          reportsThisMonth: 2,
+          reportsPreviousMonth: 3,
+          monthOverMonthGrowth: Number(((2 - 3) / 3).toFixed(2)),
+        },
       });
 
-      expect(prisma.financialReport.count).toHaveBeenCalledWith();
+      expect(prisma.financialReport.count).toHaveBeenNthCalledWith(1);
       expect(prisma.financialReport.groupBy).toHaveBeenCalledWith({
         by: ['ngoId'],
         _count: { ngoId: true },
@@ -225,9 +313,13 @@ describe('AnalyticsAggregationService', () => {
     });
 
     it('handles empty dataset gracefully', async () => {
-    prisma.financialReport.count.mockResolvedValue(0);
-    prisma.financialReport.groupBy.mockResolvedValue([] as any);
-    prisma.financialReport.findFirst.mockResolvedValue(null);
+      prisma.financialReport.count.mockResolvedValueOnce(0);
+      prisma.financialReport.groupBy.mockResolvedValue([] as any);
+      prisma.financialReport.findFirst.mockResolvedValue(null);
+
+      prisma.financialReport.count
+        .mockResolvedValueOnce(0)
+        .mockResolvedValueOnce(0);
 
       const result = await service.getFinancialReportOverview();
 
@@ -235,6 +327,12 @@ describe('AnalyticsAggregationService', () => {
         totalReports: 0,
         ngoCount: 0,
         latestSubmittedAt: null,
+        kpis: {
+          averageReportsPerNgo: 0,
+          reportsThisMonth: 0,
+          reportsPreviousMonth: 0,
+          monthOverMonthGrowth: null,
+        },
       });
     });
   });

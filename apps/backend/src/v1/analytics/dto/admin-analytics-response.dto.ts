@@ -35,6 +35,34 @@ class DonationTimelinePointDto {
   amount!: number;
 }
 
+class DonationLargestDonationDto {
+  @Expose()
+  @ApiProperty({ example: 250000 })
+  amount!: number;
+
+  @Expose()
+  @ApiProperty({ example: '2025-02-10T09:30:00.000Z', nullable: true })
+  donationDate!: string | null;
+}
+
+class DonationKpisDto {
+  @Expose()
+  @ApiProperty({ example: 125000 })
+  averageAmount!: number;
+
+  @Expose()
+  @ApiProperty({ example: 12 })
+  uniqueDonors!: number;
+
+  @Expose()
+  @ApiProperty({ example: 4 })
+  uniqueCompanies!: number;
+
+  @Expose()
+  @Type(() => DonationLargestDonationDto)
+  largestDonation!: DonationLargestDonationDto | null;
+}
+
 class DonationSummaryDto {
   @Expose()
   @ApiProperty({ example: 120 })
@@ -69,6 +97,10 @@ class DonationsDto {
   @Expose()
   @Type(() => DonationSummaryDto)
   summary!: DonationSummaryDto;
+
+  @Expose()
+  @Type(() => DonationKpisDto)
+  kpis!: DonationKpisDto;
 }
 
 class ProgrammeCountDto {
@@ -95,6 +127,24 @@ class ProgrammeSummaryDto {
   byStatus!: Record<string, number>;
 }
 
+class ProgrammeKpisDto {
+  @Expose()
+  @ApiProperty({ example: 18 })
+  activeCount!: number;
+
+  @Expose()
+  @ApiProperty({ example: 9 })
+  completedCount!: number;
+
+  @Expose()
+  @ApiProperty({ example: 0.5 })
+  completionRate!: number;
+
+  @Expose()
+  @ApiProperty({ example: 2 })
+  archivedCount!: number;
+}
+
 class ProgrammesDto {
   @Expose()
   @Type(() => ProgrammeCountDto)
@@ -103,6 +153,10 @@ class ProgrammesDto {
   @Expose()
   @Type(() => ProgrammeSummaryDto)
   summary!: ProgrammeSummaryDto;
+
+  @Expose()
+  @Type(() => ProgrammeKpisDto)
+  kpis!: ProgrammeKpisDto;
 }
 
 class ApprovalCountDto {
@@ -129,6 +183,24 @@ class ApprovalSummaryDto {
   byStatus!: Record<string, number>;
 }
 
+class ApprovalKpisDto {
+  @Expose()
+  @ApiProperty({ example: 18 })
+  approvedCount!: number;
+
+  @Expose()
+  @ApiProperty({ example: 6 })
+  pendingCount!: number;
+
+  @Expose()
+  @ApiProperty({ example: 0.72 })
+  approvalRate!: number;
+
+  @Expose()
+  @ApiProperty({ example: 3 })
+  rejectionCount!: number;
+}
+
 class ApprovalsDto {
   @Expose()
   @Type(() => ApprovalCountDto)
@@ -137,6 +209,28 @@ class ApprovalsDto {
   @Expose()
   @Type(() => ApprovalSummaryDto)
   summary!: ApprovalSummaryDto;
+
+  @Expose()
+  @Type(() => ApprovalKpisDto)
+  kpis!: ApprovalKpisDto;
+}
+
+class FinancialKpisDto {
+  @Expose()
+  @ApiProperty({ example: 2.4 })
+  averageReportsPerNgo!: number;
+
+  @Expose()
+  @ApiProperty({ example: 5 })
+  reportsThisMonth!: number;
+
+  @Expose()
+  @ApiProperty({ example: 4 })
+  reportsPreviousMonth!: number;
+
+  @Expose()
+  @ApiProperty({ example: 0.25, nullable: true })
+  monthOverMonthGrowth!: number | null;
 }
 
 class FinancialOverviewDto {
@@ -151,6 +245,10 @@ class FinancialOverviewDto {
   @Expose()
   @ApiProperty({ example: '2025-02-10T09:30:00.000Z', nullable: true })
   latestSubmittedAt!: string | null;
+
+  @Expose()
+  @Type(() => FinancialKpisDto)
+  kpis!: FinancialKpisDto;
 }
 
 class ActivityEntryDto {

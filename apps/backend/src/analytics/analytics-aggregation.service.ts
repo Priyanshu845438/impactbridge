@@ -25,6 +25,12 @@ export interface FinancialReportOverview {
   totalReports: number;
   ngoCount: number;
   latestSubmittedAt: Date | null;
+  kpis: {
+    averageReportsPerNgo: number;
+    reportsThisMonth: number;
+    reportsPreviousMonth: number;
+    monthOverMonthGrowth: number | null;
+  };
 }
 
 export interface DonationTimelinePoint {
@@ -47,6 +53,12 @@ export interface DonationOverview {
     last7Days: { count: number; amount: number };
     last30Days: { count: number; amount: number };
   };
+  kpis: {
+    averageAmount: number;
+    largestDonation: { amount: number; donationDate: Date | null } | null;
+    uniqueDonors: number;
+    uniqueCompanies: number;
+  };
 }
 
 export interface ProgrammeOverview {
@@ -57,6 +69,12 @@ export interface ProgrammeOverview {
     totalProgrammes: number;
     byStatus: Record<string, number>;
   };
+  kpis: {
+    activeCount: number;
+    completedCount: number;
+    completionRate: number;
+    archivedCount: number;
+  };
 }
 
 export interface ApprovalOverview {
@@ -66,6 +84,12 @@ export interface ApprovalOverview {
   summary: {
     totalApprovals: number;
     byStatus: Record<string, number>;
+  };
+  kpis: {
+    approvedCount: number;
+    pendingCount: number;
+    approvalRate: number;
+    rejectionCount: number;
   };
 }
 
@@ -146,6 +170,33 @@ export class AnalyticsAggregationService {
       },
     };
 
+    const [largestDonation] = await this.prisma.donation.findMany({
+      where,
+      orderBy: { amount: 'desc' },
+      select: { amount: true, donationDate: true },
+      take: 1,
+    });
+
+    const [donorGroups, companyGroups] = await Promise.all([
+      this.prisma.donation.groupBy({
+        where: { ...where, donorId: { not: null } },
+        by: ['donorId'],
+        _count: { _all: true },
+      }),
+      this.prisma.donation.groupBy({
+        where: { ...where, companyId: { not: null } },
+        by: ['companyId'],
+        _count: { _all: true },
+      }),
+    ]);
+
+    const uniqueDonors = donorGroups.length;
+    const uniqueCompanies = companyGroups.length;
+
+    const averageAmount = summary.totalCount
+      ? Number((summary.totalAmount / summary.totalCount).toFixed(2))
+      : 0;
+
     return {
       totalAmount: summary.totalAmount,
       totalCount: summary.totalCount,
@@ -164,6 +215,17 @@ export class AnalyticsAggregationService {
       totals,
       timeline,
       summary,
+      kpis: {
+        averageAmount,
+        largestDonation: largestDonation
+          ? {
+              amount: largestDonation.amount,
+              donationDate: largestDonation.donationDate ?? null,
+            }
+          : null,
+        uniqueDonors,
+        uniqueCompanies,
+      },
     };
   }
 
@@ -197,6 +259,13 @@ export class AnalyticsAggregationService {
       count: row._count._all ?? 0,
     }));
 
+    const activeCount = byStatus[ProgrammeStatus.ACTIVE] ?? 0;
+    const completedCount = byStatus[ProgrammeStatus.COMPLETED] ?? 0;
+    const archivedCount = byStatus[ProgrammeStatus.ARCHIVED] ?? 0;
+    const completionRate = total
+      ? Number((completedCount / total).toFixed(2))
+      : 0;
+
     return {
       totalProgrammes: total,
       byStatus,
@@ -204,6 +273,12 @@ export class AnalyticsAggregationService {
       summary: {
         totalProgrammes: total,
         byStatus,
+      },
+      kpis: {
+        activeCount,
+        completedCount,
+        completionRate,
+        archivedCount,
       },
     };
   }
@@ -236,6 +311,13 @@ export class AnalyticsAggregationService {
       count: row._count._all ?? 0,
     }));
 
+    const approvedCount = byStatus.APPROVED ?? 0;
+    const pendingCount = byStatus.PENDING ?? 0;
+    const rejectionCount = byStatus.REJECTED ?? 0;
+    const approvalRate = total
+      ? Number((approvedCount / total).toFixed(2))
+      : 0;
+
     return {
       totalApprovals: total,
       byStatus,
@@ -243,6 +325,12 @@ export class AnalyticsAggregationService {
       summary: {
         totalApprovals: total,
         byStatus,
+      },
+      kpis: {
+        approvedCount,
+        pendingCount,
+        approvalRate,
+        rejectionCount,
       },
     };
   }
@@ -260,10 +348,54 @@ export class AnalyticsAggregationService {
       }),
     ]);
 
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfPreviousMonth = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      1,
+    );
+    const endOfPreviousMonth = new Date(startOfMonth.getTime() - 1);
+
+    const [reportsThisMonth, reportsPreviousMonth] = await Promise.all([
+      this.prisma.financialReport.count({
+        where: {
+          createdAt: {
+            gte: startOfMonth,
+            lte: now,
+          },
+        },
+      }),
+      this.prisma.financialReport.count({
+        where: {
+          createdAt: {
+            gte: startOfPreviousMonth,
+            lte: endOfPreviousMonth,
+          },
+        },
+      }),
+    ]);
+
+    const averageReportsPerNgo = groupedByNgo.length
+      ? Number((totalReports / groupedByNgo.length).toFixed(2))
+      : 0;
+
+    const monthOverMonthGrowth = reportsPreviousMonth
+      ? Number(
+          ((reportsThisMonth - reportsPreviousMonth) / reportsPreviousMonth).toFixed(2),
+        )
+      : null;
+
     return {
       totalReports,
       ngoCount: groupedByNgo.length,
       latestSubmittedAt: latest?.createdAt ?? null,
+      kpis: {
+        averageReportsPerNgo,
+        reportsThisMonth,
+        reportsPreviousMonth,
+        monthOverMonthGrowth,
+      },
     };
   }
 
