@@ -2,69 +2,144 @@
 
 _All findings are observational; no code was modified during this audit. Items are grouped by scope with each task captured as an individual, detailed point._
 
-### Recommended Implementation Order
-1. Testing & CI infrastructure to add cross-app integration/e2e coverage and keep regressions out.
-2. Approvals UI wiring (API-backed actions) with audit log surfacing.
-3. Notifications provider dashboard & monitoring once retry telemetry is in use.
-
-## 1. apps/__tests__
-1. Jest, RTL, and Nest unit suites exist per app, but there are still **no cross-application integration tests** that exercise real HTTP controllers, shared DTOs, and Prisma together; regressions can hide when contracts drift between backend and frontend.
-2. Vitest-based mocks in the frontend rely on global fetch overrides without scoped reset helpers, so state leakage can occur when new suites are added or run in parallel.
-3. Broader customer journeys (auth → dashboard → CSR/financial) still lack end-to-end coverage—plan Playwright or supertest flows once the APIs stabilise to catch navigation or RBAC issues.
-4. CSR programme smoke tests (Playwright or equivalent) remain outstanding to exercise API-on journeys end-to-end; mock vs API parity is now covered at unit + RTL layers.
-5. Financial flows have DTO-level unit coverage, yet there are no tests validating that admin listings, analytics, and retry-safe delivery stay consistent when data volume increases; load-focused or contract tests are still needed.
-
-## 2. apps/backend
-1. **CSR Programme**: Controller and service are aligned with shared DTOs and guarded via `JwtAuthGuard` + `RolesGuard (COMPANY)`. Negative paths and audit logging are covered, but legacy `/api/v1` e2e suites still fail until Prisma-backed fixtures are restored.
-2. **Approvals**: Workflow emits notification intents and audit logs, and RBAC integration tests now cover company-vs-NGO access. There is still no verification that approval state changes propagate to linked CSR/financial reports.
-3. **Financial**: Upload/list endpoints enforce DTO validation and duplicate checks. Admin list (`/financial/admin/all`) returns raw Prisma models; analytics surfaces and admin dashboards still consume mock data, and no reconciliation exists between financial reports and donation ledgers.
-4. **Analytics**: Aggregation service now delivers donations/programmes/approvals plus financial KPIs with optional company/NGO filters and in-process caching; rate limiting remains out of scope for now.
-5. **Notifications**: Intent storage, safe delivery, metrics, and automated retry scheduling are in place. Provider dashboards, status introspection endpoints, and long-term worker orchestration remain future work.
-6. **Docs & Tooling**: API guide and Postman collection cover CSR/auth/users/financial uploads but omit admin analytics examples. Operational runbooks mention notification delivery but not retry tuning, and there is no automation to ensure docs stay synced with code changes.
-7. **Infrastructure**: Global validation pipe is active, yet controllers depend on service-level DTOs without local pipes; adding `@UsePipes(ValidationPipe)` where mutations occur would reduce reliance on global config. Prisma queries lack transactional wrappers around multi-step operations like approvals + notifications.
-
-## 3. apps/frontend
-1. **Admin Dashboard**: Dashboard and reports pages now use live analytics when `API_DASHBOARD` is enabled, with mock fallbacks maintained. Financial widgets, timeline charts, and activity feed consume backend data; monitor performance before defaulting flag to on.
-2. **NGO Dashboard**: Financial reports list/upload screens render mock data only; backend DTO validation is exercised through unit tests but the UI never calls the true endpoints, leaving parity unchecked.
-3. **CSR Programme UI**: API flag now default-on with parity tests in place; focus shifts to e2e smoke coverage and runtime monitoring for assignment/status flows.
-4. **Approvals & Notifications**: UI remains prototype-level, relying on mocked cards. No hooks exist for real approval actions or notification counts beyond the context stub.
-5. **Feature Flags**: `API_DASHBOARD`, `API_PROGRAMME`, and `API_AUTH` default to false. Documentation reflects runtime fallbacks, but environment plumbing and monitoring for production toggles are not set up.
-6. **Testing**: Dashboard suites assert rendering of mock data; there is no assurance that API-enabled modes render the same output. Major paths (financial admin, approvals, donors) lack even smoke-level coverage.
-7. **Performance & Accessibility**: Static analytics widgets and large mock datasets render synchronously, which may degrade SSR when replaced with live data. Accessibility audits are pending for interactive tables and modals.
-
-## 4. packages (api-contracts)
-1. CSR programme DTOs are published, but there is **no automated release pipeline**; manual `npm publish` risks version drift. Semantic-release or similar tooling is recommended.
-2. Campaign, donation, financial, and analytics DTOs are missing, leading frontend consumers to handcraft types and increasing drift risk.
-3. Tests provide compile-time assurances only; add runtime schema checks or snapshot validation if the package will back public APIs.
-4. Dist output coexists with tsconfig path aliases. Consumers depend on TS path mapping, so ensure builds or lint setups fail fast when output moves.
-
-## 5. Documentation & Tooling
-1. Frontend docs describe feature flags and testing gaps but omit financial admin wiring status and runtime fallback expectations for analytics.
-2. Backend CHANGELOG and operations guides record notification delivery updates but lack playbooks for retry tuning, provider metrics interpretation, or financial reconciliation processes.
-3. Pending work tracking is manual; there is no CI hook to ensure this audit stays aligned with commits.
-
-## Role-Wise Module Status
-
-### Backend
-- **Auth** — ✅ Completed (JWT register/login, guards, hashing utilities). _Pending_: refresh-token rotation, password recovery flows, and multi-factor support once product scope finalises.
-- **Users** — ✅ Completed (CRUD, RBAC endpoints, profile services). _Pending_: soft-delete restore endpoints, scoped pagination filters, and admin export tooling.
-- **Approvals** — 🟢 Complete (state transitions, notification intents, audit logs validated). _Pending_: Failure-safety covered by design guarantees; focus shifts to frontend wiring and monitoring.
-- **CSR Programme** — ✅ Completed (service/controller aligned with shared DTOs, company scoping, audit logging). _Pending_: rebuild legacy `/api/v1` e2e fixtures, monitor frontend parity before default API rollout, and extend analytics aggregation with programme KPIs.
-- **Financial** — 🟢 Complete (uploads, admin listings, reconciliation, and NGO→admin flow validated). _Pending_: Monitor performance after rollout and plan end-to-end UI coverage.
-- **Analytics** — 🟢 Complete (richer KPIs, scoped filters, caching, and operational guardrails documented). _Pending_: Monitor cache hit rates in production and adjust TTLs when load testing data is available.
-- **Notifications** — ✅ Completed (intent storage, safe delivery processor, metrics, automated retries). _Pending_: provider dashboards, SLA monitoring hooks, and long-term worker orchestration.
-- **Activity / Audit Logging** — ✅ Completed (CSR, approvals, financial flows emit actor-scoped entries). _Pending_: ensure future modules register logs and surface reporting UI.
-
-### Frontend
-- **Admin Dashboard** — ✅ Completed (analytics wiring live via feature flag, mock fallback retained). _Pending_: monitor live metrics performance and plan richer KPI widgets once the flag is default-on.
-- **Approvals UI** — ✅ Completed (shared API clients, validation schemas, hooks, and tests in place; ready for action wiring without touching UI).
-- **CSR Programme UI** — ✅ Completed (feature flag default-on with API parity tests for list/detail/create/edit flows). _Pending_: ship end-to-end smoke tests, monitor runtime metrics, and verify RBAC guard telemetry after rollout.
-- **Notifications UI** — 🔴 Missing (only unread count placeholder). _Pending_: render intent statuses, subscribe to real-time updates, align with backend metrics.
-
-### Shared / Infrastructure
-- **API Contracts** — 🟡 Working (core CSR DTOs published). _Pending_: add campaign/donation/financial/analytics DTOs, automate releases, strengthen runtime validation.
-- **Testing & CI** — 🟠 Prototype (per-app suites, no cross-app coverage). _Pending_: integration/e2e pipelines, coverage gates, visual regression, and doc-sync checks.
-- **Observability & Docs** — 🟡 Working (structured logs, ops guides). _Pending_: analytics dashboards, notification metric summaries, financial reconciliation playbooks, and automated doc validation.
+## Task Overview
+- [x] Perform deep-dive audit of target folders
+- [x] Summarise connections, missing pieces, and incorrect implementations
+- [x] Update role-wise module status with completion/pending markers
+- [x] Re-verify coverage so no pending item is omitted
 
 ---
+
+## 1. apps/__tests__ (Shared Test Harness)
+**Current Coverage**
+- Contains a single `api-client.test.ts` focused on fetch wrapper utilities; no suites validate shared DTOs, feature flags, or integration flows.
+- Relies on relative imports (`../lib/api/client`) that break if relocated; no CI reference ensures execution.
+
+**Connections & Gaps**
+- Tests should mirror cross-app contracts (`@impactbridge/api-contracts`) but currently do not consume that package.
+- Lacks smoke tests for backend endpoints or frontend rendering, leaving regression detection entirely to app-level suites.
+
+**Missing / Incomplete Work**
+- Introduce API contract smoke tests covering auth, approvals, CSR programmes, and financial flows.
+- Establish Playwright or API-integration fixtures that exercise both backend and frontend builds end-to-end.
+- Set up CI pipeline stage (GitHub Actions/CI) to run `apps/__tests__` so regressions are caught automatically.
+
+**Pending Actions**
+1. Restructure shared tests under a stable path (e.g., `tests/shared`) with tsconfig path aliases.
+2. Expand coverage to include DTO serialization/deserialization snapshots and schema validation.
+3. Document how these shared tests complement app-specific suites to avoid duplication.
+
+---
+
+## 2. apps/backend (NestJS API)
+**Current Coverage & Connections**
+- Modular NestJS app with Prisma integrations, versioned controllers (`/api/v1`), and shared DTO contracts.
+- `CSRProgrammeService` mature but `/api/v1/csr` routes remain unwired; admin reporting & analytics KPIs partially present in services but not exposed publicly.
+- Approvals module has guards/tests yet lacks integration tests for transaction failure scenarios.
+
+**Incomplete / Incorrect Implementations**
+- `/api/v1` CSR endpoints absent; frontends cannot consume programme data via the versioned API namespace.
+- Admin reporting lacks filtered list endpoints; analytics aggregation omits CSR KPIs demanded by dashboards.
+- Approvals analytics linkage relies on eventual consistency; no tests ensure notification failures leave approvals intact (design guarantee, but unverified).
+- Financial admin listing returns raw Prisma models; requires DTO sanitisation before surfacing to consumers.
+
+**Missing Work & Dependencies**
+- Need integration tests for CSR endpoints (company vs admin RBAC) and analytics KPI verification.
+- Notification retry queue documented but not instrumented with metrics dashboards.
+- Docs (AGENTS.md, docs folder) should capture transaction guarantees, cache TTL guardrails, and CSR v1 status.
+
+**Pending Actions**
+1. Wire CSR Programme controllers into `/api/v1`, add admin filters, and ensure analytics includes CSR KPIs.
+2. Expand end-to-end tests for approvals/CSR/financial modules using seeded Prisma fixtures.
+3. Harden documentation (API, operations, Postman) to reflect new endpoints, cache behaviour, and retry strategy.
+
+---
+
+## 3. apps/frontend (Next.js Web Client)
+**Current Coverage & Connections**
+- Feature-flag driven dashboards (`API_DASHBOARD`) consuming analytics hooks.
+- Approvals UI still static; hooks prepared but not connected to live data.
+- CSR Programme UI leverages backend DTOs but lacks end-to-end smoke tests and runtime monitoring.
+
+**Incomplete / Incorrect Implementations**
+- Approvals screen shows prototype cards with mock data; lacks real API integration, validation, or optimistic updates.
+- NGO financial uploads remain placeholder; no API wiring to backend financial endpoints.
+- Notifications UI only displays badge stubs—no list/feed, filters, or real-time updates.
+
+**Missing Work & Dependencies**
+- Need API clients/hooks mirroring backend approval endpoints and CSR admin reports.
+- Feature flag infrastructure requires environment-specific defaults plus monitoring dashboards.
+- Accessibility/performance audits pending for dashboard components (charts, tables, modals).
+
+**Pending Actions**
+1. Wire approvals UI to backend read APIs (read-only first), then add action flows with optimistic updates and audit surfacing.
+2. Replace NGO financial mocks with real upload/listing flows; ensure API flag parity tests exist.
+3. Build notifications centre UI and connect to backend intent/metrics once provider dashboard is live.
+
+---
+
+## 4. packages (Shared Libraries)
+**Current Coverage & Connections**
+- `@impactbridge/api-contracts` publishes enums and a handful of DTOs; many folders remain empty.
+- No automated release/versioning; consumers rely on workspace references.
+
+**Incomplete / Incorrect Implementations**
+- CSR, approvals, financial, analytics DTO definitions incomplete—forcing apps to re-create interfaces.
+- Lack of schema validation or contract tests increases drift risk between backend responses and frontend expectations.
+- Build pipeline doesn’t generate declaration maps or publish to registry, limiting external reuse.
+
+**Pending Actions**
+1. Populate DTO exports for all active modules (auth, approvals, CSR, financial, analytics, notifications).
+2. Configure semantic-release (or equivalent) with changelog, version bumping, and CI publish.
+3. Add contract tests comparing package exports against live backend serializers.
+
+---
+
+## 5. Documentation & Tooling (Cross-Cutting)
+**Observations**
+- Backend docs updated through analytics caching but missing CSR v1/API wiring notes.
+- Frontend documentation lacks approvals UI plan, feature-flag operations, and monitoring guidance.
+- No automated doc lint or sync process; updates are manual and prone to drift.
+
+**Pending Actions**
+1. Extend backend docs with CSR v1 endpoints, approval transaction guarantees, and analytics cache guardrails.
+2. Update frontend docs to describe approvals integration roadmap, fallback behaviour, and testing strategy.
+3. Introduce doc lint/check step in CI to ensure pending work log stays current.
+
+---
+
+## Role-Wise Module Status & Pending Work
+
+### Backend
+- **Auth** — ✅ Completed — _Pending_: refresh tokens, password recovery, MFA rollout.
+- **Users** — ✅ Completed — _Pending_: soft-delete restore workflows, advanced filters/exports.
+- **Approvals** — 🟢 Complete — _Pending_: transactional coupling with notifications/audit logs, analytics reconciliation tests.
+- **CSR Programme** — 🟡 In Progress — _Pending_: `/api/v1` exposure, admin reporting reads, analytics KPIs, integration tests.
+- **Financial** — 🟢 Complete — _Pending_: DTO sanitised responses for admin list, automated donation/financial reconciliation checks.
+- **Analytics** — 🟢 Complete — _Pending_: cache telemetry, rate limiting, multi-tenant performance monitoring.
+- **Notifications** — 🟡 In Progress — _Pending_: provider dashboard, alerting thresholds, worker orchestration.
+- **Activity/Audit Logging** — ✅ Completed — _Pending_: reporting surfaces and coverage for future modules.
+- **Infrastructure & Docs** — 🟡 In Progress — _Pending_: doc automation, validation hooks, CI pipeline expansion.
+
+### Frontend
+- **Admin Dashboard** — 🟢 Complete — _Pending_: performance instrumentation, API-on smoke tests, offline fallbacks.
+- **Approvals UI** — 🟠 Prototype — _Pending_: real API wiring, form validation, optimistic updates, audit trail display.
+- **CSR Programme UI** — 🟢 Complete — _Pending_: e2e smoke coverage, RBAC telemetry, runtime monitoring dashboards.
+- **NGO Dashboard & Financials** — 🟠 Prototype — _Pending_: real upload/list wiring, donor journey tests, data validation.
+- **Notifications UI** — 🔴 Missing — _Pending_: feed view, filtering, real-time updates aligned with backend retries.
+- **Testing & Quality** — 🟠 Prototype — _Pending_: RTL/Playwright journeys, performance/a11y audits, API-flag permutations.
+
+### Shared / Packages
+- **API Contracts** — 🟠 Prototype — _Pending_: DTO expansion, release automation, contract validation tests.
+- **Testing & CI Infrastructure** — 🟠 Prototype — _Pending_: cross-app suites, coverage gates, doc-sync checks.
+- **Observability & Operations** — 🟡 In Progress — _Pending_: analytics dashboards, notification metrics, reconciliation playbooks.
+
+---
+
+## Final Verification Checklist
+- [x] All four target folders audited with explicit missing/incomplete work.
+- [x] Pending tasks documented for each module and shared concern.
+- [x] Role-wise status updated with clear ✅/🟢/🟠/🔴 markers.
+- [x] No code files modified; documentation only.
+
 _Update this document whenever items are closed or new findings emerge to maintain alignment across teams._
