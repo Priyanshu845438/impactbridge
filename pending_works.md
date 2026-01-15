@@ -7,6 +7,7 @@ _All findings are observational; no code was modified during this audit. Items a
 - [x] Summarise connections, missing pieces, and incorrect implementations
 - [x] Update role-wise module status with completion/pending markers
 - [x] Re-verify coverage so no pending item is omitted
+- [x] Reconfirm CSR Programme backend scope (company CRUD only) with no new v1/admin wiring until requirements finalised
 
 ---
 
@@ -38,8 +39,7 @@ _All findings are observational; no code was modified during this audit. Items a
 - Approvals module has guards/tests yet lacks integration tests for transaction failure scenarios.
 
 **Incomplete / Incorrect Implementations**
-- `/api/v1` CSR endpoints absent; frontends cannot consume programme data via the versioned API namespace.
-- Admin reporting lacks filtered list endpoints; analytics aggregation omits CSR KPIs demanded by dashboards.
+- CSR company endpoints exist but remain behind feature flag; `/api/v1` admin reporting and analytics KPIs still pending.
 - Approvals analytics linkage relies on eventual consistency; no tests ensure notification failures leave approvals intact (design guarantee, but unverified).
 - Financial admin listing returns raw Prisma models; requires DTO sanitisation before surfacing to consumers.
 
@@ -114,7 +114,7 @@ _All findings are observational; no code was modified during this audit. Items a
 - **Auth** — ✅ Completed — _Pending_: refresh tokens, password recovery, MFA rollout.
 - **Users** — ✅ Completed — _Pending_: soft-delete restore workflows, advanced filters/exports.
 - **Approvals** — 🟢 Complete — _Pending_: transactional coupling with notifications/audit logs, analytics reconciliation tests.
-- **CSR Programme** — 🟡 In Progress — _Pending_: `/api/v1` exposure, admin reporting reads, analytics KPIs, integration tests.
+- **CSR Programme** — 🟡 In Progress — _Pending_: `/api/v1` admin reporting reads, analytics KPIs, integration tests (company CRUD in place).
 - **Financial** — 🟢 Complete — _Pending_: DTO sanitised responses for admin list, automated donation/financial reconciliation checks.
 - **Analytics** — 🟢 Complete — _Pending_: cache telemetry, rate limiting, multi-tenant performance monitoring.
 - **Notifications** — 🟡 In Progress — _Pending_: provider dashboard, alerting thresholds, worker orchestration.

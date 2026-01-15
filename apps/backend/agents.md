@@ -174,3 +174,8 @@
 - Added in-memory caching for donation/programme/approval/financial aggregates with tenant-scoped keys and short TTLs.
 - Extended analytics with richer KPIs, company/NGO filters, and comprehensive tests/endpoints verification.
 - Documented operational guardrails covering query cost, cache expectations, and admin-only usage assumptions.
+
+25. CSR Programme Backend Revalidation
+- Re-reviewed existing company-scoped CSR programme controller/service to confirm current `/api/v1` routes already align with frontend consumers.
+- Verified no additional admin routing or analytics wiring was implemented yet; outstanding extensions remain tracked in pending work.
+- Left code untouched to avoid unintended regressions while awaiting confirmed implementation scope.
