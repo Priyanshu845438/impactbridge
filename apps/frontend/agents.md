@@ -140,3 +140,8 @@
 29. Shared Test Harness Planning
 - Logged dependency on workspace-level shared tests consuming `@impactbridge/api-contracts` so frontend analytics/approvals UI can rely on consistent DTOs.
 - Awaiting backend alignment on contract smoke tests before wiring new fixtures; tracked via pending works shared testing section.
+
+30. Approvals Hooks API Wiring (No UI Exposure)
+- Hardened `approvalDecisionSchema` and `approvalRevokeSchema` to mirror backend DTO rules, including remark requirements for reject/revoke flows.
+- Confirmed mutation hooks call real approvals API clients with validated payloads and safe error handling while remaining unused by UI for now.
+- Full frontend test/build pipeline rerun (`npm run test`, `npm run build`) to verify no behavioural or UI changes.

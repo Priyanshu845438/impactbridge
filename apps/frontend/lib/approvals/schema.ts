@@ -1,5 +1,14 @@
 import { z } from 'zod';
 
+const REMARK_MAX_MESSAGE = 'Remarks must be 1000 characters or less';
+const REMARK_REQUIRED_REJECT = 'Remarks are required when rejecting a campaign';
+const REMARK_REQUIRED_REVOKE = 'Remarks are required to revoke an approval';
+
+const remarksField = z
+  .string()
+  .trim()
+  .max(1000, { message: REMARK_MAX_MESSAGE });
+
 export const approvalStatusSchema = z.enum([
   'PENDING',
   'APPROVED',
@@ -10,11 +19,11 @@ export const approvalStatusSchema = z.enum([
 export const approvalSummarySchema = z.object({
   id: z.string().uuid(),
   status: approvalStatusSchema,
-  remarks: z.string().max(1000).nullable().optional(),
+  remarks: remarksField.nullable().optional(),
   campaign: z.object({
     id: z.string().uuid(),
     title: z.string().min(1),
-    description: z.string().max(2000).nullable().optional(),
+    description: remarksField.nullable().optional(),
   }),
   ngo: z.object({
     id: z.string().uuid(),
@@ -32,30 +41,31 @@ export const approvalSummarySchema = z.object({
 
 export const approvalRequestSchema = z.object({
   companyId: z.string().uuid({ message: 'Company is required' }),
-  remarks: z
-    .string()
-    .trim()
-    .max(1000, { message: 'Remarks must be 1000 characters or less' })
-    .optional(),
+  remarks: remarksField.optional(),
 });
 
-export const approvalDecisionSchema = z.object({
-  status: z
-    .enum(['APPROVED', 'REJECTED'])
-    .optional(),
-  remarks: z
-    .string()
-    .trim()
-    .max(1000, { message: 'Remarks must be 1000 characters or less' })
-    .optional(),
-});
+export const approvalDecisionSchema = z
+  .object({
+    status: z
+      .enum(['APPROVED', 'REJECTED'])
+      .optional(),
+    remarks: remarksField.optional(),
+  })
+  .superRefine((value, ctx) => {
+    if (value.status === 'REJECTED') {
+      const cleanRemarks = value.remarks?.trim() ?? '';
+      if (cleanRemarks.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: REMARK_REQUIRED_REJECT,
+          path: ['remarks'],
+        });
+      }
+    }
+  });
 
 export const approvalRevokeSchema = z.object({
-  remarks: z
-    .string()
-    .trim()
-    .max(1000, { message: 'Remarks must be 1000 characters or less' })
-    .optional(),
+  remarks: remarksField.min(1, { message: REMARK_REQUIRED_REVOKE }),
 });
 
 export type ApprovalSummary = z.infer<typeof approvalSummarySchema>;
