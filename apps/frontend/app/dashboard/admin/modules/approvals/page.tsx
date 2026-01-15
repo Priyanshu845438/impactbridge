@@ -71,7 +71,7 @@ function EmptyState({ title, description }: { title: string; description: string
   );
 }
 
-type ApprovalRow = ReturnType<typeof usePendingApprovals>['approvals'][number];
+type ApprovalRow = ReturnType<typeof usePendingApprovals>["approvals"][number];
 
 function ApprovalsTable({ approvals }: { approvals: ApprovalRow[] }) {
   return (
@@ -110,17 +110,17 @@ function ApprovalsTable({ approvals }: { approvals: ApprovalRow[] }) {
 }
 
 const STATUS_LABELS: Record<string, string> = {
-  PENDING: 'Pending',
-  APPROVED: 'Approved',
-  REJECTED: 'Rejected',
-  REVOKED: 'Revoked',
+  PENDING: "Pending",
+  APPROVED: "Approved",
+  REJECTED: "Rejected",
+  REVOKED: "Revoked",
 };
 
 const STATUS_TONE: Record<string, string> = {
-  PENDING: 'bg-amber-50 text-amber-700 border-amber-200',
-  APPROVED: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-  REJECTED: 'bg-rose-50 text-rose-700 border-rose-200',
-  REVOKED: 'bg-slate-50 text-slate-600 border-slate-200',
+  PENDING: "bg-amber-50 text-amber-700 border-amber-200",
+  APPROVED: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  REJECTED: "bg-rose-50 text-rose-700 border-rose-200",
+  REVOKED: "bg-slate-50 text-slate-600 border-slate-200",
 };
 
 function StatusBadge({ status }: { status: string }) {

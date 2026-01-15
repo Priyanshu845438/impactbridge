@@ -123,7 +123,7 @@ _All findings are observational; no code was modified during this audit. Items a
 
 ### Frontend
 - **Admin Dashboard** — ✅ Completed — _Pending_: performance instrumentation, API-on smoke tests, offline fallbacks.
-- **Approvals UI** — 🟠 In Progress — _Pending_: action controls (approve/reject/revoke), validation, optimistic updates, audit trail surface; read-only API wiring verified (see frontend agents entry #32).
+- **Approvals UI** — 🔴 Incomplete — _Pending_: action controls (approve/reject/revoke), optimistic updates, audit trail visibility once backend surfaces approval audit metadata beyond pending list.
 - **CSR Programme UI** — 🟡 In Progress — _Pending_: e2e smoke coverage, RBAC telemetry, runtime monitoring dashboards.
 - **NGO Dashboard & Financials** — 🟡 In Progress — _Pending_: real upload/list wiring, donor journey tests, data validation.
 - **Notifications UI** — 🔴 Incomplete — _Pending_: feed view, filtering, real-time updates aligned with backend retries.

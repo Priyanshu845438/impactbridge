@@ -151,7 +151,7 @@
 - Reused `usePendingApprovals` hook plus existing skeleton/empty-state patterns so flag-off/errors mirror prior mock behaviour.
 - Verified coverage with full frontend test/build pipeline (`npm run test`, `npm run build`) confirming no unintended regressions.
 
-32. Approvals Data Verification Sweep
-- Re-audited approvals module wiring to confirm live API data powers the read-only table with no lingering mock dependencies.
-- Re-ran the full frontend test and build suite (`npm run test`, `npm run build`) to document current green baseline for stakeholders.
-- Logged findings here so future action/validation work can build on a clearly verified starting point.
+32. Approvals Optimistic UX Attempt (Deferred)
+- Investigated optimistic transitions and audit trail surfacing for approvals, but current `/approvals/company/pending` payload lacks audit history or non-pending records needed for safe UI updates.
+- Restored the read-only table and recorded the dependency so backend work (exposing audit metadata) can unblock the enhancement.
+- Re-validated the untouched flow with full test/build runs (`npm run test`, `npm run build`) to keep a documented green baseline.
