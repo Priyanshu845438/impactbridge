@@ -8,5 +8,6 @@ The docs folder captures the minimum set of references required to work on the N
 - `STYLE_GUIDE.md` — design system guidelines, component conventions, and accessibility guardrails.
 - `TESTING.md` — unit/integration testing strategy, scripts, and utilities.
 - `CSR_PROGRAMME_DATA_FLOW.md` — end-to-end view of CSR programme hooks, feature flag behaviour, fallback safety, and cache invalidation patterns.
+- Approvals integration roadmap and testing coverage are tracked in `OPERATIONS.md` and `TESTING.md` until the UI ships.
 
 Keep each document concise and updated as the implementation evolves.

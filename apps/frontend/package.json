@@ -13,7 +13,8 @@
     "build-storybook": "storybook build",
     "snapshot:ui": "echo 'Percy disabled: install system Chromium deps then run npm run snapshot:ui:run (docs in README.visual-regression.md).'",
     "snapshot:ui:disable": "echo 'Percy disabled: install system Chromium deps then restore percy command (see README).'",
-    "snapshot:ui:run": "percy storybook http://localhost:6006 --config tests/percy.config.json"
+    "snapshot:ui:run": "percy storybook http://localhost:6006 --config tests/percy.config.json",
+    "lint:docs": "node scripts/lint-docs.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

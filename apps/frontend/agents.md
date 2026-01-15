@@ -125,3 +125,13 @@
 - Added approval API clients, validation schemas, and React Query hooks so future approval actions can call backend endpoints without restructuring pages.
 - Hook unit tests confirm feature-flag gating, cache invalidation, and backend parity while keeping the current static UI unchanged.
 - Pending works tracker updated; verification via `npm run test` and `npm run build` shows no behavioural regressions.
+
+27. Approvals UI Gap Assessment
+- Confirmed no dedicated approvals screen exists; current dashboards only surface analytics counts without real record views.
+- Documented requirements for wiring existing hooks to UI, adding validation/optimistic updates, and rendering audit history alongside backend payloads.
+- Pending works tracker updated to keep Approvals UI flagged as incomplete until implementation lands.
+- Frontend docs (operations/testing/readme) now capture the integration roadmap, fallback behaviour, and coverage plan so future work starts from a shared baseline.
+28. Documentation & Docs Lint Pipeline
+- Expanded frontend docs with approvals integration roadmap, fallback behaviour, and testing plan across operations/testing/readme.
+- Added `lint:docs` script plus GitHub Actions workflow to lint markdown files for trailing whitespace and stray TODOs.
+- First run of the docs lint succeeded locally, ensuring CI will guard pending_works and docs updates automatically.

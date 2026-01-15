@@ -179,3 +179,7 @@
 - Re-reviewed existing company-scoped CSR programme controller/service to confirm current `/api/v1` routes already align with frontend consumers.
 - Verified no additional admin routing or analytics wiring was implemented yet; outstanding extensions remain tracked in pending work.
 - Left code untouched to avoid unintended regressions while awaiting confirmed implementation scope.
+### **24. Documentation Extended for CSR & Analytics**
+- API guide now lists `/api/v1/csr-programmes` admin endpoints alongside company-scoped routes and clarifies shared DTO usage.
+- Added approvals transaction guarantees section noting state-first persistence, audit logging, and notification intent behaviour.
+- Expanded analytics operational notes with cache TTL, scope hashing, invalidation triggers, and horizontal scaling guardrails.

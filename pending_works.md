@@ -97,14 +97,14 @@ _All findings are observational; no code was modified during this audit. Items a
 
 ## 5. Documentation & Tooling (Cross-Cutting)
 **Observations**
-- Backend docs updated through analytics caching but missing CSR v1/API wiring notes.
-- Frontend documentation lacks approvals UI plan, feature-flag operations, and monitoring guidance.
-- No automated doc lint or sync process; updates are manual and prone to drift.
+- Backend docs now cover CSR v1/admin endpoints, approval transaction guarantees, and analytics cache guardrails (see backend agents entry #24).
+- Frontend documentation includes approvals integration roadmap, fallback behaviour, and testing plan across operations/testing/readme docs (frontend agents entry #27-28).
+- Docs lint workflow in CI (`docs-lint.yml`) ensures future changes keep documentation and pending works tidy.
 
 **Pending Actions**
-1. Extend backend docs with CSR v1 endpoints, approval transaction guarantees, and analytics cache guardrails.
-2. Update frontend docs to describe approvals integration roadmap, fallback behaviour, and testing strategy.
-3. Introduce doc lint/check step in CI to ensure pending work log stays current.
+1. Keep backend docs synced with future CSR v1 enhancements (admin filters, analytics KPIs) once implemented.
+2. Expand frontend docs again when approvals UI ships (screenshots, end-to-end flows) to match the roadmap.
+3. Monitor doc lint pipeline outcomes and iterate rules if additional formatting policies are needed.
 
 ---
 
@@ -113,25 +113,25 @@ _All findings are observational; no code was modified during this audit. Items a
 ### Backend
 - **Auth** — ✅ Completed — _Pending_: refresh tokens, password recovery, MFA rollout.
 - **Users** — ✅ Completed — _Pending_: soft-delete restore workflows, advanced filters/exports.
-- **Approvals** — 🟢 Complete — _Pending_: transactional coupling with notifications/audit logs, analytics reconciliation tests.
-- **CSR Programme** — 🟡 In Progress — _Pending_: `/api/v1` admin reporting reads, analytics KPIs, integration tests (company CRUD in place).
-- **Financial** — 🟢 Complete — _Pending_: DTO sanitised responses for admin list, automated donation/financial reconciliation checks.
-- **Analytics** — 🟢 Complete — _Pending_: cache telemetry, rate limiting, multi-tenant performance monitoring.
+- **Approvals** — 🟡 In Progress — _Pending_: transactional coupling with notifications/audit logs, analytics reconciliation tests (documentation for guarantees added in backend agents entry #24).
+- **CSR Programme** — 🟡 In Progress — _Pending_: `/api/v1` admin reporting reads, analytics KPIs, integration tests (API guide updated with v1 endpoints).
+- **Financial** — 🟡 In Progress — _Pending_: DTO sanitised responses for admin list, automated donation/financial reconciliation checks.
+- **Analytics** — 🟡 In Progress — _Pending_: cache telemetry, rate limiting, multi-tenant performance monitoring (operations guide expanded with guardrails).
 - **Notifications** — 🟡 In Progress — _Pending_: provider dashboard, alerting thresholds, worker orchestration.
 - **Activity/Audit Logging** — ✅ Completed — _Pending_: reporting surfaces and coverage for future modules.
-- **Infrastructure & Docs** — 🟡 In Progress — _Pending_: doc automation, validation hooks, CI pipeline expansion.
+- **Infrastructure & Docs** — 🟡 In Progress — _Pending_: doc automation, validation hooks, CI pipeline expansion; latest documentation updates captured in backend agents entry #24.
 
 ### Frontend
-- **Admin Dashboard** — 🟢 Complete — _Pending_: performance instrumentation, API-on smoke tests, offline fallbacks.
-- **Approvals UI** — 🟠 Prototype — _Pending_: real API wiring, form validation, optimistic updates, audit trail display.
-- **CSR Programme UI** — 🟢 Complete — _Pending_: e2e smoke coverage, RBAC telemetry, runtime monitoring dashboards.
-- **NGO Dashboard & Financials** — 🟠 Prototype — _Pending_: real upload/list wiring, donor journey tests, data validation.
-- **Notifications UI** — 🔴 Missing — _Pending_: feed view, filtering, real-time updates aligned with backend retries.
-- **Testing & Quality** — 🟠 Prototype — _Pending_: RTL/Playwright journeys, performance/a11y audits, API-flag permutations.
+- **Admin Dashboard** — ✅ Completed — _Pending_: performance instrumentation, API-on smoke tests, offline fallbacks.
+- **Approvals UI** — 🔴 Incomplete — _Pending_: real API wiring, form validation, optimistic updates, audit trail display (see frontend agents entry #27 for latest gap assessment).
+- **CSR Programme UI** — 🟡 In Progress — _Pending_: e2e smoke coverage, RBAC telemetry, runtime monitoring dashboards.
+- **NGO Dashboard & Financials** — 🟡 In Progress — _Pending_: real upload/list wiring, donor journey tests, data validation.
+- **Notifications UI** — 🔴 Incomplete — _Pending_: feed view, filtering, real-time updates aligned with backend retries.
+- **Testing & Quality** — 🟡 In Progress — _Pending_: RTL/Playwright journeys, performance/a11y audits, API-flag permutations.
 
 ### Shared / Packages
-- **API Contracts** — 🟠 Prototype — _Pending_: DTO expansion, release automation, contract validation tests.
-- **Testing & CI Infrastructure** — 🟠 Prototype — _Pending_: cross-app suites, coverage gates, doc-sync checks.
+- **API Contracts** — 🟡 In Progress — _Pending_: DTO expansion, release automation, contract validation tests.
+- **Testing & CI Infrastructure** — 🟡 In Progress — _Pending_: cross-app suites, coverage gates, doc-sync checks.
 - **Observability & Operations** — 🟡 In Progress — _Pending_: analytics dashboards, notification metrics, reconciliation playbooks.
 
 ---

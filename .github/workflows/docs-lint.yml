@@ -1,0 +1,36 @@
+name: Docs Lint
+
+on:
+  pull_request:
+    paths:
+      - 'apps/frontend/docs/**/*.md'
+      - 'apps/backend/docs/**/*.md'
+      - 'pending_works.md'
+      - 'apps/frontend/scripts/lint-docs.mjs'
+      - '.github/workflows/docs-lint.yml'
+  push:
+    branches: [ main ]
+    paths:
+      - 'apps/frontend/docs/**/*.md'
+      - 'apps/backend/docs/**/*.md'
+      - 'pending_works.md'
+      - 'apps/frontend/scripts/lint-docs.mjs'
+
+jobs:
+  lint-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install --workspaces
+
+      - name: Run docs lint
+        run: npm run lint:docs --workspace apps/frontend
