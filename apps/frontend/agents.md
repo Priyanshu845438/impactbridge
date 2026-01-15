@@ -131,7 +131,12 @@
 - Documented requirements for wiring existing hooks to UI, adding validation/optimistic updates, and rendering audit history alongside backend payloads.
 - Pending works tracker updated to keep Approvals UI flagged as incomplete until implementation lands.
 - Frontend docs (operations/testing/readme) now capture the integration roadmap, fallback behaviour, and coverage plan so future work starts from a shared baseline.
+
 28. Documentation & Docs Lint Pipeline
 - Expanded frontend docs with approvals integration roadmap, fallback behaviour, and testing plan across operations/testing/readme.
 - Added `lint:docs` script plus GitHub Actions workflow to lint markdown files for trailing whitespace and stray TODOs.
 - First run of the docs lint succeeded locally, ensuring CI will guard pending_works and docs updates automatically.
+
+29. Shared Test Harness Planning
+- Logged dependency on workspace-level shared tests consuming `@impactbridge/api-contracts` so frontend analytics/approvals UI can rely on consistent DTOs.
+- Awaiting backend alignment on contract smoke tests before wiring new fixtures; tracked via pending works shared testing section.

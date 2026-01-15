@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@impactbridge/api-contracts": ["packages/api-contracts/src/index.ts"],
+      "@impactbridge/api-contracts/*": ["packages/api-contracts/src/*"],
+      "@impactbridge/shared-tests/*": ["tests/shared/*"],
+      "@impactbridge/test-utils": ["tests/shared/utils/index.ts"],
+      "@impactbridge/backend": ["apps/backend/src"],
+      "@impactbridge/frontend": ["apps/frontend"],
+      "@impactbridge/backend/*": ["apps/backend/src/*"],
+      "@impactbridge/frontend/*": ["apps/frontend/*"]
+    }
+  },
+  "include": ["tests/shared/**/*", "tests/contracts/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
