@@ -145,3 +145,8 @@
 - Hardened `approvalDecisionSchema` and `approvalRevokeSchema` to mirror backend DTO rules, including remark requirements for reject/revoke flows.
 - Confirmed mutation hooks call real approvals API clients with validated payloads and safe error handling while remaining unused by UI for now.
 - Full frontend test/build pipeline rerun (`npm run test`, `npm run build`) to verify no behavioural or UI changes.
+
+31. Approvals Read-Only Dashboard
+- Introduced `/dashboard/admin/modules/approvals` presenting a read-only table over pending approvals with status badges and relative timestamps.
+- Reused `usePendingApprovals` hook plus existing skeleton/empty-state patterns so flag-off/errors mirror prior mock behaviour.
+- Verified coverage with full frontend test/build pipeline (`npm run test`, `npm run build`) confirming no unintended regressions.
