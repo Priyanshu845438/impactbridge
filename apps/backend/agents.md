@@ -203,3 +203,7 @@
 - Keeps `period` as string and treats `updatedAt` as optional to avoid TypeScript build failures while preserving runtime shape.
 - Documented rationale and re-ran `npm run init`, `npm run build`, and `npm run test` to confirm zero behavioural impact.
 
+27. Financial Reconciliation Service Added
+- Implemented read-only reconciliation helper comparing donation totals against submitted financial reports per NGO/period/year.
+- Aggregates donation totals quarterly and annually, matching them against utilisation-backed financial reports to flag missing submissions or mismatches without mutating state.
+- Added targeted unit coverage (match/missing/mismatch scenarios) and revalidated with `npm run init`, `npm run build`, and `npm run test`.
