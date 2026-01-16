@@ -155,3 +155,13 @@
 - Captured backend validation outcome confirming approvals flows are production-ready (state persistence, audit logs, notifications) with added test coverage.
 - Documented that frontend enhancements (optimistic updates, audit surfacing) remain blocked pending backend audit metadata exposure.
 - Full test/build passes (`npm run test`, `npm run build`) reaffirm the stable baseline.
+
+33. Shared Smoke Tests Coverage (Frontend Contracts)
+- Coordinated with backend to stand up `tests/shared/` Vitest workspace exercising auth, approvals, CSR, and financial API shapes via mocked HTTP calls.
+- Ensures frontend adapters continue matching backend serializers; no runtime code touched, but contract drift now fails CI.
+- Shared workflow runs on every PR affecting frontend/backend/contracts, providing early warning before UI regressions surface.
+
+34. Financial Admin Contract Watch
+- Awaiting backend financial admin sanitisation to stabilise; frontend will hold integration work until DTO shape is finalised.
+- No UI changes shipped – dashboards continue consuming existing mocks while backend tests settle.
+- Shared smoke suite unchanged; will extend once backend contract passes `financial.admin.sanitization` spec consistently.

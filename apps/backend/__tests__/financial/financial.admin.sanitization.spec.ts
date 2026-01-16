@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, VersioningType } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { AppModule } from '../../src/app.module';
@@ -17,8 +17,8 @@ describe('Financial admin endpoints sanitisation', () => {
     },
   } as unknown as PrismaService;
 
-  const adminToken = signToken({ sub: 'admin-user', role: UserRole.SUPER_ADMIN });
-  const ngoToken = signToken({ sub: 'ngo-user', role: UserRole.NGO });
+let adminToken: string;
+let ngoToken: string;
 
   const createdAt = new Date('2024-05-01T10:00:00.000Z');
   const updatedAt = new Date('2024-05-02T10:00:00.000Z');
@@ -47,6 +47,8 @@ describe('Financial admin endpoints sanitisation', () => {
 
   beforeAll(async () => {
     process.env.JWT_SECRET = JWT_SECRET;
+    adminToken = signToken({ sub: 'admin-user', role: UserRole.SUPER_ADMIN });
+    ngoToken = signToken({ sub: 'ngo-user', role: UserRole.NGO });
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
     })
@@ -56,6 +58,12 @@ describe('Financial admin endpoints sanitisation', () => {
 
     app = moduleRef.createNestApplication();
     prisma = app.get(PrismaService);
+    app.setGlobalPrefix('api');
+    app.enableVersioning({
+      type: VersioningType.URI,
+      defaultVersion: '1',
+    });
+
     await app.init();
   });
 

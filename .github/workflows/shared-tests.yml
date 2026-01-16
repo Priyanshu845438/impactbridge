@@ -1,0 +1,38 @@
+name: Shared Tests
+
+on:
+  push:
+    paths:
+      - 'tests/shared/**'
+      - 'apps/backend/**'
+      - 'apps/frontend/**'
+      - 'packages/**'
+      - '.github/workflows/shared-tests.yml'
+  pull_request:
+    paths:
+      - 'tests/shared/**'
+      - 'apps/backend/**'
+      - 'apps/frontend/**'
+      - 'packages/**'
+
+jobs:
+  run-shared-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install shared test dependencies
+        working-directory: tests/shared
+        run: npm install
+
+      - name: Run shared smoke tests
+        working-directory: tests/shared
+        run: npx vitest run --run

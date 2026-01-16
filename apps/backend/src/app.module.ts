@@ -9,6 +9,7 @@ import { CSRProgrammeModule } from './csr-programme/csr-programme.module';
 import { ApprovalsModule } from './approvals/approvals.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { CommonModule } from './common/common.module';
+import { FinancialModule } from './financial/financial.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -24,6 +25,7 @@ import { AppService } from './app.service';
     ApprovalsModule,
     NotificationsModule,
     CommonModule,
+    FinancialModule,
   ],
   controllers: [AppController],
   providers: [AppService],
