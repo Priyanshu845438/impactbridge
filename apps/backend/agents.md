@@ -193,3 +193,8 @@
 - Reviewed donation, programme, approval, and financial aggregations to confirm KPI accuracy, role safety, and alignment with current dashboards.
 - Reconfirmed analytics tests cover empty datasets, large counts, and cross-module consistency (approvals/CSR/financial) without altering behaviour.
 - Test/build pipeline rerun (`npm run test -- analytics`, `npm run test`, `npm run build`) verifying production readiness with no code changes.
+
+25. Approvals Resilience Tests Added
+- Added dedicated Jest suite (`__tests__/approvals/approvals.resilience.spec.ts`) that forces notification enqueue failures during approve/reject/revoke flows.
+- Validates approval status persistence and activity log emission despite downstream notification errors.
+- Confirms existing service guarantees without modifying runtime code; full unit/integration suites remain green.
