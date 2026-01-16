@@ -184,6 +184,11 @@
 - Added approvals transaction guarantees section noting state-first persistence, audit logging, and notification intent behaviour.
 - Expanded analytics operational notes with cache TTL, scope hashing, invalidation triggers, and horizontal scaling guardrails.
 
+25. Shared Smoke Tests Added (Backend Contracts)
+- Introduced repository-level Vitest suite under `tests/shared/` to assert auth, approvals, CSR, and financial API contracts remain stable.
+- Ensures backend serializers keep returning the documented shapes consumed by frontend hooks without modifying runtime code.
+- CI now runs these cross-app smoke tests on every push/PR touching backend/frontend/contracts directories.
+
 26. Analytics Backend Validation
 - Reviewed donation, programme, approval, and financial aggregations to confirm KPI accuracy, role safety, and alignment with current dashboards.
 - Reconfirmed analytics tests cover empty datasets, large counts, and cross-module consistency (approvals/CSR/financial) without altering behaviour.
