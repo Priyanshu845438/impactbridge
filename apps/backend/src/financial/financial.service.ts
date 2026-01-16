@@ -7,15 +7,16 @@ import { PrismaService } from '../prisma/prisma.service';
 import { FinancialReportDto } from './dto/financial-report.dto';
 import { ActivityLogService } from '../activity/activity-log.service';
 import { AdminFinancialReportDto } from './dto/admin-financial-report.dto';
+import type { FinancialReportResponse } from './types/financial-report-response.type';
 
 type FinancialReportWithNgo = {
   id: string;
-  period: 'Q1' | 'Q2' | 'Q3' | 'Q4' | 'ANNUAL';
+  period: string;
   year: number;
   reportUrl: string;
   ngoId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | string;
+  updatedAt?: Date | string | null;
   ngo?: {
     id: string;
     user?: {
@@ -158,8 +159,13 @@ export class FinancialService {
     return profile;
   }
 
-  mapAdminReport(report: FinancialReportWithNgo): AdminFinancialReportDto {
-    return {
+  mapAdminReport(report: FinancialReportWithNgo): FinancialReportResponse {
+    const createdAt =
+      report.createdAt instanceof Date
+        ? report.createdAt
+        : new Date(report.createdAt);
+
+    const response: FinancialReportResponse = {
       id: report.id,
       period: report.period,
       year: report.year,
@@ -167,8 +173,17 @@ export class FinancialService {
       ngoId: report.ngoId,
       ngoName: report.ngo?.user?.name ?? null,
       ngoEmail: report.ngo?.user?.email ?? null,
-      createdAt: report.createdAt.toISOString(),
-      updatedAt: report.updatedAt.toISOString(),
-    } satisfies AdminFinancialReportDto;
+      createdAt: createdAt.toISOString(),
+    };
+
+    if (report.updatedAt) {
+      const updatedAt =
+        report.updatedAt instanceof Date
+          ? report.updatedAt
+          : new Date(report.updatedAt);
+      response.updatedAt = updatedAt.toISOString();
+    }
+
+    return response;
   }
 }

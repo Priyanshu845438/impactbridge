@@ -92,7 +92,6 @@
 - Added company-scoped controller wiring the existing service methods without altering behaviour.
 - Module now registers CSRProgrammeController for route exposure.
 
-
 21. CSR Programme Route Contracts
 - Added company-scoped e2e tests covering list/detail/create/update/assign/status routes.
 - Tests run against Nest testing module with mocked Prisma to assert DTO-aligned responses.
@@ -198,4 +197,9 @@
 - Added dedicated Jest suite (`__tests__/approvals/approvals.resilience.spec.ts`) that forces notification enqueue failures during approve/reject/revoke flows.
 - Validates approval status persistence and activity log emission despite downstream notification errors.
 - Confirms existing service guarantees without modifying runtime code; full unit/integration suites remain green.
+
+26. Financial DTO Adapter Introduced
+- Added tolerant response adapter ensuring Prisma financial reports map to DTO-safe payloads without schema changes.
+- Keeps `period` as string and treats `updatedAt` as optional to avoid TypeScript build failures while preserving runtime shape.
+- Documented rationale and re-ran `npm run init`, `npm run build`, and `npm run test` to confirm zero behavioural impact.
 
