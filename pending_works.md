@@ -35,11 +35,11 @@ _All findings are observational; no runtime code was modified while compiling th
 - **Current state:** Feature-flag driven dashboards. CSR programme UI already API-aware with fallbacks. Approvals screen recently added as read-only (see frontend agents entries **#31-32**), but interactive flows remain undone. NGO financial UI still mock-backed.
 - **Gaps & risks:**
   - Approvals UI lacks action wiring, optimistic updates, validation, and audit trail surfacing despite backend readiness.
-  - NGO financial uploads/lists do not call backend; no parity tests for API flag permutations.
+  - NGO financial uploads/lists still rely on mock data; API flag scaffolding added but needs contract validation and tests before enabling.
   - Notifications section remains a badge placeholder with no real feed or filters.
 - **Required actions:**
   1. Connect approvals list to live mutations (approve/reject/revoke) with validation mirroring backend DTOs; add optimistic updates + audit history rendering once backend exposes metadata.
-  2. Replace NGO financial mocks with real upload/list flows, guarded by feature flags and covered by RTL tests.
+  2. Finalise NGO financial list API integration: finish React Query hook mapping, add RTL coverage for flag on/off + empty states, and enable flag once backend sanitisation is stable.
   3. Deliver notifications centre UI aligned with backend intents & retry metrics when product requirements arrive.
 
 ### packages — 🟡 In Progress
