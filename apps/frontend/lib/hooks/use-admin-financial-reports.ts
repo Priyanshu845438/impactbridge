@@ -31,8 +31,8 @@ export function useAdminFinancialReports() {
 
     return data.map((report) => ({
       id: report.id,
-      ngoName: report.ngo?.user?.name ?? 'Unknown NGO',
-      ngoEmail: report.ngo?.user?.email ?? 'unknown@example.com',
+      ngoName: report.ngoName ?? 'Unknown NGO',
+      ngoEmail: report.ngoEmail ?? 'unknown@example.com',
       period: report.period,
       year: report.year,
       submittedAt: new Date(report.createdAt).toLocaleDateString('en-IN', {

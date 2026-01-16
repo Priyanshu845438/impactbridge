@@ -174,3 +174,8 @@
 36. Approvals Docs Touchpoint
 - Logged the latest backend verification request; no frontend-runtime work executed but documentation remains aligned with pending tasks.
 - Tests and builds untouched because the frontend baseline is unchanged.
+
+37. NGO Financial API Wiring (WIP)
+- Added `API_NGO_FINANCIAL` feature flag plus React Query hook and API client scaffolding for the NGO finance reports page.
+- Page still defaults to mock data while DTO mapping, optimistic fallbacks, and RTL coverage are finalised; build not rerun yet.
+- Pending follow-up to validate contract shapes, finish tests, and enable the flag once backend sanitisation stabilises.

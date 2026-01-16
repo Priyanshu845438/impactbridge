@@ -4,6 +4,7 @@ const DEFAULT_FLAGS = {
   SERVER_NAVIGATION: false,
   API_AUTH: false,
   API_PROGRAMME: false,
+  API_NGO_FINANCIAL: false,
 } as const;
 
 export type FeatureFlagKey = keyof typeof DEFAULT_FLAGS;
@@ -25,6 +26,7 @@ export function getFeatureFlags(env: Record<string, string | undefined> = proces
     SERVER_NAVIGATION: parseFlag(env.NEXT_PUBLIC_FLAG_SERVER_NAVIGATION) ?? DEFAULT_FLAGS.SERVER_NAVIGATION,
     API_AUTH: parseFlag(env.NEXT_PUBLIC_FLAG_API_AUTH) ?? DEFAULT_FLAGS.API_AUTH,
     API_PROGRAMME: parseFlag(env.NEXT_PUBLIC_FLAG_API_PROGRAMME) ?? DEFAULT_FLAGS.API_PROGRAMME,
+    API_NGO_FINANCIAL: parseFlag(env.NEXT_PUBLIC_FLAG_API_NGO_FINANCIAL) ?? DEFAULT_FLAGS.API_NGO_FINANCIAL,
   };
 }
 
@@ -46,4 +48,5 @@ export const FEATURE_FLAG_DESCRIPTORS: Record<FeatureFlagKey, string> = {
   SERVER_NAVIGATION: 'Enable server-driven navigation menus.',
   API_AUTH: 'Route login & register flows through backend auth endpoints.',
   API_PROGRAMME: 'Enable CSR Programme API integration for company dashboards.',
+  API_NGO_FINANCIAL: 'Enable NGO financial reports to load from backend APIs.',
 };

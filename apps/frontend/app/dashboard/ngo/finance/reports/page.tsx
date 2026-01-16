@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { AlertTriangle, ArrowUpRight, CheckCircle2, Clock4, FileText, Filter, RefreshCw } from "lucide-react";
 
 import { Breadcrumb } from "@/components/ui/breadcrumb";
@@ -11,6 +11,8 @@ import { SectionHeader } from "@/components/dashboard/section-header";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+
+import { useNgoFinancialReports } from "@/lib/hooks/use-ngo-financial-reports";
 
 interface FinancialReportRow {
   id: string;
@@ -54,7 +56,7 @@ const mockReports: FinancialReportRow[] = [
   },
 ];
 
-const statusTone: Record<FinancialReportRow["status"], string> = {
+const statusTone: Record<string, string> = {
   Submitted: "bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-200",
   Verified: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-200",
   Pending: "bg-rose-100 text-rose-700 dark:bg-rose-500/10 dark:text-rose-200",
@@ -82,9 +84,7 @@ const activityTimeline = [
 ];
 
 export default function NGOFinancialReportsPage() {
-  const [isLoading] = useState(false);
-  const [error] = useState<string | null>(null);
-  const [reports] = useState<FinancialReportRow[]>(mockReports);
+  const { reports, isLoading, error, usingMockData } = useNgoFinancialReports(mockReports);
 
   const breadcrumbItems = useMemo(
     () => [
@@ -166,7 +166,7 @@ export default function NGOFinancialReportsPage() {
                       <TableCell>{report.period}</TableCell>
                       <TableCell>{report.type}</TableCell>
                       <TableCell>
-                        <Badge className={cn("rounded-full px-3 py-1 text-xs font-semibold", statusTone[report.status])}>
+                        <Badge className={cn("rounded-full px-3 py-1 text-xs font-semibold", statusTone[report.status] ?? statusTone.Pending)}>
                           {report.status}
                         </Badge>
                       </TableCell>
