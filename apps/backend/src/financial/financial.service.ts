@@ -6,6 +6,24 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { FinancialReportDto } from './dto/financial-report.dto';
 import { ActivityLogService } from '../activity/activity-log.service';
+import { AdminFinancialReportDto } from './dto/admin-financial-report.dto';
+
+type FinancialReportWithNgo = {
+  id: string;
+  period: 'Q1' | 'Q2' | 'Q3' | 'Q4' | 'ANNUAL';
+  year: number;
+  reportUrl: string;
+  ngoId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  ngo?: {
+    id: string;
+    user?: {
+      name?: string | null;
+      email?: string | null;
+    } | null;
+  } | null;
+};
 
 interface ListOptions {
   year?: number;
@@ -102,7 +120,17 @@ export class FinancialService {
   }
 
   async getReportsForNGOId(ngoProfileId: string) {
-    return this.getReportsForNGO(ngoProfileId);
+    return this.prisma.financialReport.findMany({
+      where: { ngoId: ngoProfileId },
+      include: {
+        ngo: {
+          include: {
+            user: { select: { id: true, name: true, email: true } },
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
   async getReportsForAdmin() {
@@ -128,5 +156,19 @@ export class FinancialService {
     }
 
     return profile;
+  }
+
+  mapAdminReport(report: FinancialReportWithNgo): AdminFinancialReportDto {
+    return {
+      id: report.id,
+      period: report.period,
+      year: report.year,
+      reportUrl: report.reportUrl,
+      ngoId: report.ngoId,
+      ngoName: report.ngo?.user?.name ?? null,
+      ngoEmail: report.ngo?.user?.email ?? null,
+      createdAt: report.createdAt.toISOString(),
+      updatedAt: report.updatedAt.toISOString(),
+    } satisfies AdminFinancialReportDto;
   }
 }

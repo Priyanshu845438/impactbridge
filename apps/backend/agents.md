@@ -198,3 +198,4 @@
 - Added dedicated Jest suite (`__tests__/approvals/approvals.resilience.spec.ts`) that forces notification enqueue failures during approve/reject/revoke flows.
 - Validates approval status persistence and activity log emission despite downstream notification errors.
 - Confirms existing service guarantees without modifying runtime code; full unit/integration suites remain green.
+    

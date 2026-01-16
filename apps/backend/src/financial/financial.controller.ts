@@ -16,6 +16,7 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { AuthUser } from '../auth/types/auth-user.type';
 import { FinancialReportDto } from './dto/financial-report.dto';
 import { UsersService } from '../users/users.service';
+import { AdminFinancialReportDto } from './dto/admin-financial-report.dto';
 
 @Controller({ path: 'financial', version: '1' })
 export class FinancialController {
@@ -53,14 +54,16 @@ export class FinancialController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.SUPER_ADMIN)
   @Get('admin/ngo/:id')
-  getReportsForNGO(@Param('id') id: string) {
-    return this.financialService.getReportsForNGOId(id);
+  async getReportsForNGO(@Param('id') id: string): Promise<AdminFinancialReportDto[]> {
+    const reports = await this.financialService.getReportsForNGOId(id);
+    return reports.map((report) => this.financialService.mapAdminReport(report));
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.SUPER_ADMIN)
   @Get('admin/all')
-  getAllReports() {
-    return this.financialService.getReportsForAdmin();
+  async getAllReports(): Promise<AdminFinancialReportDto[]> {
+    const reports = await this.financialService.getReportsForAdmin();
+    return reports.map((report) => this.financialService.mapAdminReport(report));
   }
 }

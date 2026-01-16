@@ -166,6 +166,27 @@ describe('FinancialService', () => {
     });
   });
 
+  describe('getReportsForNGOId', () => {
+    it('returns NGO reports with contact info ordered newest first', async () => {
+      prisma.financialReport.findMany.mockResolvedValue([report] as any);
+
+      const result = await service.getReportsForNGOId('ngo-1');
+
+      expect(result).toEqual([report]);
+      expect(prisma.financialReport.findMany).toHaveBeenCalledWith({
+        where: { ngoId: 'ngo-1' },
+        include: {
+          ngo: {
+            include: {
+              user: { select: { id: true, name: true, email: true } },
+            },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+      });
+    });
+  });
+
   describe('getReportsForAdmin', () => {
     it('returns all reports with NGO contact info ordered by newest first', async () => {
       prisma.financialReport.findMany.mockResolvedValue([report] as any);
@@ -183,6 +204,59 @@ describe('FinancialService', () => {
         },
         orderBy: { createdAt: 'desc' },
       });
+    });
+  });
+
+  describe('mapAdminReport', () => {
+    it('sanitises Prisma model into DTO format', () => {
+      const createdAt = new Date('2024-03-01T00:00:00.000Z');
+      const updatedAt = new Date('2024-03-02T00:00:00.000Z');
+      const dto = service.mapAdminReport({
+        id: 'rep-1',
+        period: 'Q1',
+        year: 2024,
+        reportUrl: 'https://example.com/report.pdf',
+        ngoId: 'ngo-1',
+        createdAt,
+        updatedAt,
+        ngo: {
+          id: 'ngo-1',
+          user: {
+            name: 'NGO Name',
+            email: 'ngo@example.com',
+          },
+        },
+      } as any);
+
+      expect(dto).toEqual({
+        id: 'rep-1',
+        period: 'Q1',
+        year: 2024,
+        reportUrl: 'https://example.com/report.pdf',
+        ngoId: 'ngo-1',
+        ngoName: 'NGO Name',
+        ngoEmail: 'ngo@example.com',
+        createdAt: createdAt.toISOString(),
+        updatedAt: updatedAt.toISOString(),
+      });
+    });
+
+    it('handles missing NGO contact info gracefully', () => {
+      const createdAt = new Date('2024-03-01T00:00:00.000Z');
+      const updatedAt = new Date('2024-03-02T00:00:00.000Z');
+      const dto = service.mapAdminReport({
+        id: 'rep-2',
+        period: 'ANNUAL',
+        year: 2023,
+        reportUrl: 'https://example.com/annual.pdf',
+        ngoId: 'ngo-2',
+        createdAt,
+        updatedAt,
+        ngo: null,
+      } as any);
+
+      expect(dto.ngoName).toBeNull();
+      expect(dto.ngoEmail).toBeNull();
     });
   });
 });
