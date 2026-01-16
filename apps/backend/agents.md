@@ -183,3 +183,8 @@
 - API guide now lists `/api/v1/csr-programmes` admin endpoints alongside company-scoped routes and clarifies shared DTO usage.
 - Added approvals transaction guarantees section noting state-first persistence, audit logging, and notification intent behaviour.
 - Expanded analytics operational notes with cache TTL, scope hashing, invalidation triggers, and horizontal scaling guardrails.
+
+26. Analytics Backend Validation
+- Reviewed donation, programme, approval, and financial aggregations to confirm KPI accuracy, role safety, and alignment with current dashboards.
+- Reconfirmed analytics tests cover empty datasets, large counts, and cross-module consistency (approvals/CSR/financial) without altering behaviour.
+- Test/build pipeline rerun (`npm run test -- analytics`, `npm run test`, `npm run build`) verifying production readiness with no code changes.
