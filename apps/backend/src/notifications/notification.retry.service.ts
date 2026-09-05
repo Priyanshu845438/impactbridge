@@ -1,6 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { NotificationProcessor } from './notification.processor';
-import { NotificationRepository, MIN_RETRY_DELAY_MS } from './notification.repository';
+import {
+  NotificationRepository,
+  MIN_RETRY_DELAY_MS,
+} from './notification.repository';
 import { NotificationIntent } from './notification.types';
 
 const MAX_RETRY_ATTEMPTS = 5;

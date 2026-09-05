@@ -7,6 +7,7 @@ describe("feature flag resolution", () => {
     NEXT_PUBLIC_FLAG_SERVER_NAVIGATION: undefined,
     NEXT_PUBLIC_FLAG_API_AUTH: undefined,
     NEXT_PUBLIC_FLAG_API_PROGRAMME: undefined,
+    NEXT_PUBLIC_FLAG_API_NGO_FINANCIAL: undefined,
   } as Record<string, string | undefined>;
 
   it("returns defaults when env vars are missing", () => {
@@ -16,6 +17,7 @@ describe("feature flag resolution", () => {
       SERVER_NAVIGATION: false,
       API_AUTH: false,
       API_PROGRAMME: false,
+      API_NGO_FINANCIAL: false,
     });
   });
 
@@ -27,6 +29,7 @@ describe("feature flag resolution", () => {
       NEXT_PUBLIC_FLAG_SERVER_NAVIGATION: "enabled",
       NEXT_PUBLIC_FLAG_API_AUTH: "yes",
       NEXT_PUBLIC_FLAG_API_PROGRAMME: "on",
+      NEXT_PUBLIC_FLAG_API_NGO_FINANCIAL: "on",
     };
     expect(getFeatureFlags(env)).toEqual({
       API_DASHBOARD: true,
@@ -34,6 +37,7 @@ describe("feature flag resolution", () => {
       SERVER_NAVIGATION: true,
       API_AUTH: true,
       API_PROGRAMME: true,
+      API_NGO_FINANCIAL: true,
     });
   });
 
@@ -45,6 +49,7 @@ describe("feature flag resolution", () => {
       NEXT_PUBLIC_FLAG_SERVER_NAVIGATION: "disabled",
       NEXT_PUBLIC_FLAG_API_AUTH: "no",
       NEXT_PUBLIC_FLAG_API_PROGRAMME: "off",
+      NEXT_PUBLIC_FLAG_API_NGO_FINANCIAL: "off",
     };
     expect(getFeatureFlags(env)).toEqual({
       API_DASHBOARD: false,
@@ -52,6 +57,7 @@ describe("feature flag resolution", () => {
       SERVER_NAVIGATION: false,
       API_AUTH: false,
       API_PROGRAMME: false,
+      API_NGO_FINANCIAL: false,
     });
   });
 
@@ -83,6 +89,7 @@ describe("feature flag resolution", () => {
       { key: "SERVER_NAVIGATION", enabled: false },
       { key: "API_AUTH", enabled: false },
       { key: "API_PROGRAMME", enabled: false },
+      { key: "API_NGO_FINANCIAL", enabled: false },
     ]);
   });
 });

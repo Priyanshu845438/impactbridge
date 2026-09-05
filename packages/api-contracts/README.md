@@ -1,30 +1,33 @@
 # @impactbridge/api-contracts
 
-Shared enums and TypeScript DTO interfaces used by ImpactBridge backend and frontend.
+Shared TypeScript interfaces, DTOs, and domain enums utilized across the ImpactBridge monorepo (`apps/backend` and `apps/frontend`).
 
-## Contents
+## 📦 Contents & Modules
 
-- Role enums, approval decisions, programme states, and report types.
-- Read-only DTO interfaces for auth, approvals, CSR programmes, financial reports, and user profiles.
-- Type-only exports (no runtime code) for safe consumption by Node and browser bundles.
+- **Roles & Permissions**: `Role` enum (`SUPER_ADMIN`, `NGO`, `COMPANY`, `DONOR`).
+- **Auth Contracts**: Login, Register, Refresh Token DTOs, and Auth Response payloads.
+- **CSR Programmes**: Programme lifecycle states, creation, update, listing, and NGO assignment DTOs.
+- **Approvals Workflow**: Approval decision enums (`APPROVED`, `REJECTED`, `REVOKED`, `PENDING`), review requests, and decision mutation DTOs.
+- **Financial & Utilisation**: Milestone disbursement DTOs, utilisation proofs, and statutory financial reports.
+- **System Settings & Keys**: `SystemSettingDto` and `UpdateSystemSettingsDto` for dynamic platform configuration (Cloud Storage, Mail, Payment, CSR Rules, and Feature Flags).
+- **Analytics**: Admin KPI query parameters, timeline groupings, and aggregation payload types.
 
-## Usage (planned)
+## 🚀 Building the Package
 
-1. Install from workspace once published: `npm install @impactbridge/api-contracts`.
-2. Import enums/DTOs in backend controllers/services or frontend hooks to ensure shared typing.
-3. Update consuming code to rely on shared definitions instead of local duplicates.
+From the package directory or monorepo root:
 
-## Build
-
-```
+```bash
+cd packages/api-contracts
 npm install
 npm run build
 ```
 
-Outputs TypeScript declaration files into `dist/`.
+This compiles TypeScript definitions directly into `dist/` with declaration maps (`.d.ts`), enabling instant resolution in consuming workspaces.
 
-## Migration Plan
+## 🔗 Workspace Consumption
 
-- **Backend**: replace local enums/DTO types (e.g., `user-role.enum.ts`, approval DTOs) with imports from this package once the backend tsconfig references it.
-- **Frontend**: update auth/approvals hooks to consume these shared contracts after backend rollout keeps types in sync.
-- Document migration steps in service-specific READMEs and update tests alongside the refactor to avoid drift.
+Both `apps/backend` and `apps/frontend` reference `@impactbridge/api-contracts` as a local workspace dependency:
+
+```typescript
+import { Role, SystemSettingDto, UpdateSystemSettingsDto } from '@impactbridge/api-contracts';
+```

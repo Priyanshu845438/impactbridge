@@ -109,7 +109,11 @@ export interface ActivityEntry {
 
 @Injectable()
 export class AnalyticsAggregationService {
-  private readonly cache = new NodeCache({ stdTTL: 120, useClones: false, checkperiod: 60 });
+  private readonly cache = new NodeCache({
+    stdTTL: 120,
+    useClones: false,
+    checkperiod: 60,
+  });
 
   constructor(private readonly prisma: PrismaService) {}
 
@@ -347,9 +351,7 @@ export class AnalyticsAggregationService {
     const approvedCount = byStatus.APPROVED ?? 0;
     const pendingCount = byStatus.PENDING ?? 0;
     const rejectionCount = byStatus.REJECTED ?? 0;
-    const approvalRate = total
-      ? Number((approvedCount / total).toFixed(2))
-      : 0;
+    const approvalRate = total ? Number((approvedCount / total).toFixed(2)) : 0;
 
     const overview: ApprovalOverview = {
       totalApprovals: total,
@@ -448,7 +450,10 @@ export class AnalyticsAggregationService {
 
     const monthOverMonthGrowth = reportsPreviousMonth
       ? Number(
-          ((reportsThisMonth - reportsPreviousMonth) / reportsPreviousMonth).toFixed(2),
+          (
+            (reportsThisMonth - reportsPreviousMonth) /
+            reportsPreviousMonth
+          ).toFixed(2),
         )
       : null;
 
@@ -524,7 +529,10 @@ export class AnalyticsAggregationService {
       grouped.set(key, existing + donation.amount);
     });
 
-    return Array.from(grouped.entries()).map(([date, amount]) => ({ date, amount }));
+    return Array.from(grouped.entries()).map(([date, amount]) => ({
+      date,
+      amount,
+    }));
   }
 
   private buildDonationTotals(
@@ -537,7 +545,10 @@ export class AnalyticsAggregationService {
     const last30Amount = last30Days._sum?.amount ?? 0;
 
     const previousWeek = last30Amount - last7Amount;
-    const delta = previousWeek > 0 ? (last7Amount - previousWeek) / previousWeek : undefined;
+    const delta =
+      previousWeek > 0
+        ? (last7Amount - previousWeek) / previousWeek
+        : undefined;
 
     return [
       { label: 'Total', amount: last30Amount },

@@ -15,14 +15,14 @@ import { UserRole } from '../user/user-role.enum';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { AuthUser } from '../auth/types/auth-user.type';
 import { FinancialReportDto } from './dto/financial-report.dto';
-import { UsersService } from '../users/users.service';
+import { UserService } from '../user/user.service';
 import type { FinancialReportResponse } from './types/financial-report-response.type';
 
 @Controller({ path: 'financial', version: '1' })
 export class FinancialController {
   constructor(
     private readonly financialService: FinancialService,
-    private readonly usersService: UsersService,
+    private readonly userService: UserService,
   ) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -32,7 +32,7 @@ export class FinancialController {
     @CurrentUser() user: AuthUser,
     @Body() dto: FinancialReportDto,
   ) {
-    const profile = await this.usersService.getNGOProfileByUserId(user.sub);
+    const profile = await this.userService.getNGOProfileByUserId(user.sub);
     if (!profile) {
       throw new ForbiddenException('NGO profile not found for user');
     }
@@ -44,7 +44,7 @@ export class FinancialController {
   @Roles(UserRole.NGO)
   @Get('ngo/my-reports')
   async getMyReports(@CurrentUser() user: AuthUser) {
-    const profile = await this.usersService.getNGOProfileByUserId(user.sub);
+    const profile = await this.userService.getNGOProfileByUserId(user.sub);
     if (!profile) {
       throw new ForbiddenException('NGO profile not found for user');
     }
@@ -58,7 +58,9 @@ export class FinancialController {
     @Param('id') id: string,
   ): Promise<FinancialReportResponse[]> {
     const reports = await this.financialService.getReportsForNGOId(id);
-    return reports.map((report) => this.financialService.mapAdminReport(report));
+    return reports.map((report) =>
+      this.financialService.mapAdminReport(report),
+    );
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -66,6 +68,8 @@ export class FinancialController {
   @Get('admin/all')
   async getAllReports(): Promise<FinancialReportResponse[]> {
     const reports = await this.financialService.getReportsForAdmin();
-    return reports.map((report) => this.financialService.mapAdminReport(report));
+    return reports.map((report) =>
+      this.financialService.mapAdminReport(report),
+    );
   }
 }

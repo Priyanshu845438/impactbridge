@@ -11,7 +11,10 @@ class MockNotificationRepository {
   public findPending = jest.fn<Promise<NotificationIntent[]>, []>();
   public markSent = jest.fn<Promise<void>, [string]>();
   public markFailed = jest.fn<Promise<void>, [string]>();
-  public recordMetric = jest.fn<Promise<void>, [string, string, string, string?]>();
+  public recordMetric = jest.fn<
+    Promise<void>,
+    [string, string, string, string?]
+  >();
 }
 
 class MockNotificationProvider implements NotificationProvider {

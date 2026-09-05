@@ -1,0 +1,27 @@
+{
+  "name": "impactbridge-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ImpactBridge - Open Source CSR & Non-Profit Governance Platform",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build:contracts": "npm run build --workspace @impactbridge/api-contracts",
+    "build:backend": "npm run build --workspace backend",
+    "build:frontend": "npm run build --workspace impactbridge-frontend",
+    "build": "npm run build:contracts && npm run build:backend && npm run build:frontend",
+    "test:contracts": "npm run build --workspace @impactbridge/api-contracts",
+    "test:backend": "npm run test --workspace backend",
+    "test:frontend": "npm run test --workspace impactbridge-frontend",
+    "test": "npm run test:backend && npm run test:frontend",
+    "lint:backend": "npm run lint --workspace backend",
+    "lint:frontend": "npm run lint --workspace impactbridge-frontend",
+    "lint": "npm run lint:frontend",
+    "db:push": "npm run db:push --workspace backend",
+    "db:seed": "npm run db:seed --workspace backend",
+    "db:reset": "npm run db:reset --workspace backend"
+  },
+  "license": "MIT"
+}

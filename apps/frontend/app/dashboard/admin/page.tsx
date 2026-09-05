@@ -333,54 +333,9 @@ export default function AdminDashboard() {
     );
   }
 
-  if (loading) {
-    return (
-      <div className="space-y-8">
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-          <SkeletonCard />
-          <div className="grid gap-4">
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-          </div>
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <SkeletonStat />
-          <SkeletonStat />
-          <SkeletonStat />
-          <SkeletonStat />
-        </div>
-
-        <SkeletonCard className="h-80" />
-
-        <div className="space-y-4">
-          <SectionHeader title="Quick actions" subtitle="Common control centre tasks for administrators" data-onboarding="quick-actions" />
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-            <SkeletonCard />
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <SectionHeader title="Recent activity" subtitle="Live audit feed across compliance, programmes, and access" data-onboarding="activity-feed" />
-          <div className="rounded-2xl border border-slate-200 bg-white/90 shadow-sm">
-            <ul className="max-h-72 divide-y divide-slate-100">
-              {Array.from({ length: 4 }).map((_, index) => (
-                <SkeletonActivityItem key={index} />
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <>
-      <DashboardOnboarding />
+      {mounted && <DashboardOnboarding />}
       <div className="space-y-10">
         <div
           className={cn(
@@ -654,32 +609,32 @@ export default function AdminDashboard() {
 const SuggestedActionsPanel = memo(function SuggestedActionsPanel() {
   const suggestions = useMemo(
     () => [
-    {
-      title: "Review pending NGO documents",
-      description: "3 submissions await compliance sign-off before they can go live.",
-      icon: Files,
-    },
-    {
-      title: "Approve CSR programme",
-      description: "Green Earth solar initiative is waiting on your final verification.",
-      icon: ShieldCheck,
-    },
-    {
-      title: "Follow up with Company XYZ",
-      description: "Send a reminder for quarterly reporting and impact evidence uploads.",
-      icon: Target,
-    },
-    {
-      title: "Check donor KYC gaps",
-      description: "5 donors created accounts but still need PAN / address verification.",
-      icon: Users2,
-    },
-    {
-      title: "Schedule compliance sync",
-      description: "Plan a review with NGO partners flagged for audit next month.",
-      icon: Sparkles,
-    },
-  ] as const,
+      {
+        title: "Review pending NGO documents",
+        description: "3 submissions await compliance sign-off before they can go live.",
+        icon: Files,
+      },
+      {
+        title: "Approve CSR programme",
+        description: "Green Earth solar initiative is waiting on your final verification.",
+        icon: ShieldCheck,
+      },
+      {
+        title: "Follow up with Company XYZ",
+        description: "Send a reminder for quarterly reporting and impact evidence uploads.",
+        icon: Target,
+      },
+      {
+        title: "Check donor KYC gaps",
+        description: "5 donors created accounts but still need PAN / address verification.",
+        icon: Users2,
+      },
+      {
+        title: "Schedule compliance sync",
+        description: "Plan a review with NGO partners flagged for audit next month.",
+        icon: Sparkles,
+      },
+    ] as const,
     [],
   );
 
@@ -752,7 +707,7 @@ function KpiCard({ label, value, delta, data, tone = "slate" }: KpiCardProps) {
             isPositive ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700",
           )}
         >
-          {isPositive ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />} 
+          {isPositive ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
           {Math.abs(delta).toFixed(1)}%
         </span>
       </div>

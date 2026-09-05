@@ -53,7 +53,9 @@ describe('NotificationsService', () => {
     service = moduleRef.get(NotificationsService);
   });
 
-  const buildIntent = (overrides: Partial<NotificationIntent> = {}): NotificationIntent => ({
+  const buildIntent = (
+    overrides: Partial<NotificationIntent> = {},
+  ): NotificationIntent => ({
     id: 'intent-1',
     channel: 'email',
     recipient: { email: 'user@example.com' },

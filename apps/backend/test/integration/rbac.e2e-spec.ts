@@ -26,7 +26,7 @@ describe('RBAC integration (controllers only)', () => {
     }),
     update: jest.fn().mockResolvedValue({ id: 'user-123', name: 'Updated' }),
     getNGOProfileByUserId: jest.fn().mockResolvedValue({ id: 'ngo-profile' }),
-  } satisfies Partial<UsersService> as UsersService;
+  } satisfies Partial<UsersService>;
 
   const approvalsService = {
     approve: jest

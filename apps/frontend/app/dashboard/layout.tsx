@@ -18,16 +18,13 @@ import {
   ChevronRight,
   Clock3,
   Command,
-  ClipboardList,
   FileBarChart,
   FilePlus2,
   FileText,
-  HandCoins,
   Menu,
   MessageSquarePlus,
   Search,
   ShieldCheck,
-  TicketCheck,
   Users,
   X,
 } from "lucide-react";
@@ -55,12 +52,12 @@ function NotificationItem({ icon: Icon, title, timestamp }: NotificationItemProp
       <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
         <Icon className="h-4 w-4" />
       </span>
-            <div className="space-y-1">
-              <p className="text-small font-semibold text-slate-700">{title}</p>
-              <p className="text-xs text-slate-400">{timestamp}</p>
-            </div>
-            <span className="ml-auto flex h-2 w-2 items-center justify-center rounded-full bg-emerald-400" />
-          </div>
+      <div className="space-y-1">
+        <p className="text-small font-semibold text-slate-700">{title}</p>
+        <p className="text-xs text-slate-400">{timestamp}</p>
+      </div>
+      <span className="ml-auto flex h-2 w-2 items-center justify-center rounded-full bg-emerald-400" />
+    </div>
   );
 }
 
@@ -210,32 +207,11 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
         group: "Insights",
       },
       {
-        label: "Campaign management",
-        href: "/dashboard/admin/campaigns",
-        roles: [userRole],
-        icon: ClipboardList,
-        group: "Registry",
-      },
-      {
         label: "System settings",
         href: "/dashboard/admin/settings",
         roles: [userRole],
         icon: Command,
         group: "Platform",
-      },
-      {
-        label: "Donation detail",
-        href: "/dashboard/admin/donations/cmp-101",
-        roles: [userRole],
-        icon: TicketCheck,
-        group: "Registry",
-      },
-      {
-        label: "Donation history",
-        href: "/dashboard/admin/donations",
-        roles: [userRole],
-        icon: HandCoins,
-        group: "Registry",
       },
     ];
   }, [userRole]);
@@ -310,23 +286,23 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
       message: string;
       key: string;
     }> = [
-      {
-        match: (path) => path === "/dashboard" || path === "/dashboard/admin",
-        message: "Press ⌘K to search anything across ImpactBridge.",
-        key: "dashboard-command",
-      },
-      {
-        match: (path) => path.startsWith("/dashboard/admin/companies"),
-        message: "Tip: Filter by CSR category for quicker matches.",
-        key: "companies-filter",
-      },
-      {
-        match: (path) =>
-          path.startsWith("/dashboard/admin/ngos/") && path.endsWith("/documents"),
-        message: "Drag & drop files here to upload supporting documents faster.",
-        key: "ngo-documents-upload",
-      },
-    ];
+        {
+          match: (path) => path === "/dashboard" || path === "/dashboard/admin",
+          message: "Press ⌘K to search anything across ImpactBridge.",
+          key: "dashboard-command",
+        },
+        {
+          match: (path) => path.startsWith("/dashboard/admin/companies"),
+          message: "Tip: Filter by CSR category for quicker matches.",
+          key: "companies-filter",
+        },
+        {
+          match: (path) =>
+            path.startsWith("/dashboard/admin/ngos/") && path.endsWith("/documents"),
+          message: "Drag & drop files here to upload supporting documents faster.",
+          key: "ngo-documents-upload",
+        },
+      ];
 
     const matched = rules.find((rule) => rule.match(pathname));
     if (!matched) {
@@ -347,7 +323,6 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
 
   useEffect(() => {
     router.prefetch("/dashboard/admin");
-    router.prefetch("/dashboard/users");
     router.prefetch("/dashboard/admin/modules/reports");
   }, [router]);
 
@@ -384,7 +359,15 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
       setContentOpacityClass("opacity-100");
     });
 
-    return () => cancelAnimationFrame(frame);
+    // Fallback in case frame is delayed
+    const timeout = setTimeout(() => {
+      setContentOpacityClass("opacity-100");
+    }, 100);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(timeout);
+    };
   }, [pathname]);
 
   useEffect(() => {
@@ -475,33 +458,33 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
               ImpactBridge
             </Link>
             <nav className="mt-4 flex flex-col gap-6 text-small">
-            {groupedLinks.map((group) => (
-              <div key={group.name}>
-                <p className="px-4 pb-2 text-xs font-semibold uppercase tracking-[0.28em] text-slate-400 dark:text-slate-500">
-                  {group.name}
-                </p>
-                <div className="space-y-1">
-                  {group.items.map((link) => (
-                    <SidebarLink
-                      key={link.label}
-                      item={link}
-                      pathname={pathname}
-                      onNavigate={handleLinkNavigate}
-                    />
-                  ))}
+              {groupedLinks.map((group) => (
+                <div key={group.name}>
+                  <p className="px-4 pb-2 text-xs font-semibold uppercase tracking-[0.28em] text-slate-400 dark:text-slate-500">
+                    {group.name}
+                  </p>
+                  <div className="space-y-1">
+                    {group.items.map((link) => (
+                      <SidebarLink
+                        key={link.label}
+                        item={link}
+                        pathname={pathname}
+                        onNavigate={handleLinkNavigate}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </nav>
+              ))}
+            </nav>
 
-          <div className="mt-auto rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-900/40 dark:text-slate-400">
-            <p className="font-semibold text-slate-700 dark:text-slate-100">Secure CSR environment</p>
-            <p className="mt-1 leading-relaxed">
-              Built for compliant collaboration across NGOs, companies, and donors.
-            </p>
+            <div className="mt-auto rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-900/40 dark:text-slate-400">
+              <p className="font-semibold text-slate-700 dark:text-slate-100">Secure CSR environment</p>
+              <p className="mt-1 leading-relaxed">
+                Built for compliant collaboration across NGOs, companies, and donors.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
       </aside>
 
       <div className="flex w-full flex-1 flex-col overflow-hidden bg-background transition-colors">
@@ -524,107 +507,107 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
             </div>
 
             <div className="flex flex-1 items-center justify-center gap-4 md:justify-end">
-            <div className="flex w-full max-w-md items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-1.5 shadow-sm transition focus-within:border-slate-300 focus-within:shadow dark:border-slate-700 dark:bg-slate-900" data-onboarding="global-search">
-              <Search className="h-4 w-4 text-slate-400 dark:text-slate-500" />
-              <input
-                type="search"
-                placeholder="Search anything…"
-                aria-label="Search the dashboard"
-                className="w-full cursor-pointer bg-transparent text-small text-slate-600 placeholder:text-slate-400 focus:outline-none dark:text-slate-200 dark:placeholder:text-slate-500"
-                onFocus={() => setSearchOpen(true)}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") {
-                    event.preventDefault();
-                    setSearchOpen(true);
-                    setCommandOpen(false);
-                  }
-                }}
-                readOnly
-              />
-              <button
-                type="button"
-                onClick={() =>
-                  startCommandTransition(() => {
-                    setSearchOpen(true);
-                    setCommandOpen(false);
-                  })
-                }
-                className="hidden items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-medium text-slate-500 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-600 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-400 dark:hover:border-emerald-400/60 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-300 sm:flex disabled:opacity-60"
-                aria-label="Open global search"
-                disabled={isCommandPending}
-              >
-                <Command className="h-3.5 w-3.5" />
-                <span>⌘K</span>
-              </button>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <ThemeToggle />
-              <div className="relative">
-                <button
-                  type="button"
-                  aria-label="View activity notifications"
-                  className="relative flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-emerald-400/60 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-300"
-                  onClick={() => {
-                    if (window.innerWidth < 768) {
-                      setMobileNotificationsOpen(true);
-                    } else {
-                      setNotificationsOpen((prev) => !prev);
+              <div className="flex w-full max-w-md items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-1.5 shadow-sm transition focus-within:border-slate-300 focus-within:shadow dark:border-slate-700 dark:bg-slate-900" data-onboarding="global-search">
+                <Search className="h-4 w-4 text-slate-400 dark:text-slate-500" />
+                <input
+                  type="search"
+                  placeholder="Search anything…"
+                  aria-label="Search the dashboard"
+                  className="w-full cursor-pointer bg-transparent text-small text-slate-600 placeholder:text-slate-400 focus:outline-none dark:text-slate-200 dark:placeholder:text-slate-500"
+                  onFocus={() => setSearchOpen(true)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
+                      setSearchOpen(true);
+                      setCommandOpen(false);
                     }
                   }}
+                  readOnly
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    startCommandTransition(() => {
+                      setSearchOpen(true);
+                      setCommandOpen(false);
+                    })
+                  }
+                  className="hidden items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-medium text-slate-500 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-600 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-400 dark:hover:border-emerald-400/60 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-300 sm:flex disabled:opacity-60"
+                  aria-label="Open global search"
+                  disabled={isCommandPending}
                 >
-                  <BellRing className="h-5 w-5" />
-                  <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-emerald-500 px-1 text-[10px] font-semibold text-white shadow-sm">
-                    3
-                  </span>
+                  <Command className="h-3.5 w-3.5" />
+                  <span>⌘K</span>
                 </button>
+              </div>
 
-                {notificationsOpen ? (
-                  <div className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-80 rounded-2xl border border-slate-200 bg-white p-4 text-small shadow-2xl transition-colors dark:border-slate-700 dark:bg-slate-950">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-small font-semibold text-slate-700 dark:text-slate-100">Activity notifications</p>
-                        <p className="text-xs text-slate-400 dark:text-slate-500">Stay on top of compliance updates.</p>
+              <div className="flex items-center gap-3">
+                <ThemeToggle />
+                <div className="relative">
+                  <button
+                    type="button"
+                    aria-label="View activity notifications"
+                    className="relative flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-emerald-400/60 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-300"
+                    onClick={() => {
+                      if (window.innerWidth < 768) {
+                        setMobileNotificationsOpen(true);
+                      } else {
+                        setNotificationsOpen((prev) => !prev);
+                      }
+                    }}
+                  >
+                    <BellRing className="h-5 w-5" />
+                    <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-emerald-500 px-1 text-[10px] font-semibold text-white shadow-sm">
+                      3
+                    </span>
+                  </button>
+
+                  {notificationsOpen ? (
+                    <div className="absolute right-0 top-[calc(100%+0.75rem)] z-50 w-80 rounded-2xl border border-slate-200 bg-white p-4 text-small shadow-2xl transition-colors dark:border-slate-700 dark:bg-slate-950">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-small font-semibold text-slate-700 dark:text-slate-100">Activity notifications</p>
+                          <p className="text-xs text-slate-400 dark:text-slate-500">Stay on top of compliance updates.</p>
+                        </div>
+                        <button
+                          type="button"
+                          className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-emerald-400/60 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-300"
+                          onClick={() => setNotificationsOpen(false)}
+                          aria-label="Close notifications"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                      <div className="mt-4 space-y-3 text-slate-600 dark:text-slate-300">
+                        <NotificationItem
+                          icon={FilePlus2}
+                          title="New document uploaded by NGO"
+                          timestamp="Just now"
+                        />
+                        <NotificationItem
+                          icon={MessageSquarePlus}
+                          title="Comment added on CSR Form"
+                          timestamp="5 minutes ago"
+                        />
+                        <NotificationItem
+                          icon={Clock3}
+                          title="Review request assigned to you"
+                          timestamp="12 minutes ago"
+                        />
                       </div>
                       <button
                         type="button"
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-emerald-400/60 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-300"
+                        className="mt-4 inline-flex w-full items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-slate-600 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-600 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-400 dark:hover:border-emerald-400/60 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-200"
                         onClick={() => setNotificationsOpen(false)}
-                        aria-label="Close notifications"
                       >
-                        <X className="h-4 w-4" />
+                        Mark all as read
                       </button>
                     </div>
-                    <div className="mt-4 space-y-3 text-slate-600 dark:text-slate-300">
-                      <NotificationItem
-                        icon={FilePlus2}
-                        title="New document uploaded by NGO"
-                        timestamp="Just now"
-                      />
-                      <NotificationItem
-                        icon={MessageSquarePlus}
-                        title="Comment added on CSR Form"
-                        timestamp="5 minutes ago"
-                      />
-                      <NotificationItem
-                        icon={Clock3}
-                        title="Review request assigned to you"
-                        timestamp="12 minutes ago"
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      className="mt-4 inline-flex w-full items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-slate-600 transition hover:border-brand-200 hover:bg-brand-50 hover:text-brand-600 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-400 dark:hover:border-emerald-400/60 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-200"
-                      onClick={() => setNotificationsOpen(false)}
-                    >
-                      Mark all as read
-                    </button>
-                  </div>
-                ) : null}
+                  ) : null}
+                </div>
               </div>
-            </div>
 
-            <ProfileDrawer onSignOut={handleLogout}>
+              <ProfileDrawer onSignOut={handleLogout}>
                 <button
                   type="button"
                   className="group hidden items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-left shadow-sm transition md:flex hover:border-transparent hover:bg-[#0B5C4B] hover:text-white"

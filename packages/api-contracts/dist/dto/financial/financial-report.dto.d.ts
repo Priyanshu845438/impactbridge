@@ -1,11 +1,15 @@
 import type { ReportType } from '../../enums/report-type.enum';
 export interface FinancialReportDto {
     id: string;
-    ngoId: string;
+    ngoId?: string;
     companyId?: string;
-    reportType: ReportType;
-    fiscalYear: string;
+    reportType?: ReportType | string;
+    fiscalYear?: string;
     quarter?: string;
-    url: string;
-    uploadedAt: string;
+    period?: string;
+    status?: string;
+    reviewer?: string;
+    url?: string;
+    uploadedAt?: string;
 }
+export type NgoFinancialReportDto = FinancialReportDto;

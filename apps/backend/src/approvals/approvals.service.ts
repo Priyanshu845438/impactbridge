@@ -445,6 +445,30 @@ export class ApprovalsService {
     });
   }
 
+  async getAllPending() {
+    return this.prisma.campaignApproval.findMany({
+      where: { status: 'PENDING' },
+      include: {
+        campaign: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+          },
+        },
+        ngo: {
+          select: {
+            id: true,
+            user: {
+              select: { id: true, name: true, email: true },
+            },
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
   async getPendingForCompany(companyProfileId: string) {
     return this.prisma.campaignApproval.findMany({
       where: { companyId: companyProfileId, status: 'PENDING' },

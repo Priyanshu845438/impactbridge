@@ -7,3 +7,4 @@ export * from './dto/approvals';
 export * from './dto/csr-programme';
 export * from './dto/financial';
 export * from './dto/users';
+export * from './dto/system-settings';

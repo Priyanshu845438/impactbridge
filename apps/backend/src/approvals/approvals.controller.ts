@@ -31,7 +31,7 @@ export class ApprovalsController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.COMPANY)
+  @Roles(UserRole.COMPANY, UserRole.SUPER_ADMIN)
   @Post(':campaignId/approve')
   approve(
     @CurrentUser() user: AuthUser,
@@ -42,7 +42,7 @@ export class ApprovalsController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.COMPANY)
+  @Roles(UserRole.COMPANY, UserRole.SUPER_ADMIN)
   @Post(':campaignId/reject')
   reject(
     @CurrentUser() user: AuthUser,
@@ -53,7 +53,7 @@ export class ApprovalsController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.COMPANY)
+  @Roles(UserRole.COMPANY, UserRole.SUPER_ADMIN)
   @Post(':campaignId/revoke')
   revoke(
     @CurrentUser() user: AuthUser,
@@ -66,6 +66,16 @@ export class ApprovalsController {
       user.sub,
       remarks,
     );
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.COMPANY, UserRole.SUPER_ADMIN)
+  @Get('pending')
+  getAllOrCompanyPending(@CurrentUser() user: AuthUser) {
+    if (user.role === UserRole.SUPER_ADMIN) {
+      return this.approvalsService.getAllPending();
+    }
+    return this.approvalsService.getPendingForCompany(user.sub);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

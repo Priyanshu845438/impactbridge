@@ -22,6 +22,10 @@ import { PrismaModule } from '../prisma/prisma.module';
       useClass: NoopNotificationProvider,
     },
   ],
-  exports: [NotificationsService, NotificationProcessor, NotificationRetryService],
+  exports: [
+    NotificationsService,
+    NotificationProcessor,
+    NotificationRetryService,
+  ],
 })
 export class NotificationsModule {}

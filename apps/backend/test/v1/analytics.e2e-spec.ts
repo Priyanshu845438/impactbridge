@@ -73,7 +73,10 @@ describe('V1 AnalyticsController (e2e)', () => {
         },
         counts: expect.arrayContaining([
           expect.objectContaining({ status: ProgrammeStatus.ACTIVE, count: 1 }),
-          expect.objectContaining({ status: ProgrammeStatus.COMPLETED, count: 1 }),
+          expect.objectContaining({
+            status: ProgrammeStatus.COMPLETED,
+            count: 1,
+          }),
         ]),
       },
       approvals: {

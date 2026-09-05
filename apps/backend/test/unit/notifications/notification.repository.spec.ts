@@ -1,6 +1,10 @@
 import { Test } from '@nestjs/testing';
 import { Prisma } from 'prisma/generated';
-import { NotificationRepository, MAX_RETRY_ATTEMPTS, MIN_RETRY_DELAY_MS } from '../../../src/notifications/notification.repository';
+import {
+  NotificationRepository,
+  MAX_RETRY_ATTEMPTS,
+  MIN_RETRY_DELAY_MS,
+} from '../../../src/notifications/notification.repository';
 import { PrismaService } from '../../../src/prisma/prisma.service';
 
 class MockPrismaService {

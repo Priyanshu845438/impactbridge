@@ -67,3 +67,15 @@
 - Introduced RTL suites for programme list, detail, and edit pages with `API_PROGRAMME` enabled to verify API vs mock parity and edit submission wiring.
 - Tests confirm skeleton/error fallbacks mirror existing behaviour and mutation submits unchanged payloads via the feature-flagged hook.
 - Frontend and backend builds re-executed post-tests to ensure stability across the stack.
+
+15. Embedded SQLite Engine & Deep Clean Delivered
+- Configured embedded SQLite database (`file:./dev.db`) in backend for zero-dependency local development while preserving MySQL production compatibility.
+- Cleaned monorepo by untracking 500+ TypeScript files in api-contracts node_modules and 57 Storybook build assets.
+- Added root workspace package.json orchestrating multi-package build, test, lint, and database sync pipelines.
+
+16. Admin Settings Hub & Interactive Workflows
+- Implemented `SystemSettings` module in backend with secure masked API keys and seed data for 29 platform settings.
+- Built interactive 6-tab Admin Settings & Keys Console (`/dashboard/admin/settings`) in frontend.
+- Wired interactive Approvals Hub (`/dashboard/admin/modules/approvals`) with Approve/Reject/Revoke mutations and audit remarks modal.
+- Built NGO Statutory Document Vault (`/dashboard/ngo/documents`) with client validation and progress simulation.
+

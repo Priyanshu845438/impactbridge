@@ -207,3 +207,15 @@
 - Implemented read-only reconciliation helper comparing donation totals against submitted financial reports per NGO/period/year.
 - Aggregates donation totals quarterly and annually, matching them against utilisation-backed financial reports to flag missing submissions or mismatches without mutating state.
 - Added targeted unit coverage (match/missing/mismatch scenarios) and revalidated with `npm run init`, `npm run build`, and `npm run test`.
+
+28. Embedded SQLite Engine & Prisma Database Synchronization
+- Introduced file-based SQLite database (`apps/backend/prisma/dev.db`) for frictionless local development without Docker.
+- Added `npm run db:push`, `npm run db:seed`, and `npm run db:reset` scripts in `apps/backend/package.json`.
+- Seeded Super Admin user (`admiin@acadifysolution.com` / `Acadify@2026!`) with `Role.SUPER_ADMIN`.
+
+29. System Settings Module Implemented
+- Added `SystemSetting` model in Prisma schema supporting category, key, value, description, and secret masking metadata.
+- Implemented `SystemSettingsService`, `SystemSettingsController`, and `SystemSettingsModule` secured by `Role.SUPER_ADMIN`.
+- Masked sensitive credentials (`••••••••`) over the network with bulk update support.
+- Pre-seeded 29 platform default settings across General, Storage, Mail, Payment, and CSR rules.
+

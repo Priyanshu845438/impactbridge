@@ -15,4 +15,3 @@ export interface FinancialReconciliationSummary {
   matchedPeriods: number;
   issues: FinancialReconciliationIssue[];
 }
-

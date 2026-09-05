@@ -56,36 +56,38 @@ const toDateString = (value: string | Date | null | undefined) =>
 const mapAssignments = (
   assignments: SanitizedProgrammeAssignment[] | undefined,
 ) =>
-  (assignments ?? []).map<ProgrammeDetailDto['assignments'][number]>((assignment) => ({
-    id: assignment.id,
-    ngoId: assignment.ngoId,
-    status: assignment.status,
-    notes: assignment.notes ?? undefined,
-    assignedAt: toDateString(assignment.createdAt) ?? '',
-    updatedAt: toDateString(assignment.updatedAt) ?? '',
-    ngo: assignment.ngo
-      ? {
-          id: assignment.ngo.id,
-          name: assignment.ngo.user?.name ?? undefined,
-          email: assignment.ngo.user?.email ?? undefined,
-          missionStatement: assignment.ngo.missionStatement ?? undefined,
-        }
-      : undefined,
-  }));
+  (assignments ?? []).map<ProgrammeDetailDto['assignments'][number]>(
+    (assignment) => ({
+      id: assignment.id,
+      ngoId: assignment.ngoId,
+      status: assignment.status,
+      notes: assignment.notes ?? undefined,
+      assignedAt: toDateString(assignment.createdAt) ?? '',
+      updatedAt: toDateString(assignment.updatedAt) ?? '',
+      ngo: assignment.ngo
+        ? {
+            id: assignment.ngo.id,
+            name: assignment.ngo.user?.name ?? undefined,
+            email: assignment.ngo.user?.email ?? undefined,
+            missionStatement: assignment.ngo.missionStatement ?? undefined,
+          }
+        : undefined,
+    }),
+  );
 
-const mapMilestones = (
-  milestones: SanitizedProgrammeMilestone[] | undefined,
-) =>
-  (milestones ?? []).map<ProgrammeDetailDto['milestones'][number]>((milestone) => ({
-    id: milestone.id,
-    title: milestone.title,
-    description: milestone.description ?? undefined,
-    status: milestone.status,
-    progress: milestone.progress,
-    dueDate: toDateString(milestone.dueDate ?? undefined),
-    createdAt: toDateString(milestone.createdAt) ?? '',
-    updatedAt: toDateString(milestone.updatedAt) ?? '',
-  }));
+const mapMilestones = (milestones: SanitizedProgrammeMilestone[] | undefined) =>
+  (milestones ?? []).map<ProgrammeDetailDto['milestones'][number]>(
+    (milestone) => ({
+      id: milestone.id,
+      title: milestone.title,
+      description: milestone.description ?? undefined,
+      status: milestone.status,
+      progress: milestone.progress,
+      dueDate: toDateString(milestone.dueDate ?? undefined),
+      createdAt: toDateString(milestone.createdAt) ?? '',
+      updatedAt: toDateString(milestone.updatedAt) ?? '',
+    }),
+  );
 
 export const toProgrammeDetailDto = (
   programme: SanitizedProgramme,

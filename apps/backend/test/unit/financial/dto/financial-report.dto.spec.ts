@@ -1,4 +1,3 @@
-
 import { validate } from 'class-validator';
 import { FinancialReportDto } from '../../../../src/financial/dto/financial-report.dto';
 

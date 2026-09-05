@@ -11,7 +11,10 @@ describe('NGO → Admin financial flow', () => {
   let prisma: PrismaService;
 
   const ngoToken = signToken({ sub: 'ngo-user', role: UserRole.NGO });
-  const adminToken = signToken({ sub: 'admin-user', role: UserRole.SUPER_ADMIN });
+  const adminToken = signToken({
+    sub: 'admin-user',
+    role: UserRole.SUPER_ADMIN,
+  });
 
   beforeAll(async () => {
     process.env.JWT_SECRET = process.env.JWT_SECRET || 'test-secret';

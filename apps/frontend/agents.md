@@ -179,3 +179,14 @@
 - Added `API_NGO_FINANCIAL` feature flag plus React Query hook and API client scaffolding for the NGO finance reports page.
 - Page still defaults to mock data while DTO mapping, optimistic fallbacks, and RTL coverage are finalised; build not rerun yet.
 - Pending follow-up to validate contract shapes, finish tests, and enable the flag once backend sanitisation stabilises.
+
+38. Admin Settings & Keys Console Delivered
+- Built comprehensive 6-tab Admin Settings & Keys Console (`/dashboard/admin/settings`) backed by React Query mutations and queries.
+- Allows Super Admin to configure General, Cloud Storage, Email, Payment, CSR regulatory thresholds, and live Feature Flags.
+- Masked sensitive tokens (`••••••••`) over the network with interactive reveal/edit controls.
+
+39. Interactive Approvals Hub & NGO Statutory Vault
+- Connected `/dashboard/admin/modules/approvals` with live mutations (`approve`, `reject`, `revoke`) and mandatory audit remarks dialog.
+- Built interactive NGO Statutory Document Vault (`/dashboard/ngo/documents`) with client file selection, size validation, and simulated progress.
+- Resolved TypeScript compiler issue in hook test and verified 100% test pass (27 suites, 99 tests) and production build (81 routes).
+

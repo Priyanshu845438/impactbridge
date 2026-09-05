@@ -11,7 +11,9 @@ import { AnalyticsAggregationService } from '../../src/analytics/analytics-aggre
 import { signToken } from '../../src/auth/utils/jwt.util';
 import { NotificationChannel } from '../../src/notifications/notification.types';
 
-function createApprovalFixture(overrides: Partial<ReturnType<typeof baseApproval>> = {}) {
+function createApprovalFixture(
+  overrides: Partial<ReturnType<typeof baseApproval>> = {},
+) {
   return {
     ...baseApproval(),
     ...overrides,
@@ -98,7 +100,10 @@ describe('ApprovalsController failure-safety (e2e)', () => {
     analytics = moduleFixture.get(AnalyticsAggregationService);
 
     ngoToken = await signToken({ sub: ngoUser.id, role: ngoUser.role });
-    companyToken = await signToken({ sub: companyUser.id, role: companyUser.role });
+    companyToken = await signToken({
+      sub: companyUser.id,
+      role: companyUser.role,
+    });
   });
 
   afterEach(() => {
@@ -134,7 +139,9 @@ describe('ApprovalsController failure-safety (e2e)', () => {
     });
 
     it('updates approval even if notification enqueue fails', async () => {
-      notifications.enqueue.mockRejectedValueOnce(new Error('provider offline'));
+      notifications.enqueue.mockRejectedValueOnce(
+        new Error('provider offline'),
+      );
 
       await request(app.getHttpServer())
         .post('/api/v1/approvals/campaign-1/approve')
@@ -154,7 +161,9 @@ describe('ApprovalsController failure-safety (e2e)', () => {
     });
 
     it('keeps analytics overview stable after notification failure', async () => {
-      notifications.enqueue.mockRejectedValueOnce(new Error('provider offline'));
+      notifications.enqueue.mockRejectedValueOnce(
+        new Error('provider offline'),
+      );
 
       await request(app.getHttpServer())
         .post('/api/v1/approvals/campaign-1/approve')
@@ -196,7 +205,9 @@ describe('ApprovalsController failure-safety (e2e)', () => {
     });
 
     it('records rejection with audit log even when notifications fail', async () => {
-      notifications.enqueue.mockRejectedValueOnce(new Error('provider offline'));
+      notifications.enqueue.mockRejectedValueOnce(
+        new Error('provider offline'),
+      );
 
       await request(app.getHttpServer())
         .post('/api/v1/approvals/campaign-1/reject')

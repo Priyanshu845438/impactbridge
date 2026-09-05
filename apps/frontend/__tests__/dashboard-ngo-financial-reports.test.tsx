@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import NGOFinancialReportsPage from "@/app/dashboard/ngo/finance/reports/page";
 import NGOFinancialReportUploadPage from "@/app/dashboard/ngo/finance/reports/upload/page";
@@ -14,9 +15,21 @@ jest.mock("next/link", () => ({
   default: ({ children }: { children: React.ReactNode }) => <span>{children}</span>,
 }));
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
+
 describe("NGO financial reports screens", () => {
   it("renders list view with mock data", () => {
-    render(<NGOFinancialReportsPage />);
+    render(
+      <QueryClientProvider client={queryClient}>
+        <NGOFinancialReportsPage />
+      </QueryClientProvider>
+    );
 
     expect(screen.getByRole("heading", { name: /Financial reports/i })).toBeInTheDocument();
     expect(screen.getByText(/Statements archive/i)).toBeInTheDocument();

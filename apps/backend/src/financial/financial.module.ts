@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { FinancialController } from './financial.controller';
 import { FinancialService } from './financial.service';
 import { PrismaModule } from '../prisma/prisma.module';
-import { UsersModule } from '../users/users.module';
+import { UserModule } from '../user/user.module';
 import { ActivityLogModule } from '../activity/activity-log.module';
 
 @Module({
-  imports: [PrismaModule, UsersModule, ActivityLogModule],
+  imports: [PrismaModule, UserModule, ActivityLogModule],
   controllers: [FinancialController],
   providers: [FinancialService],
   exports: [FinancialService],

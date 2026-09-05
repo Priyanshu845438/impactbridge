@@ -175,8 +175,16 @@ export class FinancialReconciliationService {
       const quarter = this.resolveQuarter(createdAt);
       const amount = Number(report.amountUsed ?? 0);
 
-      this.incrementTotal(utilisationTotals, { ngoId, period: quarter, year }, amount);
-      this.incrementTotal(utilisationTotals, { ngoId, period: 'ANNUAL', year }, amount);
+      this.incrementTotal(
+        utilisationTotals,
+        { ngoId, period: quarter, year },
+        amount,
+      );
+      this.incrementTotal(
+        utilisationTotals,
+        { ngoId, period: 'ANNUAL', year },
+        amount,
+      );
     }
 
     const totals = new Map<string, AggregatedRow>();
@@ -213,7 +221,11 @@ export class FinancialReconciliationService {
     map.set(key, current);
   }
 
-  private buildKey(row: { ngoId: string; period: string; year: number }): string {
+  private buildKey(row: {
+    ngoId: string;
+    period: string;
+    year: number;
+  }): string {
     return `${row.ngoId}:${row.period}:${row.year}`;
   }
 
@@ -240,4 +252,3 @@ export class FinancialReconciliationService {
     return Math.abs(a - b) < 0.01;
   }
 }
-

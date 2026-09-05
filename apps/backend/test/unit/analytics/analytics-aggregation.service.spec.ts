@@ -48,9 +48,7 @@ describe('AnalyticsAggregationService', () => {
         .mockResolvedValueOnce([])
         .mockResolvedValueOnce([]);
 
-      prisma.donation.count
-        .mockResolvedValueOnce(0)
-        .mockResolvedValueOnce(0);
+      prisma.donation.count.mockResolvedValueOnce(0).mockResolvedValueOnce(0);
 
       const result = await service.getDonationOverview();
 
@@ -149,9 +147,7 @@ describe('AnalyticsAggregationService', () => {
         { amount: 1500, donationDate: new Date('2024-02-05T00:00:00Z') },
       ] as any);
 
-    prisma.donation.count
-      .mockResolvedValueOnce(2)
-      .mockResolvedValueOnce(1);
+    prisma.donation.count.mockResolvedValueOnce(2).mockResolvedValueOnce(1);
 
     prisma.donation.groupBy
       .mockResolvedValueOnce([
@@ -182,7 +178,9 @@ describe('AnalyticsAggregationService', () => {
         { status: ProgrammeStatus.COMPLETED, _count: { _all: 1 } },
       ]);
 
-      const result = await service.getProgrammeOverview({ companyId: 'comp-1' });
+      const result = await service.getProgrammeOverview({
+        companyId: 'comp-1',
+      });
 
       expect(prisma.cSRProgramme.groupBy).toHaveBeenCalledWith({
         where: { companyId: 'comp-1', deletedAt: null },
@@ -281,7 +279,9 @@ describe('AnalyticsAggregationService', () => {
         { ngoId: 'ngo-2', _count: { ngoId: 2 } },
       ] as any);
 
-      prisma.financialReport.findFirst.mockResolvedValue({ createdAt: now } as any);
+      prisma.financialReport.findFirst.mockResolvedValue({
+        createdAt: now,
+      } as any);
 
       prisma.financialReport.count
         .mockResolvedValueOnce(2)
@@ -301,7 +301,9 @@ describe('AnalyticsAggregationService', () => {
         },
       });
 
-      expect(prisma.financialReport.count).toHaveBeenNthCalledWith(1, { where: {} });
+      expect(prisma.financialReport.count).toHaveBeenNthCalledWith(1, {
+        where: {},
+      });
       expect(prisma.financialReport.groupBy).toHaveBeenCalledWith({
         by: ['ngoId'],
         _count: { ngoId: true },

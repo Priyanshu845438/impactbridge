@@ -52,7 +52,7 @@ describe('NGO financial reports page', () => {
 
     const table = screen.getByRole('table', { name: /financial reports table/i });
     expect(table).toBeInTheDocument();
-    expect(screen.getByText(/Q2/)).toBeInTheDocument();
+    expect(screen.getAllByText(/Q2/)[0]).toBeInTheDocument();
     expect(mockedApi.fetchNgoFinancialReports).not.toHaveBeenCalled();
   });
 
@@ -82,7 +82,7 @@ describe('NGO financial reports page', () => {
     render(<NGOFinancialReportsPage />, { wrapper: createWrapper() });
 
     await waitFor(() => expect(screen.getByText('Q3')).toBeInTheDocument());
-    expect(screen.getByText(/verified/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/verified/i)[0]).toBeInTheDocument();
     expect(mockedApi.fetchNgoFinancialReports).toHaveBeenCalledTimes(1);
   });
 

@@ -18,6 +18,10 @@
     "test:watch": "jest --watch --config jest.config.ts",
     "test:cov": "jest --coverage --config jest.config.ts",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand --config jest.config.ts",
+    "prisma:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "ts-node src/scripts/seed-admin.ts",
+    "db:reset": "prisma db push --force-reset && ts-node src/scripts/seed-admin.ts",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {

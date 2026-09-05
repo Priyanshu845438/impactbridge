@@ -79,7 +79,9 @@ export class NotificationRepository {
     return toIntent(created);
   }
 
-  async findPending(limit = DEFAULT_PENDING_LIMIT): Promise<NotificationIntent[]> {
+  async findPending(
+    limit = DEFAULT_PENDING_LIMIT,
+  ): Promise<NotificationIntent[]> {
     const rows = await this.prisma.notificationIntent.findMany({
       where: { status: PENDING_STATUS },
       orderBy: { createdAt: 'asc' },

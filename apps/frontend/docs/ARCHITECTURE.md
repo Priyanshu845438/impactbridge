@@ -21,12 +21,12 @@
 
 ## Routing & RBAC
 - Middleware enforces role-based access using shared helpers (`types/rbac.ts`).
-- `AuthProvider` hydrates session context client-side, redirects on mismatch, and respects feature flags.
+- `AuthProvider` hydrates session context client-side and respects feature flags.
 - Dashboard routes rely on role-aware layout components controlling navigation visibility.
 
 ## Data Fetching
-- API calls go through `lib/api-client.ts` (ky wrapper) pointing to `/api/v1` backend base URL.
-- React Query handles caching, retries, stale-while-revalidate semantics.
+- API calls go through `lib/api-client.ts` pointing to the consolidated backend base URL (all v1 routes).
+- React Query handles caching, retries, and state management.
 - Feature-flagged endpoints (analytics, CSR programmes) fall back to mock data until backend integration is enabled.
 
 ## Error & Loading States

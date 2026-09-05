@@ -2,44 +2,40 @@
 
 ## Frontend Technology Stack
 - **Framework**: Next.js 14 (App Router) with TypeScript for end-to-end type safety.
-- **Styling**: Tailwind CSS utility classes complemented by component-scoped CSS modules when finer control is required.
-- **State & Data**: React Query manages server-state caching, feature-flag-aware hooks switch between mock data and live APIs, and Context providers handle authentication/session data.
-- **Testing**: Jest + React Testing Library for unit/contract tests, MSW for network stubs, and Playwright planned for full E2E coverage.
-- **Build & Tooling**: pnpm/npm workspace commands run linting, type-checks, and Next production builds (hybrid static + server rendering bundles).
+- **Styling**: Tailwind CSS v3 utility classes with component-scoped styles and responsive layouts.
+- **State & Data**: React Query for server-state caching, optimistic mutations, and custom hooks switching between live API and safe fallbacks.
+- **UI & Accessibility**: Accessible Radix UI primitives, Lucide icons, and Sonner toast alerts.
+- **Testing**: Jest + React Testing Library for component and hook unit tests with custom accessibility assertion utilities.
+- **Build & Tooling**: Root npm workspaces orchestrating multi-project build, lint, and test execution.
 
 ## Backend Technology Stack
-- **Framework**: NestJS with modular architecture (controllers → services → Prisma layer) enforcing separation of concerns.
-- **Language & Runtime**: TypeScript targeting Node.js 18+, leveraging decorators, guards, and interceptors.
-- **Database Access**: Prisma Client (generated from the workspace Prisma schema) with a shared `PrismaService` exported via `PrismaModule`.
-- **Auth & Security**: Bcrypt for password hashing, JSON Web Tokens (JWT) for stateless auth, custom guards (`JwtAuthGuard`, `RolesGuard`) and route-level RBAC decorators.
-- **Testing**: Jest-powered unit/integration suites, contract/e2e coverage for CSR programme workflows, and Postman collections for manual verification.
-- **Operations**: AsyncLocal-based request context, activity/audit logging utilities, and structured logging middleware.
+- **Framework**: NestJS with modular architecture (controllers → services → Prisma ORM) enforcing strict separation of concerns.
+- **Language & Runtime**: TypeScript targeting Node.js 18+, utilizing decorators, pipes, filters, and interceptors.
+- **Database & ORM**: Prisma ORM with an **embedded SQLite database** (`file:./dev.db`) for zero-dependency local development, with direct compatibility for MySQL / PostgreSQL in staging and production environments.
+- **Auth & Security**: Bcrypt for salt-based password hashing, stateless JSON Web Tokens (JWT), custom `JwtAuthGuard`, `RolesGuard`, and strict RBAC decorators.
+- **Configuration & Secrets**: Centralized `SystemSettingsModule` for runtime configuration of Cloud Storage (S3/R2/MinIO), Mail gateways (Resend/SendGrid/SES), Payment providers (Razorpay/Stripe), and statutory CSR rules.
+- **Testing**: Jest-powered unit suites and Supertest integration suites across auth, approvals, analytics, and financial-reconciliation flows.
 
 ## High-Level Application Flow
-1. **Authentication**: Clients call `/auth/register` or `/auth/login`; passwords are hashed, JWTs issued, and guards validate requests.
-2. **Company Experience**: Company users interact with CSR programme list/detail/create/update/status/assignment endpoints. Feature flags ensure the frontend can toggle between mock data and live API without UX changes.
-3. **NGO & Donor Modules**: Auto-created profile records capture compliance metadata. Future flows consume shared DTOs to manage campaigns, donations, and reporting.
-4. **Activity Logging**: Service methods emit audit entries when actor context is available, enabling traceability without altering business responses.
-5. **Frontend Data Fetching**: React Query hooks determine data source (mock vs API) by reading feature flags, normalise payloads to shared DTO shapes, and pass safe data into UI components.
-
-## Architecture Summary
-- **Backend Layers**: Controllers accept DTO-validated bodies, delegate to services, which in turn orchestrate Prisma Client operations. Guards and interceptors enforce authentication, RBAC, and request context population.
-- **Frontend Layers**: App Router segments isolate role-specific dashboards. Shared hooks (`useCompanyProgrammes`, `useProgrammeDetail`, `useUpdateProgramme`, etc.) encapsulate API/mocks, while UI components focus on rendering consistent experiences regardless of data source.
-- **Shared Contracts**: `packages/api-contracts` exports TypeScript DTOs consumed by both apps, ensuring compile-time parity between backend responses and frontend expectations.
+1. **Authentication & Session**: Clients call `/api/v1/auth/login`; passwords are validated with Bcrypt, signed JWTs issued, and guards enforce role-specific permissions.
+2. **Admin Configuration**: Super Admins dynamically configure system credentials (storage, mail, payments, CSR rules, and feature flags) via `/dashboard/admin/settings` without requiring server restarts.
+3. **Approvals State Machine**: Pending CSR programmes and grant requests are submitted, reviewed, approved, rejected (with required remarks), or revoked through a managed audit pipeline.
+4. **NGO Statutory Compliance**: NGOs upload mandatory statutory certificates (12A, 80G, FCRA, CSR-1) and financial reports with validation and tracking.
+5. **CSR Programme Lifecycle**: Corporate donors discover verified NGOs, commit budgets according to Section 135 thresholds, and release tranche disbursements against verified milestones.
+6. **Activity & Audit Logging**: High-value state transitions emit structured audit entries capturing the actor, action, timestamp, and metadata.
 
 ## Database Schema Snapshot (Prisma Models)
-- **User**: Core identity with email, hashed password, name, and `role` enum (`SUPER_ADMIN`, `NGO`, `COMPANY`, `DONOR`). Relations to specific profile tables.
-- **NGOProfile / CompanyProfile / DonorProfile**: Store regulatory, compliance, and contact details linked 1:1 with `User` via `userId`.
-- **Campaign**: CSR/NGO campaign metadata including category enum, goal amounts, timeframe, and owning organisation.
-- **Donation**: Records donor contributions with amount, currency, linked campaign, and company/NGO references for reporting.
-- **BankDetail**: Stores bank verification data tied to organisations for payout compliance.
-- **Document**: Tracks uploaded compliance documents with type enum (PAN, registration certificates, etc.) and status fields.
-- **Address**: Normalised postal addresses reusable across profiles, campaigns, and compliance artefacts.
-- **AuditLog**: Captures actorId, entity references, actions, and metadata for traceability.
+- **User**: Core identity with email, hashed password, name, and `Role` enum (`SUPER_ADMIN`, `NGO`, `COMPANY`, `DONOR`).
+- **NGOProfile / CompanyProfile / DonorProfile**: Dedicated domain profiles storing statutory compliance, organization identifiers, and contact details linked 1:1 to `User`.
+- **SystemSetting**: Dynamic key-value configuration store with encryption/masking metadata and category groupings.
+- **Campaign**: CSR and NGO social initiatives with categorization, financial targets, and execution timeframes.
+- **Donation**: Records contributions with amount, currency, linked campaign, donor reference, and audit state.
+- **BankDetail**: Financial settlement and IFSC/account verification data for statutory payout compliance.
+- **Document**: Tracks compliance documents with verification status, file URLs, and expiration dates.
+- **Address**: Postal address representation reusable across profiles and compliance artifacts.
+- **AuditLog**: Immutable action log capturing actor ID, entity target, action verb, and event metadata.
 
-## Data Flow & Integration Notes
-- Frontend mutations map directly to backend DTOs: create/update/status/assign flows share consistent payload structures.
-- Feature flags allow staged rollout: mocks remain default while services mature, ensuring zero downtime when toggling API consumption.
-- Prisma migrations maintain government-compliant relations; auto-profile creation at registration guarantees referential integrity across user types.
+## Monorepo Architecture
+- **Workspaces**: Managed via npm workspaces (`apps/backend`, `apps/frontend`, `packages/api-contracts`).
+- **Shared Contracts**: `@impactbridge/api-contracts` provides single-source-of-truth TypeScript definitions for DTOs and Enums across client and server.
 
-Keep this document updated alongside schema or architecture changes so onboarding teammates can reference the current technology landscape at a glance.

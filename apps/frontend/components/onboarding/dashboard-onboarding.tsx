@@ -143,6 +143,20 @@ export function DashboardOnboarding() {
 
   useEffect(() => {
     if (!open) {
+      return;
+    }
+    // Automatically dismiss if current step target is missing to avoid stuck blur
+    const step = steps[currentIndex];
+    const target = document.querySelector(step.targetSelector);
+    if (!target) {
+      console.warn(`[Onboarding] Target not found for step ${currentIndex} (${step.id}). Dismissing to avoid UI lock.`);
+      setOpen(false);
+      return;
+    }
+  }, [open, currentIndex, steps]);
+
+  useEffect(() => {
+    if (!open) {
       if (dontShowAgain) {
         window.localStorage.setItem(STORAGE_KEY, "true");
       }
@@ -218,7 +232,7 @@ export function DashboardOnboarding() {
 
   return createPortal(
     <div className="fixed inset-0 z-[9999]" role="dialog" aria-modal="true">
-      <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" />
+      <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] transition-opacity" />
       <div
         ref={highlightRef}
         className="pointer-events-none absolute rounded-3xl border-2 border-brand-300/80 bg-white/40 shadow-2xl shadow-brand-500/30 transition-all duration-200"

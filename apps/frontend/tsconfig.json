@@ -29,6 +29,9 @@
       ],
       "@impactbridge/api-contracts": [
         "../../packages/api-contracts/src/index.ts"
+      ],
+      "@impactbridge/api-contracts/*": [
+        "../../packages/api-contracts/src/*"
       ]
     }
   },

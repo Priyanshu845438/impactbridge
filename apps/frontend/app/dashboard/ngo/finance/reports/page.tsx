@@ -84,7 +84,7 @@ const activityTimeline = [
 ];
 
 export default function NGOFinancialReportsPage() {
-  const { reports, isLoading, error, usingMockData } = useNgoFinancialReports(mockReports);
+  const { reports, isLoading, error } = useNgoFinancialReports(mockReports);
 
   const breadcrumbItems = useMemo(
     () => [

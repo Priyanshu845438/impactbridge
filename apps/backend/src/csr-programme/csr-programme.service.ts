@@ -401,11 +401,16 @@ export class CSRProgrammeService {
     this.assertStatusTransition(programme.status, nextStatus);
 
     if (nextStatus === programme.status) {
-      await this.emitActivityLog(context?.actorId, 'status_changed', programmeId, {
-        companyId,
-        status: nextStatus,
-        previousStatus: programme.status,
-      });
+      await this.emitActivityLog(
+        context?.actorId,
+        'status_changed',
+        programmeId,
+        {
+          companyId,
+          status: nextStatus,
+          previousStatus: programme.status,
+        },
+      );
 
       const sanitized = sanitizeEntity(programme)!;
       return toProgrammeStatusTransitionDto(sanitized);
@@ -420,11 +425,16 @@ export class CSRProgrammeService {
       },
     });
 
-    await this.emitActivityLog(context?.actorId, 'status_changed', programmeId, {
-      companyId,
-      status: nextStatus,
-      previousStatus: programme.status,
-    });
+    await this.emitActivityLog(
+      context?.actorId,
+      'status_changed',
+      programmeId,
+      {
+        companyId,
+        status: nextStatus,
+        previousStatus: programme.status,
+      },
+    );
 
     const sanitized = sanitizeEntity(updated)!;
     return toProgrammeStatusTransitionDto(sanitized);
@@ -525,7 +535,6 @@ export class CSRProgrammeService {
         programmeId,
         title: {
           equals: title,
-          mode: 'insensitive',
         },
       },
     });

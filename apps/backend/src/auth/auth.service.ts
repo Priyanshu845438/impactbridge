@@ -16,8 +16,13 @@ export class AuthService {
       where: { email: dto.email },
     });
 
-    if (!user || !(await comparePassword(dto.password, user.password))) {
-      throw new BadRequestException('Invalid credentials');
+    if (!user) {
+      throw new BadRequestException('Account not found with this email');
+    }
+
+    const isPasswordValid = await comparePassword(dto.password, user.password);
+    if (!isPasswordValid) {
+      throw new BadRequestException('Incorrect password');
     }
 
     const token = signToken({ sub: user.id, role: user.role });

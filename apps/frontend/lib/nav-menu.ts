@@ -41,24 +41,7 @@ export const navMenu: NavItem[] = [
         href: "/dashboard/admin",
         roles: ["SUPER_ADMIN"],
       },
-      {
-        label: "Performance",
-        href: "/dashboard/admin/performance",
-        roles: ["SUPER_ADMIN"],
-      },
-      {
-        label: "Team activity",
-        href: "/dashboard/admin/activity",
-        roles: ["SUPER_ADMIN"],
-      },
     ],
-  },
-  {
-    label: "Users",
-    icon: Users,
-    roles: ["SUPER_ADMIN"],
-    group: "People",
-    href: "/dashboard/users",
   },
   {
     label: "NGO ops",
@@ -82,12 +65,6 @@ export const navMenu: NavItem[] = [
         label: "Partner profiles",
         href: "/dashboard/admin/modules/ngos/partner-profiles",
         roles: ["SUPER_ADMIN"],
-      },
-      {
-        label: "Impact portfolio",
-        href: "/dashboard/admin/modules/ngos/impact-portfolio",
-        roles: ["SUPER_ADMIN"],
-        // TODO(backlog): replace mock insights with reporting service once available.
       },
     ],
   },
@@ -297,16 +274,6 @@ export const navMenu: NavItem[] = [
       {
         label: "Overview",
         href: "/dashboard/ngo",
-        roles: ["NGO"],
-      },
-      {
-        label: "Campaigns",
-        href: "/dashboard/ngo/campaigns",
-        roles: ["NGO"],
-      },
-      {
-        label: "Donations",
-        href: "/dashboard/ngo/donations",
         roles: ["NGO"],
       },
       {

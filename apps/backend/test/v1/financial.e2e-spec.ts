@@ -17,7 +17,10 @@ jest.mock('../../src/prisma/prisma.service');
 describe('V1 FinancialController /admin/all (e2e)', () => {
   let app: INestApplication;
   let prisma: PrismaService;
-  const adminToken = signToken({ sub: 'admin-user', role: UserRole.SUPER_ADMIN });
+  const adminToken = signToken({
+    sub: 'admin-user',
+    role: UserRole.SUPER_ADMIN,
+  });
   const ngoToken = signToken({ sub: 'ngo-user', role: UserRole.NGO });
 
   const now = new Date('2024-03-01T10:00:00Z');

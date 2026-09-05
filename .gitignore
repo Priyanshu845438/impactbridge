@@ -1,0 +1,57 @@
+# Dependency directories
+node_modules/
+**/node_modules/
+jspm_packages/
+web_modules/
+
+# Next.js build output
+.next/
+out/
+.swc/
+cache/
+
+# NestJS build output
+dist/
+
+# SQLite & Local DB files
+*.db
+*.db-journal
+apps/backend/prisma/dev.db
+apps/backend/prisma/dev.db-journal
+
+# Env files (keep credentials secret)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*
+!.env.example
+
+# TS build info
+*.tsbuildinfo
+**/*.tsbuildinfo
+
+# OS metadata
+.DS_Store
+**/.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# IDE files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+
+# Prisma client generated outputs
+apps/backend/prisma/generated/
+
+# Storybook build output
+storybook-static/
+**/storybook-static/

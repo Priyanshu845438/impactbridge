@@ -72,8 +72,7 @@ function formatTimestamp(timestamp?: string | null) {
       hour: '2-digit',
       minute: '2-digit',
     });
-  } catch (_error) {
+  } catch {
     return '—';
   }
 }
-***PATCH
